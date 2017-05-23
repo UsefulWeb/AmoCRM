@@ -23,7 +23,7 @@ request.get( '/private/api/v2/json/accounts/current' )
 .then( data => {
     console.log( 'Полученные данные', data );
 })
-.catch e => {
+.catch( e => {
     console.log( 'Произошла ошибка', e );
 })
 
@@ -44,7 +44,7 @@ request.post( '/private/api/v2/json/contacts/set', {
  .then( data => {
      console.log( 'Полученные данные', data );
  })
- .catch e => {
+ .catch( e => {
      console.log( 'Произошла ошибка создания контакта', e );
  })
 ```
