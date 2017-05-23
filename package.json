@@ -1,0 +1,31 @@
+{
+  "name": "amocrm",
+  "version": "0.0.1",
+  "description": "JS Library for AmoCRM",
+  "main": "src/AmoCRM.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UsefulWeb/AmoCRM.git"
+  },
+  "keywords": [
+    "crm",
+    "amocrm",
+    "amo"
+  ],
+  "author": "Vladimir Yazykov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UsefulWeb/AmoCRM/issues"
+  },
+  "homepage": "https://github.com/UsefulWeb/AmoCRM#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "qs": "^6.4.0"
+  }
+}

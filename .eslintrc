@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "idiomatic"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 8
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "semi": ["error", "always"],
+    "require-jsdoc": ["error", {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true,
+        "ArrowFunctionExpression": true
+      }
+    }]
+  }
+}
