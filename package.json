@@ -1,6 +1,6 @@
 {
   "name": "amocrm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JS Library for AmoCRM",
   "main": "src/AmoCRM.js",
   "directories": {

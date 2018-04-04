@@ -2,19 +2,18 @@
 const https = require( 'https' ),
   qs = require( 'qs' );
 
-let _isBusy = new WeakMap,
-  _cookies = new WeakMap;
-
 /**
  * Класс для обращения к CRM
  */
 class AmoRequest {
+  static REQUEST_TIMEOUT = 1000 * 60;
+  static REQUEST_CHECK_INTERVAL = 100;
   /**
    * Конструктор класса
    * @param  {String} domain
    */
   constructor( domain ) {
-    _isBusy.set( this, false );
+    this._isBusy = false;
 
     Object.defineProperty( this, 'hostname', {
       value: domain + '.amocrm.ru'
@@ -24,7 +23,6 @@ class AmoRequest {
    * Создаёт POST-запрос через оболчку в виде AmoRequest.request
    * @param  {String} url     URL страницы
    * @param  {Object} data    Данные для передачи
-   * @param  {String} method  Метод запроса (GET, POST и т.д.)
    * @param  {Object} options Опции в запросе
    * @return {Promise}         Обещание-результат работы
    */
@@ -50,9 +48,9 @@ class AmoRequest {
    * @return {Promise}         Обещание-результат работы
    */
   request( url, data = {}, method = 'GET', options = {}) {
-    _isBusy.set( this, true );
+    this._isBusy = true;
     const isAjax = url.indexOf( '/ajax' ) === 0,
-      isGET = method == 'GET';
+      isGET = method === 'GET';
 
     let encodedData = isAjax || isGET ? qs.stringify( data ) : JSON.stringify( data ),
       response;
@@ -71,11 +69,9 @@ class AmoRequest {
       options.headers[ 'Content-Length' ] = Buffer.byteLength( encodedData );
     }
 
-    this.beginRequest()
-    .then(() => this.makeRequest( url, encodedData, options ))
-    .then(() => this.endRequest );
-
-    return response;
+    return this.beginRequest()
+      .then(() => this.makeRequest( url, encodedData, options ))
+      .then(() => this.endRequest );
   }
   /**
    * Создаёт начало запроса
@@ -92,7 +88,7 @@ class AmoRequest {
        * @return {undefined}
        */
       const timer = () => {
-        if ( !_isBusy.get( this )) {
+        if ( !this._isBusy) {
           resolve();
           return;
         }
@@ -106,7 +102,7 @@ class AmoRequest {
 
     })
     .then(() => {
-      _isBusy.set( this, true );
+      this._isBusy = true;
     });
   }
 
@@ -117,7 +113,7 @@ class AmoRequest {
    */
   endRequest() {
     return new Promise( resolve => {
-      _isBusy.set( this, false );
+      this._isBusy = false;
       resolve();
     });
   }
@@ -126,25 +122,19 @@ class AmoRequest {
    * Тело запроса на сервер AmoCRM
    * @param  {String} url     URL страницы
    * @param  {Object} data    Данные для передачи
+   * @param  {String} method  Метод запроса (GET, POST и т.д.)
    * @param  {Object} options Опции в запросе
    * @return {Promise}
    */
   makeRequest( url, data = {}, method = 'GET', options = {}) {
-    var response = new Promise(( resolve, reject ) => {
-      /**
-       * Отклоняет результат запроса к CRM при получении ошибки.
-       * @param  {Error} e Текущая ошибка приложения
-       * @return {undefined}
-       */
-      const onRequestError = e => {
-          reject( e );
-        },
+    const onRequestError = reject => e => reject( e ),
+      response = new Promise(( resolve, reject ) => {
         /**
          * Обработчик результата при запросе в CRM.
          * @param  {Object} result результат запроса
          * @return {undefined}
          */
-        onResponse = result => {
+        const onResponse = result => {
           let data = '';
           /**
            * Обработчик порции данных.
@@ -154,7 +144,7 @@ class AmoRequest {
           const onResponseData = chunk => {
               data += chunk;
             },
-          /**
+            /**
            * Обработчик окончания запроса
            * @return {undefined} [description]
            */
@@ -178,7 +168,7 @@ class AmoRequest {
 
         };
 
-      let request = https.request({
+      const request = https.request({
         hostname: this.hostname,
         port: 443,
         path: url,
@@ -198,8 +188,5 @@ class AmoRequest {
     return response;
   }
 }
-
-AmoRequest.REQUEST_TIMEOUT = 1000 * 60;
-AmoRequest.REQUEST_CHECK_INTERVAL = 100;
 
 module.exports = AmoRequest;
