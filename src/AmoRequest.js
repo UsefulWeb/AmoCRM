@@ -23,31 +23,23 @@ class AmoRequest {
     return this.request( url, data, 'GET', options );
   }
 
-  prepareRequest( url, data, method, options ) {
-    const isGET = method === 'GET',
-      encodedData = isGET ? qs.stringify( data ) : JSON.stringify( data ),
+  request( url, data = {}, method = 'GET', options = {}) {
+    const isGET = method === 'GET';
+
+    const encodedData = isGET ? qs.stringify( data ) : JSON.stringify( data ),
       headers = Object.assign({}, options.headers, {
         'Cookie': this._cookies.join(),
         'User-Agent': this.constructor.DEFAULT_USER_AGENT,
       });
 
-    let path = url;
-
     if ( isGET ) {
-      path += '?' + encodedData;
+      url += '?' + encodedData;
     } else if ( encodedData ) {
       headers[ 'Content-Length' ] = Buffer.byteLength( encodedData );
     }
 
-    return { path, headers, encodedData };
-  }
-
-  request( url, data = {}, method = 'GET', options = {}) {
-
-    const { path, headers, encodedData } = this.prepareRequest( url, data, method, options );
-
     return this.beginRequest()
-      .then(() => this.makeRequest( path, encodedData, method, headers ))
+      .then(() => this.makeRequest( url, encodedData, method, headers ))
       .then( response => this.handleResponse( response, options.response ))
       .then( response => this.endRequest( response ));
   }
@@ -100,9 +92,9 @@ class AmoRequest {
     return data;
   }
 
-  makeRequest( path, data = {}, method = 'GET', headers = {}) {
+  makeRequest( url, data = {}, method = 'GET', headers = {}) {
     return HTTPSRequest.send({
-      path,
+      path: url,
       hostname: this._hostname,
       headers,
       method,
