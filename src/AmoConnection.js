@@ -1,14 +1,11 @@
 'use strict';
 
-const AmoRequest = require( './AmoRequest.js' );
-
 class AmoConnection {
   static AUTH_URL = '/private/api/auth.php?type=json';
 
   constructor( options = {}) {
     this._options = options;
     this._isConnected = false;
-    this._request = new AmoRequest( options.domain );
   }
 
   set request( request ) {
@@ -19,29 +16,33 @@ class AmoConnection {
     return this._isConnected;
   }
 
-  establish() {
+  connect() {
     if ( this._isConnected ) {
       return Promise.resolve( true );
     }
-    const data = {},
-      { login, password, hash } = this._options,
-      _static = this.constructor;
+    const { login, password, hash } = this._options,
+      data = {
+        USER_LOGIN: login
+      },
+      url = this.constructor.AUTH_URL;
 
-    data[ 'USER_LOGIN' ] = login;
-
-    if ( password !== undefined ) {
-      data[ 'USER_PASSWORD' ] = password;
-    } else if ( hash !== undefined ) {
+    if ( hash ) {
       data[ 'USER_HASH' ] = hash;
     }
+    else if ( password ) {
+      data[ 'USER_PASSWORD' ] = password;
+    }
 
-    return this._request.get( _static.AUTH_URL, data, {
+    return this._request.post( url, data, {
       headers: { 'Content-Type': 'application/json' },
-      saveCookie: true
+      response: {
+        dataType: 'json',
+        saveCookies: true
+      }
     })
-    .then(() => {
-      this._isConnected = true;
-      return true;
+    .then( data => {
+      this._isConnected = data.response.auth === true;
+      return this._isConnected;
     })
     .catch( e => {
       throw new Error( 'Connection Error!' );

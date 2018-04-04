@@ -3,11 +3,15 @@
     "eslint:recommended",
     "idiomatic"
   ],
+  "plugins": [
+    "jasmine"
+  ],
   "parserOptions": {
     "ecmaVersion": 8,
     "sourceType": "module"
   },
   "env": {
+    "jasmine": true,
     "node": true,
     "es6": true
   },
