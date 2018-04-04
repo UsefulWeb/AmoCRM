@@ -23,28 +23,31 @@ class AmoRequest {
     return this.request( url, data, 'GET', options );
   }
 
-  request( url, data = {}, method = 'GET', options = {}) {
-    const isAjax = url.indexOf( '/ajax' ) === 0,
-      isGET = method === 'GET';
-
-    const encodedData = isAjax || isGET ? qs.stringify( data ) : JSON.stringify( data ),
+  prepareRequest( url, data, method, options ) {
+    const isGET = method === 'GET',
+      encodedData = isGET ? qs.stringify( data ) : JSON.stringify( data ),
       headers = Object.assign({}, options.headers, {
         'Cookie': this._cookies.join(),
         'User-Agent': this.constructor.DEFAULT_USER_AGENT,
       });
 
-    if ( isAjax ) {
-      headers[ 'X-Requested-With' ] = 'XMLHttpRequest';
-    }
+    let path = url;
 
     if ( isGET ) {
-      url += '?' + encodedData;
-    } else if ( Object.keys( data ).length ) {
+      path += '?' + encodedData;
+    } else if ( encodedData ) {
       headers[ 'Content-Length' ] = Buffer.byteLength( encodedData );
     }
 
+    return { path, headers, encodedData };
+  }
+
+  request( url, data = {}, method = 'GET', options = {}) {
+
+    const { path, headers, encodedData } = this.prepareRequest( url, data, method, options );
+
     return this.beginRequest()
-      .then(() => this.makeRequest( url, encodedData, method, headers ))
+      .then(() => this.makeRequest( path, encodedData, method, headers ))
       .then( response => this.handleResponse( response, options.response ))
       .then( response => this.endRequest( response ));
   }
@@ -97,9 +100,9 @@ class AmoRequest {
     return data;
   }
 
-  makeRequest( url, data = {}, method = 'GET', headers = {}) {
+  makeRequest( path, data = {}, method = 'GET', headers = {}) {
     return HTTPSRequest.send({
-      path: url,
+      path,
       hostname: this._hostname,
       headers,
       method,
