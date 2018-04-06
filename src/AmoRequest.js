@@ -1,16 +1,15 @@
 'use strict';
-import HTTPSRequest from "./HTTPSRequest";
+import HTTPSRequest from './HTTPSRequest';
+import Queue from 'promise-queue';
 
 import qs from 'qs';
 import { parseString } from 'xml2js';
 
 class AmoRequest {
-  static REQUEST_TIMEOUT = 1000 * 60;
-  static REQUEST_CHECK_INTERVAL = 100;
   static DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';
 
   constructor( domain ) {
-    this._isBusy = false;
+    this._queue = new Queue( 1 );
     this._cookies = [];
     this._hostname = domain + '.amocrm.ru';
   }
@@ -24,24 +23,33 @@ class AmoRequest {
   }
 
   request( url, data = {}, method = 'GET', options = {}) {
+    const encodedData = this.encodeData( url, data, method, options ),
+      headers = this.getHeaders( url, encodedData, method, options ),
+      request = this.createRequest( url, encodedData, method, headers );
+
+    return this._queue.add(() => {
+      return request.send()
+        .then( response => this.handleResponse( response, options.response ))
+    });
+  }
+
+  encodeData( url, data = {}, method = 'GET', options = {}) {
     const isGET = method === 'GET';
 
-    const encodedData = isGET ? qs.stringify( data ) : JSON.stringify( data ),
+    return isGET ? qs.stringify( data ) : JSON.stringify( data );
+  }
+
+  getHeaders( url, encodedData = '', method = 'GET', options = {}) {
+    const isGET = method === 'GET',
       headers = Object.assign({}, options.headers, {
         'Cookie': this._cookies.join(),
         'User-Agent': this.constructor.DEFAULT_USER_AGENT,
       });
 
-    if ( isGET ) {
-      url += '?' + encodedData;
-    } else if ( encodedData ) {
+    if ( !isGET && encodedData ) {
       headers[ 'Content-Length' ] = Buffer.byteLength( encodedData );
     }
-
-    return this.beginRequest()
-      .then(() => this.makeRequest( url, encodedData, method, headers ))
-      .then( response => this.handleResponse( response, options.response ))
-      .then( response => this.endRequest( response ));
+    return headers;
   }
 
   handleResponse({ rawData, response }, options = {}) {
@@ -63,44 +71,18 @@ class AmoRequest {
     return Promise.resolve( data );
   }
 
-  beginRequest() {
-    const checkInterval = this.constructor.REQUEST_CHECK_INTERVAL,
-      timeout = this.constructor.REQUEST_TIMEOUT;
-    let waitTime = timeout;
+  createRequest(url, encodedData = '', method = 'GET', headers = {}) {
+    const isGET = method === 'GET',
+      path = isGET ? `${url}?${encodedData}`: url;
 
-    return new Promise(( resolve, reject ) => {
-      const timer = () => {
-        if ( !this._isBusy ) {
-          resolve();
-          return;
-        }
-        waitTime -= checkInterval;
-        if ( waitTime > 0 ) {
-          return setTimeout( timer, 100 );
-        }
-        reject( new Error( `Maximum waiting time limit reached: (${timeout} ms.)` ));
-      };
-      timer();
-    })
-    .then(() => {
-      this._isBusy = true;
-    });
-  }
-
-  endRequest( data ) {
-    this._isBusy = false;
-    return data;
-  }
-
-  makeRequest( url, data = {}, method = 'GET', headers = {}) {
-    return HTTPSRequest.send({
-      path: url,
+    return new HTTPSRequest({
+      path,
       hostname: this._hostname,
       headers,
       method,
-      data
+      data: encodedData
     })
   }
-}
+} 
 
 export default AmoRequest;

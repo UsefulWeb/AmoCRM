@@ -2,9 +2,13 @@
 import https from 'https';
 
 class HTTPSRequest {
-  static send( options ) {
-    const { hostname, path, method = 'GET', headers = {}, data = '' } = options;
-    return  new Promise(( resolve, reject ) => {
+  constructor( options ) {
+    this._options = options;
+  }
+
+  send() {
+    const { hostname, path, method = 'GET', headers = {}, data = '' } = this._options;
+    return new Promise(( resolve, reject ) => {
       const request = https.request({
         hostname,
         path,
@@ -21,11 +25,11 @@ class HTTPSRequest {
     });
   }
 
-  static onError( callback ) {
+  onError( callback ) {
     return ({ error }) => callback( error );
   }
 
-  static onResponse( callback ) {
+  onResponse( callback ) {
     let rawData = '';
     const onResponseData = chunk => rawData += chunk,
       onRequestEnd = response => () => callback({ response, rawData });
