@@ -14,6 +14,10 @@ class EntityHandler {
   }
 
   set( target, name, value ) {
+    if ( this._entity[ name ]) {
+      this._entity[ name ] = value;
+      return true;
+    }
     const result = this._entity.setAttribute( name, value );
     return Boolean( result );
   }

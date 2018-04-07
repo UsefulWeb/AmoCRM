@@ -1,6 +1,6 @@
 import EntityResponseHandler from "../responseHandlers/EntityResponseHandler";
 import ResourceFactory from "./ResourceFactory";
-import EntityHandler from "../EntityHandler";
+import EntityHandler from "../EntityProxyHandler";
 
 class EntityFactory extends ResourceFactory {
   static responseHandlerClass = EntityResponseHandler;
@@ -10,8 +10,15 @@ class EntityFactory extends ResourceFactory {
     const { entityClass, entityHandlerClass } = this.constructor,
       entity = new entityClass( this._resource, attributes ),
       handler = new entityHandlerClass( entity );
-
     return new Proxy({}, handler );
+  }
+
+  findById( id ) {
+    return this._resource.findById( id )
+      .then( response => {
+        const attributes = response.getFirstItem();
+        return this.create( attributes );
+      });
   }
 
   find( query ) {

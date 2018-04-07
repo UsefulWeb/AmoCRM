@@ -1,10 +1,10 @@
 import AmoCRM from '../src/AmoCRM';
-import { connection } from './support/config';
+import config from './support/config';
 
 let client;
 
 beforeEach( done => {
-  client = new AmoCRM({ connection });
+  client = new AmoCRM( config );
   client
     .connect()
     .then( done );
@@ -16,7 +16,7 @@ describe( 'AmoCRM connection', () => {
   it( 'should get account data', done => {
     client.request.get( '/api/v2/account' )
       .then( account => {
-        expect( account.subdomain ).toBe( connection.domain );
+        expect( account.subdomain ).toBe( config.domain );
         done();
       });
   });

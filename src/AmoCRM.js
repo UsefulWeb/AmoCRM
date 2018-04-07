@@ -1,40 +1,25 @@
 'use strict';
 import AmoConnection from './base/AmoConnection';
 import AmoRequest from './base/AmoRequest';
-import factories from './api/factories';
-
+import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
 
 class AmoCRM {
 
-  constructor( options = {}) {
-    this._options = options;
-    if( !options.connection ) {
-      throw new Error( 'Wrong connection configuration' );
+  constructor( options ) {
+    if ( !options ) {
+      throw new Error( 'Wrong configuration' );
     }
-    this._request = new AmoRequest( options.connection.domain );
-    this._connection = new AmoConnection( this._request, options.connection.auth );
+    this._options = options;
+    this._request = new AmoRequest( options.domain );
+    this._connection = new AmoConnection( this._request, options.auth );
 
     this.assignFactories();
   }
 
   assignFactories() {
-    Object.keys( factories ).forEach( factoryName => {
-      const factory = new factories[ factoryName ]( this._request ),
-        handler = this.createFactoryHandler( factory ),
-        target = function target() {};
-      this[ factoryName ] = new Proxy( target, handler );
-    });
-  }
-
-  createFactoryHandler( factory ) {
-    return {
-      /**
-       * @param target {EntityFactory}
-       * @param attributes {object}
-       */
-      construct: ( target, attributes ) => factory.create( attributes ),
-      get: ( target, attribute ) => factory[ attribute ]
-    };
+    const builder = new ResourceFactoryBuilder( this._request ),
+      factories = builder.getResourceFactories();
+    Object.assign( this, factories );
   }
 
   get request() {

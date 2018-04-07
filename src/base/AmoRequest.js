@@ -9,6 +9,9 @@ class AmoRequest {
   static DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';
 
   constructor( domain ) {
+    if ( !domain ) {
+      throw new Error( 'Portal domain must be set!' );
+    }
     this._queue = new Queue( 1 );
     this._cookies = [];
     this._hostname = domain + '.amocrm.ru';
@@ -25,7 +28,7 @@ class AmoRequest {
   request( url, data = {}, method = 'GET', options = {}) {
     const encodedData = this.encodeData( url, data, method, options ),
       headers = this.getHeaders( url, encodedData, method, options ),
-      request = this.createRequest( url, encodedData, method, headers );
+      request = this.createHTTPSRequest( url, encodedData, method, headers );
 
     return this._queue.add(() => {
       return request.send()
@@ -71,7 +74,7 @@ class AmoRequest {
     return Promise.resolve( data );
   }
 
-  createRequest(url, encodedData = '', method = 'GET', headers = {}) {
+  createHTTPSRequest(url, encodedData = '', method = 'GET', headers = {}) {
     const isGET = method === 'GET',
       path = isGET ? `${url}?${encodedData}`: url;
 

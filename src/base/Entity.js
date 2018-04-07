@@ -7,7 +7,7 @@ class Entity {
    */
   constructor( resource, attributes = {}) {
     this._resource = resource;
-    this._attributes = Object.assign({}, attributes );
+    this._attributes = attributes;
   }
 
   set attributes( attributes ) {
@@ -47,7 +47,7 @@ class Entity {
       .findById( this._attributes.id )
       .then( response => {
         this._attributes = response.getFirstItem();
-        return this.attributes;
+        return this;
       });
   }
 
@@ -57,20 +57,20 @@ class Entity {
       .then( response => {
         const attributes = response.getFirstItem();
         this._attributes.id = attributes.id;
-        return attributes;
+        return this;
       });
   }
 
   update() {
     return this._resource
       .update([ this._attributes ])
-      .then( response => response.getFirstItem());
+      .then( response => this );
   }
 
   remove() {
     return this._resource
       .remove([ this._attributes ])
-      .then( response => response.getFirstItem());
+      .then( response => this );
   }
 }
 
