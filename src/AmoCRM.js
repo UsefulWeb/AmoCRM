@@ -1,42 +1,40 @@
 'use strict';
-import AmoConnection from './AmoConnection';
-import AmoRequest from './AmoRequest';
-import Lead from './Entities/Lead';
+import AmoConnection from './base/AmoConnection';
+import AmoRequest from './base/AmoRequest';
+import factories from './api/factories';
 
-const entities = [ Lead ];
 
 class AmoCRM {
 
   constructor( options = {}) {
     this._options = options;
-    if ( options.connection ) {
-      this.connection = new AmoConnection( options.connection );
-      this.request = new AmoRequest( options.connection.domain );
+    if( !options.connection ) {
+      throw new Error( 'Wrong connection configuration' );
     }
+    this._request = new AmoRequest( options.connection.domain );
+    this._connection = new AmoConnection( this._request, options.connection.auth );
 
-    this.buildEntityFactories();
+    this.assignFactories();
   }
 
-  buildEntityFactories() {
-    for ( let i = 0, len = entities.length; i < len; i++ ) {
-      const factoryName = entities[ i ].name;
-      this[ factoryName ] = ( ...args ) => {
-        const instance = new entities[ i ]( ...args );
-        instance.request = this._request;
-        return instance;
-      };
-    }
+  assignFactories() {
+    Object.keys( factories ).forEach( factoryName => {
+      const factory = new factories[ factoryName ]( this._request ),
+        handler = this.createFactoryHandler( factory ),
+        target = function target() {};
+      this[ factoryName ] = new Proxy( target, handler );
+    });
   }
 
-  set connection( connection ) {
-    this._connection = connection;
-  }
-
-  set request( request ) {
-    if ( this._connection ) {
-      this._connection.request = request;
-    }
-    this._request = request;
+  createFactoryHandler( factory ) {
+    return {
+      /**
+       * @param target {EntityFactory}
+       * @param attributes {object}
+       */
+      construct: ( target, attributes ) => factory.create( attributes ),
+      get: ( target, attribute ) => factory[ attribute ]
+    };
   }
 
   get request() {
@@ -47,9 +45,6 @@ class AmoCRM {
   }
 
   connect() {
-    if ( this._connection === undefined ) {
-      throw new Error( 'client doesnt have any connection configuration' );
-    }
     return this._connection.connect();
   }
 }

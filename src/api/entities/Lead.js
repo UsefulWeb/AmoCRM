@@ -1,9 +1,9 @@
 'use strict';
 
-import Entity from '../Entity';
+import Entity from '../../base/Entity';
 
 class Lead extends Entity {
-  static PATH = '/leads';
+
 }
 
 export default Lead;

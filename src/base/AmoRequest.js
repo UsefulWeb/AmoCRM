@@ -83,6 +83,6 @@ class AmoRequest {
       data: encodedData
     })
   }
-} 
+}
 
 export default AmoRequest;
