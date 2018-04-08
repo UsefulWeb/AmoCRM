@@ -1,6 +1,6 @@
 import AmoCRM from '../../src/AmoCRM';
 import config from '../support/config';
-import Lead from '../../src/api/entities/Lead';
+import Lead from '../../src/api/activeRecords/Lead';
 
 let client;
 
@@ -96,7 +96,7 @@ describe( 'AmoCRM API Lead Interface', () => {
       .then( lead => {
         expect( lead.name ).toBe( 'Created lead' );
         lead.name = 'Updated lead';
-        lead.updated_at = Math.ceil( new Date / 1000 ) + 1;
+        lead.updated_at = Math.ceil( new Date / 1000 ) + 20;
         return lead.save();
       })
       .then(({ id }) => {
@@ -109,5 +109,20 @@ describe( 'AmoCRM API Lead Interface', () => {
       });
   });
 
-  
+  it( 'create lead and remove it', done => {
+    const newLead = new client.Lead;
+    newLead.name = 'Lead for deletion';
+    newLead.save()
+      .then( lead => {
+        return lead.remove();
+      })
+      .then(({ id }) => {
+        const lead = new client.Lead({ id });
+        return lead.fetch();
+      })
+      .then( lead => {
+        expect( lead.id ).toBeUndefined();
+        done();
+      });
+  });
 });

@@ -4,17 +4,16 @@ class ResourceFactory {
    * @param resourceClass {RemoteResource}
    */
   static resourceClass;
-  static responseHandlerClass;
 
   /**
-   * @param request {AmoRequest}
+   * @param request {DomainRequest}
    */
   constructor( request ) {
-    const { responseHandlerClass, resourceClass } = this.constructor;
+    const { resourceClass } = this.constructor;
     /**
      * @param _resource {RemoteResource}
      */
-    this._resource = new resourceClass( request, responseHandlerClass );
+    this._resource = new resourceClass( request );
   }
 
   create( attributes={}) {

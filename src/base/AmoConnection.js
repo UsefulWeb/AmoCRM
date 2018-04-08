@@ -41,7 +41,7 @@ class AmoConnection {
         return this._isConnected;
       })
       .catch( e => {
-        throw new Error( 'Connection Error!' );
+        throw new Error( `Connection Error: ${ e.message }` );
       });
   }
 }

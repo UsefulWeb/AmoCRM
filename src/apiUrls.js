@@ -1,17 +1,35 @@
 export default {
   auth: '/private/api/auth.php?type=json',
+  account: '/api/v2/account',
+  multiactions: '/ajax/v1/multiactions/set',
   entities: {
-    leads: '/api/v2/leads',
-    contacts: '/api/v2/contacts',
-    companies: '/api/v2/companies',
-    customers: '/api/v2/customers',
-    tasks: '/api/v2/tasks',
-    notes: '/api/v2/notes',
-    fields: '/api/v2/fields',
+    leads: {
+      path: '/api/v2/leads',
+      deleteOnePath: '/private/deals/delete.php',
+    },
+    contacts: {
+      path: '/api/v2/contacts'
+    },
+    companies: {
+      path: '/api/v2/companies'
+    },
+    customers: {
+      path: '/api/v2/customers'
+    },
+    tasks: {
+      path: '/api/v2/tasks'
+    },
+    notes: {
+      path: '/api/v2/notes'
+    },
+    fields: {
+      path: '/api/v2/fields'
+    },
     pipelines: {
-      get: '/api/v2/pipelines',
-      update: '/private/api/v2/json/pipelines/set',
-      delete: '/private/api/v2/json/pipelines/delete'
+      getPath: '/api/v2/pipelines',
+      insertPath: '/private/api/v2/json/pipelines/set',
+      updatePath: '/private/api/v2/json/pipelines/set',
+      deletePath: '/private/api/v2/json/pipelines/delete'
     }
   },
   unsorted: {

@@ -1,17 +1,9 @@
-class EntityErrorResponseHandler {
-  constructor( response ) {
-    this._response = response;
-  }
+import ResponseErrorHandler from './ResponseErrorHandler';
 
-  handleErrors() {
-    if ( !this.hasErrors()) {
-      return;
-    }
-    throw this.getFirstError();
-  }
+class EntityResponseErrorHandler extends ResponseErrorHandler {
 
   getErrorsData() {
-    return this._response._embedded.errors;
+    return this._response._embedded && this._response._embedded.errors;
   }
 
   hasErrors() {
@@ -38,4 +30,4 @@ class EntityErrorResponseHandler {
   }
 }
 
-export default EntityErrorResponseHandler;
+export default EntityResponseErrorHandler;

@@ -1,6 +1,6 @@
 class EntityHandler {
   /**
-   * @param entity {Entity}
+   * @param entity {EntityActiveRecord}
    */
   constructor( entity ) {
     this._entity = entity;
@@ -10,7 +10,9 @@ class EntityHandler {
     if ( this._entity[ name ]) {
       return this._entity[ name ];
     }
-    return this._entity.getAttribute( name );
+    if ( this._entity.hasAttribute( name )) {
+      return this._entity.getAttribute( name );
+    }
   }
 
   set( target, name, value ) {

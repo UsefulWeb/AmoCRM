@@ -1,21 +1,21 @@
 
 class RemoteResource {
+  static responseHandlerClass;
   /**
-   * @param request {AmoRequest}
-   * @param responseHandler {ResponseHandler}
+   * @param request {DomainRequest}
    */
-  constructor( request, responseHandler ) {
+  constructor( request ) {
     this._request = request;
-    this._responseHandler = responseHandler;
   }
 
-  request( method, path, data ) {
-    return this._request.request( path, data, method )
+  request( method, path, data, options ) {
+    const { responseHandlerClass } = this.constructor;
+    return this._request.request( path, data, method, options )
       .then( response => {
-        if ( !this._responseHandler ) {
+        if ( !responseHandlerClass ) {
           return response;
         }
-        return new this._responseHandler( response );
+        return new responseHandlerClass( response );
       });
   }
 }

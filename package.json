@@ -35,6 +35,7 @@
     "babel-preset-es2015": "^6.24.1",
     "promise-queue": "^2.2.5",
     "qs": "^6.4.0",
+    "unirest": "^0.5.1",
     "xml2js": "^0.4.19"
   }
 }

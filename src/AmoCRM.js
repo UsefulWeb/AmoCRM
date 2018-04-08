@@ -1,6 +1,6 @@
 'use strict';
 import AmoConnection from './base/AmoConnection';
-import AmoRequest from './base/AmoRequest';
+import PrivateDomainRequest from './base/requests/domain/PrivateDomainRequest';
 import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
 
 class AmoCRM {
@@ -10,7 +10,7 @@ class AmoCRM {
       throw new Error( 'Wrong configuration' );
     }
     this._options = options;
-    this._request = new AmoRequest( options.domain );
+    this._request = new PrivateDomainRequest( options.domain );
     this._connection = new AmoConnection( this._request, options.auth );
 
     this.assignFactories();

@@ -1,9 +1,7 @@
-import EntityResponseHandler from "../responseHandlers/EntityResponseHandler";
 import ResourceFactory from "./ResourceFactory";
 import EntityHandler from "../EntityProxyHandler";
 
 class EntityFactory extends ResourceFactory {
-  static responseHandlerClass = EntityResponseHandler;
   static entityHandlerClass = EntityHandler;
 
   create( attributes={}) {
