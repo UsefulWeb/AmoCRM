@@ -11,6 +11,10 @@ class EntityFactory extends ResourceFactory {
     return new Proxy({}, handler );
   }
 
+  of( attributes={}) {
+    return this.create( attributes );
+  }
+
   findById( id ) {
     return this._resource.findById( id )
       .then( response => {
