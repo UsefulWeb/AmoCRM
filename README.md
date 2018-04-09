@@ -22,7 +22,7 @@ crm.connect();
 ```js
 // Получить данные по аккаунту (GET-запрос)
 crm.request
-.get( '/private/api/v2/json/accounts/current' )
+.get( '/api/v2/account' )
 .then( data => {
     console.log( 'Полученные данные', data );
 })
@@ -32,18 +32,14 @@ crm.request
 
 // Создать новый контакт (POST-запрос)
 crm.request
-.post( '/private/api/v2/json/contacts/set', {
-    request: {
-        contacts: {
-            add: [
-                {
-                    name: "Walter White",
-                    request_id: 143,
-                    // другие поля ...
-                }
-            ]
+.post( '/api/v2/contacts', {
+    add: [
+        {
+            name: "Walter White",
+            request_id: 143,
+            // другие поля ...
         }
-    } 
+    ]
 })
 .then( data => {
  console.log( 'Полученные данные', data );
@@ -51,6 +47,43 @@ crm.request
 .catch( e => {
  console.log( 'Произошла ошибка создания контакта', e );
 })
+```
+
+## Фабрики
+
+В настоящий момент доступны следующие фабрики:
+
+```js
+
+crm.Lead // манипуляции со сделками
+crm.Contact // манипуляции с контактами
+```
+
+Каждая из фабрик имеет методы для множественных операций со сделками:
+
+```js
+// Поиск сделок по критерию, возвращает [ Lead, Lead, ... ]
+crm.Lead.find( criteria );
+// Добавление сделок
+crm.Lead.update([
+     {
+         name: "Walter White",
+         request_id: 143,
+         // другие поля ...
+     }
+ ]);
+// Обновление сделок
+crm.Lead.update([
+    {
+        id: 1234
+        name: "Walter White",
+        request_id: 143,
+        // другие поля ...
+    }
+]);
+
+// Возвращает Lead
+crm.Lead.findById( id );
 ```
 
 ## Сделки
