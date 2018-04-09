@@ -65,7 +65,7 @@ crm.Contact // манипуляции с контактами
 // Поиск сделок по критерию, возвращает [ Lead, Lead, ... ]
 crm.Lead.find( criteria );
 // Добавление сделок
-crm.Lead.update([
+crm.Lead.insert([
      {
          name: "Walter White",
          request_id: 143,
