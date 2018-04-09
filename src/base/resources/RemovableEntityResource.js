@@ -13,7 +13,7 @@ class RemovableEntityResource extends EntityResource {
     }, multiaction_type );
   }
 
-  removeById( id ) {
+  removeOne( id ) {
     const { deletePath } = this.constructor;
     if ( !deletePath ) {
       throw new Error( 'deletePath is not specified!' );
