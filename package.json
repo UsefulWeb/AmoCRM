@@ -1,5 +1,5 @@
 {
-  "name": "amocrm",
+  "name": "amocrm-js",
   "version": "1.0.0",
   "description": "JS Library for AmoCRM",
   "main": "src/AmoCRM.js",
