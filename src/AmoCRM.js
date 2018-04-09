@@ -1,31 +1,36 @@
 'use strict';
-const AmoConnection = require( './AmoConnection.js' );
+import AmoConnection from './base/AmoConnection';
+import PrivateDomainRequest from './base/requests/domain/PrivateDomainRequest';
+import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
 
-let _options = new WeakMap;
-
-/**
- * Основной класс для работы с библиотекой
- */
 class AmoCRM {
-  /**
-   * Конструктор класса
-   * @param  {Object} options Список настроек для объекта
-   */
-  constructor( options = {}) {
-    options = Object.assign({}, options );
-    _options.set( this, options );
 
-    if ( 'connection' in options ) {
-      this.connection = new AmoConnection( options.connection );
+  constructor( options ) {
+    if ( !options ) {
+      throw new Error( 'Wrong configuration' );
     }
+    this._options = options;
+    this._request = new PrivateDomainRequest( options.domain );
+    this._connection = new AmoConnection( this._request, options.auth );
+
+    this.assignFactories();
   }
 
-  /**
-   * Установить соединение с CRM
-   * @return {Promise}
-   */
+  assignFactories() {
+    const builder = new ResourceFactoryBuilder( this._request ),
+      factories = builder.getResourceFactories();
+    Object.assign( this, factories );
+  }
+
+  get request() {
+    return {
+      get: ( ...args ) => this._request.get( ...args ),
+      post: ( ...args ) => this._request.post( ...args )
+    };
+  }
+
   connect() {
-    return this.connection.establish();
+    return this._connection.connect();
   }
 }
 

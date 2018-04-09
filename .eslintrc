@@ -3,22 +3,19 @@
     "eslint:recommended",
     "idiomatic"
   ],
+  "plugins": [
+    "jasmine"
+  ],
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 8,
+    "sourceType": "module"
   },
   "env": {
+    "jasmine": true,
     "node": true,
     "es6": true
   },
   "rules": {
-    "semi": ["error", "always"],
-    "require-jsdoc": ["error", {
-      "require": {
-        "FunctionDeclaration": true,
-        "MethodDefinition": true,
-        "ClassDeclaration": true,
-        "ArrowFunctionExpression": true
-      }
-    }]
+    "semi": ["error", "always"]
   }
 }
