@@ -1,4 +1,4 @@
-import AmoCRM from '../src/AmoCRM';
+import AmoCRM from '../dist/AmoCRM';
 import config from './support/config';
 
 let client;
