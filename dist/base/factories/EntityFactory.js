@@ -57,6 +57,9 @@ var EntityFactory = function (_ResourceFactory) {
 
       return this._resource.findById(id).then(function (response) {
         var attributes = response.getFirstItem();
+        if (!attributes) {
+          return;
+        }
         return _this2.create(attributes);
       });
     }

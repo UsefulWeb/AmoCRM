@@ -17,12 +17,15 @@ class EntityActiveRecord extends ActiveRecord {
     return this._resource
       .findById( this._attributes.id )
       .then( response => {
-        this._attributes = response.getFirstItem();
+        this._attributes = response.getFirstItem() || {};
         return this;
       });
   }
 
   insert() {
+    if ( !this.isNew()) {
+      throw new Error( 'EntityActiveRecord must not exists for using EntityActiveRecord.insert()!' );
+    }
     return this._resource
       .insert([ this._attributes ])
       .then( response => {
@@ -33,6 +36,9 @@ class EntityActiveRecord extends ActiveRecord {
   }
 
   update() {
+    if ( this.isNew()) {
+      throw new Error( 'EntityActiveRecord must exists for using EntityActiveRecord.update()!' );
+    }
     return this._resource
       .update([ this._attributes ])
       .then(() => this );

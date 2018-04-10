@@ -3,7 +3,7 @@ import RemoveableEntityResource from '../../base/resources/RemovableEntityResour
 
 class CompanyResource extends RemoveableEntityResource {
   static path = schema.entities.companies.path;
-  static deletePath = schema.entities.companies.deletePath;
+  static ENTITY_TYPE = 3;
 }
 
 export default CompanyResource;

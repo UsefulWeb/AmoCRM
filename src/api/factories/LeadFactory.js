@@ -1,8 +1,8 @@
-import EntityFactory from '../../base/factories/EntityFactory';
 import Lead from '../activeRecords/Lead';
 import LeadResource from '../resources/LeadResource';
+import RemovableEntityFactory from '../../base/factories/RemovableEntityFactory';
 
-class LeadFactory extends EntityFactory {
+class LeadFactory extends RemovableEntityFactory {
   static entityClass = Lead;
   static resourceClass = LeadResource;
 }

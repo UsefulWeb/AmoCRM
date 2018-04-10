@@ -1,4 +1,4 @@
-import AmoCRM from '../../dist/AmoCRM';
+import AmoCRM from '../../src/AmoCRM';
 import config from '../support/config';
 import Lead from '../../src/api/activeRecords/Lead';
 
@@ -121,7 +121,7 @@ describe( 'AmoCRM API Lead Interface', () => {
         return lead.fetch();
       })
       .then( lead => {
-        expect( lead.id ).toBeUndefined();
+        expect( lead.name ).toBeUndefined();
         done();
       });
   });

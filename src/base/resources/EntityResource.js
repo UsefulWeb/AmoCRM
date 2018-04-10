@@ -38,7 +38,7 @@ class EntityResource extends RemoteResource {
     });
   }
 
-  multiactions( ids, data= {}, multiaction_type ) {
+  multiactions( ids, data = {}, multiaction_type ) {
     const { multiactionsPath, ENTITY_TYPE } = this.constructor;
     return this.request( 'POST', multiactionsPath,
       {

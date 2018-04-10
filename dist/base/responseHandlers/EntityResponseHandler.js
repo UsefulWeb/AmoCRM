@@ -40,7 +40,7 @@ var EntityResponseHandler = function (_ResponseHandler) {
   }, {
     key: 'getFirstItem',
     value: function getFirstItem() {
-      return this.getItems()[0] || {};
+      return this.getItems()[0];
     }
   }]);
 

@@ -1,4 +1,4 @@
-import AmoCRM from '../../dist/AmoCRM';
+import AmoCRM from '../../src/AmoCRM';
 import config from '../support/config';
 
 let client;
@@ -46,7 +46,7 @@ describe( 'AmoCRM API Contact Interface', () => {
       .then(() => contact.remove())
       .then(() => client.Contact.findById( contact.id ))
       .then( removedContact => {
-        expect( removedContact.id ).toBeUndefined();
+        expect( removedContact ).toBeUndefined();
         done();
       });
   });

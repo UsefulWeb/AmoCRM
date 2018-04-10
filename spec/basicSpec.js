@@ -1,4 +1,4 @@
-import AmoCRM from '../dist/AmoCRM';
+import AmoCRM from '../src/AmoCRM';
 
 describe( 'Entry Point: AmoCRM class', () => {
   it( 'should create instance', () => {

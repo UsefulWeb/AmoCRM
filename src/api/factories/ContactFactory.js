@@ -1,8 +1,8 @@
-import EntityFactory from '../../base/factories/EntityFactory';
 import Contact from '../activeRecords/Contact';
 import ContactResource from '../resources/ContactResource';
+import RemovableEntityFactory from '../../base/factories/RemovableEntityFactory';
 
-class ContactFactory extends EntityFactory {
+class ContactFactory extends RemovableEntityFactory {
   static entityClass = Contact;
   static resourceClass = ContactResource;
 }

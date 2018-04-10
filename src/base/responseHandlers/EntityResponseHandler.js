@@ -10,7 +10,7 @@ class EntityResponseHandler extends ResponseHandler {
   }
 
   getFirstItem() {
-    return this.getItems()[ 0 ] || {};
+    return this.getItems()[ 0 ];
   }
 }
 

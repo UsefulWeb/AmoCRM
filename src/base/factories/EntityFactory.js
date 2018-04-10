@@ -1,5 +1,6 @@
 import ResourceFactory from "./ResourceFactory";
 import EntityHandler from "../EntityProxyHandler";
+import BaseActiveRecord from "../activeRecords/BaseActiveRecord";
 
 class EntityFactory extends ResourceFactory {
   static entityHandlerClass = EntityHandler;
@@ -19,6 +20,9 @@ class EntityFactory extends ResourceFactory {
     return this._resource.findById( id )
       .then( response => {
         const attributes = response.getFirstItem();
+        if ( !attributes ) {
+          return;
+        }
         return this.create( attributes );
       });
   }
@@ -31,16 +35,28 @@ class EntityFactory extends ResourceFactory {
       });
   }
 
-  insert( data ) {
+  insert( rawData ) {
+    const data = this.getDataAttributes( rawData );
     return this._resource.insert( data );
   }
 
-  update( data ) {
+  update( rawData ) {
+    const data = this.getDataAttributes( rawData );
     return this._resource.update( data );
   }
 
-  remove( data ) {
-    return this._resource.remove( data );
+  getDataAttributes( data = []) {
+    return data.map( item =>
+      item instanceof BaseActiveRecord ? item.attributes : item
+    );
+  }
+
+  getDataIdentifiers( data = []) {
+    return this
+      .getDataAttributes( data )
+      .map(
+        item => typeof item === 'object' ? item.id : item
+      );
   }
 }
 
