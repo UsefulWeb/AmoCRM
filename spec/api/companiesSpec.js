@@ -39,7 +39,7 @@ describe( 'AmoCRM API Company Interface', () => {
       });
   });
 
-  fit( 'create company and remove it', done => {
+  it( 'create company and remove it', done => {
     const company = new client.Company;
     company.name = 'Company for deletion';
     company.save()
