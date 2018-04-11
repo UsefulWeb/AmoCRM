@@ -1,4 +1,7 @@
+import BehaviorFactory from '../BehaviorFactory';
+
 class BaseActiveRecord {
+  static behaviors = [];
   /**
    * @param resource {RemovableEntityResource}
    * @param attributes {object}
@@ -7,6 +10,7 @@ class BaseActiveRecord {
     this._resource = resource;
     this._attributes = Object.assign({}, attributes );
     this._isRemoved = false;
+    BehaviorFactory.assignBehaviors( this, this.constructor.behaviors );
   }
 
   set attributes( attributes ) {
@@ -36,10 +40,6 @@ class BaseActiveRecord {
 
   isNew() {
     return this._attributes.id === undefined;
-  }
-
-  isRemoved() {
-    return this._isRemoved;
   }
 }
 

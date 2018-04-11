@@ -1,9 +1,13 @@
+import BehaviorFactory from "../BehaviorFactory";
+
 class ResourceFactory {
   static entityClass;
   /**
    * @param resourceClass {RemoteResource}
    */
   static resourceClass;
+
+  static behaviors = [];
 
   /**
    * @param request {DomainRequest}
@@ -14,6 +18,7 @@ class ResourceFactory {
      * @param _resource {RemoteResource}
      */
     this._resource = new resourceClass( request );
+    BehaviorFactory.assignBehaviors( this, this.constructor.behaviors );
   }
 
   create( attributes={}) {

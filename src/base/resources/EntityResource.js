@@ -1,6 +1,5 @@
 import RemoteResource from './RemoteResource';
 import EntityResponseHandler from "../responseHandlers/EntityResponseHandler";
-import schema from '../../apiUrls';
 
 class EntityResource extends RemoteResource {
 
@@ -8,7 +7,6 @@ class EntityResource extends RemoteResource {
   static getPath;
   static insertPath;
   static updatePath;
-  static multiactionsPath = schema.multiactions;
 
   static responseHandlerClass = EntityResponseHandler;
 
@@ -36,29 +34,6 @@ class EntityResource extends RemoteResource {
     return this.request( 'POST', updatePath || path, {
       update: data
     });
-  }
-
-  multiactions( ids, data = {}, multiaction_type ) {
-    const { multiactionsPath, ENTITY_TYPE } = this.constructor;
-    return this.request( 'POST', multiactionsPath,
-      {
-        request: {
-          multiactions: {
-            add: [
-              {
-                entity_type: ENTITY_TYPE,
-                multiaction_type,
-                data,
-                ids
-              }
-            ]
-          }
-        }
-      },
-      {
-        formData: true
-      }
-    );
   }
 }
 

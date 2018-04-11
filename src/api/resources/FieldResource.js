@@ -1,7 +1,7 @@
 import schema from '../../apiUrls';
-import RemoveableEntityResource from '../../base/resources/RemovableEntityResource';
+import EntityResource from '../../base/resources/EntityResource';
 
-class FieldResource extends RemoveableEntityResource {
+class FieldResource extends EntityResource {
   static path = schema.entities.fields.path;
   static getPath = schema.account;
   static deletePath = schema.entities.fields.deletePath;

@@ -1,10 +1,12 @@
 import Company from '../activeRecords/Company';
 import CompanyResource from '../resources/CompanyResource';
-import RemovableEntityFactory from '../../base/factories/RemovableEntityFactory';
+import EntityFactory from '../../base/factories/EntityFactory';
+import Removable from "../../base/factories/behaviors/Removable";
 
-class CompanyFactory extends RemovableEntityFactory {
+class CompanyFactory extends EntityFactory {
   static entityClass = Company;
   static resourceClass = CompanyResource;
+  static behaviors = [ new Removable ];
 }
 
 export default CompanyFactory;

@@ -11,15 +11,21 @@ class EntityActiveRecord extends ActiveRecord {
     if ( this.isNew()) {
       throw new Error( 'EntityActiveRecord must exists for using EntityActiveRecord.fetch()!' );
     }
-    if ( this.isRemoved()) {
-      throw new Error( 'You cannot fetch deleted resource!' );
-    }
     return this._resource
       .findById( this._attributes.id )
       .then( response => {
-        this._attributes = response.getFirstItem() || {};
+        const attributes = response.getFirstItem();
+        if ( !attributes ) {
+          return false;
+        }
+        this._attributes = attributes;
         return this;
       });
+  }
+
+  exists() {
+    return this.fetch()
+      .then( response => response !== false );
   }
 
   insert() {
@@ -29,7 +35,7 @@ class EntityActiveRecord extends ActiveRecord {
     return this._resource
       .insert([ this._attributes ])
       .then( response => {
-        const attributes = response.getFirstItem();
+        const attributes = response.getFirstItem() || {};
         this._attributes.id = attributes.id;
         return this;
       });
@@ -42,15 +48,6 @@ class EntityActiveRecord extends ActiveRecord {
     return this._resource
       .update([ this._attributes ])
       .then(() => this );
-  }
-
-  remove() {
-    return this._resource
-      .remove([ this._attributes.id ])
-      .then(() => {
-        this._isRemoved = true;
-        return this;
-      });
   }
 }
 

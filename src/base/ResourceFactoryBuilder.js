@@ -8,9 +8,9 @@ class ResourceFactoryBuilder {
   }
 
   getResourceFactories() {
-    return Object.keys( factories ).reduce(( target, factoryName ) => {
-      target[ factoryName ] = this.createResourceFactory( factoryName );
-      return target;
+    return Object.keys( factories ).reduce(( factories, factoryName ) => {
+      factories[ factoryName ] = this.createResourceFactory( factoryName );
+      return factories;
     }, {});
   }
 

@@ -10,7 +10,10 @@ import CompanyFactory from './factories/CompanyFactory';
 export default {
   Lead: LeadFactory,
   Contact: ContactFactory,
-  Company: CompanyFactory
+  Company: CompanyFactory,
+  Note: NoteFactory,
+  Task: TaskFactory
+
   /* TODO
   Customer: CustomerFactory,
   Field: FieldFactory,
