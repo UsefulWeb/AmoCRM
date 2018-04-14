@@ -50,7 +50,7 @@ describe( 'AmoCRM API Note Interface', () => {
 
   });
 
-  fit( 'should check notable interface in all entities', () => {
+  it( 'should check notable interface in all entities', () => {
     const lead = new client.Lead,
       contact = new client.Contact,
       customer = new client.Customer,
@@ -81,15 +81,4 @@ describe( 'AmoCRM API Note Interface', () => {
       });
   });
 
-  it( 'create note and remove it', done => {
-    const note = new client.Note;
-    note.text = 'Note for deletion';
-    note.save()
-      .then(() => note.remove())
-      .then(() => client.Note.findById( note.id ))
-      .then( removedNote => {
-        expect( removedNote ).toBeUndefined();
-        done();
-      });
-  });
 });
