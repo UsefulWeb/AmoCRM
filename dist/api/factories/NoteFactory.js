@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _EntityFactory2 = require('../../base/factories/EntityFactory');
 
 var _EntityFactory3 = _interopRequireDefault(_EntityFactory2);
@@ -62,39 +64,28 @@ var NoteFactory = function (_EntityFactory) {
 
     var _this = _possibleConstructorReturn(this, (_ref = NoteFactory.__proto__ || Object.getPrototypeOf(NoteFactory)).call.apply(_ref, [this].concat(args)));
 
-    _this.ELEMENT_TYPE = {
-      CONTACT: _ContactResource2.default.NOTE_ELEMENT_TYPE,
-      LEAD: _LeadResource2.default.NOTE_ELEMENT_TYPE,
-      COMPANY: _CompanyResource2.default.NOTE_ELEMENT_TYPE,
-      TASK: _TaskResource2.default.NOTE_ELEMENT_TYPE,
-      CUSTOMER: _CustomerResource2.default.NOTE_ELEMENT_TYPE
-    };
+    _this.ELEMENT_TYPE = _NoteResource2.default.ELEMENT_TYPES;
 
-    _this.NOTE_TYPE = {
-      DEAL_CREATED: 1,
-      CONTACT_CREATED: 2,
-      DEAL_STATUS_CHANGED: 3,
-      COMMON: 4,
-      CALL_IN: 10,
-      CALL_OUT: 11,
-      COMPANY_CREATED: 12,
-      TASK_RESULT: 13,
-      SYSTEM: 25,
-      SMS_IN: 102,
-      SMS_OUT: 103
-    };
+    _this.NOTE_TYPE = _NoteResource2.default.NOTE_TYPES;
 
-    _this.CALL_STATUS = {
-      VOICE_MESSAGE_CREATED: 1,
-      CALL_LATER: 2,
-      NOT_AVAILABLE: 3,
-      SUCCESSFUL_CALL: 4,
-      WRONG_NUMBER: 5,
-      DID_NOT_GET_THROUGH: 6,
-      BUSY: 7
-    };
+    _this.CALL_STATUS = _NoteResource2.default.CALL_STATUSES;
     return _this;
   }
+
+  _createClass(NoteFactory, [{
+    key: 'findById',
+    value: function findById(id, type) {
+      var _this2 = this;
+
+      return this._resource.findById(id, type).then(function (response) {
+        var attributes = response.getFirstItem();
+        if (!attributes) {
+          return;
+        }
+        return _this2.create(attributes);
+      });
+    }
+  }]);
 
   return NoteFactory;
 }(_EntityFactory3.default);

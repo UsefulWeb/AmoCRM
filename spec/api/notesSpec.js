@@ -81,18 +81,24 @@ describe( 'AmoCRM API Note Interface', () => {
       });
   });
 
-  fit( 'should get notes for lead', done => {
+  it( 'should get notes for lead', done => {
     const lead = new client.Lead({
         name: 'lead form notes'
       }),
       note = new client.Note({
-        text: 'Hello from Moscow!'
+        text: 'Hello from Moscow!',
+        note_type: client.Note.NOTE_TYPE.COMMON
       });
 
     lead.save()
       .then( lead => lead.notes.add( note ))
+      .then( note => note.fetch())
       .then( note => note.getElement())
-      .then( lead => lead.notes.get())
+      .then( lead => lead.notes.get(
+        {
+          note_type: client.Note.NOTE_TYPE.COMMON
+        }
+      ))
       .then( notes => {
         expect( notes.length ).toBe( 1 );
         expect( notes[ 0 ].id ).toBe( note.id );

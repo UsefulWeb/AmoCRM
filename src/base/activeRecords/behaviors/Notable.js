@@ -1,4 +1,5 @@
-import NoteFactory from "../../../api/factories/NoteFactory";
+import factories from "../../../api/factories";
+import NoteResource from "../../../api/resources/NoteResource";
 
 class Notable {
   get notes() {
@@ -19,13 +20,19 @@ class Notable {
   }
 
   getNotes( params ) {
-    const factory = NoteFactory.createFromResource( this._resource ),
+    const factory = factories.Note,
+      resource = this._resource,
+      factoryInstance = factory.createFromResource( resource ),
+      resourceConstructor = resource.constructor,
+      { NOTE_ELEMENT_TYPE } = resourceConstructor,
+      type = NoteResource.getElementType( NOTE_ELEMENT_TYPE ),
       criteria = {
         ...params,
-        element_id: this.id
+        type,
+        element_id: this._attributes.id
       };
 
-    return factory.find( criteria );
+    return factoryInstance.find( criteria );
   }
 }
 

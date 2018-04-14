@@ -8,9 +8,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _NoteFactory = require("../../../api/factories/NoteFactory");
+var _factories = require("../../../api/factories");
 
-var _NoteFactory2 = _interopRequireDefault(_NoteFactory);
+var _factories2 = _interopRequireDefault(_factories);
+
+var _NoteResource = require("../../../api/resources/NoteResource");
+
+var _NoteResource2 = _interopRequireDefault(_NoteResource);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36,12 +40,19 @@ var Notable = function () {
   }, {
     key: "getNotes",
     value: function getNotes(params) {
-      var factory = _NoteFactory2.default.createFromResource(this._resource),
+      var factory = _factories2.default.Note,
+          resource = this._resource,
+          factoryInstance = factory.createFromResource(resource),
+          resourceConstructor = resource.constructor,
+          NOTE_ELEMENT_TYPE = resourceConstructor.NOTE_ELEMENT_TYPE,
+          type = _NoteResource2.default.getElementType(NOTE_ELEMENT_TYPE),
           criteria = _extends({}, params, {
-        element_id: this.id
+        type: type,
+        element_id: this._attributes.id
       });
 
-      return factory.find(criteria);
+
+      return factoryInstance.find(criteria);
     }
   }, {
     key: "notes",

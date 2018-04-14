@@ -15,37 +15,22 @@ class NoteFactory extends EntityFactory {
 
   constructor( ...args ) {
     super( ...args );
-    this.ELEMENT_TYPE = {
-      CONTACT: ContactResource.NOTE_ELEMENT_TYPE,
-      LEAD: LeadResource.NOTE_ELEMENT_TYPE,
-      COMPANY: CompanyResource.NOTE_ELEMENT_TYPE,
-      TASK: TaskResource.NOTE_ELEMENT_TYPE,
-      CUSTOMER: CustomerResource.NOTE_ELEMENT_TYPE
-    };
+    this.ELEMENT_TYPE = NoteResource.ELEMENT_TYPES;
 
-    this.NOTE_TYPE = {
-      DEAL_CREATED: 1,
-      CONTACT_CREATED: 2,
-      DEAL_STATUS_CHANGED: 3,
-      COMMON: 4,
-      CALL_IN: 10,
-      CALL_OUT: 11,
-      COMPANY_CREATED: 12,
-      TASK_RESULT: 13,
-      SYSTEM: 25,
-      SMS_IN: 102,
-      SMS_OUT: 103
-    };
+    this.NOTE_TYPE = NoteResource.NOTE_TYPES;
 
-    this.CALL_STATUS = {
-      VOICE_MESSAGE_CREATED: 1,
-      CALL_LATER: 2,
-      NOT_AVAILABLE: 3,
-      SUCCESSFUL_CALL: 4,
-      WRONG_NUMBER: 5,
-      DID_NOT_GET_THROUGH: 6,
-      BUSY: 7
-    };
+    this.CALL_STATUS = NoteResource.CALL_STATUSES;
+  }
+
+  findById( id, type ) {
+    return this._resource.findById( id, type )
+      .then( response => {
+        const attributes = response.getFirstItem();
+        if ( !attributes ) {
+          return;
+        }
+        return this.create( attributes );
+      });
   }
 }
 

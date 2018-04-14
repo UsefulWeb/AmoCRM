@@ -24,7 +24,7 @@ class ResourceFactory {
   static createFromResource( resource ) {
     const request = resource.getDomainRequest();
 
-    return new this.constructor( request );
+    return new this( request );
   }
 
   create( attributes={}) {

@@ -47,7 +47,7 @@ var ResourceFactory = function () {
     value: function createFromResource(resource) {
       var request = resource.getDomainRequest();
 
-      return new this.constructor(request);
+      return new this(request);
     }
   }]);
 

@@ -11,6 +11,7 @@ import LeadFactory from "../factories/LeadFactory";
 import CompanyFactory from "../factories/CompanyFactory";
 import TaskFactory from "../factories/TaskFactory";
 import CustomerFactory from "../factories/CustomerFactory";
+import NoteResource from "../resources/NoteResource";
 
 class Note extends Entity {
   static behaviors = [];
@@ -28,6 +29,28 @@ class Note extends Entity {
       case CustomerResource.NOTE_ELEMENT_TYPE:
         return CustomerFactory;
     }
+  }
+
+  fetch() {
+    const type = NoteResource.getElementType( this._attributes.element_type ),
+      { id } = this._attributes;
+    if ( this.isNew()) {
+      throw new Error( 'EntityActiveRecord must exists for using EntityActiveRecord.fetch()!' );
+    }
+    return this._resource
+      .findById( id, type )
+      .then( response => {
+        const attributes = response.getFirstItem();
+        if ( !attributes ) {
+          return false;
+        }
+        this._attributes = attributes;
+        return this;
+      });
+  }
+
+  findById( id, type ) {
+    return this._resource.findById({ id, type });
   }
 
   getElement() {

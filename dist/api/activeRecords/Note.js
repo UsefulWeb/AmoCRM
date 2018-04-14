@@ -50,6 +50,10 @@ var _CustomerFactory = require('../factories/CustomerFactory');
 
 var _CustomerFactory2 = _interopRequireDefault(_CustomerFactory);
 
+var _NoteResource = require('../resources/NoteResource');
+
+var _NoteResource2 = _interopRequireDefault(_NoteResource);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -82,6 +86,31 @@ var Note = function (_Entity) {
         case _CustomerResource2.default.NOTE_ELEMENT_TYPE:
           return _CustomerFactory2.default;
       }
+    }
+  }, {
+    key: 'fetch',
+    value: function fetch() {
+      var _this2 = this;
+
+      var type = _NoteResource2.default.getElementType(this._attributes.element_type),
+          id = this._attributes.id;
+
+      if (this.isNew()) {
+        throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.fetch()!');
+      }
+      return this._resource.findById(id, type).then(function (response) {
+        var attributes = response.getFirstItem();
+        if (!attributes) {
+          return false;
+        }
+        _this2._attributes = attributes;
+        return _this2;
+      });
+    }
+  }, {
+    key: 'findById',
+    value: function findById(id, type) {
+      return this._resource.findById({ id: id, type: type });
     }
   }, {
     key: 'getElement',
