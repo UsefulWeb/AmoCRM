@@ -89,7 +89,6 @@ describe( 'AmoCRM API Note Interface', () => {
         text: 'Hello from Moscow!'
       });
 
-    console.log( 'saving lead' );
     lead.save()
       .then( lead => lead.notes.add( note ))
       .then( note => note.getElement())
