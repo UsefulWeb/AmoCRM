@@ -13,7 +13,8 @@ class Notable {
     if ( !note.isNew()) {
       throw new Error( 'note must not exists!' );
     }
-    note.element_type = this._resource.constructor.NOTE_ELEMENT_TYPE;
+    const { NOTE_ELEMENT_TYPE } = this._resource.constructor;
+    note.element_type = NOTE_ELEMENT_TYPE;
     note.element_id = this._attributes.id;
     return note.save();
   }

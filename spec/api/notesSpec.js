@@ -32,7 +32,7 @@ describe( 'AmoCRM API Note Interface', () => {
 
   });
 
-  fit( 'should create note from notable behavior', done => {
+  it( 'should create note from notable behavior', done => {
     const lead = new client.Lead({
         name: 'lead form notes'
       }),
@@ -48,6 +48,20 @@ describe( 'AmoCRM API Note Interface', () => {
         done();
       });
 
+  });
+
+  fit( 'should check notable interface in all entities', () => {
+    const lead = new client.Lead,
+      contact = new client.Contact,
+      customer = new client.Customer,
+      task = new client.Task,
+      company = new client.Company;
+
+    expect( lead.notes ).toBeDefined();
+    expect( contact.notes ).toBeDefined();
+    expect( customer.notes ).toBeDefined();
+    expect( task.notes ).toBeDefined();
+    expect( company.notes ).toBeDefined();
   });
 
   it( 'should create and update note', done => {

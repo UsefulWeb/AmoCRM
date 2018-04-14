@@ -12,13 +12,13 @@ export default {
   Contact: ContactFactory,
   Company: CompanyFactory,
   Note: NoteFactory,
-  Task: TaskFactory
-
+  Task: TaskFactory,
+  Customer: CustomerFactory
   /* TODO
-  Customer: CustomerFactory,
+
   Field: FieldFactory,
   Note: NoteFactory,
   Pipeline: PipelineFactory,
-  Task: TaskFactory
+
   */
 };
