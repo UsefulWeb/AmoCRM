@@ -1,5 +1,4 @@
 import NoteFactory from "../../../api/factories/NoteFactory";
-import NoteResource from "../../../api/resources/NoteResource";
 
 class Notable {
   get notes() {
@@ -20,8 +19,7 @@ class Notable {
   }
 
   getNotes( params ) {
-    const resource = NoteResource.createFrom( this._resource ),
-      factory = new NoteFactory( resource ),
+    const factory = NoteFactory.createFromResource( this._resource ),
       criteria = {
         ...params,
         element_id: this.id

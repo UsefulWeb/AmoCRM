@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _EntityFactory2 = require('../../base/factories/EntityFactory');
-
-var _EntityFactory3 = _interopRequireDefault(_EntityFactory2);
-
 var _Company = require('../activeRecords/Company');
 
 var _Company2 = _interopRequireDefault(_Company);
@@ -15,6 +11,14 @@ var _Company2 = _interopRequireDefault(_Company);
 var _CompanyResource = require('../resources/CompanyResource');
 
 var _CompanyResource2 = _interopRequireDefault(_CompanyResource);
+
+var _EntityFactory2 = require('../../base/factories/EntityFactory');
+
+var _EntityFactory3 = _interopRequireDefault(_EntityFactory2);
+
+var _Removable = require('../../base/factories/behaviors/Removable');
+
+var _Removable2 = _interopRequireDefault(_Removable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38,4 +42,5 @@ var CompanyFactory = function (_EntityFactory) {
 
 CompanyFactory.entityClass = _Company2.default;
 CompanyFactory.resourceClass = _CompanyResource2.default;
+CompanyFactory.behaviors = [new _Removable2.default()];
 exports.default = CompanyFactory;

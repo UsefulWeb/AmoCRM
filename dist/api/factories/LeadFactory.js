@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _EntityFactory2 = require('../../base/factories/EntityFactory');
-
-var _EntityFactory3 = _interopRequireDefault(_EntityFactory2);
-
 var _Lead = require('../activeRecords/Lead');
 
 var _Lead2 = _interopRequireDefault(_Lead);
@@ -15,6 +11,18 @@ var _Lead2 = _interopRequireDefault(_Lead);
 var _LeadResource = require('../resources/LeadResource');
 
 var _LeadResource2 = _interopRequireDefault(_LeadResource);
+
+var _EntityFactory2 = require('../../base/factories/EntityFactory');
+
+var _EntityFactory3 = _interopRequireDefault(_EntityFactory2);
+
+var _Removable = require('../../base/factories/behaviors/Removable');
+
+var _Removable2 = _interopRequireDefault(_Removable);
+
+var _RemovableById = require('../../base/factories/behaviors/RemovableById');
+
+var _RemovableById2 = _interopRequireDefault(_RemovableById);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38,4 +46,5 @@ var LeadFactory = function (_EntityFactory) {
 
 LeadFactory.entityClass = _Lead2.default;
 LeadFactory.resourceClass = _LeadResource2.default;
+LeadFactory.behaviors = [new _Removable2.default(), new _RemovableById2.default()];
 exports.default = LeadFactory;

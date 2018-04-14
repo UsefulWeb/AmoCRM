@@ -3,7 +3,7 @@ import BehaviorFactory from '../BehaviorFactory';
 class BaseActiveRecord {
   static behaviors = [];
   /**
-   * @param resource {RemovableEntityResource}
+   * @param resource {EntityResource}
    * @param attributes {object}
    */
   constructor( resource, attributes = {}) {
@@ -11,6 +11,13 @@ class BaseActiveRecord {
     this._attributes = Object.assign({}, attributes );
     this._isRemoved = false;
     BehaviorFactory.assignBehaviors( this, this.constructor.behaviors );
+  }
+
+  static createFrom( activeRecordInstance, attributes={} ) {
+    const resourceConstructor = this._resource.constructor,
+      resource = resourceConstructor.createFrom( this._resource );
+
+    return new activeRecordInstance.constructor( resource, attributes );
   }
 
   set attributes( attributes ) {

@@ -12,10 +12,10 @@ class RemoteResource {
   }
 
   static createFrom( resourceInstance ) {
-    return new this.constructor( resourceInstance.getDomainrequest());
+    return new this.constructor( resourceInstance.getDomainRequest());
   }
 
-  getDomainrequest() {
+  getDomainRequest() {
     return this._request;
   }
 

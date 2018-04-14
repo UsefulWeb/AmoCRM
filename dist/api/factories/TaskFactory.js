@@ -16,6 +16,10 @@ var _TaskResource = require('../resources/TaskResource');
 
 var _TaskResource2 = _interopRequireDefault(_TaskResource);
 
+var _Removable = require('../../base/factories/behaviors/Removable');
+
+var _Removable2 = _interopRequireDefault(_Removable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,9 +32,23 @@ var TaskFactory = function (_EntityFactory) {
   _inherits(TaskFactory, _EntityFactory);
 
   function TaskFactory() {
+    var _ref;
+
     _classCallCheck(this, TaskFactory);
 
-    return _possibleConstructorReturn(this, (TaskFactory.__proto__ || Object.getPrototypeOf(TaskFactory)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = TaskFactory.__proto__ || Object.getPrototypeOf(TaskFactory)).call.apply(_ref, [this].concat(args)));
+
+    _this.ELEMENT_TYPE = {
+      CONTACT: 1,
+      LEAD: 2,
+      COMPANY: 3,
+      CUSTOMER: 12
+    };
+    return _this;
   }
 
   return TaskFactory;
@@ -38,4 +56,5 @@ var TaskFactory = function (_EntityFactory) {
 
 TaskFactory.entityClass = _Task2.default;
 TaskFactory.resourceClass = _TaskResource2.default;
+TaskFactory.behaviors = [new _Removable2.default()];
 exports.default = TaskFactory;

@@ -14,10 +14,6 @@ var _EntityResponseHandler = require('../responseHandlers/EntityResponseHandler'
 
 var _EntityResponseHandler2 = _interopRequireDefault(_EntityResponseHandler);
 
-var _apiUrls = require('../../apiUrls');
-
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -74,36 +70,11 @@ var EntityResource = function (_RemoteResource) {
         update: data
       });
     }
-  }, {
-    key: 'multiactions',
-    value: function multiactions(ids) {
-      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var multiaction_type = arguments[2];
-      var _constructor4 = this.constructor,
-          multiactionsPath = _constructor4.multiactionsPath,
-          ENTITY_TYPE = _constructor4.ENTITY_TYPE;
-
-      return this.request('POST', multiactionsPath, {
-        request: {
-          multiactions: {
-            add: [{
-              entity_type: ENTITY_TYPE,
-              multiaction_type: multiaction_type,
-              data: data,
-              ids: ids
-            }]
-          }
-        }
-      }, {
-        formData: true
-      });
-    }
   }]);
 
   return EntityResource;
 }(_RemoteResource3.default);
 
-EntityResource.multiactionsPath = _apiUrls2.default.multiactions;
 EntityResource.responseHandlerClass = _EntityResponseHandler2.default;
 EntityResource.DELETE_MULTIACTION_TYPE = 4;
 exports.default = EntityResource;

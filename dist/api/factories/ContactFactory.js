@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _EntityFactory2 = require('../../base/factories/EntityFactory');
-
-var _EntityFactory3 = _interopRequireDefault(_EntityFactory2);
-
 var _Contact = require('../activeRecords/Contact');
 
 var _Contact2 = _interopRequireDefault(_Contact);
@@ -15,6 +11,14 @@ var _Contact2 = _interopRequireDefault(_Contact);
 var _ContactResource = require('../resources/ContactResource');
 
 var _ContactResource2 = _interopRequireDefault(_ContactResource);
+
+var _EntityFactory2 = require('../../base/factories/EntityFactory');
+
+var _EntityFactory3 = _interopRequireDefault(_EntityFactory2);
+
+var _Removable = require('../../base/factories/behaviors/Removable');
+
+var _Removable2 = _interopRequireDefault(_Removable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38,4 +42,5 @@ var ContactFactory = function (_EntityFactory) {
 
 ContactFactory.entityClass = _Contact2.default;
 ContactFactory.resourceClass = _ContactResource2.default;
+ContactFactory.behaviors = [new _Removable2.default()];
 exports.default = ContactFactory;

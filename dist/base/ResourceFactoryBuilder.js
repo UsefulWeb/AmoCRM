@@ -28,9 +28,9 @@ var ResourceFactoryBuilder = function () {
     value: function getResourceFactories() {
       var _this = this;
 
-      return Object.keys(_factories2.default).reduce(function (target, factoryName) {
-        target[factoryName] = _this.createResourceFactory(factoryName);
-        return target;
+      return Object.keys(_factories2.default).reduce(function (factories, factoryName) {
+        factories[factoryName] = _this.createResourceFactory(factoryName);
+        return factories;
       }, {});
     }
   }, {

@@ -40,12 +40,20 @@ var EntityActiveRecord = function (_ActiveRecord) {
       if (this.isNew()) {
         throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.fetch()!');
       }
-      if (this.isRemoved()) {
-        throw new Error('You cannot fetch deleted resource!');
-      }
       return this._resource.findById(this._attributes.id).then(function (response) {
-        _this2._attributes = response.getFirstItem();
+        var attributes = response.getFirstItem();
+        if (!attributes) {
+          return false;
+        }
+        _this2._attributes = attributes;
         return _this2;
+      });
+    }
+  }, {
+    key: 'exists',
+    value: function exists() {
+      return this.fetch().then(function (response) {
+        return response !== false;
       });
     }
   }, {
@@ -53,8 +61,11 @@ var EntityActiveRecord = function (_ActiveRecord) {
     value: function insert() {
       var _this3 = this;
 
+      if (!this.isNew()) {
+        throw new Error('EntityActiveRecord must not exists for using EntityActiveRecord.insert()!');
+      }
       return this._resource.insert([this._attributes]).then(function (response) {
-        var attributes = response.getFirstItem();
+        var attributes = response.getFirstItem() || {};
         _this3._attributes.id = attributes.id;
         return _this3;
       });
@@ -64,18 +75,11 @@ var EntityActiveRecord = function (_ActiveRecord) {
     value: function update() {
       var _this4 = this;
 
+      if (this.isNew()) {
+        throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.update()!');
+      }
       return this._resource.update([this._attributes]).then(function () {
         return _this4;
-      });
-    }
-  }, {
-    key: 'remove',
-    value: function remove() {
-      var _this5 = this;
-
-      return this._resource.remove([this._attributes.id]).then(function () {
-        _this5._isRemoved = true;
-        return _this5;
       });
     }
   }]);

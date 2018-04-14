@@ -21,6 +21,12 @@ class ResourceFactory {
     BehaviorFactory.assignBehaviors( this, this.constructor.behaviors );
   }
 
+  static createFromResource( resource ) {
+    const request = resource.getDomainRequest();
+
+    return new this.constructor( request );
+  }
+
   create( attributes={}) {
     return new this.constructor.entityClass( this._resource, attributes );
   }

@@ -8,6 +8,14 @@ var _EntityActiveRecord = require('../../base/activeRecords/EntityActiveRecord')
 
 var _EntityActiveRecord2 = _interopRequireDefault(_EntityActiveRecord);
 
+var _Removable = require('../../base/activeRecords/behaviors/Removable');
+
+var _Removable2 = _interopRequireDefault(_Removable);
+
+var _Notable = require('../../base/activeRecords/behaviors/Notable');
+
+var _Notable2 = _interopRequireDefault(_Notable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,4 +36,5 @@ var Contact = function (_Entity) {
   return Contact;
 }(_EntityActiveRecord2.default);
 
+Contact.behaviors = [new _Removable2.default(), new _Notable2.default()];
 exports.default = Contact;

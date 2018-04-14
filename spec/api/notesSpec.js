@@ -81,4 +81,24 @@ describe( 'AmoCRM API Note Interface', () => {
       });
   });
 
+  fit( 'should get notes for lead', done => {
+    const lead = new client.Lead({
+        name: 'lead form notes'
+      }),
+      note = new client.Note({
+        text: 'Hello from Moscow!'
+      });
+
+    console.log( 'saving lead' );
+    lead.save()
+      .then( lead => lead.notes.add( note ))
+      .then( note => note.getElement())
+      .then( lead => lead.notes.get())
+      .then( notes => {
+        expect( notes.length ).toBe( 1 );
+        expect( notes[ 0 ].id ).toBe( note.id );
+        done();
+      });
+  });
+
 });
