@@ -64,23 +64,6 @@ describe( 'AmoCRM API Note Interface', () => {
     expect( company.notes ).toBeDefined();
   });
 
-  it( 'should create and update note', done => {
-    const note = new client.Note({
-      text: 'empty note'
-    });
-    note.save()
-      .then(() => {
-        note.text = 'empty note manager';
-        note.updated_at = Math.floor( new Date / 1000 ) + 10;
-        return note.save();
-      })
-      .then(() => client.Note.findById( note.id ))
-      .then(({ text }) => {
-        expect( text ).toBe( 'empty note manager' );
-        done();
-      });
-  });
-
   it( 'should get notes for lead', done => {
     const lead = new client.Lead({
         name: 'lead form notes'

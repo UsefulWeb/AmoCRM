@@ -17,6 +17,7 @@ class Note extends Entity {
   static behaviors = [];
 
   getElementFactoryClassName() {
+
     switch ( this._attributes.element_type ) {
       case ContactResource.NOTE_ELEMENT_TYPE:
         return ContactFactory;

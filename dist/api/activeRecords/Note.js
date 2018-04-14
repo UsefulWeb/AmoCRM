@@ -74,6 +74,7 @@ var Note = function (_Entity) {
   _createClass(Note, [{
     key: 'getElementFactoryClassName',
     value: function getElementFactoryClassName() {
+
       switch (this._attributes.element_type) {
         case _ContactResource2.default.NOTE_ELEMENT_TYPE:
           return _ContactFactory2.default;
