@@ -1,11 +1,6 @@
 import schema from '../../apiUrls';
 import EntityResource from '../../base/resources/EntityResource';
 import HasMultiactions from "../../base/resources/behaviors/HasMultiactions";
-import LeadResource from "./LeadResource";
-import TaskResource from "./TaskResource";
-import ContactResource from "./ContactResource";
-import CustomerResource from "./CustomerResource";
-import CompanyResource from "./CompanyResource";
 
 class NoteResource extends EntityResource {
   static path = schema.entities.notes.path;
@@ -14,11 +9,11 @@ class NoteResource extends EntityResource {
   static behaviors = [ new HasMultiactions ];
 
   static ELEMENT_TYPES = {
-    CONTACT: ContactResource.NOTE_ELEMENT_TYPE,
-    LEAD: LeadResource.NOTE_ELEMENT_TYPE,
-    COMPANY: CompanyResource.NOTE_ELEMENT_TYPE,
-    TASK: TaskResource.NOTE_ELEMENT_TYPE,
-    CUSTOMER: CustomerResource.NOTE_ELEMENT_TYPE
+    CONTACT: 1,
+    LEAD: 2,
+    COMPANY: 3,
+    TASK: 4,
+    CUSTOMER: 5
   };
 
   static NOTE_TYPES = {

@@ -8,6 +8,7 @@ class LeadResource extends EntityResource {
   static deletePath = schema.entities.leads.deletePath;
   static ENTITY_TYPE = 2;
   static NOTE_ELEMENT_TYPE = 2;
+  static TASK_ELEMENT_TYPE = 2;
   static behaviors = [ new Removable, new HasMultiactions ];
 }
 

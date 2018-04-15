@@ -10,12 +10,8 @@ class TaskFactory extends EntityFactory {
 
   constructor( ...args ) {
     super( ...args );
-    this.ELEMENT_TYPE = {
-      CONTACT: 1,
-      LEAD: 2,
-      COMPANY: 3,
-      CUSTOMER: 12
-    };
+    this.ELEMENT_TYPE = TaskResource.ELEMENT_TYPES;
+    this.TASK_TYPE = TaskResource.TASK_TYPES;
   }
 }
 

@@ -17,7 +17,6 @@ export default {
   /* TODO
 
   Field: FieldFactory,
-  Note: NoteFactory,
   Pipeline: PipelineFactory,
 
   */

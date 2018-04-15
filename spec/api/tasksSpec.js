@@ -10,7 +10,7 @@ beforeEach( done => {
     .then( done );
 });
 
-describe( 'AmoCRM API Task Interface', () => {
+fdescribe( 'AmoCRM API Task Interface', () => {
   it( 'should create task', done => {
     const task = new client.Task({
       text: 'Help other'

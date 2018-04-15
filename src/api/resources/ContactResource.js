@@ -8,6 +8,7 @@ class ContactResource extends EntityResource {
   static deletePath = schema.entities.contacts.deletePath;
   static ENTITY_TYPE = 17;
   static NOTE_ELEMENT_TYPE = 1;
+  static TASK_ELEMENT_TYPE = 1;
   static behaviors = [ new Removable, new HasMultiactions ];
 }
 

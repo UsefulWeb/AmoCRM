@@ -6,6 +6,7 @@ class CustomerResource extends EntityResource {
   static path = schema.entities.customers.path;
   static deletePath = schema.entities.customers.deletePath;
   static NOTE_ELEMENT_TYPE = 12;
+  static TASK_ELEMENT_TYPE = 12;
   static behaviors = [ new Removable ];
 }
 
