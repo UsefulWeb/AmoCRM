@@ -1,34 +1,29 @@
 'use strict';
 
 import Entity from '../../base/activeRecords/EntityActiveRecord';
+import factories from '../factories';
 import ContactResource from "../resources/ContactResource";
 import LeadResource from "../resources/LeadResource";
 import CompanyResource from "../resources/CompanyResource";
 import TaskResource from "../resources/TaskResource";
 import CustomerResource from "../resources/CustomerResource";
-import ContactFactory from "../factories/ContactFactory";
-import LeadFactory from "../factories/LeadFactory";
-import CompanyFactory from "../factories/CompanyFactory";
-import TaskFactory from "../factories/TaskFactory";
-import CustomerFactory from "../factories/CustomerFactory";
 import NoteResource from "../resources/NoteResource";
 
 class Note extends Entity {
   static behaviors = [];
 
   getElementFactoryClassName() {
-
     switch ( this._attributes.element_type ) {
       case ContactResource.NOTE_ELEMENT_TYPE:
-        return ContactFactory;
+        return factories.Contact;
       case LeadResource.NOTE_ELEMENT_TYPE:
-        return LeadFactory;
+        return factories.Lead;
       case CompanyResource.NOTE_ELEMENT_TYPE:
-        return CompanyFactory;
+        return factories.Company;
       case TaskResource.NOTE_ELEMENT_TYPE:
-        return TaskFactory;
+        return factories.Task;
       case CustomerResource.NOTE_ELEMENT_TYPE:
-        return CustomerFactory;
+        return factories.Customer;
     }
   }
 
@@ -40,14 +35,7 @@ class Note extends Entity {
     }
     return this._resource
       .findById( id, type )
-      .then( response => {
-        const attributes = response.getFirstItem();
-        if ( !attributes ) {
-          return false;
-        }
-        this._attributes = attributes;
-        return this;
-      });
+      .then( response => this.afterFetch( response ));
   }
 
   findById( id, type ) {

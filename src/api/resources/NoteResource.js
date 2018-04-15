@@ -1,6 +1,5 @@
 import schema from '../../apiUrls';
 import EntityResource from '../../base/resources/EntityResource';
-import Removable from "../../base/resources/behaviors/PrivateRemovable";
 import HasMultiactions from "../../base/resources/behaviors/HasMultiactions";
 import LeadResource from "./LeadResource";
 import TaskResource from "./TaskResource";
@@ -12,7 +11,7 @@ class NoteResource extends EntityResource {
   static path = schema.entities.notes.path;
   static deletePath = schema.entities.notes.deletePath;
   static ENTITY_TYPE = 2;
-  static behaviors = [ new Removable, new HasMultiactions ];
+  static behaviors = [ new HasMultiactions ];
 
   static ELEMENT_TYPES = {
     CONTACT: ContactResource.NOTE_ELEMENT_TYPE,

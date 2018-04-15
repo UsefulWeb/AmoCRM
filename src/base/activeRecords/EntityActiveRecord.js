@@ -13,14 +13,16 @@ class EntityActiveRecord extends ActiveRecord {
     }
     return this._resource
       .findById( this._attributes.id )
-      .then( response => {
-        const attributes = response.getFirstItem();
-        if ( !attributes ) {
-          return false;
-        }
-        this._attributes = attributes;
-        return this;
-      });
+      .then( response => this.afterFetch( response ));
+  }
+
+  afterFetch( response ) {
+    const attributes = response.getFirstItem();
+    if ( !attributes ) {
+      return false;
+    }
+    this._attributes = attributes;
+    return this;
   }
 
   exists() {
@@ -34,11 +36,13 @@ class EntityActiveRecord extends ActiveRecord {
     }
     return this._resource
       .insert([ this._attributes ])
-      .then( response => {
-        const attributes = response.getFirstItem() || {};
-        this._attributes.id = attributes.id;
-        return this;
-      });
+      .then( response => this.afterInsert( response ));
+  }
+
+  afterInsert( response ) {
+    const attributes = response.getFirstItem() || {};
+    this._attributes.id = attributes.id;
+    return this;
   }
 
   update() {

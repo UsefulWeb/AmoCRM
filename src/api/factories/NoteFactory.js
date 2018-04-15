@@ -1,7 +1,6 @@
 import EntityFactory from '../../base/factories/EntityFactory';
 import Note from '../activeRecords/Note';
 import NoteResource from '../resources/NoteResource';
-import Removable from '../../base/factories/behaviors/Removable';
 import ContactResource from "../resources/ContactResource";
 import LeadResource from "../resources/LeadResource";
 import CompanyResource from "../resources/CompanyResource";
@@ -11,7 +10,7 @@ import CustomerResource from "../resources/CustomerResource";
 class NoteFactory extends EntityFactory {
   static entityClass = Note;
   static resourceClass = NoteResource;
-  static behaviors = [ new Removable ];
+  static behaviors = [];
 
   constructor( ...args ) {
     super( ...args );
