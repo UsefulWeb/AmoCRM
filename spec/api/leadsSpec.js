@@ -33,7 +33,7 @@ describe( 'AmoCRM API Lead Interface', () => {
     lead.save()
       .then( item => {
         expect( item.id ).toBeDefined();
-        expect( item.isNew() ).toBe( false );
+        expect( item.isNew()).toBe( false );
         expect( lead.id ).toBe( item.id );
         done();
       });

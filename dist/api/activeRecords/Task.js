@@ -16,6 +16,10 @@ var _Notable = require('../../base/activeRecords/behaviors/Notable');
 
 var _Notable2 = _interopRequireDefault(_Notable);
 
+var _HasElementByField = require('../../base/activeRecords/behaviors/HasElementByField');
+
+var _HasElementByField2 = _interopRequireDefault(_HasElementByField);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -36,5 +40,5 @@ var Task = function (_Entity) {
   return Task;
 }(_EntityActiveRecord2.default);
 
-Task.behaviors = [new _Removable2.default(), new _Notable2.default()];
+Task.behaviors = [new _Removable2.default(), new _Notable2.default(), new _HasElementByField2.default('TASK_ELEMENT_TYPE')];
 exports.default = Task;

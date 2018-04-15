@@ -18,13 +18,15 @@ class EntityFactory extends ResourceFactory {
 
   findById( id ) {
     return this._resource.findById( id )
-      .then( response => {
-        const attributes = response.getFirstItem();
-        if ( !attributes ) {
-          return;
-        }
-        return this.create( attributes );
-      });
+      .then( response => this.afterFindById( response ));
+  }
+
+  afterFindById( response ) {
+    const attributes = response.getFirstItem();
+    if ( !attributes ) {
+      return;
+    }
+    return this.create( attributes );
   }
 
   find( query ) {

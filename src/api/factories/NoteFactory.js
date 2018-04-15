@@ -1,11 +1,6 @@
 import EntityFactory from '../../base/factories/EntityFactory';
 import Note from '../activeRecords/Note';
 import NoteResource from '../resources/NoteResource';
-import ContactResource from "../resources/ContactResource";
-import LeadResource from "../resources/LeadResource";
-import CompanyResource from "../resources/CompanyResource";
-import TaskResource from "../resources/TaskResource";
-import CustomerResource from "../resources/CustomerResource";
 
 class NoteFactory extends EntityFactory {
   static entityClass = Note;
@@ -23,13 +18,7 @@ class NoteFactory extends EntityFactory {
 
   findById( id, type ) {
     return this._resource.findById( id, type )
-      .then( response => {
-        const attributes = response.getFirstItem();
-        if ( !attributes ) {
-          return;
-        }
-        return this.create( attributes );
-      });
+      .then( response => this.afterFindById( response ));
   }
 }
 

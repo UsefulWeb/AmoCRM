@@ -19,7 +19,8 @@ var BehaviorFactory = function () {
     key: 'assignBehaviors',
     value: function assignBehaviors(target, behaviors) {
       var info = this.mergeBehaviorsInfo.apply(this, _toConsumableArray(behaviors));
-      Object.assign(target, info.methods);
+      Object.assign(target, info.prototypeProperties);
+      Object.assign(target, info.properties);
       Object.defineProperties(target, info.descriptors);
     }
   }, {
@@ -43,8 +44,9 @@ var BehaviorFactory = function () {
         return Object.assign.apply(Object, _toConsumableArray(getObjectsProps(objs, prop)));
       },
           info = {
-        methods: {},
-        descriptors: {}
+        prototypeProperties: {},
+        descriptors: {},
+        properties: {}
       };
 
       for (var _len = arguments.length, behaviors = Array(_len), _key = 0; _key < _len; _key++) {
@@ -53,8 +55,9 @@ var BehaviorFactory = function () {
 
       return behaviors.reduce(function (target, behavior) {
         var info = _this.getBehaviorInfo(behavior);
-        mergeByProp('methods', target, info);
+        mergeByProp('prototypeProperties', target, info);
         mergeByProp('descriptors', target, info);
+        mergeByProp('properties', target, info);
         return target;
       }, info);
     }
@@ -62,24 +65,33 @@ var BehaviorFactory = function () {
     key: 'getBehaviorInfo',
     value: function getBehaviorInfo(behavior) {
       return {
-        methods: this.getBehaviorMethods(behavior),
-        descriptors: this.getBehaviorDescriptors(behavior)
+        prototypeProperties: this.getBehaviorPrototypeProperties(behavior),
+        descriptors: this.getBehaviorDescriptors(behavior),
+        properties: this.getBehaviorProperties(behavior)
       };
     }
   }, {
-    key: 'getBehaviorMethods',
-    value: function getBehaviorMethods(behavior) {
+    key: 'getBehaviorProperties',
+    value: function getBehaviorProperties(behavior) {
+      return Object.keys(behavior).reduce(function (target, property) {
+        target[property] = behavior[property];
+        return target;
+      }, {});
+    }
+  }, {
+    key: 'getBehaviorPrototypeProperties',
+    value: function getBehaviorPrototypeProperties(behavior) {
       var proto = Object.getPrototypeOf(behavior),
           isNotConstructor = function isNotConstructor(property) {
         return property !== 'constructor';
       },
           data = {},
-          methods = Object.getOwnPropertyNames(proto);
+          properties = Object.getOwnPropertyNames(proto);
 
-      methods.filter(function (property) {
+      properties.filter(function (property) {
         return isNotConstructor(property);
-      }).forEach(function (methodName) {
-        data[methodName] = behavior[methodName];
+      }).forEach(function (property) {
+        data[property] = behavior[property];
       });
 
       return data;
