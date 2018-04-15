@@ -10,7 +10,7 @@ class Taskable {
   };
 
   addTask( task ) {
-    if ( !note.isNew()) {
+    if ( !task.isNew()) {
       throw new Error( 'task must not exists!' );
     }
     const { TASK_ELEMENT_TYPE } = this._resource.constructor;
