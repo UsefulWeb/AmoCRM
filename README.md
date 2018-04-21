@@ -1,111 +1,131 @@
 # AmoCRM
 Javascript библиотека для работы с AmoCRM
 
-## Подключение к CRM
+## Возможности и особенности
+1. Свободные запросы к порталу
+2. Работает с основными сущностями CRM с помощью объектов
+3. Может работать с внутренним API портала для реализации доп. функций (удаление сделок, контактов и пр.)
+
+## Установка
+
+```
+npm i --save amocrm-js
+```
+
+## Пример использования
+ 
 ```js
 const AmoCRM = require( 'amocrm-js' );
 
+// инициализация
 const crm = new AmoCRM({
-    domain: 'domain' // логин пользователя в портале, где адрес портала mydomain.amocrm.ru
+    /*
+     логин пользователя в портале, где адрес
+      портала mydomain.amocrm.ru
+    */
+    domain: 'domain' 
     auth: {
         login: 'mylogin',
         hash: 'mytesthash', // API-ключ доступа
     }
 });
 
-// Вход в портал
-crm.connect();
-```
-
-## Свободный запрос к CRM
-
-```js
-// Получить данные по аккаунту (GET-запрос)
-crm.request
-.get( '/api/v2/account' )
-.then( data => {
-    console.log( 'Полученные данные', data );
-})
-.catch( e => {
-    console.log( 'Произошла ошибка', e );
-})
-
-// Создать новый контакт (POST-запрос)
-crm.request
-.post( '/api/v2/contacts', {
-    add: [
-        {
+// подключение
+crm.connect()
+  .then(() => {
+    // можем отправить либо post, либо get запрос
+    return crm.request
+      .post( '/api/v2/contacts', {
+        add: [
+          {
             name: "Walter White",
             request_id: 143,
-            // другие поля ...
-        }
-    ]
-})
-.then( data => {
- console.log( 'Полученные данные', data );
-})
-.catch( e => {
- console.log( 'Произошла ошибка создания контакта', e );
-})
+            // ...
+          }
+        ]
+      })
+  })
+  .then( response => {
+    console.log( response );
+  })
+  .then(() => {
+    const lead = new crm.Lead({
+      name: 'Заявка из Ростова'
+    });
+    /* 
+      параметры сущностей задаются 
+      напрямую через свойства
+     */
+    lead.price = 2000;
+    // сохранение заявки
+    return lead.save();
+  })
+  .then( lead => {
+    console.log( 'id новой заявки', lead.id );
+    
+    const note = new crm.Note;
+    /* 
+      все свойства совпадают с параметрами, 
+      которые вы будете передавать в запросе
+     */
+    note.text = 'Hello from Moscow!';
+    /* 
+      в библиотеке есть константы для значений
+      свойств сущностей
+     */
+    note.note_type = crm.Note.NOTE_TYPE.COMMON;
+    /*
+     можем добавлять заметки и задачи
+     к некоторым сущностям
+    */
+    return lead.notes.add( note );
+  })
+  .then( note => {
+    /*
+     можем получить элемент, к которому
+     прикреплена заметка или задача
+    */
+    return note.getElement();
+  })
+  .then( lead => {
+    // некоторые сущности можно удалять
+    return lead.remove();
+  })
+  .then(() => {
+    // многие сущности поддерживают поиск
+    return crm.Lead.find({
+      status: 1, // найти сделки с нужным статусом
+      responsible_user_id: 34 // и определённым ответственным человеком 
+    });
+  })
+  .then( leads => {
+    // массив данных
+    
+    // также можно найти сущность по id
+    return crm.Company.findById( 123123 );
+  });
 ```
 
-## Сделки
+[Основы работы](./docs/basic.md)
 
-```js
-// новая сделка
-const lead = new crm.Lead;
-lead.linked_company_id = 1245;
-lead.updated_at = 12345678;
-lead.price = 10000;
+## Детали
 
-lead.save(); // вернёт Promise
-// альтернативный вариант 1
-const lead = new crm.Lead({
-    linked_company_id: 1245,
-    updated_at: 12345678,
-    price: 10000
-});
-lead.save();
+### Основные сущности
 
-// альтернативный вариант 2
-const lead = crm.Lead.of({
-    linked_company_id: 1245,
-    updated_at: 12345678,
-    price: 10000
-});
-lead.save();
+1. Сделки (Lead)
+2. Контакты (Contact)
+3. Компании (Company)
+4. Клиенты (Customer)
+5. Заметки (Note)
+6. Задачи (Task)
+7. Дополнительные поля (Field)
+8. Неразобранное/Входящие заявки из форм и телефонии (IncomingLead)
+9. Воронки продаж (Pipeline)
 
-// Обновление сделки
-lead.name = "Заявка для Ивана";
-lead.save();
+### Поведения
 
-// Поиск сделок
+У некоторых сущностей есть расширенный функционал.
 
-crm.Lead.find({
-    status: 1 // найти сделки с нужным статусом
-    responsible_user_id: 34 // и определённым ответственным человеком 
-})
-.then( leads => {
-    console.log( "Найденное", leads );
-})
-
-// Взять данные о сделке с сервера
-
-crm.Lead.findById( 123 )
-.then( lead => console.log( lead ));
-
-```
-
-### Удаление сделок
-
-Так как в официальном API данная возможность не документирована, лавка может в обозримом будущем прикрыться.
-Тем не менее, есть возможность удалять сделки.
-
-```js
-// список идентификаторов сделок
-crm.Lead.remove([ 12 345, 568944 ])
-
-// удаление отедльной сделки
-crm.Lead.findById( 123 )
-.then( lead => lead.remove());
-```
+1. Taskable - позволяет создавать задачу со ссылкой на сущность.
+2. Notable - позволяет создавать заметку со ссылкой на сущность.
+3. Removable - позволяет удалять созданную сущность
