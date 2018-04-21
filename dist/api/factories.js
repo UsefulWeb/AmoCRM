@@ -47,7 +47,6 @@ exports.default = {
   Customer: _CustomerFactory2.default
   /* TODO
    Field: FieldFactory,
-  Note: NoteFactory,
   Pipeline: PipelineFactory,
    */
 };

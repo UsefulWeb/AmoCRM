@@ -40,7 +40,7 @@ var CompanyFactory = function (_EntityFactory) {
   return CompanyFactory;
 }(_EntityFactory3.default);
 
-CompanyFactory.entityClass = _Company2.default;
+CompanyFactory.activeRecordClass = _Company2.default;
 CompanyFactory.resourceClass = _CompanyResource2.default;
 CompanyFactory.behaviors = [new _Removable2.default()];
 exports.default = CompanyFactory;

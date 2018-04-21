@@ -10,7 +10,7 @@ beforeEach( done => {
     .then( done );
 });
 
-fdescribe( 'AmoCRM API Task Interface', () => {
+describe( 'AmoCRM API Task Interface', () => {
   it( 'should create task', done => {
     const task = new client.Task({
       text: 'Help other'
@@ -51,7 +51,7 @@ fdescribe( 'AmoCRM API Task Interface', () => {
       });
   });
 
-  fit( 'add task from taskable interface', done => {
+  it( 'add task from taskable interface', done => {
     const lead = new client.Lead({
         name: 'Taskable Lead'
       }),

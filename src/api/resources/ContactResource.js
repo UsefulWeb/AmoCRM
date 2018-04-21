@@ -9,7 +9,7 @@ class ContactResource extends EntityResource {
   static ENTITY_TYPE = 17;
   static NOTE_ELEMENT_TYPE = 1;
   static TASK_ELEMENT_TYPE = 1;
-  static behaviors = [ new Removable, new HasMultiactions ];
+  static behaviors = [ ...EntityResource.behaviors, new Removable, new HasMultiactions ];
 }
 
 export default ContactResource;

@@ -44,5 +44,6 @@ LeadResource.path = _apiUrls2.default.entities.leads.path;
 LeadResource.deletePath = _apiUrls2.default.entities.leads.deletePath;
 LeadResource.ENTITY_TYPE = 2;
 LeadResource.NOTE_ELEMENT_TYPE = 2;
+LeadResource.TASK_ELEMENT_TYPE = 2;
 LeadResource.behaviors = [new _PrivateRemovable2.default(), new _HasMultiactions2.default()];
 exports.default = LeadResource;

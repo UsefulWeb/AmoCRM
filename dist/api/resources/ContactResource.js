@@ -44,5 +44,6 @@ ContactResource.path = _apiUrls2.default.entities.contacts.path;
 ContactResource.deletePath = _apiUrls2.default.entities.contacts.deletePath;
 ContactResource.ENTITY_TYPE = 17;
 ContactResource.NOTE_ELEMENT_TYPE = 1;
+ContactResource.TASK_ELEMENT_TYPE = 1;
 ContactResource.behaviors = [new _PrivateRemovable2.default(), new _HasMultiactions2.default()];
 exports.default = ContactResource;

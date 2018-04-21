@@ -16,33 +16,9 @@ var _EntityResource2 = require('../../base/resources/EntityResource');
 
 var _EntityResource3 = _interopRequireDefault(_EntityResource2);
 
-var _PrivateRemovable = require('../../base/resources/behaviors/PrivateRemovable');
-
-var _PrivateRemovable2 = _interopRequireDefault(_PrivateRemovable);
-
 var _HasMultiactions = require('../../base/resources/behaviors/HasMultiactions');
 
 var _HasMultiactions2 = _interopRequireDefault(_HasMultiactions);
-
-var _LeadResource = require('./LeadResource');
-
-var _LeadResource2 = _interopRequireDefault(_LeadResource);
-
-var _TaskResource = require('./TaskResource');
-
-var _TaskResource2 = _interopRequireDefault(_TaskResource);
-
-var _ContactResource = require('./ContactResource');
-
-var _ContactResource2 = _interopRequireDefault(_ContactResource);
-
-var _CustomerResource = require('./CustomerResource');
-
-var _CustomerResource2 = _interopRequireDefault(_CustomerResource);
-
-var _CompanyResource = require('./CompanyResource');
-
-var _CompanyResource2 = _interopRequireDefault(_CompanyResource);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -85,13 +61,13 @@ var NoteResource = function (_EntityResource) {
 NoteResource.path = _apiUrls2.default.entities.notes.path;
 NoteResource.deletePath = _apiUrls2.default.entities.notes.deletePath;
 NoteResource.ENTITY_TYPE = 2;
-NoteResource.behaviors = [new _PrivateRemovable2.default(), new _HasMultiactions2.default()];
+NoteResource.behaviors = [new _HasMultiactions2.default()];
 NoteResource.ELEMENT_TYPES = {
-  CONTACT: _ContactResource2.default.NOTE_ELEMENT_TYPE,
-  LEAD: _LeadResource2.default.NOTE_ELEMENT_TYPE,
-  COMPANY: _CompanyResource2.default.NOTE_ELEMENT_TYPE,
-  TASK: _TaskResource2.default.NOTE_ELEMENT_TYPE,
-  CUSTOMER: _CustomerResource2.default.NOTE_ELEMENT_TYPE
+  CONTACT: 1,
+  LEAD: 2,
+  COMPANY: 3,
+  TASK: 4,
+  CUSTOMER: 5
 };
 NoteResource.NOTE_TYPES = {
   DEAL_CREATED: 1,

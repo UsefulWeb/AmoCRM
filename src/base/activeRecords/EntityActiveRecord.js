@@ -3,13 +3,10 @@
 import ActiveRecord from './BaseActiveRecord';
 
 class EntityActiveRecord extends ActiveRecord {
-  save() {
-    return this.isNew() ? this.insert() : this.update();
-  }
 
   fetch() {
     if ( this.isNew()) {
-      throw new Error( 'EntityActiveRecord must exists for using EntityActiveRecord.fetch()!' );
+      throw new Error( 'ActiveRecord must exists for using fetch()!' );
     }
     return this._resource
       .findById( this._attributes.id )
@@ -23,6 +20,10 @@ class EntityActiveRecord extends ActiveRecord {
     }
     this._attributes = attributes;
     return this;
+  }
+
+  save() {
+    return this.isNew() ? this.insert() : this.update();
   }
 
   exists() {

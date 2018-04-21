@@ -5,9 +5,9 @@ import Removable from "../../base/factories/behaviors/Removable";
 import RemovableById from "../../base/factories/behaviors/RemovableById";
 
 class LeadFactory extends EntityFactory {
-  static entityClass = Lead;
+  static activeRecordClass = Lead;
   static resourceClass = LeadResource;
-  static behaviors = [ new Removable, new RemovableById ];
+  static behaviors = [ ...EntityFactory.behaviors, new Removable, new RemovableById ];
 }
 
 export default LeadFactory;

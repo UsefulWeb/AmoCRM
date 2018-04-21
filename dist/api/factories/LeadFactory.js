@@ -44,7 +44,7 @@ var LeadFactory = function (_EntityFactory) {
   return LeadFactory;
 }(_EntityFactory3.default);
 
-LeadFactory.entityClass = _Lead2.default;
+LeadFactory.activeRecordClass = _Lead2.default;
 LeadFactory.resourceClass = _LeadResource2.default;
 LeadFactory.behaviors = [new _Removable2.default(), new _RemovableById2.default()];
 exports.default = LeadFactory;

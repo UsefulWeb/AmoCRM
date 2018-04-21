@@ -1,12 +1,17 @@
 import schema from '../../apiUrls';
 import EntityResource from '../../base/resources/EntityResource';
 import HasMultiactions from "../../base/resources/behaviors/HasMultiactions";
+import hasElementTypeByKey from "../../base/resources/behaviors/static/hasElementTypeByKey";
+import Updatable from "../../base/resources/behaviors/Updatable";
+import Findable from "../../base/resources/behaviors/Findable";
+import FindableById from "../../base/resources/behaviors/FindableById";
+import Insertable from "../../base/resources/behaviors/Insertable";
 
 class NoteResource extends EntityResource {
   static path = schema.entities.notes.path;
   static deletePath = schema.entities.notes.deletePath;
   static ENTITY_TYPE = 2;
-  static behaviors = [ new HasMultiactions ];
+  static behaviors = [ new Findable, new Updatable, new Insertable, new HasMultiactions ];
 
   static ELEMENT_TYPES = {
     CONTACT: 1,
@@ -40,16 +45,10 @@ class NoteResource extends EntityResource {
     BUSY: 7
   };
 
-  static getElementType( value ) {
-    const types = this.ELEMENT_TYPES,
-      compareKey = key => types[ key ] === value,
-      type = Object.keys( types ).filter( compareKey )[ 0 ];
-
-    return type.toLowerCase();
-  }
+  static getElementType = hasElementTypeByKey( 'ELEMENT_TYPES' );
 
   findById( id, type ) {
-    return super.find({ id, type });
+    return this.find({ id, type });
   }
 
 }

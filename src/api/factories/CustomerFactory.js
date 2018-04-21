@@ -3,7 +3,7 @@ import Customer from '../activeRecords/Customer';
 import CustomerResource from '../resources/CustomerResource';
 
 class CustomerFactory extends EntityFactory {
-  static entityClass = Customer;
+  static activeRecordClass = Customer;
   static resourceClass = CustomerResource;
 }
 

@@ -5,8 +5,7 @@ import NoteResource from "../resources/NoteResource";
 import HasElementByField from "../../base/activeRecords/behaviors/HasElementByField";
 
 class Note extends Entity {
-  static behaviors = [ new HasElementByField( 'NOTE_ELEMENT_TYPE' ) ];
-
+  static behaviors = [ new HasElementByField( 'NOTE_ELEMENT_TYPE' )];
   fetch() {
     const type = NoteResource.getElementType( this._attributes.element_type ),
       { id } = this._attributes;
@@ -19,7 +18,7 @@ class Note extends Entity {
   }
 
   findById( id, type ) {
-    return this._resource.findById({ id, type });
+    return this._resource.findById( id, type );
   }
 }
 

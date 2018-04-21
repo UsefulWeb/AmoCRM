@@ -8,7 +8,7 @@ class CompanyResource extends EntityResource {
   static ENTITY_TYPE = 3;
   static NOTE_ELEMENT_TYPE = 3;
   static TASK_ELEMENT_TYPE = 3;
-  static behaviors = [ new Removable, new HasMultiactions ];
+  static behaviors = [ ...EntityResource.behaviors, new Removable, new HasMultiactions ];
 }
 
 export default CompanyResource;

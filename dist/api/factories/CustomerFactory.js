@@ -36,6 +36,6 @@ var CustomerFactory = function (_EntityFactory) {
   return CustomerFactory;
 }(_EntityFactory3.default);
 
-CustomerFactory.entityClass = _Customer2.default;
+CustomerFactory.activeRecordClass = _Customer2.default;
 CustomerFactory.resourceClass = _CustomerResource2.default;
 exports.default = CustomerFactory;

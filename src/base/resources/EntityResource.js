@@ -1,5 +1,9 @@
 import RemoteResource from './RemoteResource';
 import EntityResponseHandler from "../responseHandlers/EntityResponseHandler";
+import Updatable from "./behaviors/Updatable";
+import Insertable from "./behaviors/Insertable";
+import Findable from "./behaviors/Findable";
+import FindableById from "./behaviors/FindableById";
 
 class EntityResource extends RemoteResource {
 
@@ -13,28 +17,7 @@ class EntityResource extends RemoteResource {
   static ENTITY_TYPE;
   static DELETE_MULTIACTION_TYPE = 4;
 
-  findById( id ) {
-    return this.find({ id });
-  }
-
-  find( query = {}) {
-    const { path, getPath } = this.constructor;
-    return this.request( 'GET', getPath || path, query );
-  }
-
-  insert( data=[]) {
-    const { insertPath, path } = this.constructor;
-    return this.request( 'POST', insertPath || path, {
-      add: data
-    });
-  }
-
-  update( data=[]) {
-    const { path, updatePath } = this.constructor;
-    return this.request( 'POST', updatePath || path, {
-      update: data
-    });
-  }
+  static behaviors = [ new Findable, new FindableById, new Updatable, new Insertable ];
 }
 
 export default EntityResource;

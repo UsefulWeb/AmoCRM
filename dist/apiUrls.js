@@ -40,7 +40,7 @@ exports.default = {
   unsorted: {
     get: '/api/v2/incoming_leads',
     summary: '/api/v2/incoming_leads/summary',
-    add: '/api/v2/incoming_leads/sip',
+    addFromSIP: '/api/v2/incoming_leads/sip',
     addFromForm: '/api/v2/incoming_leads/form',
     accept: '/api/v2/incoming_leads/accept',
     decline: '/api/v2/incoming_leads/decline'

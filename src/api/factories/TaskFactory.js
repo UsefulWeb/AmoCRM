@@ -4,9 +4,9 @@ import TaskResource from '../resources/TaskResource';
 import Removable from '../../base/factories/behaviors/Removable';
 
 class TaskFactory extends EntityFactory {
-  static entityClass = Task;
+  static activeRecordClass = Task;
   static resourceClass = TaskResource;
-  static behaviors = [ new Removable ];
+  static behaviors = [ ...EntityFactory.behaviors, new Removable ];
 
   constructor( ...args ) {
     super( ...args );

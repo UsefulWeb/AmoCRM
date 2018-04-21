@@ -6,6 +6,7 @@ import NoteFactory from './factories/NoteFactory';
 import PipelineFactory from './factories/PipelineFactory';
 import TaskFactory from './factories/TaskFactory';
 import CompanyFactory from './factories/CompanyFactory';
+import IncomingLeadFactory from "./factories/IncomingLeadFactory";
 
 export default {
   Lead: LeadFactory,
@@ -13,11 +14,8 @@ export default {
   Company: CompanyFactory,
   Note: NoteFactory,
   Task: TaskFactory,
-  Customer: CustomerFactory
-  /* TODO
-
+  Customer: CustomerFactory,
+  IncomingLead: IncomingLeadFactory,
   Field: FieldFactory,
-  Pipeline: PipelineFactory,
-
-  */
+  Pipeline: PipelineFactory
 };

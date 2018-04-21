@@ -9,7 +9,7 @@ class LeadResource extends EntityResource {
   static ENTITY_TYPE = 2;
   static NOTE_ELEMENT_TYPE = 2;
   static TASK_ELEMENT_TYPE = 2;
-  static behaviors = [ new Removable, new HasMultiactions ];
+  static behaviors = [ ...EntityResource.behaviors, new Removable, new HasMultiactions ];
 }
 
 export default LeadResource;

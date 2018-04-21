@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,15 +8,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ResourceFactory2 = require("./ResourceFactory");
+var _ResourceFactory2 = require('./ResourceFactory');
 
 var _ResourceFactory3 = _interopRequireDefault(_ResourceFactory2);
 
-var _EntityProxyHandler = require("../EntityProxyHandler");
-
-var _EntityProxyHandler2 = _interopRequireDefault(_EntityProxyHandler);
-
-var _BaseActiveRecord = require("../activeRecords/BaseActiveRecord");
+var _BaseActiveRecord = require('../activeRecords/BaseActiveRecord');
 
 var _BaseActiveRecord2 = _interopRequireDefault(_BaseActiveRecord);
 
@@ -38,39 +34,25 @@ var EntityFactory = function (_ResourceFactory) {
   }
 
   _createClass(EntityFactory, [{
-    key: "create",
-    value: function create() {
-      var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var _constructor = this.constructor,
-          entityClass = _constructor.entityClass,
-          entityHandlerClass = _constructor.entityHandlerClass,
-          entity = new entityClass(this._resource, attributes),
-          handler = new entityHandlerClass(entity);
-
-      return new Proxy({}, handler);
-    }
-  }, {
-    key: "of",
-    value: function of() {
-      var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      return this.create(attributes);
-    }
-  }, {
-    key: "findById",
+    key: 'findById',
     value: function findById(id) {
       var _this2 = this;
 
       return this._resource.findById(id).then(function (response) {
-        var attributes = response.getFirstItem();
-        if (!attributes) {
-          return;
-        }
-        return _this2.create(attributes);
+        return _this2.afterFindById(response);
       });
     }
   }, {
-    key: "find",
+    key: 'afterFindById',
+    value: function afterFindById(response) {
+      var attributes = response.getFirstItem();
+      if (!attributes) {
+        return;
+      }
+      return this.create(attributes);
+    }
+  }, {
+    key: 'find',
     value: function find(query) {
       var _this3 = this;
 
@@ -82,19 +64,19 @@ var EntityFactory = function (_ResourceFactory) {
       });
     }
   }, {
-    key: "insert",
+    key: 'insert',
     value: function insert(rawData) {
       var data = this.getDataAttributes(rawData);
       return this._resource.insert(data);
     }
   }, {
-    key: "update",
+    key: 'update',
     value: function update(rawData) {
       var data = this.getDataAttributes(rawData);
       return this._resource.update(data);
     }
   }, {
-    key: "getDataAttributes",
+    key: 'getDataAttributes',
     value: function getDataAttributes() {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
@@ -103,12 +85,12 @@ var EntityFactory = function (_ResourceFactory) {
       });
     }
   }, {
-    key: "getDataIdentifiers",
+    key: 'getDataIdentifiers',
     value: function getDataIdentifiers() {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
       return this.getDataAttributes(data).map(function (item) {
-        return (typeof item === "undefined" ? "undefined" : _typeof(item)) === 'object' ? item.id : item;
+        return (typeof item === 'undefined' ? 'undefined' : _typeof(item)) === 'object' ? item.id : item;
       });
     }
   }]);
@@ -116,5 +98,4 @@ var EntityFactory = function (_ResourceFactory) {
   return EntityFactory;
 }(_ResourceFactory3.default);
 
-EntityFactory.entityHandlerClass = _EntityProxyHandler2.default;
 exports.default = EntityFactory;

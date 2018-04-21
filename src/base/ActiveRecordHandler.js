@@ -1,4 +1,4 @@
-class EntityHandler {
+class ActiveRecordHandler {
   /**
    * @param entity {EntityActiveRecord}
    */
@@ -25,4 +25,4 @@ class EntityHandler {
   }
 }
 
-export default EntityHandler;
+export default ActiveRecordHandler;

@@ -4,8 +4,13 @@ import EntityErrorResponseHandler from '../errorHandlers/EntityResponseErrorHand
 class EntityResponseHandler extends ResponseHandler {
   static errorHandlerClass = EntityErrorResponseHandler;
 
+  getEmbedded() {
+    return this._response._embedded;
+  }
+
   getItems() {
-    const items = this._response._embedded && this._response._embedded.items;
+    const embedded = this.getEmbedded(),
+      items = embedded && embedded.items;
     return items || [];
   }
 

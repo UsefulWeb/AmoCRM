@@ -36,6 +36,6 @@ var PipelineFactory = function (_EntityFactory) {
   return PipelineFactory;
 }(_EntityFactory3.default);
 
-PipelineFactory.entityClass = _Pipeline2.default;
+PipelineFactory.activeRecordClass = _Pipeline2.default;
 PipelineFactory.resourceClass = _PipelineResource2.default;
 exports.default = PipelineFactory;

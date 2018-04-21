@@ -40,7 +40,7 @@ var ContactFactory = function (_EntityFactory) {
   return ContactFactory;
 }(_EntityFactory3.default);
 
-ContactFactory.entityClass = _Contact2.default;
+ContactFactory.activeRecordClass = _Contact2.default;
 ContactFactory.resourceClass = _ContactResource2.default;
 ContactFactory.behaviors = [new _Removable2.default()];
 exports.default = ContactFactory;

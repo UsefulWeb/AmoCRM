@@ -42,19 +42,15 @@ var TaskFactory = function (_EntityFactory) {
 
     var _this = _possibleConstructorReturn(this, (_ref = TaskFactory.__proto__ || Object.getPrototypeOf(TaskFactory)).call.apply(_ref, [this].concat(args)));
 
-    _this.ELEMENT_TYPE = {
-      CONTACT: 1,
-      LEAD: 2,
-      COMPANY: 3,
-      CUSTOMER: 12
-    };
+    _this.ELEMENT_TYPE = _TaskResource2.default.ELEMENT_TYPES;
+    _this.TASK_TYPE = _TaskResource2.default.TASK_TYPES;
     return _this;
   }
 
   return TaskFactory;
 }(_EntityFactory3.default);
 
-TaskFactory.entityClass = _Task2.default;
+TaskFactory.activeRecordClass = _Task2.default;
 TaskFactory.resourceClass = _TaskResource2.default;
 TaskFactory.behaviors = [new _Removable2.default()];
 exports.default = TaskFactory;

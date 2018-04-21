@@ -36,6 +36,6 @@ var FieldFactory = function (_ResourceFactory) {
   return FieldFactory;
 }(_ResourceFactory3.default);
 
-FieldFactory.entityClass = _Field2.default;
+FieldFactory.activeRecordClass = _Field2.default;
 FieldFactory.resourceClass = _FieldResource2.default;
 exports.default = FieldFactory;

@@ -26,16 +26,15 @@ export default {
       path: '/api/v2/fields'
     },
     pipelines: {
+      path: '/private/api/v2/json/pipelines/set',
       getPath: '/api/v2/pipelines',
-      insertPath: '/private/api/v2/json/pipelines/set',
-      updatePath: '/private/api/v2/json/pipelines/set',
       deletePath: '/private/api/v2/json/pipelines/delete'
     }
   },
   unsorted: {
     get: '/api/v2/incoming_leads',
     summary: '/api/v2/incoming_leads/summary',
-    add: '/api/v2/incoming_leads/sip',
+    addFromSIP: '/api/v2/incoming_leads/sip',
     addFromForm: '/api/v2/incoming_leads/form',
     accept: '/api/v2/incoming_leads/accept',
     decline: '/api/v2/incoming_leads/decline'

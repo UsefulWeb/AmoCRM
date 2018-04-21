@@ -1,9 +1,9 @@
 class Removable {
 
-  update( ids = []) {
+  remove( ids = []) {
     const { path, deletePath } = this.constructor;
     return this.request( 'POST', deletePath || path, {
-      update: ids
+      delete: ids
     });
   }
 }

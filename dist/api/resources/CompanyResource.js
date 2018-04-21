@@ -43,5 +43,6 @@ var CompanyResource = function (_EntityResource) {
 CompanyResource.path = _apiUrls2.default.entities.companies.path;
 CompanyResource.ENTITY_TYPE = 3;
 CompanyResource.NOTE_ELEMENT_TYPE = 3;
+CompanyResource.TASK_ELEMENT_TYPE = 3;
 CompanyResource.behaviors = [new _PrivateRemovable2.default(), new _HasMultiactions2.default()];
 exports.default = CompanyResource;

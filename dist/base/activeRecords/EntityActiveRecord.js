@@ -41,13 +41,18 @@ var EntityActiveRecord = function (_ActiveRecord) {
         throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.fetch()!');
       }
       return this._resource.findById(this._attributes.id).then(function (response) {
-        var attributes = response.getFirstItem();
-        if (!attributes) {
-          return false;
-        }
-        _this2._attributes = attributes;
-        return _this2;
+        return _this2.afterFetch(response);
       });
+    }
+  }, {
+    key: 'afterFetch',
+    value: function afterFetch(response) {
+      var attributes = response.getFirstItem();
+      if (!attributes) {
+        return false;
+      }
+      this._attributes = attributes;
+      return this;
     }
   }, {
     key: 'exists',
@@ -65,10 +70,15 @@ var EntityActiveRecord = function (_ActiveRecord) {
         throw new Error('EntityActiveRecord must not exists for using EntityActiveRecord.insert()!');
       }
       return this._resource.insert([this._attributes]).then(function (response) {
-        var attributes = response.getFirstItem() || {};
-        _this3._attributes.id = attributes.id;
-        return _this3;
+        return _this3.afterInsert(response);
       });
+    }
+  }, {
+    key: 'afterInsert',
+    value: function afterInsert(response) {
+      var attributes = response.getFirstItem() || {};
+      this._attributes.id = attributes.id;
+      return this;
     }
   }, {
     key: 'update',

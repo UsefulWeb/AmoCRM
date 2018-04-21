@@ -18,30 +18,6 @@ var _NoteResource = require('../resources/NoteResource');
 
 var _NoteResource2 = _interopRequireDefault(_NoteResource);
 
-var _Removable = require('../../base/factories/behaviors/Removable');
-
-var _Removable2 = _interopRequireDefault(_Removable);
-
-var _ContactResource = require('../resources/ContactResource');
-
-var _ContactResource2 = _interopRequireDefault(_ContactResource);
-
-var _LeadResource = require('../resources/LeadResource');
-
-var _LeadResource2 = _interopRequireDefault(_LeadResource);
-
-var _CompanyResource = require('../resources/CompanyResource');
-
-var _CompanyResource2 = _interopRequireDefault(_CompanyResource);
-
-var _TaskResource = require('../resources/TaskResource');
-
-var _TaskResource2 = _interopRequireDefault(_TaskResource);
-
-var _CustomerResource = require('../resources/CustomerResource');
-
-var _CustomerResource2 = _interopRequireDefault(_CustomerResource);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -78,11 +54,7 @@ var NoteFactory = function (_EntityFactory) {
       var _this2 = this;
 
       return this._resource.findById(id, type).then(function (response) {
-        var attributes = response.getFirstItem();
-        if (!attributes) {
-          return;
-        }
-        return _this2.create(attributes);
+        return _this2.afterFindById(response);
       });
     }
   }]);
@@ -90,7 +62,7 @@ var NoteFactory = function (_EntityFactory) {
   return NoteFactory;
 }(_EntityFactory3.default);
 
-NoteFactory.entityClass = _Note2.default;
+NoteFactory.activeRecordClass = _Note2.default;
 NoteFactory.resourceClass = _NoteResource2.default;
-NoteFactory.behaviors = [new _Removable2.default()];
+NoteFactory.behaviors = [];
 exports.default = NoteFactory;

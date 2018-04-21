@@ -24,14 +24,23 @@ class RemoteResource {
   }
 
   request( method, path, data, options ) {
-    const { responseHandlerClass } = this.constructor;
     return this._request.request( path, data, method, options )
-      .then( response => {
-        if ( !responseHandlerClass ) {
-          return response;
-        }
-        return new responseHandlerClass( response );
-      });
+      .then( response => this.handleResponse( response ));
+  }
+
+  handleResponse( response ) {
+    const { responseHandlerClass } = this.constructor;
+    if ( !responseHandlerClass ) {
+      return response;
+    }
+    return new responseHandlerClass( response );
+  }
+
+  apiRequest( method, path, data, options = {}) {
+    return this.request( method, path, data, {
+      ...options,
+      useAPIAuth: true
+    })
   }
 }
 
