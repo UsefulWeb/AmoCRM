@@ -100,7 +100,7 @@ crm.Lead.findById( 123 )
 
 ```js
 // список идентификаторов сделок
-crm.Lead.remove([ 12 345, 568944 ])
+crm.Lead.remove([ 12345, 568944 ])
 
 // удаление отедльной сделки
 crm.Lead.findById( 123 )
