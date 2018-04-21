@@ -16,7 +16,7 @@ class NoteFactory extends EntityFactory {
   constructor( ...args ) {
     super( ...args );
     this.ELEMENT_TYPE = NoteResource.ELEMENT_TYPES;
-
+    this.ELEMENT_TYPE_NAME = NoteResource.ELEMENT_TYPE_NAMES;
     this.NOTE_TYPE = NoteResource.NOTE_TYPES;
 
     this.CALL_STATUS = NoteResource.CALL_STATUSES;

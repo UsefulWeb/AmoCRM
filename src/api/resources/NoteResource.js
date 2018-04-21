@@ -13,6 +13,14 @@ class NoteResource extends EntityResource {
   static ENTITY_TYPE = 2;
   static behaviors = [ new Findable, new Updatable, new Insertable, new HasMultiactions ];
 
+  static ELEMENT_TYPE_NAMES = {
+    CONTACT: 'contact',
+    LEAD: 'lead',
+    COMPANY: 'company',
+    TASK: 'task',
+    CUSTOMER: 'customer'
+  };
+
   static ELEMENT_TYPES = {
     CONTACT: 1,
     LEAD: 2,

@@ -7,18 +7,35 @@
 crm.Lead // манипуляции со сделками
 crm.Contact // манипуляции с контактами
 crm.Company // манипуляции с компаниями
+crm.Customer // манипуляции с клиентами
+crm.Note // манипуляции с заметками
+crm.Task // манипуляции с задачами
+crm.Field // манипуляции с дополнительными полями
+crm.IncomingLead // манипуляции с неразобранным
+crm.Pipeline // манипуляции с воронками продаж
 ```
 
 (*crm* в данном случае - [экземпляр AmoCRM](./connection.md))
 
-Каждая из фабрик имеет методы для множественных операций со сделками:
+Каждая из фабрик может создать соответсвующий объект в CRM 
+с помощью оператора *new* или метода *of*:
 
 ```js
-factory.find( criteria );
-factory.findById( id );
-factory.insert( items );
-factory.update( items );
-factory.remove( items );
+const lead = new Lead;
+// с параметрами
+const lead2 = new crm.Lead( attributes );
+// без конструктора
+const lead3 = crm.Lead.of( attributes );
 ```
 
-(*factory* в данном случае - одна из указанных выше фабрик)
+### Основные сущности
+
+1. Сделки (Lead)
+2. Контакты (Contact)
+3. Компании (Company)
+4. Клиенты (Customer)
+5. Заметки (Note)
+6. Задачи (Task)
+7. Дополнительные поля (Field)
+8. Неразобранное/Входящие заявки из форм и телефонии (IncomingLead)
+9. Воронки продаж (Pipeline)
