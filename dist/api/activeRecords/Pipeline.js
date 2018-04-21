@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _EntityActiveRecord = require('../../base/activeRecords/EntityActiveRecord');
 
 var _EntityActiveRecord2 = _interopRequireDefault(_EntityActiveRecord);
@@ -24,6 +26,15 @@ var Pipeline = function (_Entity) {
 
     return _possibleConstructorReturn(this, (Pipeline.__proto__ || Object.getPrototypeOf(Pipeline)).apply(this, arguments));
   }
+
+  _createClass(Pipeline, [{
+    key: 'afterInsert',
+    value: function afterInsert(response) {
+      var attributes = response.getFirstModifiedItem('add') || {};
+      this._attributes.id = attributes.id;
+      return this;
+    }
+  }]);
 
   return Pipeline;
 }(_EntityActiveRecord2.default);

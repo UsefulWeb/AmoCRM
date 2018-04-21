@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _apiUrls = require('../../apiUrls');
 
 var _apiUrls2 = _interopRequireDefault(_apiUrls);
@@ -22,7 +20,13 @@ var _HasMultiactions = require('../../base/resources/behaviors/HasMultiactions')
 
 var _HasMultiactions2 = _interopRequireDefault(_HasMultiactions);
 
+var _hasElementTypeByKey = require('../../base/resources/behaviors/static/hasElementTypeByKey');
+
+var _hasElementTypeByKey2 = _interopRequireDefault(_hasElementTypeByKey);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -39,19 +43,6 @@ var TaskResource = function (_EntityResource) {
     return _possibleConstructorReturn(this, (TaskResource.__proto__ || Object.getPrototypeOf(TaskResource)).apply(this, arguments));
   }
 
-  _createClass(TaskResource, null, [{
-    key: 'getElementType',
-    value: function getElementType(value) {
-      var types = this.ELEMENT_TYPES,
-          compareKey = function compareKey(key) {
-        return types[key] === value;
-      },
-          type = Object.keys(types).filter(compareKey)[0];
-
-      return type.toLowerCase();
-    }
-  }]);
-
   return TaskResource;
 }(_EntityResource3.default);
 
@@ -59,7 +50,7 @@ TaskResource.path = _apiUrls2.default.entities.tasks.path;
 TaskResource.deletePath = _apiUrls2.default.entities.tasks.deletePath;
 TaskResource.ENTITY_TYPE = 4;
 TaskResource.NOTE_ELEMENT_TYPE = 4;
-TaskResource.behaviors = [new _PrivateRemovable2.default(), new _HasMultiactions2.default()];
+TaskResource.behaviors = [].concat(_toConsumableArray(_EntityResource3.default.behaviors), [new _PrivateRemovable2.default(), new _HasMultiactions2.default()]);
 TaskResource.TASK_TYPES = {
   CALL: 1,
   MEETING: 2,
@@ -71,4 +62,5 @@ TaskResource.ELEMENT_TYPES = {
   COMPANY: 3,
   CUSTOMER: 12
 };
+TaskResource.getElementType = (0, _hasElementTypeByKey2.default)('ELEMENT_TYPES');
 exports.default = TaskResource;

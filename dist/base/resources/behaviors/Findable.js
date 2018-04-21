@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,24 +8,24 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ResponseErrorHandler = function () {
-  function ResponseErrorHandler(response) {
-    _classCallCheck(this, ResponseErrorHandler);
-
-    this._response = response;
+var Findable = function () {
+  function Findable() {
+    _classCallCheck(this, Findable);
   }
 
-  _createClass(ResponseErrorHandler, [{
-    key: "handleErrors",
-    value: function handleErrors() {
-      if (!this.hasErrors()) {
-        return;
-      }
-      throw this.getFirstError();
+  _createClass(Findable, [{
+    key: 'find',
+    value: function find() {
+      var query = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var _constructor = this.constructor,
+          path = _constructor.path,
+          getPath = _constructor.getPath;
+
+      return this.request('GET', getPath || path, query);
     }
   }]);
 
-  return ResponseErrorHandler;
+  return Findable;
 }();
 
-exports.default = ResponseErrorHandler;
+exports.default = Findable;

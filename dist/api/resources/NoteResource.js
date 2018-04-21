@@ -6,8 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
 var _apiUrls = require('../../apiUrls');
 
 var _apiUrls2 = _interopRequireDefault(_apiUrls);
@@ -19,6 +17,26 @@ var _EntityResource3 = _interopRequireDefault(_EntityResource2);
 var _HasMultiactions = require('../../base/resources/behaviors/HasMultiactions');
 
 var _HasMultiactions2 = _interopRequireDefault(_HasMultiactions);
+
+var _hasElementTypeByKey = require('../../base/resources/behaviors/static/hasElementTypeByKey');
+
+var _hasElementTypeByKey2 = _interopRequireDefault(_hasElementTypeByKey);
+
+var _Updatable = require('../../base/resources/behaviors/Updatable');
+
+var _Updatable2 = _interopRequireDefault(_Updatable);
+
+var _Findable = require('../../base/resources/behaviors/Findable');
+
+var _Findable2 = _interopRequireDefault(_Findable);
+
+var _FindableById = require('../../base/resources/behaviors/FindableById');
+
+var _FindableById2 = _interopRequireDefault(_FindableById);
+
+var _Insertable = require('../../base/resources/behaviors/Insertable');
+
+var _Insertable2 = _interopRequireDefault(_Insertable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40,18 +58,7 @@ var NoteResource = function (_EntityResource) {
   _createClass(NoteResource, [{
     key: 'findById',
     value: function findById(id, type) {
-      return _get(NoteResource.prototype.__proto__ || Object.getPrototypeOf(NoteResource.prototype), 'find', this).call(this, { id: id, type: type });
-    }
-  }], [{
-    key: 'getElementType',
-    value: function getElementType(value) {
-      var types = this.ELEMENT_TYPES,
-          compareKey = function compareKey(key) {
-        return types[key] === value;
-      },
-          type = Object.keys(types).filter(compareKey)[0];
-
-      return type.toLowerCase();
+      return this.find({ id: id, type: type });
     }
   }]);
 
@@ -61,7 +68,7 @@ var NoteResource = function (_EntityResource) {
 NoteResource.path = _apiUrls2.default.entities.notes.path;
 NoteResource.deletePath = _apiUrls2.default.entities.notes.deletePath;
 NoteResource.ENTITY_TYPE = 2;
-NoteResource.behaviors = [new _HasMultiactions2.default()];
+NoteResource.behaviors = [new _Findable2.default(), new _Updatable2.default(), new _Insertable2.default(), new _HasMultiactions2.default()];
 NoteResource.ELEMENT_TYPES = {
   CONTACT: 1,
   LEAD: 2,
@@ -91,4 +98,5 @@ NoteResource.CALL_STATUSES = {
   DID_NOT_GET_THROUGH: 6,
   BUSY: 7
 };
+NoteResource.getElementType = (0, _hasElementTypeByKey2.default)('ELEMENT_TYPES');
 exports.default = NoteResource;

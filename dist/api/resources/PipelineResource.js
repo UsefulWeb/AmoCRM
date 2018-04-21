@@ -14,6 +14,14 @@ var _EntityResource2 = require('../../base/resources/EntityResource');
 
 var _EntityResource3 = _interopRequireDefault(_EntityResource2);
 
+var _Findable = require('../../base/resources/behaviors/Findable');
+
+var _Findable2 = _interopRequireDefault(_Findable);
+
+var _PipelineResponseHandler = require('../responseHandlers/PipelineResponseHandler');
+
+var _PipelineResponseHandler2 = _interopRequireDefault(_PipelineResponseHandler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32,11 +40,68 @@ var PipelineResource = function (_EntityResource) {
   }
 
   _createClass(PipelineResource, [{
+    key: 'findById',
+    value: function findById(id) {
+      var _this2 = this;
+
+      return this.find().then(function (response) {
+        return response.getItems();
+      }).then(function (items) {
+        return items.filter(function (item) {
+          return id === item.id;
+        });
+      }).then(function (response) {
+        return _this2.handleResponse(response);
+      });
+    }
+  }, {
+    key: 'insert',
+    value: function insert() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var _constructor = this.constructor,
+          insertPath = _constructor.insertPath,
+          path = _constructor.path;
+
+      return this.request('POST', insertPath || path, {
+        request: {
+          pipelines: {
+            add: data
+          }
+        }
+      });
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var _constructor2 = this.constructor,
+          path = _constructor2.path,
+          updatePath = _constructor2.updatePath,
+          pipelinesData = data.reduce(function (target, item) {
+        target[item.id] = item;
+        return target;
+      }, {});
+
+
+      return this.request('POST', updatePath || path, {
+        request: {
+          pipelines: {
+            update: pipelinesData
+          }
+        }
+      });
+    }
+  }, {
     key: 'remove',
-    value: function remove(id) {
+    value: function remove() {
+      var ids = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var deletePath = this.constructor.deletePath;
 
-      return this.request('POST', deletePath, { id: id });
+      return this.request('POST', deletePath, {
+        request: {
+          id: ids
+        }
+      });
     }
   }]);
 
@@ -44,5 +109,8 @@ var PipelineResource = function (_EntityResource) {
 }(_EntityResource3.default);
 
 PipelineResource.path = _apiUrls2.default.entities.pipelines.path;
+PipelineResource.getPath = _apiUrls2.default.entities.pipelines.getPath;
 PipelineResource.deletePath = _apiUrls2.default.entities.pipelines.deletePath;
+PipelineResource.responseHandlerClass = _PipelineResponseHandler2.default;
+PipelineResource.behaviors = [new _Findable2.default()];
 exports.default = PipelineResource;

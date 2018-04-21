@@ -28,17 +28,12 @@ var EntityActiveRecord = function (_ActiveRecord) {
   }
 
   _createClass(EntityActiveRecord, [{
-    key: 'save',
-    value: function save() {
-      return this.isNew() ? this.insert() : this.update();
-    }
-  }, {
     key: 'fetch',
     value: function fetch() {
       var _this2 = this;
 
       if (this.isNew()) {
-        throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.fetch()!');
+        throw new Error('ActiveRecord must exists for using fetch()!');
       }
       return this._resource.findById(this._attributes.id).then(function (response) {
         return _this2.afterFetch(response);
@@ -53,6 +48,11 @@ var EntityActiveRecord = function (_ActiveRecord) {
       }
       this._attributes = attributes;
       return this;
+    }
+  }, {
+    key: 'save',
+    value: function save() {
+      return this.isNew() ? this.insert() : this.update();
     }
   }, {
     key: 'exists',

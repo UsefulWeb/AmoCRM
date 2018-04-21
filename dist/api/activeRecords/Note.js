@@ -53,7 +53,7 @@ var Note = function (_Entity) {
   }, {
     key: 'findById',
     value: function findById(id, type) {
-      return this._resource.findById({ id: id, type: type });
+      return this._resource.findById(id, type);
     }
   }]);
 

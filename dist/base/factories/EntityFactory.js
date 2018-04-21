@@ -16,6 +16,22 @@ var _BaseActiveRecord = require('../activeRecords/BaseActiveRecord');
 
 var _BaseActiveRecord2 = _interopRequireDefault(_BaseActiveRecord);
 
+var _Findable = require('./behaviors/Findable');
+
+var _Findable2 = _interopRequireDefault(_Findable);
+
+var _FindableById = require('./behaviors/FindableById');
+
+var _FindableById2 = _interopRequireDefault(_FindableById);
+
+var _Insertable = require('./behaviors/Insertable');
+
+var _Insertable2 = _interopRequireDefault(_Insertable);
+
+var _Updatable = require('./behaviors/Updatable');
+
+var _Updatable2 = _interopRequireDefault(_Updatable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34,48 +50,6 @@ var EntityFactory = function (_ResourceFactory) {
   }
 
   _createClass(EntityFactory, [{
-    key: 'findById',
-    value: function findById(id) {
-      var _this2 = this;
-
-      return this._resource.findById(id).then(function (response) {
-        return _this2.afterFindById(response);
-      });
-    }
-  }, {
-    key: 'afterFindById',
-    value: function afterFindById(response) {
-      var attributes = response.getFirstItem();
-      if (!attributes) {
-        return;
-      }
-      return this.create(attributes);
-    }
-  }, {
-    key: 'find',
-    value: function find(query) {
-      var _this3 = this;
-
-      return this._resource.find(query).then(function (response) {
-        var items = response.getItems();
-        return items.map(function (attributes) {
-          return _this3.create(attributes);
-        });
-      });
-    }
-  }, {
-    key: 'insert',
-    value: function insert(rawData) {
-      var data = this.getDataAttributes(rawData);
-      return this._resource.insert(data);
-    }
-  }, {
-    key: 'update',
-    value: function update(rawData) {
-      var data = this.getDataAttributes(rawData);
-      return this._resource.update(data);
-    }
-  }, {
     key: 'getDataAttributes',
     value: function getDataAttributes() {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -98,4 +72,5 @@ var EntityFactory = function (_ResourceFactory) {
   return EntityFactory;
 }(_ResourceFactory3.default);
 
+EntityFactory.behaviors = [new _Findable2.default(), new _FindableById2.default(), new _Insertable2.default(), new _Updatable2.default()];
 exports.default = EntityFactory;

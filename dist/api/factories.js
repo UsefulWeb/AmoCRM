@@ -36,6 +36,10 @@ var _CompanyFactory = require('./factories/CompanyFactory');
 
 var _CompanyFactory2 = _interopRequireDefault(_CompanyFactory);
 
+var _IncomingLeadFactory = require('./factories/IncomingLeadFactory');
+
+var _IncomingLeadFactory2 = _interopRequireDefault(_IncomingLeadFactory);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -44,9 +48,8 @@ exports.default = {
   Company: _CompanyFactory2.default,
   Note: _NoteFactory2.default,
   Task: _TaskFactory2.default,
-  Customer: _CustomerFactory2.default
-  /* TODO
-   Field: FieldFactory,
-  Pipeline: PipelineFactory,
-   */
+  Customer: _CustomerFactory2.default,
+  IncomingLead: _IncomingLeadFactory2.default,
+  Field: _FieldFactory2.default,
+  Pipeline: _PipelineFactory2.default
 };

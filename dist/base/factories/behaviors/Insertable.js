@@ -8,24 +8,20 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ResponseErrorHandler = function () {
-  function ResponseErrorHandler(response) {
-    _classCallCheck(this, ResponseErrorHandler);
-
-    this._response = response;
+var Insertable = function () {
+  function Insertable() {
+    _classCallCheck(this, Insertable);
   }
 
-  _createClass(ResponseErrorHandler, [{
-    key: "handleErrors",
-    value: function handleErrors() {
-      if (!this.hasErrors()) {
-        return;
-      }
-      throw this.getFirstError();
+  _createClass(Insertable, [{
+    key: "insert",
+    value: function insert(rawData) {
+      var data = this.getDataAttributes(rawData);
+      return this._resource.insert(data);
     }
   }]);
 
-  return ResponseErrorHandler;
+  return Insertable;
 }();
 
-exports.default = ResponseErrorHandler;
+exports.default = Insertable;

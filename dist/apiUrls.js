@@ -31,9 +31,8 @@ exports.default = {
       path: '/api/v2/fields'
     },
     pipelines: {
+      path: '/private/api/v2/json/pipelines/set',
       getPath: '/api/v2/pipelines',
-      insertPath: '/private/api/v2/json/pipelines/set',
-      updatePath: '/private/api/v2/json/pipelines/set',
       deletePath: '/private/api/v2/json/pipelines/delete'
     }
   },

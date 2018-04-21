@@ -1,18 +1,32 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _RemoteResource2 = require('./RemoteResource');
+var _RemoteResource2 = require("./RemoteResource");
 
 var _RemoteResource3 = _interopRequireDefault(_RemoteResource2);
 
-var _EntityResponseHandler = require('../responseHandlers/EntityResponseHandler');
+var _EntityResponseHandler = require("../responseHandlers/EntityResponseHandler");
 
 var _EntityResponseHandler2 = _interopRequireDefault(_EntityResponseHandler);
+
+var _Updatable = require("./behaviors/Updatable");
+
+var _Updatable2 = _interopRequireDefault(_Updatable);
+
+var _Insertable = require("./behaviors/Insertable");
+
+var _Insertable2 = _interopRequireDefault(_Insertable);
+
+var _Findable = require("./behaviors/Findable");
+
+var _Findable2 = _interopRequireDefault(_Findable);
+
+var _FindableById = require("./behaviors/FindableById");
+
+var _FindableById2 = _interopRequireDefault(_FindableById);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,50 +45,10 @@ var EntityResource = function (_RemoteResource) {
     return _possibleConstructorReturn(this, (EntityResource.__proto__ || Object.getPrototypeOf(EntityResource)).apply(this, arguments));
   }
 
-  _createClass(EntityResource, [{
-    key: 'findById',
-    value: function findById(id) {
-      return this.find({ id: id });
-    }
-  }, {
-    key: 'find',
-    value: function find() {
-      var query = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var _constructor = this.constructor,
-          path = _constructor.path,
-          getPath = _constructor.getPath;
-
-      return this.request('GET', getPath || path, query);
-    }
-  }, {
-    key: 'insert',
-    value: function insert() {
-      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      var _constructor2 = this.constructor,
-          insertPath = _constructor2.insertPath,
-          path = _constructor2.path;
-
-      return this.request('POST', insertPath || path, {
-        add: data
-      });
-    }
-  }, {
-    key: 'update',
-    value: function update() {
-      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      var _constructor3 = this.constructor,
-          path = _constructor3.path,
-          updatePath = _constructor3.updatePath;
-
-      return this.request('POST', updatePath || path, {
-        update: data
-      });
-    }
-  }]);
-
   return EntityResource;
 }(_RemoteResource3.default);
 
 EntityResource.responseHandlerClass = _EntityResponseHandler2.default;
 EntityResource.DELETE_MULTIACTION_TYPE = 4;
+EntityResource.behaviors = [new _Findable2.default(), new _FindableById2.default(), new _Updatable2.default(), new _Insertable2.default()];
 exports.default = EntityResource;

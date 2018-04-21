@@ -32,9 +32,15 @@ var EntityResponseHandler = function (_ResponseHandler) {
   }
 
   _createClass(EntityResponseHandler, [{
+    key: 'getEmbedded',
+    value: function getEmbedded() {
+      return this._response._embedded;
+    }
+  }, {
     key: 'getItems',
     value: function getItems() {
-      var items = this._response._embedded && this._response._embedded.items;
+      var embedded = this.getEmbedded(),
+          items = embedded && embedded.items;
       return items || [];
     }
   }, {

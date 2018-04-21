@@ -19,9 +19,23 @@ var AmoConnection = function () {
     this._request = request;
     this._options = options;
     this._isConnected = false;
+
+    this.setupAPIRequest();
   }
 
   _createClass(AmoConnection, [{
+    key: 'setupAPIRequest',
+    value: function setupAPIRequest() {
+      var _options = this._options,
+          login = _options.login,
+          hash = _options.hash;
+
+      if (!(login && hash)) {
+        return;
+      }
+      this._request.setAPIParams('login=' + login + '&api_key=' + hash);
+    }
+  }, {
     key: 'connect',
     value: function connect() {
       var _this = this;
@@ -29,10 +43,10 @@ var AmoConnection = function () {
       if (this._isConnected) {
         return Promise.resolve(true);
       }
-      var _options = this._options,
-          login = _options.login,
-          password = _options.password,
-          hash = _options.hash,
+      var _options2 = this._options,
+          login = _options2.login,
+          password = _options2.password,
+          hash = _options2.hash,
           data = {
         USER_LOGIN: login
       };

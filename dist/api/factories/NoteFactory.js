@@ -18,6 +18,22 @@ var _NoteResource = require('../resources/NoteResource');
 
 var _NoteResource2 = _interopRequireDefault(_NoteResource);
 
+var _Findable = require('../../base/factories/behaviors/Findable');
+
+var _Findable2 = _interopRequireDefault(_Findable);
+
+var _Insertable = require('../../base/factories/behaviors/Insertable');
+
+var _Insertable2 = _interopRequireDefault(_Insertable);
+
+var _FindableById = require('../../base/factories/behaviors/FindableById');
+
+var _FindableById2 = _interopRequireDefault(_FindableById);
+
+var _Updatable = require('../../base/factories/behaviors/Updatable');
+
+var _Updatable2 = _interopRequireDefault(_Updatable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26,11 +42,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var _ref = new _FindableById2.default(),
+    afterFindById = _ref.afterFindById;
+
 var NoteFactory = function (_EntityFactory) {
   _inherits(NoteFactory, _EntityFactory);
 
   function NoteFactory() {
-    var _ref;
+    var _ref2;
 
     _classCallCheck(this, NoteFactory);
 
@@ -38,7 +57,7 @@ var NoteFactory = function (_EntityFactory) {
       args[_key] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_ref = NoteFactory.__proto__ || Object.getPrototypeOf(NoteFactory)).call.apply(_ref, [this].concat(args)));
+    var _this = _possibleConstructorReturn(this, (_ref2 = NoteFactory.__proto__ || Object.getPrototypeOf(NoteFactory)).call.apply(_ref2, [this].concat(args)));
 
     _this.ELEMENT_TYPE = _NoteResource2.default.ELEMENT_TYPES;
 
@@ -54,7 +73,7 @@ var NoteFactory = function (_EntityFactory) {
       var _this2 = this;
 
       return this._resource.findById(id, type).then(function (response) {
-        return _this2.afterFindById(response);
+        return afterFindById.call(_this2, response);
       });
     }
   }]);
@@ -64,5 +83,5 @@ var NoteFactory = function (_EntityFactory) {
 
 NoteFactory.activeRecordClass = _Note2.default;
 NoteFactory.resourceClass = _NoteResource2.default;
-NoteFactory.behaviors = [];
+NoteFactory.behaviors = [new _Findable2.default(), new _Insertable2.default(), new _Updatable2.default()];
 exports.default = NoteFactory;

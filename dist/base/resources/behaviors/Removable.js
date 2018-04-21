@@ -14,15 +14,15 @@ var Removable = function () {
   }
 
   _createClass(Removable, [{
-    key: 'update',
-    value: function update() {
+    key: 'remove',
+    value: function remove() {
       var ids = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var _constructor = this.constructor,
           path = _constructor.path,
           deletePath = _constructor.deletePath;
 
       return this.request('POST', deletePath || path, {
-        update: ids
+        delete: ids
       });
     }
   }]);

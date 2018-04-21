@@ -33,7 +33,8 @@ var DomainRequest = function () {
     if (!domain) {
       throw new Error('Portal domain must be set!');
     }
-    this._queue = new _promiseQueue2.default(1);
+    this._apiParams = '';
+    this._queue = new _promiseQueue2.default(this.constructor.MAX_REQUESTS_PER_TIME);
     this._cookies = [];
     this._hostname = domain + '.amocrm.ru';
   }
@@ -55,6 +56,13 @@ var DomainRequest = function () {
       return this.request(url, data, 'GET', options);
     }
   }, {
+    key: 'setAPIParams',
+    value: function setAPIParams() {
+      var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+      this._apiParams = params;
+    }
+  }, {
     key: 'request',
     value: function request(url) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -63,9 +71,28 @@ var DomainRequest = function () {
 
       var encodedData = this.encodeData(url, data, method, options),
           headers = this.getRequestHeaders(url, encodedData, method, options),
-          request = this.createRequest(url, encodedData, method, headers);
+          path = this.getPath(url, encodedData, method, options),
+          request = this.createRequest(path, encodedData, method, headers);
 
       return this.addRequestToQueue(request, options.response);
+    }
+  }, {
+    key: 'getPath',
+    value: function getPath(url) {
+      var encodedData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
+      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+      var isGET = method === 'GET';
+      var params = [];
+      if (isGET) {
+        params.push(encodedData);
+      }
+      if (options.useAPIAuth) {
+        params.push(this._apiParams);
+      }
+
+      return params.length ? url + '?' + params.join('&') : url;
     }
   }, {
     key: 'addRequestToQueue',
@@ -86,7 +113,6 @@ var DomainRequest = function () {
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
       var isGET = method === 'GET';
-
       return isGET ? _qs2.default.stringify(data) : JSON.stringify(data);
     }
   }, {
@@ -128,13 +154,10 @@ var DomainRequest = function () {
     }
   }, {
     key: 'createRequest',
-    value: function createRequest(url) {
+    value: function createRequest(path) {
       var encodedData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
-      var isGET = method === 'GET',
-          path = isGET ? url + '?' + encodedData : url;
 
       return new _HTTPSRequest2.default({
         path: path,
@@ -151,4 +174,5 @@ var DomainRequest = function () {
 
 DomainRequest.responseHandlerClass = _DomainResponseHandler2.default;
 DomainRequest.DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';
+DomainRequest.MAX_REQUESTS_PER_TIME = 1;
 exports.default = DomainRequest;

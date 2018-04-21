@@ -8,24 +8,32 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ResponseErrorHandler = function () {
-  function ResponseErrorHandler(response) {
-    _classCallCheck(this, ResponseErrorHandler);
-
-    this._response = response;
+var FindableById = function () {
+  function FindableById() {
+    _classCallCheck(this, FindableById);
   }
 
-  _createClass(ResponseErrorHandler, [{
-    key: "handleErrors",
-    value: function handleErrors() {
-      if (!this.hasErrors()) {
+  _createClass(FindableById, [{
+    key: "findById",
+    value: function findById(id) {
+      var _this = this;
+
+      return this._resource.findById(id).then(function (response) {
+        return _this.afterFindById(response);
+      });
+    }
+  }, {
+    key: "afterFindById",
+    value: function afterFindById(response) {
+      var attributes = response.getFirstItem();
+      if (!attributes) {
         return;
       }
-      throw this.getFirstError();
+      return this.create(attributes);
     }
   }]);
 
-  return ResponseErrorHandler;
+  return FindableById;
 }();
 
-exports.default = ResponseErrorHandler;
+exports.default = FindableById;
