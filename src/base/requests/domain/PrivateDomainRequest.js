@@ -1,6 +1,6 @@
 import qs from 'qs';
 import DomainRequest from './DomainRequest';
-import AjaxRequest from '../common/UnirestRequest';
+import HTTPRequest from '../common/HTTPRequest';
 import PrivateDomainResponseHandler from '../../responseHandlers/PrivateDomainResponseHandler';
 
 class PrivateDomainRequest extends DomainRequest {
@@ -17,22 +17,25 @@ class PrivateDomainRequest extends DomainRequest {
   requestWithFormData( url, data = {}, method = 'GET', options = {}) {
     const headers = this.getDefaultHeaders( options.headers );
     headers[ 'X-Requested-With' ] = 'XMLHttpRequest';
-    const request = this.createUnirestRequest( url, data, method, headers );
+    const request = this.createFormRequest( url, data, method, headers );
 
     return this.addRequestToQueue( request, options.response );
   }
 
-  createUnirestRequest(path, data = {}, method = 'GET', headers = {}) {
+  createFormRequest(url, data = {}, method = 'GET', headers = {}) {
     const isGET = method === 'GET',
       protocol = this.constructor.NETWORK_PROTOCOL,
-      params = isGET ? '?'+this.encodeData( data ) : '',
-      url = `${protocol}://${this._hostname}${path}${params}`;
+      secure = protocol === 'https',
+      path = isGET ? url+'?'+this.encodeData( data ) : '',
+      hostname = this._hostname;
 
-    return new AjaxRequest({
-      url,
-      headers,
+    return new HTTPRequest({
+      hostname,
+      path,
+      data,
       method,
-      data
+      headers,
+      secure
     });
   }
 }
