@@ -8,20 +8,10 @@ class AmoConnection {
     this._request = request;
     this._options = options;
     this._isConnected = false;
-
-    this.setupAPIRequest();
   }
 
   get connected() {
     return this._isConnected;
-  }
-
-  setupAPIRequest() {
-    const { login, hash } = this._options
-    if ( !( login && hash )) {
-      return;
-    }
-    this._request.setAPIParams( `login=${login}&api_key=${hash}` );
   }
 
   connect() {

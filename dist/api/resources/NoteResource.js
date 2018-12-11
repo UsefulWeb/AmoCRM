@@ -69,6 +69,13 @@ NoteResource.path = _apiUrls2.default.entities.notes.path;
 NoteResource.deletePath = _apiUrls2.default.entities.notes.deletePath;
 NoteResource.ENTITY_TYPE = 2;
 NoteResource.behaviors = [new _Findable2.default(), new _Updatable2.default(), new _Insertable2.default(), new _HasMultiactions2.default()];
+NoteResource.ELEMENT_TYPE_NAMES = {
+  CONTACT: 'contact',
+  LEAD: 'lead',
+  COMPANY: 'company',
+  TASK: 'task',
+  CUSTOMER: 'customer'
+};
 NoteResource.ELEMENT_TYPES = {
   CONTACT: 1,
   LEAD: 2,

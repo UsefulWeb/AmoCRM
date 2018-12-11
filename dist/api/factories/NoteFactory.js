@@ -60,7 +60,7 @@ var NoteFactory = function (_EntityFactory) {
     var _this = _possibleConstructorReturn(this, (_ref2 = NoteFactory.__proto__ || Object.getPrototypeOf(NoteFactory)).call.apply(_ref2, [this].concat(args)));
 
     _this.ELEMENT_TYPE = _NoteResource2.default.ELEMENT_TYPES;
-
+    _this.ELEMENT_TYPE_NAME = _NoteResource2.default.ELEMENT_TYPE_NAMES;
     _this.NOTE_TYPE = _NoteResource2.default.NOTE_TYPES;
 
     _this.CALL_STATUS = _NoteResource2.default.CALL_STATUSES;
