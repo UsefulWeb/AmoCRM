@@ -41,7 +41,8 @@ var HTTPRequest = function () {
           data = _options$data === undefined ? '' : _options$data,
           _options$secure = _options.secure,
           secure = _options$secure === undefined ? false : _options$secure,
-          driver = secure ? _https2.default : _http2.default;
+          driver = secure ? _https2.default : _http2.default,
+          isGET = method !== 'GET';
 
       return new Promise(function (resolve, reject) {
         var request = driver.request({
@@ -50,8 +51,7 @@ var HTTPRequest = function () {
           method: method,
           headers: headers
         }, _this.onResponse(resolve, reject));
-
-        if (method !== 'GET') {
+        if (isGET) {
           request.write(data);
         }
         request.on('error', _this.onError(reject));

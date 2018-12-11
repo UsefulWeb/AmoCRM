@@ -2,7 +2,7 @@
 import Queue from 'promise-queue';
 import qs from 'qs';
 
-import HTTPSRequest from '../common/HTTPSRequest';
+import HTTPRequest from '../common/HTTPRequest';
 import DomainResponseHandler from '../../responseHandlers/DomainResponseHandler'
 
 class DomainRequest {
@@ -30,7 +30,6 @@ class DomainRequest {
     const encodedData = this.encodeData( url, data, method, options ),
       headers = this.getRequestHeaders( url, encodedData, method, options ),
       request = this.createRequest( url, encodedData, method, headers );
-
     return this.addRequestToQueue( request, options.response );
   }
 
@@ -77,12 +76,13 @@ class DomainRequest {
     const isGET = method === 'GET',
       path = isGET ? `${url}?${encodedData}`: url;
 
-    return new HTTPSRequest({
+    return new HTTPRequest({
       path,
       hostname: this._hostname,
       headers,
       method,
-      data: encodedData
+      data: encodedData,
+      secure: true
     });
   }
 }

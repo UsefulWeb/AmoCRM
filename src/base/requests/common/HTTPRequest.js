@@ -9,7 +9,8 @@ class HTTPRequest {
 
   send() {
     const { hostname, path, method = 'GET', headers = {}, data = '', secure = false } = this._options,
-      driver = secure ? https : http;
+      driver = secure ? https : http,
+      isGET = method !== 'GET';
     return new Promise(( resolve, reject ) => {
       const request = driver.request({
         hostname,
@@ -17,8 +18,7 @@ class HTTPRequest {
         method,
         headers
       }, this.onResponse( resolve, reject ));
-
-      if ( method !== 'GET' ) {
+      if ( isGET ) {
         request.write( data );
       }
       request.on( 'error', this.onError( reject ));

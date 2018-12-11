@@ -9,16 +9,18 @@ class PrivateDomainRequest extends DomainRequest {
 
   request( url, data = {}, method = 'GET', options = {}) {
     if ( options.formData ) {
-      this.requestWithFormData( url, data, method, options );
+      return this.requestWithFormData( url, data, method, options );
     }
     return super.request( url, data, method, options );
   }
 
   requestWithFormData( url, data = {}, method = 'GET', options = {}) {
-    const headers = this.getDefaultHeaders( options.headers );
-    headers[ 'X-Requested-With' ] = 'XMLHttpRequest';
-    const request = this.createFormRequest( url, data, method, headers );
-
+    const headers = {
+      ...this.getDefaultHeaders( options.headers ),
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    };
+    const encodedData = qs.stringify( data ),
+      request = this.createFormRequest( url, encodedData, method, headers );
     return this.addRequestToQueue( request, options.response );
   }
 
@@ -26,7 +28,7 @@ class PrivateDomainRequest extends DomainRequest {
     const isGET = method === 'GET',
       protocol = this.constructor.NETWORK_PROTOCOL,
       secure = protocol === 'https',
-      path = isGET ? url+'?'+this.encodeData( data ) : '',
+      path = isGET ? url+'?'+this.encodeData( data ) : url,
       hostname = this._hostname;
 
     return new HTTPRequest({

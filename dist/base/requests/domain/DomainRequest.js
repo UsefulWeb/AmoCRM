@@ -14,9 +14,9 @@ var _qs = require('qs');
 
 var _qs2 = _interopRequireDefault(_qs);
 
-var _HTTPSRequest = require('../common/HTTPSRequest');
+var _HTTPRequest = require('../common/HTTPRequest');
 
-var _HTTPSRequest2 = _interopRequireDefault(_HTTPSRequest);
+var _HTTPRequest2 = _interopRequireDefault(_HTTPRequest);
 
 var _DomainResponseHandler = require('../../responseHandlers/DomainResponseHandler');
 
@@ -64,7 +64,6 @@ var DomainRequest = function () {
       var encodedData = this.encodeData(url, data, method, options),
           headers = this.getRequestHeaders(url, encodedData, method, options),
           request = this.createRequest(url, encodedData, method, headers);
-
       return this.addRequestToQueue(request, options.response);
     }
   }, {
@@ -136,12 +135,13 @@ var DomainRequest = function () {
       var isGET = method === 'GET',
           path = isGET ? url + '?' + encodedData : url;
 
-      return new _HTTPSRequest2.default({
+      return new _HTTPRequest2.default({
         path: path,
         hostname: this._hostname,
         headers: headers,
         method: method,
-        data: encodedData
+        data: encodedData,
+        secure: true
       });
     }
   }]);
