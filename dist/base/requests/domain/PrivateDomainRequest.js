@@ -16,9 +16,9 @@ var _DomainRequest2 = require('./DomainRequest');
 
 var _DomainRequest3 = _interopRequireDefault(_DomainRequest2);
 
-var _UnirestRequest = require('../common/UnirestRequest');
+var _HTTPRequest = require('../common/HTTPRequest');
 
-var _UnirestRequest2 = _interopRequireDefault(_UnirestRequest);
+var _HTTPRequest2 = _interopRequireDefault(_HTTPRequest);
 
 var _PrivateDomainResponseHandler = require('../../responseHandlers/PrivateDomainResponseHandler');
 
@@ -62,27 +62,30 @@ var PrivateDomainRequest = function (_DomainRequest) {
 
       var headers = this.getDefaultHeaders(options.headers);
       headers['X-Requested-With'] = 'XMLHttpRequest';
-      var request = this.createUnirestRequest(url, data, method, headers);
+      var request = this.createFormRequest(url, data, method, headers);
 
       return this.addRequestToQueue(request, options.response);
     }
   }, {
-    key: 'createUnirestRequest',
-    value: function createUnirestRequest(path) {
+    key: 'createFormRequest',
+    value: function createFormRequest(url) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
       var isGET = method === 'GET',
           protocol = this.constructor.NETWORK_PROTOCOL,
-          params = isGET ? '?' + this.encodeData(data) : '',
-          url = protocol + '://' + this._hostname + path + params;
+          secure = protocol === 'https',
+          path = isGET ? url + '?' + this.encodeData(data) : '',
+          hostname = this._hostname;
 
-      return new _UnirestRequest2.default({
-        url: url,
-        headers: headers,
+      return new _HTTPRequest2.default({
+        hostname: hostname,
+        path: path,
+        data: data,
         method: method,
-        data: data
+        headers: headers,
+        secure: secure
       });
     }
   }]);
