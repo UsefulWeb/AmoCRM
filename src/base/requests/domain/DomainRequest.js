@@ -2,20 +2,18 @@
 import Queue from 'promise-queue';
 import qs from 'qs';
 
-import HTTPSRequest from '../common/HTTPSRequest';
+import HTTPRequest from '../common/HTTPRequest';
 import DomainResponseHandler from '../../responseHandlers/DomainResponseHandler'
 
 class DomainRequest {
   static responseHandlerClass = DomainResponseHandler;
   static DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';
-  static MAX_REQUESTS_PER_TIME = 1;
 
   constructor( domain ) {
     if ( !domain ) {
       throw new Error( 'Portal domain must be set!' );
     }
-    this._apiParams = '';
-    this._queue = new Queue( this.constructor.MAX_REQUESTS_PER_TIME );
+    this._queue = new Queue( 1 );
     this._cookies = [];
     this._hostname = domain + '.amocrm.ru';
   }
@@ -28,30 +26,11 @@ class DomainRequest {
     return this.request( url, data, 'GET', options );
   }
 
-  setAPIParams( params = '' ) {
-    this._apiParams = params;
-  }
-
   request( url, data = {}, method = 'GET', options = {}) {
     const encodedData = this.encodeData( url, data, method, options ),
       headers = this.getRequestHeaders( url, encodedData, method, options ),
-      path = this.getPath( url, encodedData, method, options ),
-      request = this.createRequest( path, encodedData, method, headers );
-
+      request = this.createRequest( url, encodedData, method, headers );
     return this.addRequestToQueue( request, options.response );
-  }
-
-  getPath( url, encodedData = '', method = 'GET', options = {}) {
-    const isGET = method === 'GET';
-    let params = [];
-    if ( isGET ) {
-      params.push( encodedData );
-    }
-    if ( options.useAPIAuth ) {
-      params.push( this._apiParams );
-    }
-
-    return params.length ? url + '?' + params.join( '&' ) : url;
   }
 
   addRequestToQueue( request, options ) {
@@ -63,6 +42,7 @@ class DomainRequest {
 
   encodeData( url, data = {}, method = 'GET', options = {}) {
     const isGET = method === 'GET';
+
     return isGET ? qs.stringify( data ) : JSON.stringify( data );
   }
 
@@ -92,13 +72,17 @@ class DomainRequest {
     return handler.toJSON( options );
   }
 
-  createRequest(path, encodedData = '', method = 'GET', headers = {}) {
-    return new HTTPSRequest({
+  createRequest(url, encodedData = '', method = 'GET', headers = {}) {
+    const isGET = method === 'GET',
+      path = isGET ? `${url}?${encodedData}`: url;
+
+    return new HTTPRequest({
       path,
       hostname: this._hostname,
       headers,
       method,
-      data: encodedData
+      data: encodedData,
+      secure: true
     });
   }
 }

@@ -1,23 +1,24 @@
 'use strict';
+import http from 'http';
 import https from 'https';
 
-class HTTPSRequest {
+class HTTPRequest {
   constructor( options ) {
     this._options = options;
   }
 
   send() {
-    const { hostname, path, method = 'GET', headers = {}, data = '' } = this._options;
+    const { hostname, path, method = 'GET', headers = {}, data = '', secure = false } = this._options,
+      driver = secure ? https : http,
+      isGET = method !== 'GET';
     return new Promise(( resolve, reject ) => {
-      const request = https.request({
+      const request = driver.request({
         hostname,
         path,
         method,
-        headers,
-        port: 443,
+        headers
       }, this.onResponse( resolve, reject ));
-
-      if ( method !== 'GET' ) {
+      if ( isGET ) {
         request.write( data );
       }
       request.on( 'error', this.onError( reject ));
@@ -42,4 +43,4 @@ class HTTPSRequest {
 
 }
 
-export default HTTPSRequest;
+export default HTTPRequest;

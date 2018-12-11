@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -16,9 +18,9 @@ var _DomainRequest2 = require('./DomainRequest');
 
 var _DomainRequest3 = _interopRequireDefault(_DomainRequest2);
 
-var _UnirestRequest = require('../common/UnirestRequest');
+var _HTTPRequest = require('../common/HTTPRequest');
 
-var _UnirestRequest2 = _interopRequireDefault(_UnirestRequest);
+var _HTTPRequest2 = _interopRequireDefault(_HTTPRequest);
 
 var _PrivateDomainResponseHandler = require('../../responseHandlers/PrivateDomainResponseHandler');
 
@@ -49,7 +51,7 @@ var PrivateDomainRequest = function (_DomainRequest) {
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
       if (options.formData) {
-        this.requestWithFormData(url, data, method, options);
+        return this.requestWithFormData(url, data, method, options);
       }
       return _get(PrivateDomainRequest.prototype.__proto__ || Object.getPrototypeOf(PrivateDomainRequest.prototype), 'request', this).call(this, url, data, method, options);
     }
@@ -60,29 +62,33 @@ var PrivateDomainRequest = function (_DomainRequest) {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-      var headers = this.getDefaultHeaders(options.headers);
-      headers['X-Requested-With'] = 'XMLHttpRequest';
-      var request = this.createUnirestRequest(url, data, method, headers);
-
+      var headers = _extends({}, this.getDefaultHeaders(options.headers), {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      });
+      var encodedData = _qs2.default.stringify(data),
+          request = this.createFormRequest(url, encodedData, method, headers);
       return this.addRequestToQueue(request, options.response);
     }
   }, {
-    key: 'createUnirestRequest',
-    value: function createUnirestRequest(path) {
+    key: 'createFormRequest',
+    value: function createFormRequest(url) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
       var isGET = method === 'GET',
           protocol = this.constructor.NETWORK_PROTOCOL,
-          params = isGET ? '?' + this.encodeData(data) : '',
-          url = protocol + '://' + this._hostname + path + params;
+          secure = protocol === 'https',
+          path = isGET ? url + '?' + this.encodeData(data) : url,
+          hostname = this._hostname;
 
-      return new _UnirestRequest2.default({
-        url: url,
-        headers: headers,
+      return new _HTTPRequest2.default({
+        hostname: hostname,
+        path: path,
+        data: data,
         method: method,
-        data: data
+        headers: headers,
+        secure: secure
       });
     }
   }]);

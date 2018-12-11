@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
 var _https = require('https');
 
 var _https2 = _interopRequireDefault(_https);
@@ -14,14 +18,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var HTTPSRequest = function () {
-  function HTTPSRequest(options) {
-    _classCallCheck(this, HTTPSRequest);
+var HTTPRequest = function () {
+  function HTTPRequest(options) {
+    _classCallCheck(this, HTTPRequest);
 
     this._options = options;
   }
 
-  _createClass(HTTPSRequest, [{
+  _createClass(HTTPRequest, [{
     key: 'send',
     value: function send() {
       var _this = this;
@@ -34,17 +38,20 @@ var HTTPSRequest = function () {
           _options$headers = _options.headers,
           headers = _options$headers === undefined ? {} : _options$headers,
           _options$data = _options.data,
-          data = _options$data === undefined ? '' : _options$data;
+          data = _options$data === undefined ? '' : _options$data,
+          _options$secure = _options.secure,
+          secure = _options$secure === undefined ? false : _options$secure,
+          driver = secure ? _https2.default : _http2.default,
+          isGET = method !== 'GET';
 
       return new Promise(function (resolve, reject) {
-        var request = _https2.default.request({
+        var request = driver.request({
           hostname: hostname,
           path: path,
           method: method,
           headers: headers
         }, _this.onResponse(resolve, reject));
-
-        if (method !== 'GET') {
+        if (isGET) {
           request.write(data);
         }
         request.on('error', _this.onError(reject));
@@ -79,7 +86,7 @@ var HTTPSRequest = function () {
     }
   }]);
 
-  return HTTPSRequest;
+  return HTTPRequest;
 }();
 
-exports.default = HTTPSRequest;
+exports.default = HTTPRequest;

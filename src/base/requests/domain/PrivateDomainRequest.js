@@ -1,6 +1,6 @@
 import qs from 'qs';
 import DomainRequest from './DomainRequest';
-import AjaxRequest from '../common/UnirestRequest';
+import HTTPRequest from '../common/HTTPRequest';
 import PrivateDomainResponseHandler from '../../responseHandlers/PrivateDomainResponseHandler';
 
 class PrivateDomainRequest extends DomainRequest {
@@ -9,30 +9,35 @@ class PrivateDomainRequest extends DomainRequest {
 
   request( url, data = {}, method = 'GET', options = {}) {
     if ( options.formData ) {
-      this.requestWithFormData( url, data, method, options );
+      return this.requestWithFormData( url, data, method, options );
     }
     return super.request( url, data, method, options );
   }
 
   requestWithFormData( url, data = {}, method = 'GET', options = {}) {
-    const headers = this.getDefaultHeaders( options.headers );
-    headers[ 'X-Requested-With' ] = 'XMLHttpRequest';
-    const request = this.createUnirestRequest( url, data, method, headers );
-
+    const headers = {
+      ...this.getDefaultHeaders( options.headers ),
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    };
+    const encodedData = qs.stringify( data ),
+      request = this.createFormRequest( url, encodedData, method, headers );
     return this.addRequestToQueue( request, options.response );
   }
 
-  createUnirestRequest(path, data = {}, method = 'GET', headers = {}) {
+  createFormRequest(url, data = {}, method = 'GET', headers = {}) {
     const isGET = method === 'GET',
       protocol = this.constructor.NETWORK_PROTOCOL,
-      params = isGET ? '?'+this.encodeData( data ) : '',
-      url = `${protocol}://${this._hostname}${path}${params}`;
+      secure = protocol === 'https',
+      path = isGET ? url+'?'+this.encodeData( data ) : url,
+      hostname = this._hostname;
 
-    return new AjaxRequest({
-      url,
-      headers,
+    return new HTTPRequest({
+      hostname,
+      path,
+      data,
       method,
-      data
+      headers,
+      secure
     });
   }
 }
