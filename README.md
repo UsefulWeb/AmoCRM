@@ -6,7 +6,7 @@ Javascript библиотека для работы с AmoCRM
 const AmoCRM = require( 'amocrm-js' );
 
 const crm = new AmoCRM({
-    domain: 'domain' // логин пользователя в портале, где адрес портала mydomain.amocrm.ru
+    domain: 'domain', // логин пользователя в портале, где адрес портала mydomain.amocrm.ru
     auth: {
         login: 'mylogin',
         hash: 'mytesthash', // API-ключ доступа
@@ -140,9 +140,41 @@ crm.Lead.findById( 123 )
 
 ```js
 // список идентификаторов сделок
-crm.Lead.remove([ 12 345, 568944 ])
+crm.Lead.remove([ 12345, 568944 ])
 
 // удаление отедльной сделки
 crm.Lead.findById( 123 )
 .then( lead => lead.remove());
+```
+
+## Работа с событиями
+
+В настоящий момент доступны следующие события:
+
+1. connection:beforeReconnect
+2. connection:beforeConnect
+3. connection:authError
+4. connection:connected
+5. connection:error
+
+Добавление обработчика: 
+
+```javascript
+crm.on( 'connection:error', () => console.log( 'Ошибка соединения' ));
+```
+
+Удаление обработчика: 
+
+```javascript
+const handler = () => console.log( 'Ошибка соединения' );
+crm.on( 'connection:error', handler );
+
+// удалить конкретный обработчик
+crm.off( 'connection:error', handler );
+
+// удалить все обработчики конкретного события
+crm.off( 'connection:error' );
+
+// удалить все обработчики всех событий
+crm.off();
 ```
