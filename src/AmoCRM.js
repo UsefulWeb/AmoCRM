@@ -1,11 +1,13 @@
 'use strict';
+import EventResource from './base/EventResource';
 import AmoConnection from './base/AmoConnection';
 import PrivateDomainRequest from './base/requests/domain/PrivateDomainRequest';
 import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
 
-class AmoCRM {
+class AmoCRM extends EventResource {
 
   constructor( options ) {
+    super();
     if ( !options ) {
       throw new Error( 'Wrong configuration' );
     }
@@ -13,7 +15,16 @@ class AmoCRM {
     this._request = new PrivateDomainRequest( options.domain );
     this._connection = new AmoConnection( this._request, options.auth );
 
+    this.registerEvents();
     this.assignFactories();
+  }
+
+  registerEvents() {
+
+    this.proxyEventHandlers( 'connection', AmoConnection.EVENTS, this._connection );
+    this._connection.on( 'error', ( ...args ) =>
+      this.triggerEvent( 'error', ...args )
+    );
   }
 
   assignFactories() {
@@ -27,6 +38,10 @@ class AmoCRM {
       get: ( ...args ) => this._request.get( ...args ),
       post: ( ...args ) => this._request.post( ...args )
     };
+  }
+
+  get connection() {
+    return this._connection;
   }
 
   connect() {

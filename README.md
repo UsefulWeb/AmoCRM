@@ -23,7 +23,7 @@ const crm = new AmoCRM({
      логин пользователя в портале, где адрес
       портала mydomain.amocrm.ru
     */
-    domain: 'domain' 
+    domain: 'domain', 
     auth: {
         login: 'mylogin',
         hash: 'mytesthash', // API-ключ доступа

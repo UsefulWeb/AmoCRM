@@ -144,6 +144,22 @@ var DomainRequest = function () {
         secure: true
       });
     }
+  }, {
+    key: 'expires',
+    get: function get() {
+      var cookie = this._cookies.find(function (contents) {
+        return contents.includes('expires=');
+      });
+      if (!cookie) {
+        return;
+      }
+
+      var dateStr = cookie.split('; ').find(function (contents) {
+        return contents.includes('expires=');
+      }).replace('expires=', '');
+
+      return new Date(dateStr);
+    }
   }]);
 
   return DomainRequest;

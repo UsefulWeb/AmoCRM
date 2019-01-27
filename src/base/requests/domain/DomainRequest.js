@@ -18,6 +18,21 @@ class DomainRequest {
     this._hostname = domain + '.amocrm.ru';
   }
 
+  get expires() {
+    const cookie = this._cookies.find(
+      contents => contents.includes( 'expires=' )
+    );
+    if (!cookie) {
+      return;
+    }
+
+    const dateStr = cookie.split( '; ' ).find(
+      contents => contents.includes( 'expires=' )
+    ).replace( 'expires=', '' );
+
+    return new Date( dateStr );
+  }
+
   post( url, data = {}, options = {}) {
     return this.request( url, data, 'POST', options );
   }
