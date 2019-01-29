@@ -1,10 +1,10 @@
 'use strict';
 
-import Entity from '../../base/activeRecords/EntityActiveRecord';
+import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 import Removable from '../../base/activeRecords/behaviors/Removable';
 import factories from '../factories';
 
-class CatalogElement extends Entity {
+class CatalogElement extends EntityActiveRecord {
   static behaviors = [ new Removable ];
 
   getCatalog() {

@@ -1,8 +1,8 @@
 'use strict';
 
-import Entity from '../../base/activeRecords/EntityActiveRecord';
+import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 
-class Pipeline extends Entity {
+class Pipeline extends EntityActiveRecord {
   afterInsert( response ) {
     const attributes = response.getFirstModifiedItem( 'add' ) || {};
     this._attributes.id = attributes.id;

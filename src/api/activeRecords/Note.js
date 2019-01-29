@@ -1,10 +1,10 @@
 'use strict';
 
-import Entity from '../../base/activeRecords/EntityActiveRecord';
+import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 import NoteResource from "../resources/NoteResource";
 import HasElementByField from "../../base/activeRecords/behaviors/HasElementByField";
 
-class Note extends Entity {
+class Note extends EntityActiveRecord {
   static behaviors = [ new HasElementByField( 'NOTE_ELEMENT_TYPE' )];
   fetch() {
     const type = NoteResource.getElementType( this._attributes.element_type ),

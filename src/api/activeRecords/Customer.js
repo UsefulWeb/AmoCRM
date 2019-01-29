@@ -1,12 +1,12 @@
 'use strict';
 
-import Entity from '../../base/activeRecords/EntityActiveRecord';
+import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 import Removable from "../../base/activeRecords/behaviors/Removable";
 import Notable from "../../base/activeRecords/behaviors/Notable";
 import Taskable from "../../base/activeRecords/behaviors/Taskable";
 import factories from '../factories';
 
-class Customer extends Entity {
+class Customer extends EntityActiveRecord {
   static behaviors = [ new Removable, new Notable, new Taskable ];
 
   getContact() {
