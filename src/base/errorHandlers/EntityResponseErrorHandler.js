@@ -3,13 +3,25 @@ import ResponseErrorHandler from './ResponseErrorHandler';
 class EntityResponseErrorHandler extends ResponseErrorHandler {
 
   getErrorsData() {
-    if ( this._response.error ) {
-      return this._response;
+    const { _response: response } = this;
+    if ( response.error ) {
+      return response;
     }
-    if ( this._response.title === 'Error' ) {
-      return this._response;
+    if ( response.title === 'Error' ) {
+      return response;
     }
-    return this._response._embedded && this._response._embedded.errors;
+
+    const { _embedded } = response;
+
+    if ( !_embedded ) {
+      return false;
+    }
+
+    if ( Array.isArray( _embedded.errors ) && _embedded.errors.length === 0 ) {
+      return false;
+    }
+
+    return _embedded.errors;
   }
 
   hasErrors() {
@@ -21,7 +33,7 @@ class EntityResponseErrorHandler extends ResponseErrorHandler {
     const errors = this.getErrorsData();
 
     if ( errors.error ) {
-      return new Error( `ailed with code ${errors.error_code}: ${errors.error}` );
+      return new Error( `Failed with code ${errors.error_code}: ${errors.error}` );
     }
 
     if ( errors.detail ) {
@@ -37,9 +49,9 @@ class EntityResponseErrorHandler extends ResponseErrorHandler {
 
       return new Error( `${errorsNamespace} failed with code ${code}: ${message}` );
     }
-
     const firstErrorKey = Object.keys( errorsList )[ 0 ],
-      message = errorsList[ firstErrorKey ];
+      error = errorsList[ firstErrorKey ],
+      message = error.message ? error.message : error;
 
     return new Error( `${errorsNamespace} failed for key ${firstErrorKey}: ${message}` );
   }
