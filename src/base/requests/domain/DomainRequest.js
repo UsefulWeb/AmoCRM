@@ -81,7 +81,7 @@ class DomainRequest {
   handleResponse({ rawData, response }, options = {}) {
     const { responseHandlerClass } = this.constructor;
     if ( options.saveCookies ) {
-      this._cookies = response.headers[ 'set-cookie' ];
+      this._cookies = response.headers[ 'set-cookie' ] || [];
     }
     const handler = new responseHandlerClass( rawData );
     return handler.toJSON( options );
