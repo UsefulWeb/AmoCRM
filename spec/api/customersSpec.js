@@ -22,21 +22,50 @@ describe( 'AmoCRM API Customer Interface', () => {
       });
   });
 
-  it( 'should create and update Customer', done => {
+  it( 'should create Customer and link with contact', async done => {
     const customer = new client.Customer({
-      name: 'Adidas'
-    });
-    customer.save()
-      .then(() => {
-        customer.name = 'Updated Adidas';
-        customer.updated_at = Math.floor( new Date / 1000 ) + 10;
-        return customer.save();
-      })
-      .then(() => client.Customer.findById( customer.id ))
-      .then(({ name }) => {
-        expect( name ).toBe( 'Updated Adidas' );
-        done();
+        name: 'Wabeco'
+      }),
+      contact = new client.Contact({
+        name: 'Bobik'
       });
+
+    await contact.save();
+    expect( contact.id ).toBeDefined();
+    await customer.save({
+      contact_id: contact.id
+    });
+    expect( customer.id ).toBeDefined();
+    done();
+  });
+
+  it( 'should create Customer and link with contact and update it', async done => {
+    const customer = new client.Customer({
+        name: 'Wabeco'
+      }),
+      contact = new client.Contact({
+        name: 'Bobik'
+      });
+
+    await contact.save();
+
+    expect( contact.id ).toBeDefined();
+
+    await customer.save({
+      contact_id: contact.id
+    });
+
+    expect( customer.id ).toBeDefined();
+    expect( customer.contact_id ).toBe( contact.id );
+
+    await customer.save({
+      name: 'Updated Adidas',
+      updated_at: Math.floor( new Date / 1000 ) + 20,
+      next_price: 120
+    });
+
+    expect( customer.name ).toBe( 'Updated Adidas' );
+    done();
   });
 
   it( 'create Customer and remove it', done => {

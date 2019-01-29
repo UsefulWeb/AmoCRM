@@ -43,7 +43,7 @@ class PrivateRequest {
 
   onResponse( callback ) {
     let rawData = '';
-    const onResponseData = chunk => { rawData += chunk; console.log( chunk )},
+    const onResponseData = chunk => { rawData += chunk; },
       onRequestEnd = response => () => callback({ response, rawData });
 
     return response => {

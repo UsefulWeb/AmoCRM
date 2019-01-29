@@ -10,7 +10,7 @@ beforeEach( done => {
     .then( done );
 });
 
-fdescribe( 'AmoCRM API Catalog Interface', () => {
+describe( 'AmoCRM API Catalog Interface', () => {
   it( 'should create Catalog', done => {
     const catalog = new client.Catalog({
       name: 'Wabeco'

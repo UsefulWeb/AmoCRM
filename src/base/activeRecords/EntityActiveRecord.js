@@ -22,7 +22,7 @@ class EntityActiveRecord extends ActiveRecord {
     return this;
   }
 
-  save( newAttributes = {}) {
+  save( newAttributes ) {
     return this.isNew() ? this.insert( newAttributes ) : this.update( newAttributes );
   }
 
@@ -31,7 +31,7 @@ class EntityActiveRecord extends ActiveRecord {
       .then( response => response !== false );
   }
 
-  insert( newAttributes = {}) {
+  insert( newAttributes ) {
     if ( !this.isNew()) {
       throw new Error( 'EntityActiveRecord must not exists for using EntityActiveRecord.insert()!' );
     }
@@ -47,7 +47,7 @@ class EntityActiveRecord extends ActiveRecord {
     return this;
   }
 
-  update( newAttributes = {}) {
+  update( newAttributes ) {
     if ( this.isNew()) {
       throw new Error( 'EntityActiveRecord must exists for using EntityActiveRecord.update()!' );
     }

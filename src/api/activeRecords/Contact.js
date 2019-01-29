@@ -7,6 +7,11 @@ import Taskable from "../../base/activeRecords/behaviors/Taskable";
 
 class Contact extends Entity {
   static behaviors = [ new Removable, new Notable, new Taskable ];
+
+  addCustomer( customer ) {
+    customer.contact_id = this._attributes.id;
+    return customer.save();
+  }
 }
 
 export default Contact;
