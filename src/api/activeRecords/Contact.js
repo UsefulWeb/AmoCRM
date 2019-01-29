@@ -3,14 +3,34 @@
 import Entity from '../../base/activeRecords/EntityActiveRecord';
 import Removable from '../../base/activeRecords/behaviors/Removable';
 import Notable from '../../base/activeRecords/behaviors/Notable';
-import Taskable from "../../base/activeRecords/behaviors/Taskable";
+import Taskable from '../../base/activeRecords/behaviors/Taskable';
+import factories from '../factories';
 
 class Contact extends Entity {
   static behaviors = [ new Removable, new Notable, new Taskable ];
 
+  get customers() {
+    return {
+      add: customer => this.addCustomer( customer ),
+      get: params => this.getCustomers( params )
+    };
+  }
+
   addCustomer( customer ) {
     customer.contact_id = this._attributes.id;
     return customer.save();
+  }
+
+  getCustomers( params ) {
+    const factory = factories.Customer,
+      resource = this._resource,
+      factoryInstance = factory.createFromResource( resource ),
+      criteria = {
+        ...params,
+        contact_id: this._attributes.id
+      };
+
+    return factoryInstance.find( criteria );
   }
 }
 
