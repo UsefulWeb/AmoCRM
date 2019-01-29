@@ -6,11 +6,15 @@ import NoteFactory from './factories/NoteFactory';
 import PipelineFactory from './factories/PipelineFactory';
 import TaskFactory from './factories/TaskFactory';
 import CompanyFactory from './factories/CompanyFactory';
-import IncomingLeadFactory from "./factories/IncomingLeadFactory";
+import CatalogFactory from './factories/CatalogFactory';
+import CatalogElementFactory from './factories/CatalogElementFactory';
+import IncomingLeadFactory from './factories/IncomingLeadFactory';
 
 export default {
   Lead: LeadFactory,
   Contact: ContactFactory,
+  Catalog: CatalogFactory,
+  CatalogElement: CatalogElementFactory,
   Company: CompanyFactory,
   Note: NoteFactory,
   Task: TaskFactory,

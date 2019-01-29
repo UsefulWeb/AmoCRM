@@ -6,6 +6,8 @@ import TaskResource from './resources/TaskResource';
 import CustomerResource from './resources/CustomerResource';
 import FieldResource from './resources/FieldResource';
 import PipelineResource from './resources/PipelineResource';
+import CatalogElementResource from './resources/CatalogElementResource';
+import CatalogResource from './resources/CatalogResource';
 
 export default {
   Lead: LeadResource,
@@ -15,5 +17,7 @@ export default {
   Task: TaskResource,
   Customer: CustomerResource,
   Field: FieldResource,
-  Pipeline: PipelineResource
+  Pipeline: PipelineResource,
+  CatalogElement: CatalogElementResource,
+  Catalog: CatalogResource
 };
