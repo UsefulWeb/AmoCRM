@@ -18,6 +18,7 @@ class AmoConnection extends EventResource {
     this._request = request;
     this._options = options;
     this._isConnected = false;
+    this._reconnectOptions = Object.assign({ disabled: false }, options.reconnection );
   }
 
   get connected() {
@@ -57,7 +58,9 @@ class AmoConnection extends EventResource {
     if ( this._isConnected ) {
       return Promise.resolve( true );
     }
-    const { login, password, hash, reconnection } = this._options,
+    const { login, password, hash } = this._options,
+      reconnection = this._reconnectOptions,
+      { checkDelay, accuracyTime } = reconnection,
       data = {
         USER_LOGIN: login
       };
@@ -78,8 +81,8 @@ class AmoConnection extends EventResource {
       }
     })
       .then( data => {
-        if ( reconnection ) {
-          this.reconnectAt( this._request.expires, reconnection.checkDelay );
+        if ( !reconnection.disabled ) {
+          this.reconnectAt( this._request.expires, checkDelay, accuracyTime );
         }
 
         this._isConnected = data.response.auth === true;

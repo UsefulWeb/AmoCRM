@@ -31,6 +31,7 @@ var AmoConnection = function (_EventResource) {
     _this._request = request;
     _this._options = options;
     _this._isConnected = false;
+    _this._reconnectOptions = Object.assign({ disabled: false }, options.reconnection);
     return _this;
   }
 
@@ -81,7 +82,9 @@ var AmoConnection = function (_EventResource) {
           login = _options.login,
           password = _options.password,
           hash = _options.hash,
-          reconnection = _options.reconnection,
+          reconnection = this._reconnectOptions,
+          checkDelay = reconnection.checkDelay,
+          accuracyTime = reconnection.accuracyTime,
           data = {
         USER_LOGIN: login
       };
@@ -102,8 +105,8 @@ var AmoConnection = function (_EventResource) {
           saveCookies: true
         }
       }).then(function (data) {
-        if (reconnection) {
-          _this3.reconnectAt(_this3._request.expires, reconnection.checkDelay);
+        if (!reconnection.disabled) {
+          _this3.reconnectAt(_this3._request.expires, checkDelay, accuracyTime);
         }
 
         _this3._isConnected = data.response.auth === true;
