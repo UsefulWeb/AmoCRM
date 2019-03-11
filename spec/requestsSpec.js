@@ -16,7 +16,8 @@ describe( 'AmoCRM connection', () => {
   it( 'should get account data', done => {
     client.request.get( '/api/v2/account' )
       .then( account => {
-        expect( account.subdomain ).toBe( config.domain );
+        const domain = config.domain.substr( 0, config.domain.indexOf( '.' ));
+        expect( account.subdomain ).toBe( domain );
         done();
       });
   });

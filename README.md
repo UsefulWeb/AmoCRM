@@ -6,7 +6,8 @@ Javascript библиотека для работы с AmoCRM
 const AmoCRM = require( 'amocrm-js' );
 
 const crm = new AmoCRM({
-    domain: 'domain', // логин пользователя в портале, где адрес портала mydomain.amocrm.ru
+    // логин пользователя в портале, где адрес портала domain.amocrm.ru
+    domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
     auth: {
         login: 'mylogin',
         hash: 'mytesthash', // API-ключ доступа
