@@ -18,15 +18,12 @@ class DomainResponseHandler extends ResponseHandler {
       });
     }
 
-    let data;
-
     try {
-      data = JSON.parse( this._response );
+      const data = JSON.parse( this._response );
+      return Promise.resolve( data );
     } catch ( e ) {
       throw  Error( `cannot parse JSON: ${this._response}` );
     }
-
-    return Promise.resolve( data );
   }
 }
 

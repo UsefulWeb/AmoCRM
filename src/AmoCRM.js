@@ -3,6 +3,7 @@ import EventResource from './base/EventResource';
 import AmoConnection from './base/AmoConnection';
 import PrivateDomainRequest from './base/requests/domain/PrivateDomainRequest';
 import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
+import schema from './apiUrls';
 
 class AmoCRM extends EventResource {
 
@@ -12,7 +13,7 @@ class AmoCRM extends EventResource {
       throw new Error( 'Wrong configuration' );
     }
     this._options = options;
-    this._request = new PrivateDomainRequest( options.domain );
+    this._request = new PrivateDomainRequest( options.domain, options.auth.login, options.auth.hash );
     this._connection = new AmoConnection( this._request, options.auth );
 
     this.registerEvents();
@@ -46,6 +47,14 @@ class AmoCRM extends EventResource {
 
   connect() {
     return this._connection.connect();
+  }
+
+  getAccountInfo( details = [], freeUsers = false ) {
+    let url = schema.account + '?with=' + details.join( ',' );
+    if ( freeUsers ) {
+      url += '&free_users=Y';
+    }
+    return this._request.get( url );
   }
 }
 

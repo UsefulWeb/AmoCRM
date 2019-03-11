@@ -9,10 +9,16 @@ class DomainRequest {
   static responseHandlerClass = DomainResponseHandler;
   static DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';
 
-  constructor( domain ) {
+  constructor( domain, login, apiKey ) {
     if ( !domain ) {
       throw new Error( 'Portal domain must be set!' );
     }
+    this._apiParams = {
+      login,
+      api_key: apiKey
+    };
+    this._login = login;
+    this._apiKey = apiKey;
     this._queue = new Queue( 1 );
     this._cookies = [];
     this._hostname = domain + '.amocrm.ru';
@@ -42,10 +48,19 @@ class DomainRequest {
   }
 
   request( url, data = {}, method = 'GET', options = {}) {
+    url = this.getUrl( url, data, method, options );
     const encodedData = this.encodeData( url, data, method, options ),
       headers = this.getRequestHeaders( url, encodedData, method, options ),
       request = this.createRequest( url, encodedData, method, headers );
     return this.addRequestToQueue( request, options.response );
+  }
+
+  getUrl( url, data = {}, method = 'GET', options = {}) {
+    if ( !options.useAPIAuth || method === 'GET' ) {
+      return url;
+    }
+
+    return url + '?' + qs.stringify( this._apiParams );
   }
 
   addRequestToQueue( request, options ) {
@@ -56,9 +71,14 @@ class DomainRequest {
   }
 
   encodeData( url, data = {}, method = 'GET', options = {}) {
-    const isGET = method === 'GET';
+    const isGET = method === 'GET',
+      params = Object.assign( {}, data );
 
-    return isGET ? qs.stringify( data ) : JSON.stringify( data );
+    if ( isGET && options.useAPIAuth ) {
+      Object.assign( params, this._apiParams );
+    }
+
+    return isGET ? qs.stringify( params ) : JSON.stringify( params );
   }
 
   getDefaultHeaders( headers ) {
@@ -90,7 +110,6 @@ class DomainRequest {
   createRequest(url, encodedData = '', method = 'GET', headers = {}) {
     const isGET = method === 'GET',
       path = isGET ? `${url}?${encodedData}`: url;
-
     return new HTTPRequest({
       path,
       hostname: this._hostname,
