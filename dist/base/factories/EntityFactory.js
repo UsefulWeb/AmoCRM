@@ -14,6 +14,10 @@ var _EntityProxyHandler = require("../EntityProxyHandler");
 
 var _EntityProxyHandler2 = _interopRequireDefault(_EntityProxyHandler);
 
+var _EntityTarget = require("../EntityTarget");
+
+var _EntityTarget2 = _interopRequireDefault(_EntityTarget);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38,10 +42,11 @@ var EntityFactory = function (_ResourceFactory) {
       var _constructor = this.constructor,
           entityClass = _constructor.entityClass,
           entityHandlerClass = _constructor.entityHandlerClass,
+          entityTargetClass = _constructor.entityTargetClass,
           entity = new entityClass(this._resource, attributes),
           handler = new entityHandlerClass(entity);
 
-      return new Proxy({}, handler);
+      return new Proxy(new entityTargetClass(entityClass.name), handler);
     }
   }, {
     key: "of",
@@ -93,4 +98,5 @@ var EntityFactory = function (_ResourceFactory) {
 }(_ResourceFactory3.default);
 
 EntityFactory.entityHandlerClass = _EntityProxyHandler2.default;
+EntityFactory.entityTargetClass = _EntityTarget2.default;
 exports.default = EntityFactory;
