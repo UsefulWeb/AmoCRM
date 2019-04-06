@@ -16,8 +16,14 @@ var Updatable = function () {
   _createClass(Updatable, [{
     key: "update",
     value: function update(rawData) {
+      var _this = this;
+
       var data = this.getDataAttributes(rawData);
-      return this._resource.update(data);
+      return this._resource.update(data).then(function (response) {
+        var newData = response.getItems();
+        _this.updateActiveRecords(rawData, newData);
+        return response;
+      });
     }
   }]);
 

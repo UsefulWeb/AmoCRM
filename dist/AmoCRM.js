@@ -38,7 +38,7 @@ var AmoCRM = function (_EventResource) {
       throw new Error('Wrong configuration');
     }
     _this._options = options;
-    _this._request = new _PrivateDomainRequest2.default(options.domain);
+    _this._request = new _PrivateDomainRequest2.default(options.domain, options.auth.login, options.auth.hash);
     _this._connection = new _AmoConnection2.default(_this._request, options.auth);
 
     _this.registerEvents();
@@ -76,6 +76,18 @@ var AmoCRM = function (_EventResource) {
     key: 'disconnect',
     value: function disconnect() {
       return this._connection.disconnect();
+    }
+  }, {
+    key: 'getAccountInfo',
+    value: function getAccountInfo() {
+      var details = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var freeUsers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      var url = schema.account + '?with=' + details.join(',');
+      if (freeUsers) {
+        url += '&free_users=Y';
+      }
+      return this._request.get(url);
     }
   }, {
     key: 'request',

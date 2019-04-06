@@ -4,19 +4,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _EntityActiveRecord2 = require('../../base/activeRecords/EntityActiveRecord');
 
 var _EntityActiveRecord3 = _interopRequireDefault(_EntityActiveRecord2);
 
-var _NoteResource = require('../resources/NoteResource');
+var _Removable = require('../../base/activeRecords/behaviors/Removable');
 
-var _NoteResource2 = _interopRequireDefault(_NoteResource);
+var _Removable2 = _interopRequireDefault(_Removable);
 
-var _HasElementByField = require('../../base/activeRecords/behaviors/HasElementByField');
+var _factories = require('../factories');
 
-var _HasElementByField2 = _interopRequireDefault(_HasElementByField);
+var _factories2 = _interopRequireDefault(_factories);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,39 +28,51 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Note = function (_EntityActiveRecord) {
-  _inherits(Note, _EntityActiveRecord);
+var Catalog = function (_EntityActiveRecord) {
+  _inherits(Catalog, _EntityActiveRecord);
 
-  function Note() {
-    _classCallCheck(this, Note);
+  function Catalog() {
+    _classCallCheck(this, Catalog);
 
-    return _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Catalog.__proto__ || Object.getPrototypeOf(Catalog)).apply(this, arguments));
   }
 
-  _createClass(Note, [{
-    key: 'fetch',
-    value: function fetch() {
-      var _this2 = this;
-
-      var type = _NoteResource2.default.getElementType(this._attributes.element_type),
-          id = this._attributes.id;
-
-      if (this.isNew()) {
-        throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.fetch()!');
-      }
-      return this._resource.findById(id, type).then(function (response) {
-        return _this2.afterFetch(response);
-      });
+  _createClass(Catalog, [{
+    key: 'addCatalogElement',
+    value: function addCatalogElement(catalogElement) {
+      catalogElement.catalog_id = this._attributes.id;
+      return catalogElement.save();
     }
   }, {
-    key: 'findById',
-    value: function findById(id, type) {
-      return this._resource.findById(id, type);
+    key: 'getCatalogElements',
+    value: function getCatalogElements(params) {
+      var factory = _factories2.default.CatalogElement,
+          resource = this._resource,
+          factoryInstance = factory.createFromResource(resource),
+          criteria = _extends({}, params, {
+        catalog_id: this._attributes.id
+      });
+
+      return factoryInstance.find(criteria);
+    }
+  }, {
+    key: 'elements',
+    get: function get() {
+      var _this2 = this;
+
+      return {
+        add: function add(catalogElement) {
+          return _this2.addCatalogElement(catalogElement);
+        },
+        get: function get(params) {
+          return _this2.getCatalogElements(params);
+        }
+      };
     }
   }]);
 
-  return Note;
+  return Catalog;
 }(_EntityActiveRecord3.default);
 
-Note.behaviors = [new _HasElementByField2.default('NOTE_ELEMENT_TYPE')];
-exports.default = Note;
+Catalog.behaviors = [new _Removable2.default()];
+exports.default = Catalog;

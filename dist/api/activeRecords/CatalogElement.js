@@ -10,13 +10,13 @@ var _EntityActiveRecord2 = require('../../base/activeRecords/EntityActiveRecord'
 
 var _EntityActiveRecord3 = _interopRequireDefault(_EntityActiveRecord2);
 
-var _NoteResource = require('../resources/NoteResource');
+var _Removable = require('../../base/activeRecords/behaviors/Removable');
 
-var _NoteResource2 = _interopRequireDefault(_NoteResource);
+var _Removable2 = _interopRequireDefault(_Removable);
 
-var _HasElementByField = require('../../base/activeRecords/behaviors/HasElementByField');
+var _factories = require('../factories');
 
-var _HasElementByField2 = _interopRequireDefault(_HasElementByField);
+var _factories2 = _interopRequireDefault(_factories);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,39 +26,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Note = function (_EntityActiveRecord) {
-  _inherits(Note, _EntityActiveRecord);
+var CatalogElement = function (_EntityActiveRecord) {
+  _inherits(CatalogElement, _EntityActiveRecord);
 
-  function Note() {
-    _classCallCheck(this, Note);
+  function CatalogElement() {
+    _classCallCheck(this, CatalogElement);
 
-    return _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (CatalogElement.__proto__ || Object.getPrototypeOf(CatalogElement)).apply(this, arguments));
   }
 
-  _createClass(Note, [{
-    key: 'fetch',
-    value: function fetch() {
-      var _this2 = this;
+  _createClass(CatalogElement, [{
+    key: 'getCatalog',
+    value: function getCatalog() {
+      var factory = _factories2.default.Catalog,
+          resource = this._resource,
+          factoryInstance = factory.createFromResource(resource);
 
-      var type = _NoteResource2.default.getElementType(this._attributes.element_type),
-          id = this._attributes.id;
-
-      if (this.isNew()) {
-        throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.fetch()!');
-      }
-      return this._resource.findById(id, type).then(function (response) {
-        return _this2.afterFetch(response);
-      });
-    }
-  }, {
-    key: 'findById',
-    value: function findById(id, type) {
-      return this._resource.findById(id, type);
+      return factoryInstance.findById(this._attributes.catalog_id);
     }
   }]);
 
-  return Note;
+  return CatalogElement;
 }(_EntityActiveRecord3.default);
 
-Note.behaviors = [new _HasElementByField2.default('NOTE_ELEMENT_TYPE')];
-exports.default = Note;
+CatalogElement.behaviors = [new _Removable2.default()];
+exports.default = CatalogElement;

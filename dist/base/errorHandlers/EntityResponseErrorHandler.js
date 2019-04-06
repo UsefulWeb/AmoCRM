@@ -32,13 +32,27 @@ var EntityResponseErrorHandler = function (_ResponseErrorHandler) {
   _createClass(EntityResponseErrorHandler, [{
     key: 'getErrorsData',
     value: function getErrorsData() {
-      if (this._response.error) {
-        return this._response;
+      var response = this._response;
+
+      if (response.error) {
+        return response;
       }
-      if (this._response.title === 'Error') {
-        return this._response;
+      if (response.title === 'Error') {
+        return response;
       }
-      return this._response._embedded && this._response._embedded.errors;
+
+      var _embedded = response._embedded;
+
+
+      if (!_embedded) {
+        return false;
+      }
+
+      if (Array.isArray(_embedded.errors) && _embedded.errors.length === 0) {
+        return false;
+      }
+
+      return _embedded.errors;
     }
   }, {
     key: 'hasErrors',
@@ -52,7 +66,7 @@ var EntityResponseErrorHandler = function (_ResponseErrorHandler) {
       var errors = this.getErrorsData();
 
       if (errors.error) {
-        return new Error('ailed with code ' + errors.error_code + ': ' + errors.error);
+        return new Error('Failed with code ' + errors.error_code + ': ' + errors.error);
       }
 
       if (errors.detail) {
@@ -70,9 +84,9 @@ var EntityResponseErrorHandler = function (_ResponseErrorHandler) {
 
         return new Error(errorsNamespace + ' failed with code ' + code + ': ' + _message);
       }
-
       var firstErrorKey = Object.keys(errorsList)[0],
-          message = errorsList[firstErrorKey];
+          error = errorsList[firstErrorKey],
+          message = error.message ? error.message : error;
 
       return new Error(errorsNamespace + ' failed for key ' + firstErrorKey + ': ' + message);
     }

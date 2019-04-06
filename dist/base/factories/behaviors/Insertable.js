@@ -16,8 +16,14 @@ var Insertable = function () {
   _createClass(Insertable, [{
     key: "insert",
     value: function insert(rawData) {
+      var _this = this;
+
       var data = this.getDataAttributes(rawData);
-      return this._resource.insert(data);
+      return this._resource.insert(data).then(function (response) {
+        var newData = response.getItems();
+        _this.updateActiveRecords(rawData, newData);
+        return response;
+      });
     }
   }]);
 

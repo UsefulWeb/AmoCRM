@@ -74,7 +74,7 @@ var PrivateRequest = function () {
     value: function onResponse(callback) {
       var rawData = '';
       var onResponseData = function onResponseData(chunk) {
-        rawData += chunk;console.log(chunk);
+        rawData += chunk;
       },
           onRequestEnd = function onRequestEnd(response) {
         return function () {

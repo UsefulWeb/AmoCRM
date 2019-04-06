@@ -55,8 +55,23 @@ var EntityFactory = function (_ResourceFactory) {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
       return data.map(function (item) {
-        return item instanceof _BaseActiveRecord2.default ? item.attributes : item;
+        return _BaseActiveRecord2.default.isActiveRecord(item) ? item.attributes : item;
       });
+    }
+  }, {
+    key: 'updateActiveRecords',
+    value: function updateActiveRecords() {
+      var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var newData = arguments[1];
+
+      items.forEach(function (item, index) {
+        if (!_BaseActiveRecord2.default.isActiveRecord(item)) {
+          return false;
+        }
+        var attributes = newData[index];
+        item.attributes = attributes;
+      });
+      return items;
     }
   }, {
     key: 'getDataIdentifiers',

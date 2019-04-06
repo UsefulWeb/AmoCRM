@@ -62,6 +62,7 @@ var PrivateDomainRequest = function (_DomainRequest) {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
+      url = this.getUrl(url, data, method, options);
       var headers = _extends({}, this.getDefaultHeaders(options.headers), {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       });

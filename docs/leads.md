@@ -2,18 +2,6 @@
 
 ## 1. Работа с отдельными сделками
 
-```js
-const lead = new crm.Lead( attributes );
-lead.setAttribute( 'custom_attribute', custom_value );
-lead.getAttribute( 'custom_attribute' );
-lead.custom_attribute = custom_value;
-
-lead.removeAttribute( 'custom_attribute' );
-lead.fetch();
-lead.save();
-lead.remove();
-```
-
 ### 1.1. Создание экземпляра сделки
 
 ```js
@@ -22,7 +10,7 @@ const attributes = {
   name: 'Сделка от 01.06.1998'
 }
 const lead = new crm.Lead( attributes );
-// альтернативный способ
+// аналогично
 const lead2 = crm.Lead.of( attributes );
 ```
 
@@ -33,16 +21,21 @@ const lead2 = crm.Lead.of( attributes );
 
 ```js
 const lead = new crm.Lead;
+
+/* добавление и изменение свойств */
 lead.name = 'Покупка пылесоса';
-lead.setAttribute( 'responsible_user_id', 12332 );
+// аналогично
+lead.setAttribute( 'name', 'Покупка пылесоса' );
+
+/* получение свойств */
+lead.name; // Покупка пылесоса
+// аналогично
+lead.getAttribute( 'name' ); // Покупка пылесоса
+
+/* удаление свойств */
+delete lead.name;
+// аналогично
 lead.removeAttribute( 'name' );
-```
-
-Получить параметры сделки можно двумя способами
-
-```js
-console.log( lead.name );
-console.log( lead.getAttribute( 'name' ));
 ```
 
 ### 1.3 Сохранение данных
@@ -52,13 +45,27 @@ console.log( lead.getAttribute( 'name' ));
 
 ```js
 lead.save()
-    /* 
-      self - текущая сделка,
-      self === lead
-     */
-    .then( self => {
-      
-    }); 
+/* 
+  self - текущая сделка,
+  self === lead
+ */
+.then( self => {
+  
+}); 
+```
+
+В *save* можно передать новые атрибуты сделки.
+Они добавятся к уже существующим атрибутам
+
+```javascript
+const lead = new Lead;
+
+lead.save({
+  name: 'Новая сделка',
+  sale: 2000
+});
+
+console.log( lead.sale ); // 2000
 ```
 
 ### 1.4 Обновление данных с сервера
@@ -71,37 +78,35 @@ lead.save()
 
 ```js
 lead.fetch()
-    /* 
-      self - текущая сделка,
-      self === lead
-     */
-    .then( self => {
-      
-    }); 
+/* 
+  self - текущая сделка,
+  self === lead
+ */
+.then( self => {
+  
+}); 
 ```
 
 ### 1.5 Удаление (неофициально)
 
-Удаление сделок является недокументированной возможностью AmoCRM. 
-Использование данной возможности может быть рискованным, 
-так как в один день она просто может перестать работать 
-без объяснений со стороны AmoCRM.
+    Удаление сделок является недокументированной возможностью AmoCRM. 
+    Использование данной возможности может быть рискованным, 
+    так как в один день она просто может перестать работать 
+    без объяснений со стороны AmoCRM.
 
 Если вы увидите функционал нерабочим, пожалуйста, 
 откройте в этом репозитории соответствующую дискуссию (через issue tracking).
 
 ```js
 lead.remove()
-    /* 
-      self - текущая сделка,
-      self === lead
-     */
-    .then( self => {
-      
-    }); 
+/* 
+  self - текущая сделка,
+  self === lead
+ */
+.then( self => {
+  
+}); 
 ```
-
-
 
 ## 2. Поиск сделок
 
@@ -115,7 +120,6 @@ crm.Lead.find( criteria );
 ```js
 crm.Lead.findById( id );
 ```
-
 
 Пример:
 ```js
@@ -185,10 +189,12 @@ crm.Lead.insert( leads )
 ### 3.1.2. В виде отдельных объектов
 
 ```js
-const lead1 = new crm.Lead,
-  lead2 = new crm.Lead;
-lead1.name = 'Сделка для Фёдора';
-lead2.name = 'Сделка для Татьяны';
+const lead1 = new crm.Lead({
+    name: 'Сделка для Фёдора'
+  }),
+  lead2 = new crm.Lead({
+    name: 'Сделка для Татьяны'
+  });
 
 /* 
   И вместо того, чтобы по отдельности
@@ -198,9 +204,6 @@ lead2.name = 'Сделка для Татьяны';
 const leads = [ lead1, lead2 ];
 
 crm.Lead.insert( leads )
-  .then( lead => {
-    console.log( lead );
-  })
   /**
    * @param response {EntityResponseHandler}
    */
@@ -257,37 +260,30 @@ crm.Lead.update( leads )
   Предположим, что у нас в CRM уже 
   есть какие-то данные 
 */
-new crm.Lead.find({
+crm.Lead.find({
     id: [ 12323, 56745 ]
   })
-  .then( onAfterFind )
-
-const onAfterFind = ([ lead1, lead2 ]) => {
-  // ... делаем что-либо со сделками
-  
-  /* 
-    Вместо того, чтобы по отдельности
-    сохранять каждую сделку, можно 
-    сделать это пакетно за один запрос
-  */
-  const leads = [ lead1, lead2 ];
-  
-  crm.Lead.update( leads )
-    .then( lead => {
-      console.log( lead );
-    })
-    /**
-     * @param response {EntityResponseHandler}
-     */
-    .then( response => {
-      // полный JSON-ответ с сервера
+  .then( leads => {
+    // ... делаем что-либо со сделками
+    
+    /* 
+     Вместо того, чтобы по отдельности
+     сохранять каждую сделку, можно 
+     сделать это пакетно за один запрос
+    */
+    return crm.Lead.update( leads );
+  })
+  /**
+    * @param response {EntityResponseHandler}
+    */
+   .then( response => {
+     // полный JSON-ответ с сервера
       const rawResult = response.getRaw(),
-        // информация о добавленных элементах
-        items = response.getItems(),
-        // информация о первом добавленном элементе
-        first = response.getFirstItem();
-    });
-}
+       // информация о добавленных элементах
+       items = response.getItems(),
+       // информация о первом добавленном элементе
+       first = response.getFirstItem();
+   });
 
 ```
 
@@ -308,7 +304,7 @@ const onAfterFind = ([ lead1, lead2 ]) => {
 лучше воспользоваться каким-либо одним методом при работе 
 с удалением сделок. 
 На мой взгляд, лучший вариант, 
-исходя из возможностей и reverse-ingeneering - *crm.Lead.remove*.
+исходя из возможностей и reverse-engineering - *crm.Lead.remove*.
 
 ```js
 crm.Lead.remove( ids );
@@ -320,26 +316,26 @@ crm.Lead.removeById( id );
 ```js
 
 crm.Lead.remove([ 123, 234 ])
-    /**
-     * @param response {EntityResponseHandler}
-     */
-    .then( response => {
-      // полный JSON-ответ с сервера
-      const rawResult = response.getRaw();
-    });
+/**
+ * @param response {EntityResponseHandler}
+ */
+.then( response => {
+  // полный JSON-ответ с сервера
+  const rawResult = response.getRaw();
+});
 
 /*
   lead1, lead2 и тд. могут быть как простыми объектами,
   так и экземплярами crm.Lead
  */
 crm.Lead.remove([ lead1, lead2 ])
-    /**
-     * @param response {EntityResponseHandler}
-     */
-    .then( response => {
-      // полный JSON-ответ с сервера
-      const rawResult = response.getRaw();
-    });
+/**
+ * @param response {EntityResponseHandler}
+ */
+.then( response => {
+  // полный JSON-ответ с сервера
+  const rawResult = response.getRaw();
+});
 ```
 
 [Информация про объект EntityResponseHandler](./response.md)
@@ -348,11 +344,103 @@ crm.Lead.remove([ lead1, lead2 ])
 
 ```js
 crm.Lead.removeById( 1234 )
-    /**
-     * @param response {EntityResponseHandler}
-     */
-    .then( response => {
-      // полный JSON-ответ с сервера
-      const rawResult = response.getRaw();
+/**
+ * @param response {EntityResponseHandler}
+ */
+.then( response => {
+  // полный JSON-ответ с сервера
+  const rawResult = response.getRaw();
+});
+```
+
+## 5. Связанные задачи
+
+### 5.1. Добавление задачи
+
+Вы можете воспользоваться методами 
+*lead.tasks.add* или *lead.addTask*.
+
+```javascript
+const lead = new crm.Lead({
+      name: 'Заявка на мотоцикл'
+    }),
+    // задача не должна ранее существовать
+    task = new crm.Task({
+      text: 'Подготовить плановый отчёт'
     });
+
+lead.addTask( task )
+/* 
+  updatedTask - обновлённая задача,
+  updatedTask === task
+ */
+.then( updatedTask => {
+  console.log( 'Обновлённая задача', updatedTask );
+});
+```
+
+### 5.2. Получение списка задач
+
+Вы можете воспользоваться методами 
+*lead.tasks.get( criteria )* или *lead.getTasks( criteria )*.
+
+```javascript
+
+crm.Lead.findById( 12323 )
+  .then( lead =>
+    // найдёт все задачи ответственного пользователя
+    lead.getTasks({
+      responsible_user_id: 123
+    })
+  )
+  // все задачи сделки по заданному критерию
+  .then( tasks => {
+    
+  });
+```
+
+## 6. Создание связанных заметок
+
+### 6.1. Добавление заметки
+
+Вы можете воспользоваться методами 
+*lead.notes.add* или *lead.addNote*.
+
+```javascript
+const lead = new crm.Lead({
+      name: 'Заявка на мотоцикл'
+    }),
+    // задача не должна ранее существовать
+    note = new crm.Note({
+      text: 'Начаты переговоры по закупке'
+    });
+
+lead.addNote( note );
+/* 
+  updatedNote - обновлённая заметка,
+  updatedNote === note
+ */
+.then( updatedNote => {
+  console.log( 'Обновлённая заметка', updatedNote );
+});
+```
+
+### 6.2. Получение списка заметок
+
+Вы можете воспользоваться методами 
+*lead.notes.get( criteria )* или *lead.getNotes( criteria )*.
+
+```javascript
+
+crm.Lead.findById( 12323 )
+  .then( lead =>
+    // найдёт все заметки ответственного пользователя
+    lead.getNotes({
+      responsible_user_id: 123
+    })
+  )
+  // все заметки сделки по заданному критерию
+  .then( notes => {
+    
+  });
 ```

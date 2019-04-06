@@ -51,8 +51,8 @@ var EntityActiveRecord = function (_ActiveRecord) {
     }
   }, {
     key: 'save',
-    value: function save() {
-      return this.isNew() ? this.insert() : this.update();
+    value: function save(newAttributes) {
+      return this.isNew() ? this.insert(newAttributes) : this.update(newAttributes);
     }
   }, {
     key: 'exists',
@@ -63,12 +63,13 @@ var EntityActiveRecord = function (_ActiveRecord) {
     }
   }, {
     key: 'insert',
-    value: function insert() {
+    value: function insert(newAttributes) {
       var _this3 = this;
 
       if (!this.isNew()) {
         throw new Error('EntityActiveRecord must not exists for using EntityActiveRecord.insert()!');
       }
+      Object.assign(this._attributes, newAttributes);
       return this._resource.insert([this._attributes]).then(function (response) {
         return _this3.afterInsert(response);
       });
@@ -82,12 +83,13 @@ var EntityActiveRecord = function (_ActiveRecord) {
     }
   }, {
     key: 'update',
-    value: function update() {
+    value: function update(newAttributes) {
       var _this4 = this;
 
       if (this.isNew()) {
         throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.update()!');
       }
+      Object.assign(this._attributes, newAttributes);
       return this._resource.update([this._attributes]).then(function () {
         return _this4;
       });

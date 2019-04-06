@@ -38,6 +38,16 @@ var ActiveRecordHandler = function () {
       var result = this._entity.setAttribute(name, value);
       return Boolean(result);
     }
+  }, {
+    key: "deleteProperty",
+    value: function deleteProperty(target, name) {
+      if (this._entity[name]) {
+        delete this._entity[name];
+        return true;
+      }
+      this._entity.removeAttribute(name);
+      return true;
+    }
   }]);
 
   return ActiveRecordHandler;

@@ -27,12 +27,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var DomainRequest = function () {
-  function DomainRequest(domain) {
+  function DomainRequest(domain, login, apiKey) {
     _classCallCheck(this, DomainRequest);
 
     if (!domain) {
       throw new Error('Portal domain must be set!');
     }
+    this._apiParams = {
+      login: login,
+      api_key: apiKey
+    };
+    this._login = login;
+    this._apiKey = apiKey;
     this._queue = new _promiseQueue2.default(1);
     this._cookies = [];
     this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
@@ -61,10 +67,24 @@ var DomainRequest = function () {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
+      url = this.getUrl(url, data, method, options);
       var encodedData = this.encodeData(url, data, method, options),
           headers = this.getRequestHeaders(url, encodedData, method, options),
           request = this.createRequest(url, encodedData, method, headers);
       return this.addRequestToQueue(request, options.response);
+    }
+  }, {
+    key: 'getUrl',
+    value: function getUrl(url) {
+      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
+      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+      if (!options.useAPIAuth || method === 'GET') {
+        return url;
+      }
+
+      return url + '?' + _qs2.default.stringify(this._apiParams);
     }
   }, {
     key: 'addRequestToQueue',
@@ -84,9 +104,14 @@ var DomainRequest = function () {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-      var isGET = method === 'GET';
+      var isGET = method === 'GET',
+          params = Object.assign({}, data);
 
-      return isGET ? _qs2.default.stringify(data) : JSON.stringify(data);
+      if (isGET && options.useAPIAuth) {
+        Object.assign(params, this._apiParams);
+      }
+
+      return isGET ? _qs2.default.stringify(params) : JSON.stringify(params);
     }
   }, {
     key: 'getDefaultHeaders',
@@ -120,7 +145,7 @@ var DomainRequest = function () {
       var responseHandlerClass = this.constructor.responseHandlerClass;
 
       if (options.saveCookies) {
-        this._cookies = response.headers['set-cookie'];
+        this._cookies = response.headers['set-cookie'] || [];
       }
       var handler = new responseHandlerClass(rawData);
       return handler.toJSON(options);
@@ -134,7 +159,6 @@ var DomainRequest = function () {
 
       var isGET = method === 'GET',
           path = isGET ? url + '?' + encodedData : url;
-
       return new _HTTPRequest2.default({
         path: path,
         hostname: this._hostname,

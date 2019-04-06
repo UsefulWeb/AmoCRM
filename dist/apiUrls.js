@@ -18,6 +18,12 @@ exports.default = {
     companies: {
       path: '/api/v2/companies'
     },
+    catalogs: {
+      path: '/api/v2/catalogs'
+    },
+    catalogElements: {
+      path: '/api/v2/catalog_elements'
+    },
     customers: {
       path: '/api/v2/customers'
     },

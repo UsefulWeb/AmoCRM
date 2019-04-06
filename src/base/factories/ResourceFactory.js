@@ -1,9 +1,11 @@
 import BehaviorFactory from "../BehaviorFactory";
 import ActiveRecordHandler from "../ActiveRecordHandler";
+import EntityTarget from "../EntityTarget";
 
 class ResourceFactory {
   static activeRecordClass;
   static activeRecordHandlerClass = ActiveRecordHandler;
+  static entityTargetClass = EntityTarget;
   /**
    * @param resourceClass {RemoteResource}
    */
@@ -30,10 +32,12 @@ class ResourceFactory {
   }
 
   create( attributes={}) {
-    const { activeRecordClass, activeRecordHandlerClass } = this.constructor,
+    const { activeRecordClass, activeRecordHandlerClass, entityTargetClass } = this.constructor,
       entity = new activeRecordClass( this._resource, attributes ),
-      handler = new activeRecordHandlerClass( entity );
-    return new Proxy({}, handler );
+      handler = new activeRecordHandlerClass( entity ),
+      type = entityClass.name,
+      entityTarget = new entityTargetClass( type );
+    return new Proxy( entityTarget, handler );
   }
 
   of( attributes={}) {

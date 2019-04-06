@@ -23,6 +23,15 @@ class ActiveRecordHandler {
     const result = this._entity.setAttribute( name, value );
     return Boolean( result );
   }
+
+  deleteProperty( target, name ) {
+    if ( this._entity[ name ]) {
+      delete this._entity[ name ];
+      return true;
+    }
+    this._entity.removeAttribute( name );
+    return true;
+  }
 }
 
 export default ActiveRecordHandler;

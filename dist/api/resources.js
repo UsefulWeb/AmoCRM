@@ -36,6 +36,14 @@ var _PipelineResource = require('./resources/PipelineResource');
 
 var _PipelineResource2 = _interopRequireDefault(_PipelineResource);
 
+var _CatalogElementResource = require('./resources/CatalogElementResource');
+
+var _CatalogElementResource2 = _interopRequireDefault(_CatalogElementResource);
+
+var _CatalogResource = require('./resources/CatalogResource');
+
+var _CatalogResource2 = _interopRequireDefault(_CatalogResource);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -46,5 +54,7 @@ exports.default = {
   Task: _TaskResource2.default,
   Customer: _CustomerResource2.default,
   Field: _FieldResource2.default,
-  Pipeline: _PipelineResource2.default
+  Pipeline: _PipelineResource2.default,
+  CatalogElement: _CatalogElementResource2.default,
+  Catalog: _CatalogResource2.default
 };

@@ -65,6 +65,11 @@ var BaseActiveRecord = function () {
       return this._attributes;
     }
   }], [{
+    key: 'isActiveRecord',
+    value: function isActiveRecord(item) {
+      return item instanceof this;
+    }
+  }, {
     key: 'createFrom',
     value: function createFrom(activeRecordInstance) {
       var attributes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

@@ -14,6 +14,10 @@ var _ActiveRecordHandler = require("../ActiveRecordHandler");
 
 var _ActiveRecordHandler2 = _interopRequireDefault(_ActiveRecordHandler);
 
+var _EntityTarget = require("../EntityTarget");
+
+var _EntityTarget2 = _interopRequireDefault(_EntityTarget);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46,10 +50,13 @@ var ResourceFactory = function () {
       var _constructor = this.constructor,
           activeRecordClass = _constructor.activeRecordClass,
           activeRecordHandlerClass = _constructor.activeRecordHandlerClass,
+          entityTargetClass = _constructor.entityTargetClass,
           entity = new activeRecordClass(this._resource, attributes),
-          handler = new activeRecordHandlerClass(entity);
+          handler = new activeRecordHandlerClass(entity),
+          type = entityClass.name,
+          entityTarget = new entityTargetClass(type);
 
-      return new Proxy({}, handler);
+      return new Proxy(entityTarget, handler);
     }
   }, {
     key: "of",
@@ -71,5 +78,6 @@ var ResourceFactory = function () {
 }();
 
 ResourceFactory.activeRecordHandlerClass = _ActiveRecordHandler2.default;
+ResourceFactory.entityTargetClass = _EntityTarget2.default;
 ResourceFactory.behaviors = [];
 exports.default = ResourceFactory;

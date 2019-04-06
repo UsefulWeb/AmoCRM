@@ -48,15 +48,12 @@ var DomainResponseHandler = function (_ResponseHandler) {
         });
       }
 
-      var data = void 0;
-
       try {
-        data = JSON.parse(this._response);
+        var data = JSON.parse(this._response);
+        return Promise.resolve(data);
       } catch (e) {
         throw Error('cannot parse JSON: ' + this._response);
       }
-
-      return Promise.resolve(data);
     }
   }]);
 

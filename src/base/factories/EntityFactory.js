@@ -11,8 +11,19 @@ class EntityFactory extends ResourceFactory {
 
   getDataAttributes( data = []) {
     return data.map( item =>
-      item instanceof BaseActiveRecord ? item.attributes : item
+      BaseActiveRecord.isActiveRecord( item ) ? item.attributes : item
     );
+  }
+
+  updateActiveRecords( items = [], newData ) {
+    items.forEach(( item, index ) => {
+      if ( !BaseActiveRecord.isActiveRecord( item )) {
+        return false;
+      }
+      const attributes = newData[ index ];
+      item.attributes = attributes;
+    });
+    return items;
   }
 
   getDataIdentifiers( data = []) {

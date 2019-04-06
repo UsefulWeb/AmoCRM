@@ -13,6 +13,10 @@ class BaseActiveRecord {
     BehaviorFactory.assignBehaviors( this, this.constructor.behaviors );
   }
 
+  static isActiveRecord( item ) {
+    return item instanceof this;
+  }
+
   static createFrom( activeRecordInstance, attributes={} ) {
     const resourceConstructor = this._resource.constructor,
       resource = resourceConstructor.createFrom( this._resource );

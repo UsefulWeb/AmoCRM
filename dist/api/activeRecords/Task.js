@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _EntityActiveRecord = require('../../base/activeRecords/EntityActiveRecord');
+var _EntityActiveRecord2 = require('../../base/activeRecords/EntityActiveRecord');
 
-var _EntityActiveRecord2 = _interopRequireDefault(_EntityActiveRecord);
+var _EntityActiveRecord3 = _interopRequireDefault(_EntityActiveRecord2);
 
 var _Removable = require('../../base/activeRecords/behaviors/Removable');
 
@@ -28,8 +28,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Task = function (_Entity) {
-  _inherits(Task, _Entity);
+var Task = function (_EntityActiveRecord) {
+  _inherits(Task, _EntityActiveRecord);
 
   function Task() {
     _classCallCheck(this, Task);
@@ -38,7 +38,7 @@ var Task = function (_Entity) {
   }
 
   return Task;
-}(_EntityActiveRecord2.default);
+}(_EntityActiveRecord3.default);
 
 Task.behaviors = [new _Removable2.default(), new _Notable2.default(), new _HasElementByField2.default('TASK_ELEMENT_TYPE')];
 exports.default = Task;
