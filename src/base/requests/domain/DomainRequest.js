@@ -15,7 +15,7 @@ class DomainRequest {
     }
     this._queue = new Queue( 1 );
     this._cookies = [];
-    this._hostname = domain.includes( '.' ) ? domain : domain + '.amocrm.com';
+    this._hostname = domain.includes( '.' ) ? domain : domain + '.amocrm.ru';
   }
 
   post( url, data = {}, options = {}) {

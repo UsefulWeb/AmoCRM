@@ -15,7 +15,12 @@ const crm = new AmoCRM({
 });
 
 // Вход в портал
-crm.connect();
+crm.connect().then(() => {
+  console.log( `Вход в портал осуществлён` );
+})
+.catch( e => {
+  console.log( 'Ошибка входа', e );
+});
 ```
 
 ## Свободный запрос к CRM
@@ -174,9 +179,11 @@ const crm = new AmoCRM({
 
 1. connection:beforeReconnect
 2. connection:beforeConnect
-3. connection:authError
-4. connection:connected
-5. connection:error
+3. connection:checkReconnect
+4. connection:authError
+5. connection:connected
+6. connection:disconnected
+7. connection:error
 
 Добавление обработчика: 
 

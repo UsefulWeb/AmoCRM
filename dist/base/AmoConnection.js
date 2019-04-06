@@ -51,7 +51,6 @@ var AmoConnection = function (_EventResource) {
         if (self._reconnectTimeout !== timeout) {
           return reject();
         }
-
         timeout = setTimeout(function () {
           var now = new Date();
 
@@ -60,6 +59,7 @@ var AmoConnection = function (_EventResource) {
           }
 
           check(resolve, reject);
+          self.triggerEvent('checkReconnect', true);
         }, delay);
 
         self._reconnectTimeout = timeout;
@@ -69,6 +69,15 @@ var AmoConnection = function (_EventResource) {
         _this2.triggerEvent('beforeReconnect', true);
         return _this2.connect();
       });
+    }
+  }, {
+    key: 'disconnect',
+    value: function disconnect() {
+      if (this._reconnectTimeout) {
+        clearTimeout(this._reconnectTimeout);
+        this.triggerEvent('disconnected', true);
+      }
+      delete this._reconnectTimeout;
     }
   }, {
     key: 'connect',
@@ -109,7 +118,9 @@ var AmoConnection = function (_EventResource) {
           _this3.reconnectAt(_this3._request.expires, checkDelay, accuracyTime);
         }
 
-        _this3._isConnected = data.response.auth === true;
+        if (data && data.response && data.response.auth) {
+          _this3._isConnected = data.response.auth === true;
+        }
 
         if (_this3._isConnected) {
           _this3.triggerEvent('connected', _this3);
@@ -122,11 +133,7 @@ var AmoConnection = function (_EventResource) {
         _this3.triggerEvent('authError', e, _this3);
         _this3.triggerEvent('error', e, _this3);
 
-        return false;
-      }).catch(function (e) {
-        _this3.triggerEvent('error', e, _this3);
-
-        throw e;
+        return Promise.reject(e);
       });
     }
   }, {
@@ -139,6 +146,6 @@ var AmoConnection = function (_EventResource) {
   return AmoConnection;
 }(_EventResource3.default);
 
-AmoConnection.EVENTS = ['beforeReconnect', 'beforeConnect', 'authError', 'connected', 'error'];
+AmoConnection.EVENTS = ['beforeReconnect', 'beforeConnect', 'checkReconnect', 'authError', 'connected', 'disconnected', 'error'];
 
 module.exports = AmoConnection;

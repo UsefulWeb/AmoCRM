@@ -8,8 +8,10 @@ class AmoConnection extends EventResource {
   static EVENTS = [
     'beforeReconnect',
     'beforeConnect',
+    'checkReconnect',
     'authError',
     'connected',
+    'disconnected',
     'error'
   ];
 
@@ -34,7 +36,6 @@ class AmoConnection extends EventResource {
         if ( self._reconnectTimeout !== timeout ) {
           return reject();
         }
-
         timeout = setTimeout(() => {
           const now = new Date;
 
@@ -43,6 +44,7 @@ class AmoConnection extends EventResource {
           }
 
           check( resolve, reject );
+          self.triggerEvent( 'checkReconnect', true );
         }, delay );
 
         self._reconnectTimeout = timeout;
@@ -52,6 +54,14 @@ class AmoConnection extends EventResource {
       this.triggerEvent( 'beforeReconnect', true );
       return this.connect();
     });
+  }
+
+  disconnect() {
+    if ( this._reconnectTimeout ) {
+      clearTimeout( this._reconnectTimeout );
+      this.triggerEvent( 'disconnected', true );
+    }
+    delete this._reconnectTimeout;
   }
 
   connect() {
@@ -85,7 +95,9 @@ class AmoConnection extends EventResource {
           this.reconnectAt( this._request.expires, checkDelay, accuracyTime );
         }
 
-        this._isConnected = data.response.auth === true;
+        if ( data && data.response && data.response.auth ) {
+          this._isConnected = data.response.auth === true;
+        }
 
         if ( this._isConnected ) {
           this.triggerEvent( 'connected', this );
@@ -98,12 +110,7 @@ class AmoConnection extends EventResource {
         this.triggerEvent( 'authError', e, this );
         this.triggerEvent( 'error', e, this );
 
-        return false;
-      })
-      .catch( e => {
-        this.triggerEvent( 'error', e, this );
-
-        throw e;
+        return Promise.reject( e );
       });
   }
 }

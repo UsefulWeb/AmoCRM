@@ -47,6 +47,10 @@ class AmoCRM extends EventResource {
   connect() {
     return this._connection.connect();
   }
+
+  disconnect() {
+    return this._connection.disconnect();
+  }
 }
 
 module.exports = AmoCRM;

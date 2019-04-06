@@ -17,7 +17,70 @@ describe( 'AmoCRM connection', () => {
       .then( isConnected => {
         expect( isConnected ).toBe( true );
         done();
+      })
+      .catch( f => f );
+  });
+
+  it( 'should not connect', done => {
+    const { domain, auth: { hash, login } } = config,
+      client = new AmoCRM({
+        domain,
+        auth: {
+          hash: hash + Math.random(),
+          login
+        }
       });
+    client.connect()
+      .catch( e => {
+        expect( e.message ).toBe( 'Auth Error' );
+        done();
+      });
+  });
+
+  it( 'should trigger disconnect event', async done => {
+    const { domain, auth: { hash, login } } = config,
+      client = new AmoCRM({
+        domain,
+        auth: {
+          hash,
+          login
+        },
+        reconnection: {
+          checkDelay: 100
+        }
+      });
+    client.on( 'connection:disconnected', () => {
+      done();
+    });
+    await client.connect();
+    client.disconnect();
+  });
+
+  it( 'shouldn\'t trigger checkReconnect event', async done => {
+    const { domain, auth: { hash, login } } = config,
+      client = new AmoCRM({
+        domain,
+        auth: {
+          hash,
+          login
+        },
+        reconnection: {
+          checkDelay: 100
+        }
+      });
+    let checked = false,
+      disconnected = false;
+    client.on( 'connection:disconnected', () => {
+      disconnected = true;
+    });
+    client.on( 'connection:checkReconnect', () => {
+      console.log( 'checkReconnect' );
+      checked = true;
+    });
+    await client.connect();
+    client.disconnect();
+
+    setTimeout(() => !checked && disconnected && done(), 2000);
   });
 
   it( 'should connect and reconnect after 2 seconds', done => {
@@ -28,7 +91,8 @@ describe( 'AmoCRM connection', () => {
           hash, login
         }
       });
-    client.connect();
+    client.connect()
+      .catch( f => f );
 
     let date;
 
@@ -54,7 +118,8 @@ describe( 'AmoCRM connection', () => {
           hash, login
         }
       });
-    client.connect();
+    client.connect()
+      .catch( f => f );
 
     let date;
 
@@ -95,7 +160,8 @@ describe( 'AmoCRM connection', () => {
       })
     );
 
-    client.connect();
+    client.connect()
+      .catch( f => f );
   });
 
   it( 'should check error events', done => {
@@ -123,7 +189,8 @@ describe( 'AmoCRM connection', () => {
       })
     );
 
-    client.connect();
+    client.connect()
+      .catch( f => f );
   });
 
   it( 'should connect with password', done => {
@@ -139,7 +206,8 @@ describe( 'AmoCRM connection', () => {
       .then( isConnected => {
         expect( isConnected ).toBe( true );
         done();
-      });
+      })
+      .catch( f => f );
   });
 
   it( 'should connect twice without error', done => {
@@ -157,7 +225,8 @@ describe( 'AmoCRM connection', () => {
       .then( isConnected => {
         expect( isConnected ).toBe( true );
         done();
-      });
+      })
+      .catch( f => f );
   });
 
   it( 'shouldnt connect with wrong config', done => {
@@ -172,8 +241,7 @@ describe( 'AmoCRM connection', () => {
     client
       .connect()
       .then(() => client.connect())
-      .then( isConnected => {
-        expect( isConnected ).toBe( false );
+      .catch(() => {
         done();
       });
   });

@@ -73,6 +73,11 @@ var AmoCRM = function (_EventResource) {
       return this._connection.connect();
     }
   }, {
+    key: 'disconnect',
+    value: function disconnect() {
+      return this._connection.disconnect();
+    }
+  }, {
     key: 'request',
     get: function get() {
       var _this3 = this;
