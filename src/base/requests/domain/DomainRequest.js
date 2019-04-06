@@ -21,7 +21,7 @@ class DomainRequest {
     this._apiKey = apiKey;
     this._queue = new Queue( 1 );
     this._cookies = [];
-    this._hostname = domain + '.amocrm.ru';
+    this._hostname = domain.includes( '.' ) ? domain : domain + '.amocrm.ru';
   }
 
   get expires() {

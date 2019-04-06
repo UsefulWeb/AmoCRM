@@ -35,7 +35,7 @@ var DomainRequest = function () {
     }
     this._queue = new _promiseQueue2.default(1);
     this._cookies = [];
-    this._hostname = domain + '.amocrm.ru';
+    this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
   }
 
   _createClass(DomainRequest, [{
