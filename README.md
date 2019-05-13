@@ -7,6 +7,7 @@ Javascript библиотека для работы с AmoCRM
 2. Работает с основными сущностями CRM с помощью ООП.
 3. Может работать с внутренним API портала для реализации доп. функций 
 (удаление сделок, контактов и пр.)
+4. Запросы к порталу основаны на обещаниях (Promise).
 
 ## Установка
 
@@ -14,21 +15,24 @@ Javascript библиотека для работы с AmoCRM
 npm i --save amocrm-js
 ```
 
-## Пример использования
+## Инициализация
  
 ```js
-const AmoCRM = require( 'amocrm-js' );
+import AmoCRM from 'amocrm-js';
 
 const crm = new AmoCRM({
-    // логин пользователя в портале, где адрес портала domain.amocrm.ru
+    // домен, где полный адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
     auth: {
-        login: 'mylogin',
-        hash: 'mytesthash', // API-ключ доступа
+        login: 'mylogin@mail.com',
+        hash: 'mytesthash' // API-ключ доступа
     }
 });
+```
 
-// Вход в портал
+### Вход в портал
+
+```js
 crm.connect().then(() => {
   console.log( `Вход в портал осуществлён` );
 })
@@ -37,16 +41,9 @@ crm.connect().then(() => {
 });
 ```
 
-### Выход из портала
+## Свободные запросы к CRM
 
-Метод *disconnect()* позволяет выйти из портала.
-Он выключает таймер проверки времени истечения сессии.
-
-```javascript
-crm.disconnect();
-```
-
-## Свободный запрос к CRM
+Самый базовый функционал при работе с библиотекой
 
 ### GET-запрос
 
@@ -54,10 +51,10 @@ crm.disconnect();
 // Получить данные по аккаунту (GET-запрос)
 crm.request.get( '/api/v2/account' )
 .then( data => {
-    console.log( 'Полученные данные', data );
+  console.log( 'Полученные данные', data );
 })
 .catch( e => {
-    console.log( 'Произошла ошибка', e );
+  console.log( 'Произошла ошибка', e );
 })
 ```
 
@@ -75,28 +72,70 @@ crm.request.post( '/api/v2/contacts', {
     ]
 })
 .then( data => {
- console.log( 'Полученные данные', data );
+  console.log( 'Полученные данные', data );
 })
 .catch( e => {
- console.log( 'Произошла ошибка создания контакта', e );
+  console.log( 'Произошла ошибка создания контакта', e );
 })
 ```
 
-[Основы работы](./docs/basic.md)
+## Основные настройки
+
+```javascript
+const crm = new AmoCRM({
+    domain: 'domain',
+    auth: {
+        login: 'mylogin',
+        hash: 'mytesthash',
+    },
+    /*
+     * Настройки переподключения.
+     * Подклюыения через crm.connect() использует
+     * cookie-файл, имеющий ограничения по времени действия.
+     * Для непрерывной работы необходимо осуществлять
+     * повторный вход в портал незадолго до истечения сессии.
+     */
+    reconnection: {
+        /*
+         * Переподключение выключено. 
+         * По умолчанию false,
+         */
+        disabled: true,
+        /* 
+         * Как часто проверять сессию на предмет истечения. 
+         * По умолчанию: 60 * 1000 мс
+         */
+        checkDelay: 500,
+        /* 
+         * За какое кол-во мс до истечения сессии необходимо переподключиться. 
+         * По умолчанию: 60 * 1000 мс
+         */
+        accuracyTime: 1000
+    }
+});
+```
 
 ## Детали
 
+### Основное
+
+2. [Авторизация и выход](./docs/auth.md)
+3. [Свободные запросы](./docs/requests.md)
+4. [События](./docs/events.md)
+5. [Фабрики](./docs/factories.md)
+6. [Модели ActiveRecord](./docs/activeRecords.md)
+
 ### Основные сущности
 
-1. [Сделки](./docs/leads.md) (Lead)
-2. Контакты (Contact)
-3. Компании (Company)
-4. Клиенты (Customer)
-5. Заметки (Note)
-6. Задачи (Task)
-7. Дополнительные поля (Field)
-8. Неразобранное/Входящие заявки из форм и телефонии (IncomingLead) (в разработке)
-9. Воронки продаж (Pipeline)
+1. [Сделки](./docs/entities/leads.md) (Lead)
+2. [Контакты](./docs/entities/contacts.md) (Contact)
+3. [Компании](./docs/entities/companies.md) (Company)
+4. [Клиенты](./docs/entities/customers.md) (Customer)
+5. [Заметки](./docs/entities/notes.md) (Note)
+6. [Задачи](./docs/entities/tasks.md) (Task)
+7. [Дополнительные поля](./docs/entities/fields.md) (Field)
+8. [Неразобранное/Входящие заявки из форм и телефонии](./docs/entities/incomingLeads.md) (IncomingLead)
+9. [Воронки продаж](./docs/entities/pipelines.md) (Pipeline)
 
 ### Поведения
 

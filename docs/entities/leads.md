@@ -214,7 +214,7 @@ crm.Lead.insert( leads )
   });
 ```
 
-[Информация про объект EntityResponseHandler](./response.md)
+[Информация про объект EntityResponseHandler](../response.md)
 
 ### 3.2 Обновление
 
@@ -284,7 +284,7 @@ crm.Lead.find({
 
 ```
 
-[Информация про объект EntityResponseHandler](./response.md)
+[Информация про объект EntityResponseHandler](../response.md)
 
 ## 4. Удаление сделок (неофициально)
 
@@ -335,7 +335,7 @@ crm.Lead.remove([ lead1, lead2 ])
 });
 ```
 
-[Информация про объект EntityResponseHandler](./response.md)
+[Информация про объект EntityResponseHandler](../response.md)
 
 ### 4.2. Удаление отдельной сделки 
 
