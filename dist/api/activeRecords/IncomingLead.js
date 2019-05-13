@@ -30,13 +30,13 @@ var IncomingLead = function (_BaseActiveRecord) {
   _createClass(IncomingLead, [{
     key: 'insertAsSIP',
     value: function insertAsSIP(newAttributes) {
-      Object.assign(newAttributes, this._attributes);
+      Object.assign(this._attributes, newAttributes);
       return this._resource.insertAsSIP([this._attributes]);
     }
   }, {
     key: 'insertAsFormData',
     value: function insertAsFormData(newAttributes) {
-      Object.assign(newAttributes, this._attributes);
+      Object.assign(this._attributes, newAttributes);
       return this._resource.insertAsFormData([this._attributes]);
     }
   }, {

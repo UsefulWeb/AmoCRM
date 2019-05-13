@@ -53,7 +53,7 @@ var ResourceFactory = function () {
           entityTargetClass = _constructor.entityTargetClass,
           entity = new activeRecordClass(this._resource, attributes),
           handler = new activeRecordHandlerClass(entity),
-          type = entityClass.name,
+          type = activeRecordClass.name,
           entityTarget = new entityTargetClass(type);
 
       return new Proxy(entityTarget, handler);

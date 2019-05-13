@@ -59,7 +59,7 @@ exports.default = {
   Note: _NoteFactory2.default,
   Task: _TaskFactory2.default,
   Customer: _CustomerFactory2.default,
-  // IncomingLead: IncomingLeadFactory,
+  IncomingLead: _IncomingLeadFactory2.default,
   Field: _FieldFactory2.default,
   Pipeline: _PipelineFactory2.default
 };

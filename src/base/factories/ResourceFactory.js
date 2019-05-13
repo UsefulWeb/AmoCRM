@@ -35,7 +35,7 @@ class ResourceFactory {
     const { activeRecordClass, activeRecordHandlerClass, entityTargetClass } = this.constructor,
       entity = new activeRecordClass( this._resource, attributes ),
       handler = new activeRecordHandlerClass( entity ),
-      type = entityClass.name,
+      type = activeRecordClass.name,
       entityTarget = new entityTargetClass( type );
     return new Proxy( entityTarget, handler );
   }

@@ -3,13 +3,13 @@ import BaseActiveRecord from '../../base/activeRecords/BaseActiveRecord';
 export default class IncomingLead extends BaseActiveRecord {
 
   insertAsSIP( newAttributes ) {
-    Object.assign( newAttributes, this._attributes );
+    Object.assign( this._attributes, newAttributes );
     return this._resource
       .insertAsSIP([ this._attributes ]);
   }
 
   insertAsFormData( newAttributes ) {
-    Object.assign( newAttributes, this._attributes );
+    Object.assign( this._attributes, newAttributes );
     return this._resource
       .insertAsFormData([ this._attributes ]);
   }

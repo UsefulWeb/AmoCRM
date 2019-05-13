@@ -58,7 +58,7 @@ lead.save()
 Они добавятся к уже существующим атрибутам
 
 ```javascript
-const lead = new Lead;
+const lead = new crm.Lead;
 
 lead.save({
   name: 'Новая сделка',
@@ -170,9 +170,6 @@ const leads = [
 ];
 
 crm.Lead.insert( leads )
-  .then( lead => {
-    console.log( lead );
-  })
   /**
    * @param response {EntityResponseHandler}
    */

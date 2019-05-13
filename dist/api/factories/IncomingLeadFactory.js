@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _IncomingLead = require('../activeRecords/IncomingLead');
 
 var _IncomingLead2 = _interopRequireDefault(_IncomingLead);
@@ -32,6 +34,28 @@ var IncomingLeadFactory = function (_ResourceFactory) {
 
     return _possibleConstructorReturn(this, (IncomingLeadFactory.__proto__ || Object.getPrototypeOf(IncomingLeadFactory)).apply(this, arguments));
   }
+
+  _createClass(IncomingLeadFactory, [{
+    key: 'insertAsSIP',
+    value: function insertAsSIP(data) {
+      return this._resource.insertAsSIP(data);
+    }
+  }, {
+    key: 'insertAsFormData',
+    value: function insertAsFormData(data) {
+      return this._resource.insertAsFormData(data);
+    }
+  }, {
+    key: 'accept',
+    value: function accept(data) {
+      return this._resource.accept(data);
+    }
+  }, {
+    key: 'decline',
+    value: function decline(data) {
+      return this._resource.decline(data);
+    }
+  }]);
 
   return IncomingLeadFactory;
 }(_ResourceFactory3.default);

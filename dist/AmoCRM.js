@@ -18,6 +18,10 @@ var _ResourceFactoryBuilder = require('./base/ResourceFactoryBuilder');
 
 var _ResourceFactoryBuilder2 = _interopRequireDefault(_ResourceFactoryBuilder);
 
+var _apiUrls = require('./apiUrls');
+
+var _apiUrls2 = _interopRequireDefault(_apiUrls);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -83,7 +87,7 @@ var AmoCRM = function (_EventResource) {
       var details = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var freeUsers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-      var url = schema.account + '?with=' + details.join(',');
+      var url = _apiUrls2.default.account + '?with=' + details.join(',');
       if (freeUsers) {
         url += '&free_users=Y';
       }

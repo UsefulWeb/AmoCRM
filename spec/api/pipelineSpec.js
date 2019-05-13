@@ -67,8 +67,8 @@ describe( 'AmoCRM API Pipeline Interface', () => {
 
         return client.Pipeline.remove( ids );
       })
+      .catch( console.log )
       .then( done );
-
   });
 
 });

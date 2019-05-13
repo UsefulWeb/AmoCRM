@@ -19,7 +19,7 @@ export default {
   Note: NoteFactory,
   Task: TaskFactory,
   Customer: CustomerFactory,
-  // IncomingLead: IncomingLeadFactory,
+  IncomingLead: IncomingLeadFactory,
   Field: FieldFactory,
   Pipeline: PipelineFactory
 };

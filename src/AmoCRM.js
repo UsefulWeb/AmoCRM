@@ -3,6 +3,7 @@ import EventResource from './base/EventResource';
 import AmoConnection from './base/AmoConnection';
 import PrivateDomainRequest from './base/requests/domain/PrivateDomainRequest';
 import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
+import schema from './apiUrls';
 
 class AmoCRM extends EventResource {
 
