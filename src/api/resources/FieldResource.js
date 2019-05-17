@@ -42,7 +42,7 @@ class FieldResource extends RemoteResource {
   static getElementType = hasElementTypeByKey( 'ELEMENT_TYPES' );
   static getType = hasElementTypeByKey( 'TYPES' );
 
-  list() {
+  find() {
     return find.call( this, { with: 'custom_fields' })
       .then( response => response.getEmbedded().custom_fields );
   }

@@ -24,6 +24,10 @@ var _Taskable = require('../../base/activeRecords/behaviors/Taskable');
 
 var _Taskable2 = _interopRequireDefault(_Taskable);
 
+var _HasFields = require('../../base/activeRecords/behaviors/HasFields');
+
+var _HasFields2 = _interopRequireDefault(_HasFields);
+
 var _factories = require('../factories');
 
 var _factories2 = _interopRequireDefault(_factories);
@@ -82,5 +86,5 @@ var Contact = function (_EntityActiveRecord) {
   return Contact;
 }(_EntityActiveRecord3.default);
 
-Contact.behaviors = [new _Removable2.default(), new _Notable2.default(), new _Taskable2.default()];
+Contact.behaviors = [new _Removable2.default(), new _Notable2.default(), new _Taskable2.default(), new _HasFields2.default()];
 exports.default = Contact;

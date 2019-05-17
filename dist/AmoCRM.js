@@ -87,7 +87,7 @@ var AmoCRM = function (_EventResource) {
       var details = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var freeUsers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-      var url = _apiUrls2.default.account + '?with=' + details.join(',');
+      var url = _apiUrls2.default.account + '?with=' + detailbeforeConnects.join(',');
       if (freeUsers) {
         url += '&free_users=Y';
       }

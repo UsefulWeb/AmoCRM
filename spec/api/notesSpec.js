@@ -50,7 +50,7 @@ describe( 'AmoCRM API Note Interface', () => {
 
   });
 
-  it( 'should check notable interface in all entities', () => {
+  it( 'should check notable interface in all factories', () => {
     const lead = new client.Lead,
       contact = new client.Contact,
       customer = new client.Customer,

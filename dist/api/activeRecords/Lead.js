@@ -20,6 +20,10 @@ var _Taskable = require('../../base/activeRecords/behaviors/Taskable');
 
 var _Taskable2 = _interopRequireDefault(_Taskable);
 
+var _HasFields = require('../../base/activeRecords/behaviors/HasFields');
+
+var _HasFields2 = _interopRequireDefault(_HasFields);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40,5 +44,5 @@ var Lead = function (_EntityActiveRecord) {
   return Lead;
 }(_EntityActiveRecord3.default);
 
-Lead.behaviors = [new _Removable2.default(), new _Notable2.default(), new _Taskable2.default()];
+Lead.behaviors = [new _Removable2.default(), new _Notable2.default(), new _Taskable2.default(), new _HasFields2.default()];
 exports.default = Lead;

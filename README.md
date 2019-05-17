@@ -41,6 +41,19 @@ crm.connect().then(() => {
 });
 ```
 
+
+## Выход из портала
+
+Метод *disconnect* выключает переподключение к порталу,
+которое обновляет сессию (cookie-файл) до её истечения.
+
+```javascript
+crm.disconnect();
+```
+
+При необходимости, вы можете выключить переподключение
+в настройках (см. ниже).
+
 ## Свободные запросы к CRM
 
 Самый базовый функционал при работе с библиотекой
@@ -79,6 +92,126 @@ crm.request.post( '/api/v2/contacts', {
 })
 ```
 
+## Фабрики
+
+Фабрика позволяет удобно находить, менять и удалять сделки
+с помощью объектов.
+
+Пример:
+
+```js
+// Найти сделки по критерию
+crm.Lead.find({
+    status: 1 // найти сделки с нужным статусом
+    responsible_user_id: 34 // и определённым ответственным человеком 
+})
+// массив сделок
+.then( leads => {
+  leads.forEach(
+    // получить атрибуты сделки
+    lead => console.log( lead.attributes )
+  );
+});
+
+// Найти сделку по id
+crm.Lead.findById( 349 );
+.then( lead => console.log( lead.attributes ));
+
+// Добавить новые сделки
+crm.Lead.insert([
+  {
+    name: "Walter White",
+    request_id: 143,
+    // другие поля ...
+  },
+  {
+    name: "Walter Black",
+    request_id: 561,
+    // другие поля ...
+  }
+]);
+
+// Обновить сделки
+crm.Lead.update([
+  {
+    id: 1234,
+    name: "Walter White",
+    request_id: 143,
+    // другие поля ...
+  },
+  {
+    id: 5678,
+    name: "Walter Black",
+    request_id: 561,
+    // другие поля ...
+  }
+]);
+
+// Удалить сделки
+crm.Lead.remove([ 1234, 5678 ]);
+```
+
+### Основные фабрики
+
+1. [Сделки](docs/factories/leads.md) (crm.Lead)
+2. [Контакты](docs/factories/contacts.md) (crm.Contact)
+3. [Компании](docs/factories/companies.md) (crm.Company)
+4. [Клиенты](docs/factories/customers.md) (crm.Customer)
+5. [Заметки](docs/factories/notes.md) (crm.Note)
+6. [Задачи](docs/factories/tasks.md) (crm.Task)
+7. [Дополнительные поля](docs/factories/fields.md) (crm.Field)
+8. [Неразобранное/Входящие заявки из форм и телефонии](docs/factories/incomingLeads.md) (crm.IncomingLead)
+9. [Воронки продаж](docs/factories/pipelines.md) (crm.Pipeline)
+
+## Модели ActiveRecord
+
+Вы также можете создавать/редактировать/удалять поштучно сущности.
+
+Пример:
+
+```js
+// создание сделки
+const lead = new crm.Lead({
+  linked_company_id: 1245,
+  updated_at: 12345678,
+  price: 10000
+});
+lead.name = "Заявка для Ивана";
+lead.save();
+
+// обновление найденной сделки
+crm.Lead.find({
+  status: 1
+})
+.then( leads => {
+  const lead = leads[ 0 ];
+  lead.name = "Обновлённое название";
+  lead.save();
+});
+
+// удаление найденной сделки
+crm.Lead.findById({
+  status: 1
+})
+.then( lead => {
+  lead.name = "Обновлённое название";
+  lead.save();
+});
+```
+
+### Основные модели ActiveRecord
+
+1. [Сделки](docs/activeRecords/leads.md) (crm.Lead)
+2. [Контакты](docs/activeRecords/contacts.md) (crm.Contact)
+3. [Компании](docs/activeRecords/companies.md) (crm.Company)
+4. [Клиенты](docs/activeRecords/customers.md) (crm.Customer)
+5. [Заметки](docs/activeRecords/notes.md) (crm.Note)
+6. [Задачи](docs/activeRecords/tasks.md) (crm.Task)
+7. [Дополнительные поля](docs/activeRecords/fields.md) (crm.Field)
+8. [Неразобранное/Входящие заявки из форм и телефонии](docs/activeRecords/incomingLeads.md) (crm.IncomingLead)
+9. [Воронки продаж](docs/activeRecords/pipelines.md) (crm.Pipeline)
+
+
 ## Основные настройки
 
 ```javascript
@@ -98,7 +231,7 @@ const crm = new AmoCRM({
     reconnection: {
         /*
          * Переподключение выключено. 
-         * По умолчанию false,
+         * По умолчанию false.
          */
         disabled: true,
         /* 
@@ -115,34 +248,56 @@ const crm = new AmoCRM({
 });
 ```
 
-## Детали
+## События
 
-### Основное
+Добавление обработчика: 
 
-2. [Авторизация и выход](./docs/auth.md)
-3. [Свободные запросы](./docs/requests.md)
-4. [События](./docs/events.md)
-5. [Фабрики](./docs/factories.md)
-6. [Модели ActiveRecord](./docs/activeRecords.md)
+```javascript
+crm.on( 'connection:error', () => console.log( 'Ошибка соединения' ));
+```
 
-### Основные сущности
+Удаление обработчика: 
 
-1. [Сделки](./docs/entities/leads.md) (Lead)
-2. [Контакты](./docs/entities/contacts.md) (Contact)
-3. [Компании](./docs/entities/companies.md) (Company)
-4. [Клиенты](./docs/entities/customers.md) (Customer)
-5. [Заметки](./docs/entities/notes.md) (Note)
-6. [Задачи](./docs/entities/tasks.md) (Task)
-7. [Дополнительные поля](./docs/entities/fields.md) (Field)
-8. [Неразобранное/Входящие заявки из форм и телефонии](./docs/entities/incomingLeads.md) (IncomingLead)
-9. [Воронки продаж](./docs/entities/pipelines.md) (Pipeline)
+```javascript
+const handler = () => console.log( 'Ошибка соединения' );
+crm.on( 'connection:error', handler );
 
-### Поведения
+// удалить конкретный обработчик
+crm.off( 'connection:error', handler );
 
-У некоторых сущностей есть расширенный функционал.
+// удалить все обработчики конкретного события
+crm.off( 'connection:error' );
 
-1. [Taskable](./docs/behaviors/taskable.md) - позволяет создавать задачу со ссылкой на сущность.
-2. [Notable](./docs/behaviors/notable.md) - позволяет создавать заметку со ссылкой на сущность.
-3. [Removable](./docs/behaviors/removable.md) - позволяет удалять созданную сущность
-4. [Findable](./docs/behaviors/findable.md) - производит поиск записей по критерию
-5. [FindableById](./docs/behaviors/findableById.md) - производит поиск записей по идентификатору
+// удалить все обработчики всех событий
+crm.off();
+```
+
+### connection:beforeConnect
+
+Возникает перед тем, как происходит подключение 
+к порталу. Вызывается также в момент переподключения.
+
+### connection:beforeReconnect
+
+Возникает перед тем, как происходит повторное
+подключение к порталу.
+
+### connection:checkReconnect
+
+Возникает в момент проверки, истекла ли сессия.
+
+### connection:authError
+
+Возникает в момент ошибки авторизации.
+
+### connection:connected
+
+Возникает в момент успешного соединения с CRM.
+
+### connection:disconnected
+
+Возникает в момент выхода из портала (метод *disconnect*).
+
+### connection:error
+
+Возникает в момент любой ошибки соединения с CRM.

@@ -3,12 +3,12 @@ import FieldResource from '../resources/FieldResource';
 import ResourceFactory from '../../base/factories/ResourceFactory';
 import Updatable from "../../base/factories/behaviors/Updatable";
 import Insertable from "../../base/factories/behaviors/Insertable";
-import NoteResource from "../resources/NoteResource";
+import Removable from "../../base/factories/behaviors/Removable";
 
 class FieldFactory extends ResourceFactory {
   static activeRecordClass = Field;
   static resourceClass = FieldResource;
-  static behaviors = [ new Updatable, new Insertable ];
+  static behaviors = [ new Updatable, new Insertable, new Removable ];
 
   constructor( ...args ) {
     super( ...args );
@@ -30,8 +30,8 @@ class FieldFactory extends ResourceFactory {
       }, []);
   }
 
-  list() {
-    return this._resource.list()
+  find() {
+    return this._resource.find()
       .then( data =>
         Object.keys( data )
           .reduce(( target, type ) => {

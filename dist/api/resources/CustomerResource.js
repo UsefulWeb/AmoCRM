@@ -40,6 +40,7 @@ var CustomerResource = function (_EntityResource) {
 
 CustomerResource.path = _apiUrls2.default.entities.customers.path;
 CustomerResource.deletePath = _apiUrls2.default.entities.customers.deletePath;
+CustomerResource.ENTITY_TYPE = 12;
 CustomerResource.NOTE_ELEMENT_TYPE = 12;
 CustomerResource.TASK_ELEMENT_TYPE = 12;
 CustomerResource.behaviors = [].concat(_toConsumableArray(_EntityResource3.default.behaviors), [new _Removable2.default()]);

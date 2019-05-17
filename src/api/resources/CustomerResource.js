@@ -5,6 +5,7 @@ import Removable from "../../base/resources/behaviors/Removable";
 class CustomerResource extends EntityResource {
   static path = schema.entities.customers.path;
   static deletePath = schema.entities.customers.deletePath;
+  static ENTITY_TYPE = 12;
   static NOTE_ELEMENT_TYPE = 12;
   static TASK_ELEMENT_TYPE = 12;
   static behaviors = [ ...EntityResource.behaviors, new Removable ];

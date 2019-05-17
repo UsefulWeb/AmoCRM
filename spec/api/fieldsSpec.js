@@ -13,7 +13,7 @@ beforeEach( done => {
 describe( 'AmoCRM API Field Interface', () => {
 
   it( 'get fields list', done => {
-    client.Field.list()
+    client.Field.find()
       .then( fields => {
         expect( Array.isArray( fields )).toBe( true );
         done();

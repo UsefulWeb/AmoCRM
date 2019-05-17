@@ -26,9 +26,9 @@ var _Insertable = require('../../base/factories/behaviors/Insertable');
 
 var _Insertable2 = _interopRequireDefault(_Insertable);
 
-var _NoteResource = require('../resources/NoteResource');
+var _Removable = require('../../base/factories/behaviors/Removable');
 
-var _NoteResource2 = _interopRequireDefault(_NoteResource);
+var _Removable2 = _interopRequireDefault(_Removable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -77,11 +77,11 @@ var FieldFactory = function (_ResourceFactory) {
       }, []);
     }
   }, {
-    key: 'list',
-    value: function list() {
+    key: 'find',
+    value: function find() {
       var _this3 = this;
 
-      return this._resource.list().then(function (data) {
+      return this._resource.find().then(function (data) {
         return Object.keys(data).reduce(function (target, type) {
           target.push.apply(target, _toConsumableArray(_this3.createTypedEntities(data[type], type)));
           return target;
@@ -95,5 +95,5 @@ var FieldFactory = function (_ResourceFactory) {
 
 FieldFactory.activeRecordClass = _Field2.default;
 FieldFactory.resourceClass = _FieldResource2.default;
-FieldFactory.behaviors = [new _Updatable2.default(), new _Insertable2.default()];
+FieldFactory.behaviors = [new _Updatable2.default(), new _Insertable2.default(), new _Removable2.default()];
 exports.default = FieldFactory;
