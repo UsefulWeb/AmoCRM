@@ -26,6 +26,10 @@ class DomainRequest {
     return this.request( url, data, 'GET', options );
   }
 
+  get expires() {
+    return this._expires;
+  }
+
   request( url, data = {}, method = 'GET', options = {}) {
     const encodedData = this.encodeData( url, data, method, options ),
       headers = this.getRequestHeaders( url, encodedData, method, options ),
@@ -63,10 +67,21 @@ class DomainRequest {
     return headers;
   }
 
+  setCookies( cookies ) {
+    this._cookies = cookies;
+    const expires = cookies.find( cookie => cookie.includes( 'expires=' ))
+      .split( '; ' )
+      .find( cookie => cookie.startsWith( 'expires=' ));
+
+    if ( expires ) {
+      this._expires = new Date( expires.replace( 'expires=', '' ));
+    }
+  }
+
   handleResponse({ rawData, response }, options = {}) {
     const { responseHandlerClass } = this.constructor;
     if ( options.saveCookies ) {
-      this._cookies = response.headers[ 'set-cookie' ];
+      this.setCookies( response.headers[ 'set-cookie' ])
     }
     const handler = new responseHandlerClass( rawData );
     return handler.toJSON( options );

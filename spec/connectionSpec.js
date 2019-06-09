@@ -80,7 +80,7 @@ describe( 'AmoCRM connection', () => {
     await client.connect();
     client.disconnect();
 
-    setTimeout(() => !checked && disconnected && done(), 2000);
+    setTimeout(() => !checked && disconnected && done(), 2000 );
   });
 
   it( 'should connect and reconnect after 2 seconds', done => {
@@ -244,5 +244,22 @@ describe( 'AmoCRM connection', () => {
       .catch(() => {
         done();
       });
+  });
+
+  it( 'many requests check', async done => {
+    const { domain, auth: { hash, login } } = config,
+      crm = new AmoCRM({
+        domain,
+        auth: {
+          hash, login
+        }
+      });
+
+    await crm.connect();
+
+    for (let i = 0; i < 10; i++) {
+      await crm.request.get( '/api/v2/account' );
+    }
+    done();
   });
 });

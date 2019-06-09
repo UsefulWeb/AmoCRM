@@ -112,6 +112,20 @@ var DomainRequest = function () {
       return headers;
     }
   }, {
+    key: 'setCookies',
+    value: function setCookies(cookies) {
+      this._cookies = cookies;
+      var expires = cookies.find(function (cookie) {
+        return cookie.includes('expires=');
+      }).split('; ').find(function (cookie) {
+        return cookie.startsWith('expires=');
+      });
+
+      if (expires) {
+        this._expires = new Date(expires.replace('expires=', ''));
+      }
+    }
+  }, {
     key: 'handleResponse',
     value: function handleResponse(_ref) {
       var rawData = _ref.rawData,
@@ -120,7 +134,7 @@ var DomainRequest = function () {
       var responseHandlerClass = this.constructor.responseHandlerClass;
 
       if (options.saveCookies) {
-        this._cookies = response.headers['set-cookie'];
+        this.setCookies(response.headers['set-cookie']);
       }
       var handler = new responseHandlerClass(rawData);
       return handler.toJSON(options);
@@ -143,6 +157,11 @@ var DomainRequest = function () {
         data: encodedData,
         secure: true
       });
+    }
+  }, {
+    key: 'expires',
+    get: function get() {
+      return this._expires;
     }
   }]);
 
