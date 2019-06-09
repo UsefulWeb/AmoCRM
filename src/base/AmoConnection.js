@@ -61,6 +61,7 @@ class AmoConnection extends EventResource {
       clearTimeout( this._reconnectTimeout );
       this.triggerEvent( 'disconnected', true );
     }
+    this._isConnected = false;
     delete this._reconnectTimeout;
   }
 
