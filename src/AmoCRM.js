@@ -61,7 +61,7 @@ class AmoCRM extends EventResource {
     if ( freeUsers ) {
       url += '&free_users=Y';
     }
-    return this._request.get( url );
+    return this.request.get( url );
   }
 }
 

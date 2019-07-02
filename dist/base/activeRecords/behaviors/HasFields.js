@@ -66,4 +66,4 @@ var HasFields = function () {
   return HasFields;
 }();
 
-exports.default = Notable;
+exports.default = HasFields;

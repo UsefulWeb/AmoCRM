@@ -10,13 +10,13 @@ var _AmoConnection = require('./base/AmoConnection');
 
 var _AmoConnection2 = _interopRequireDefault(_AmoConnection);
 
-var _PrivateDomainRequest = require('./base/requests/domain/PrivateDomainRequest');
-
-var _PrivateDomainRequest2 = _interopRequireDefault(_PrivateDomainRequest);
-
 var _ResourceFactoryBuilder = require('./base/ResourceFactoryBuilder');
 
 var _ResourceFactoryBuilder2 = _interopRequireDefault(_ResourceFactoryBuilder);
+
+var _apiUrls = require('./apiUrls');
+
+var _apiUrls2 = _interopRequireDefault(_apiUrls);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -80,6 +80,18 @@ var AmoCRM = function (_EventResource) {
     key: 'disconnect',
     value: function disconnect() {
       return this._connection.disconnect();
+    }
+  }, {
+    key: 'getAccountInfo',
+    value: function getAccountInfo() {
+      var details = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var freeUsers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      var url = _apiUrls2.default.account + '?with=' + details.join(',');
+      if (freeUsers) {
+        url += '&free_users=Y';
+      }
+      return this.request.get(url);
     }
   }, {
     key: 'request',

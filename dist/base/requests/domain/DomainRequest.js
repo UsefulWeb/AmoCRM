@@ -37,7 +37,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var DomainRequest = function (_EventResource) {
   _inherits(DomainRequest, _EventResource);
 
-  function DomainRequest(domain) {
+  function DomainRequest(domain, login, apiKey) {
     _classCallCheck(this, DomainRequest);
 
     if (!domain) {
@@ -46,6 +46,12 @@ var DomainRequest = function (_EventResource) {
 
     var _this = _possibleConstructorReturn(this, (DomainRequest.__proto__ || Object.getPrototypeOf(DomainRequest)).call(this));
 
+    _this._apiParams = {
+      login: login,
+      api_key: apiKey
+    };
+    _this._login = login;
+    _this._apiKey = apiKey;
     _this._queue = new _promiseQueue2.default(1);
     _this._cookies = [];
     _this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
@@ -80,10 +86,24 @@ var DomainRequest = function (_EventResource) {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
+      url = this.getUrl(url, data, method, options);
       var encodedData = this.encodeData(url, data, method, options),
           headers = this.getRequestHeaders(url, encodedData, method, options),
           request = this.createRequest(url, encodedData, method, headers);
       return this.addRequestToQueue(request, options.response);
+    }
+  }, {
+    key: 'getUrl',
+    value: function getUrl(url) {
+      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
+      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+      if (!options.useAPIAuth || method === 'GET') {
+        return url;
+      }
+
+      return url + '?' + _qs2.default.stringify(this._apiParams);
     }
   }, {
     key: 'addRequestToQueue',
@@ -103,9 +123,14 @@ var DomainRequest = function (_EventResource) {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-      var isGET = method === 'GET';
+      var isGET = method === 'GET',
+          params = Object.assign({}, data);
 
-      return isGET ? _qs2.default.stringify(data) : JSON.stringify(data);
+      if (isGET && options.useAPIAuth) {
+        Object.assign(params, this._apiParams);
+      }
+
+      return isGET ? _qs2.default.stringify(params) : JSON.stringify(params);
     }
   }, {
     key: 'getDefaultHeaders',
@@ -179,7 +204,6 @@ var DomainRequest = function (_EventResource) {
 
       var isGET = method === 'GET',
           path = isGET ? url + '?' + encodedData : url;
-
       return new _HTTPRequest2.default({
         path: path,
         hostname: this._hostname,

@@ -32,4 +32,4 @@ class HasFields {
   }
 }
 
-export default Notable;
+export default HasFields;
