@@ -3,9 +3,10 @@ import Queue from 'promise-queue';
 import qs from 'qs';
 
 import HTTPRequest from '../common/HTTPRequest';
-import DomainResponseHandler from '../../responseHandlers/DomainResponseHandler'
+import DomainResponseHandler from '../../responseHandlers/DomainResponseHandler';
+import EventResource from '../../EventResource';
 
-class DomainRequest {
+class DomainRequest extends EventResource {
   static responseHandlerClass = DomainResponseHandler;
   static DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';
 
@@ -13,6 +14,7 @@ class DomainRequest {
     if ( !domain ) {
       throw new Error( 'Portal domain must be set!' );
     }
+    super();
     this._apiParams = {
       login,
       api_key: apiKey
@@ -24,19 +26,8 @@ class DomainRequest {
     this._hostname = domain.includes( '.' ) ? domain : domain + '.amocrm.ru';
   }
 
-  get expires() {
-    const cookie = this._cookies.find(
-      contents => contents.includes( 'expires=' )
-    );
-    if (!cookie) {
-      return;
-    }
-
-    const dateStr = cookie.split( '; ' ).find(
-      contents => contents.includes( 'expires=' )
-    ).replace( 'expires=', '' );
-
-    return new Date( dateStr );
+  clear() {
+    this._cookies = [];
   }
 
   post( url, data = {}, options = {}) {
@@ -45,6 +36,10 @@ class DomainRequest {
 
   get( url, data = {}, options = {}) {
     return this.request( url, data, 'GET', options );
+  }
+
+  get expires() {
+    return this._expires;
   }
 
   request( url, data = {}, method = 'GET', options = {}) {
@@ -98,10 +93,32 @@ class DomainRequest {
     return headers;
   }
 
+  setCookies( cookies ) {
+    this._cookies = cookies;
+    const expiresCookie = cookies.find( cookie => cookie.includes( 'expires=' ));
+
+    if ( !expiresCookie ) {
+      delete this._expires;
+      this.triggerEvent( 'expires', this );
+      return;
+    }
+
+    const expires = expiresCookie.split( '; ' )
+      .find( cookie => cookie.startsWith( 'expires=' ));
+
+    if ( !expires ) {
+      delete this._expires;
+      this.triggerEvent( 'expires', this );
+      return;
+    }
+
+    this._expires = new Date( expires.replace( 'expires=', '' ));
+  }
+
   handleResponse({ rawData, response }, options = {}) {
     const { responseHandlerClass } = this.constructor;
-    if ( options.saveCookies ) {
-      this._cookies = response.headers[ 'set-cookie' ] || [];
+    if ( options.saveCookies && response.headers[ 'set-cookie' ]) {
+      this.setCookies( response.headers[ 'set-cookie' ]);
     }
     const handler = new responseHandlerClass( rawData );
     return handler.toJSON( options );

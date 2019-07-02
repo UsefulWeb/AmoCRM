@@ -18,10 +18,6 @@ var _ResourceFactoryBuilder = require('./base/ResourceFactoryBuilder');
 
 var _ResourceFactoryBuilder2 = _interopRequireDefault(_ResourceFactoryBuilder);
 
-var _apiUrls = require('./apiUrls');
-
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41,9 +37,13 @@ var AmoCRM = function (_EventResource) {
     if (!options) {
       throw new Error('Wrong configuration');
     }
+
+    options = Object.assign({
+      auth: {}
+    }, options);
+
     _this._options = options;
-    _this._request = new _PrivateDomainRequest2.default(options.domain, options.auth.login, options.auth.hash);
-    _this._connection = new _AmoConnection2.default(_this._request, options.auth);
+    _this._connection = new _AmoConnection2.default(options);
 
     _this.registerEvents();
     _this.assignFactories();
@@ -67,7 +67,7 @@ var AmoCRM = function (_EventResource) {
   }, {
     key: 'assignFactories',
     value: function assignFactories() {
-      var builder = new _ResourceFactoryBuilder2.default(this._request),
+      var builder = new _ResourceFactoryBuilder2.default(this._connection),
           factories = builder.getResourceFactories();
       Object.assign(this, factories);
     }
@@ -82,32 +82,16 @@ var AmoCRM = function (_EventResource) {
       return this._connection.disconnect();
     }
   }, {
-    key: 'getAccountInfo',
-    value: function getAccountInfo() {
-      var details = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      var freeUsers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-      var url = _apiUrls2.default.account + '?with=' + detailbeforeConnects.join(',');
-      if (freeUsers) {
-        url += '&free_users=Y';
-      }
-      return this._request.get(url);
-    }
-  }, {
     key: 'request',
     get: function get() {
       var _this3 = this;
 
       return {
-        get: function get() {
-          var _request;
-
-          return (_request = _this3._request).get.apply(_request, arguments);
+        get: function get(url, data, options) {
+          return _this3._connection.request(url, data, 'GET', options);
         },
-        post: function post() {
-          var _request2;
-
-          return (_request2 = _this3._request).post.apply(_request2, arguments);
+        post: function post(url, data, options) {
+          return _this3._connection.request(url, data, 'POST', options);
         }
       };
     }

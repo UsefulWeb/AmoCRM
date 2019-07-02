@@ -22,21 +22,19 @@ describe( 'AmoCRM API Contact Interface', () => {
       });
   });
 
-  it( 'should create and update contact', done => {
+  it( 'should create and update contact', async done => {
     const contact = new client.Contact({
       name: 'Name'
     });
-    contact.save()
-      .then(() => {
-        contact.name = 'Updated Name';
-        contact.updated_at = Math.floor( new Date / 1000 ) + 10;
-        return contact.save();
-      })
-      .then(() => client.Contact.findById( contact.id ))
-      .then(({ name }) => {
-        expect( name ).toBe( 'Updated Name' );
-        done();
-      });
+    await contact.save();
+    contact.name = 'Updated Name';
+    contact.updated_at = Math.floor( new Date / 1000 ) + 10;
+    await contact.save();
+
+    const existingContact = await client.Contact.findById( contact.id );
+
+    expect( existingContact.name ).toBe( 'Updated Name' );
+    done();
   });
 
   it( 'create contact and remove it', done => {

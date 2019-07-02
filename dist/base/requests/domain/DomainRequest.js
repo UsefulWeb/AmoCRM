@@ -22,29 +22,42 @@ var _DomainResponseHandler = require('../../responseHandlers/DomainResponseHandl
 
 var _DomainResponseHandler2 = _interopRequireDefault(_DomainResponseHandler);
 
+var _EventResource2 = require('../../EventResource');
+
+var _EventResource3 = _interopRequireDefault(_EventResource2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var DomainRequest = function () {
-  function DomainRequest(domain, login, apiKey) {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DomainRequest = function (_EventResource) {
+  _inherits(DomainRequest, _EventResource);
+
+  function DomainRequest(domain) {
     _classCallCheck(this, DomainRequest);
 
     if (!domain) {
       throw new Error('Portal domain must be set!');
     }
-    this._apiParams = {
-      login: login,
-      api_key: apiKey
-    };
-    this._login = login;
-    this._apiKey = apiKey;
-    this._queue = new _promiseQueue2.default(1);
-    this._cookies = [];
-    this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
+
+    var _this = _possibleConstructorReturn(this, (DomainRequest.__proto__ || Object.getPrototypeOf(DomainRequest)).call(this));
+
+    _this._queue = new _promiseQueue2.default(1);
+    _this._cookies = [];
+    _this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
+    return _this;
   }
 
   _createClass(DomainRequest, [{
+    key: 'clear',
+    value: function clear() {
+      this._cookies = [];
+    }
+  }, {
     key: 'post',
     value: function post(url) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -67,33 +80,19 @@ var DomainRequest = function () {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-      url = this.getUrl(url, data, method, options);
       var encodedData = this.encodeData(url, data, method, options),
           headers = this.getRequestHeaders(url, encodedData, method, options),
           request = this.createRequest(url, encodedData, method, headers);
       return this.addRequestToQueue(request, options.response);
     }
   }, {
-    key: 'getUrl',
-    value: function getUrl(url) {
-      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
-      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
-      if (!options.useAPIAuth || method === 'GET') {
-        return url;
-      }
-
-      return url + '?' + _qs2.default.stringify(this._apiParams);
-    }
-  }, {
     key: 'addRequestToQueue',
     value: function addRequestToQueue(request, options) {
-      var _this = this;
+      var _this2 = this;
 
       return this._queue.add(function () {
         return request.send().then(function (response) {
-          return _this.handleResponse(response, options);
+          return _this2.handleResponse(response, options);
         });
       });
     }
@@ -104,14 +103,9 @@ var DomainRequest = function () {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-      var isGET = method === 'GET',
-          params = Object.assign({}, data);
+      var isGET = method === 'GET';
 
-      if (isGET && options.useAPIAuth) {
-        Object.assign(params, this._apiParams);
-      }
-
-      return isGET ? _qs2.default.stringify(params) : JSON.stringify(params);
+      return isGET ? _qs2.default.stringify(data) : JSON.stringify(data);
     }
   }, {
     key: 'getDefaultHeaders',
@@ -137,6 +131,32 @@ var DomainRequest = function () {
       return headers;
     }
   }, {
+    key: 'setCookies',
+    value: function setCookies(cookies) {
+      this._cookies = cookies;
+      var expiresCookie = cookies.find(function (cookie) {
+        return cookie.includes('expires=');
+      });
+
+      if (!expiresCookie) {
+        delete this._expires;
+        this.triggerEvent('expires', this);
+        return;
+      }
+
+      var expires = expiresCookie.split('; ').find(function (cookie) {
+        return cookie.startsWith('expires=');
+      });
+
+      if (!expires) {
+        delete this._expires;
+        this.triggerEvent('expires', this);
+        return;
+      }
+
+      this._expires = new Date(expires.replace('expires=', ''));
+    }
+  }, {
     key: 'handleResponse',
     value: function handleResponse(_ref) {
       var rawData = _ref.rawData,
@@ -144,8 +164,8 @@ var DomainRequest = function () {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var responseHandlerClass = this.constructor.responseHandlerClass;
 
-      if (options.saveCookies) {
-        this._cookies = response.headers['set-cookie'] || [];
+      if (options.saveCookies && response.headers['set-cookie']) {
+        this.setCookies(response.headers['set-cookie']);
       }
       var handler = new responseHandlerClass(rawData);
       return handler.toJSON(options);
@@ -159,6 +179,7 @@ var DomainRequest = function () {
 
       var isGET = method === 'GET',
           path = isGET ? url + '?' + encodedData : url;
+
       return new _HTTPRequest2.default({
         path: path,
         hostname: this._hostname,
@@ -171,23 +192,12 @@ var DomainRequest = function () {
   }, {
     key: 'expires',
     get: function get() {
-      var cookie = this._cookies.find(function (contents) {
-        return contents.includes('expires=');
-      });
-      if (!cookie) {
-        return;
-      }
-
-      var dateStr = cookie.split('; ').find(function (contents) {
-        return contents.includes('expires=');
-      }).replace('expires=', '');
-
-      return new Date(dateStr);
+      return this._expires;
     }
   }]);
 
   return DomainRequest;
-}();
+}(_EventResource3.default);
 
 DomainRequest.responseHandlerClass = _DomainResponseHandler2.default;
 DomainRequest.DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';

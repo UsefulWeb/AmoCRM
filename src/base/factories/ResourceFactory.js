@@ -14,21 +14,19 @@ class ResourceFactory {
   static behaviors = [];
 
   /**
-   * @param request {DomainRequest}
+   * @param connection {AmoConnection}
    */
-  constructor( request ) {
+  constructor( connection ) {
     const { resourceClass } = this.constructor;
     /**
      * @param _resource {RemoteResource}
      */
-    this._resource = new resourceClass( request );
+    this._resource = new resourceClass( connection );
     BehaviorFactory.assignBehaviors( this, this.constructor.behaviors );
   }
 
   static createFromResource( resource ) {
-    const request = resource.getDomainRequest();
-
-    return new this( request );
+    return new this( resource.connection );
   }
 
   create( attributes={}) {

@@ -4,10 +4,10 @@ class RemoteResource {
   static behaviors = [];
   static responseHandlerClass;
   /**
-   * @param request {DomainRequest}
+   * @param connection {AmoConnection}
    */
-  constructor( request ) {
-    this._request = request;
+  constructor( connection ) {
+    this._connection = connection;
     BehaviorFactory.assignBehaviors( this, this.constructor.behaviors );
   }
 
@@ -15,16 +15,16 @@ class RemoteResource {
     return new this.constructor( resourceInstance.getDomainRequest());
   }
 
-  getDomainRequest() {
-    return this._request;
+  get connection() {
+    return this._connection;
   }
 
   transformTo( resourceClass ) {
-    return new resourceClass( this._request );
+    return new resourceClass( this._connection );
   }
 
   request( method, path, data, options ) {
-    return this._request.request( path, data, method, options )
+    return this._connection.request( path, data, method, options )
       .then( response => this.handleResponse( response ));
   }
 
