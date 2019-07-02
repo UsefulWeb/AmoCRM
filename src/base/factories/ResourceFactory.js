@@ -6,14 +6,14 @@ class ResourceFactory {
   static resourceClass;
 
   /**
-   * @param request {DomainRequest}
+   * @param connection {AmoConnection}
    */
-  constructor( request ) {
+  constructor( connection ) {
     const { resourceClass } = this.constructor;
     /**
      * @param _resource {RemoteResource}
      */
-    this._resource = new resourceClass( request );
+    this._resource = new resourceClass( connection );
   }
 
   create( attributes={}) {

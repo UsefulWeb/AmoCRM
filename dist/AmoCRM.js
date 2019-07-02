@@ -37,9 +37,13 @@ var AmoCRM = function (_EventResource) {
     if (!options) {
       throw new Error('Wrong configuration');
     }
+
+    options = Object.assign({
+      auth: {}
+    }, options);
+
     _this._options = options;
-    _this._request = new _PrivateDomainRequest2.default(options.domain);
-    _this._connection = new _AmoConnection2.default(_this._request, options.auth);
+    _this._connection = new _AmoConnection2.default(options);
 
     _this.registerEvents();
     _this.assignFactories();
@@ -63,7 +67,7 @@ var AmoCRM = function (_EventResource) {
   }, {
     key: 'assignFactories',
     value: function assignFactories() {
-      var builder = new _ResourceFactoryBuilder2.default(this._request),
+      var builder = new _ResourceFactoryBuilder2.default(this._connection),
           factories = builder.getResourceFactories();
       Object.assign(this, factories);
     }
@@ -83,15 +87,11 @@ var AmoCRM = function (_EventResource) {
       var _this3 = this;
 
       return {
-        get: function get() {
-          var _request;
-
-          return (_request = _this3._request).get.apply(_request, arguments);
+        get: function get(url, data, options) {
+          return _this3._connection.request(url, data, 'GET', options);
         },
-        post: function post() {
-          var _request2;
-
-          return (_request2 = _this3._request).post.apply(_request2, arguments);
+        post: function post(url, data, options) {
+          return _this3._connection.request(url, data, 'POST', options);
         }
       };
     }

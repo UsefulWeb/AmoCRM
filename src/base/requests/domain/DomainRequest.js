@@ -3,9 +3,10 @@ import Queue from 'promise-queue';
 import qs from 'qs';
 
 import HTTPRequest from '../common/HTTPRequest';
-import DomainResponseHandler from '../../responseHandlers/DomainResponseHandler'
+import DomainResponseHandler from '../../responseHandlers/DomainResponseHandler';
+import EventResource from '../../EventResource';
 
-class DomainRequest {
+class DomainRequest extends EventResource {
   static responseHandlerClass = DomainResponseHandler;
   static DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';
 
@@ -13,9 +14,14 @@ class DomainRequest {
     if ( !domain ) {
       throw new Error( 'Portal domain must be set!' );
     }
+    super();
     this._queue = new Queue( 1 );
     this._cookies = [];
     this._hostname = domain.includes( '.' ) ? domain : domain + '.amocrm.ru';
+  }
+
+  clear() {
+    this._cookies = [];
   }
 
   post( url, data = {}, options = {}) {
@@ -69,19 +75,30 @@ class DomainRequest {
 
   setCookies( cookies ) {
     this._cookies = cookies;
-    const expires = cookies.find( cookie => cookie.includes( 'expires=' ))
-      .split( '; ' )
+    const expiresCookie = cookies.find( cookie => cookie.includes( 'expires=' ));
+
+    if ( !expiresCookie ) {
+      delete this._expires;
+      this.triggerEvent( 'expires', this );
+      return;
+    }
+
+    const expires = expiresCookie.split( '; ' )
       .find( cookie => cookie.startsWith( 'expires=' ));
 
-    if ( expires ) {
-      this._expires = new Date( expires.replace( 'expires=', '' ));
+    if ( !expires ) {
+      delete this._expires;
+      this.triggerEvent( 'expires', this );
+      return;
     }
+
+    this._expires = new Date( expires.replace( 'expires=', '' ));
   }
 
   handleResponse({ rawData, response }, options = {}) {
     const { responseHandlerClass } = this.constructor;
-    if ( options.saveCookies ) {
-      this.setCookies( response.headers[ 'set-cookie' ])
+    if ( options.saveCookies && response.headers[ 'set-cookie' ]) {
+      this.setCookies( response.headers[ 'set-cookie' ]);
     }
     const handler = new responseHandlerClass( rawData );
     return handler.toJSON( options );

@@ -22,23 +22,42 @@ var _DomainResponseHandler = require('../../responseHandlers/DomainResponseHandl
 
 var _DomainResponseHandler2 = _interopRequireDefault(_DomainResponseHandler);
 
+var _EventResource2 = require('../../EventResource');
+
+var _EventResource3 = _interopRequireDefault(_EventResource2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var DomainRequest = function () {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DomainRequest = function (_EventResource) {
+  _inherits(DomainRequest, _EventResource);
+
   function DomainRequest(domain) {
     _classCallCheck(this, DomainRequest);
 
     if (!domain) {
       throw new Error('Portal domain must be set!');
     }
-    this._queue = new _promiseQueue2.default(1);
-    this._cookies = [];
-    this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
+
+    var _this = _possibleConstructorReturn(this, (DomainRequest.__proto__ || Object.getPrototypeOf(DomainRequest)).call(this));
+
+    _this._queue = new _promiseQueue2.default(1);
+    _this._cookies = [];
+    _this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
+    return _this;
   }
 
   _createClass(DomainRequest, [{
+    key: 'clear',
+    value: function clear() {
+      this._cookies = [];
+    }
+  }, {
     key: 'post',
     value: function post(url) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -69,11 +88,11 @@ var DomainRequest = function () {
   }, {
     key: 'addRequestToQueue',
     value: function addRequestToQueue(request, options) {
-      var _this = this;
+      var _this2 = this;
 
       return this._queue.add(function () {
         return request.send().then(function (response) {
-          return _this.handleResponse(response, options);
+          return _this2.handleResponse(response, options);
         });
       });
     }
@@ -115,15 +134,27 @@ var DomainRequest = function () {
     key: 'setCookies',
     value: function setCookies(cookies) {
       this._cookies = cookies;
-      var expires = cookies.find(function (cookie) {
+      var expiresCookie = cookies.find(function (cookie) {
         return cookie.includes('expires=');
-      }).split('; ').find(function (cookie) {
+      });
+
+      if (!expiresCookie) {
+        delete this._expires;
+        this.triggerEvent('expires', this);
+        return;
+      }
+
+      var expires = expiresCookie.split('; ').find(function (cookie) {
         return cookie.startsWith('expires=');
       });
 
-      if (expires) {
-        this._expires = new Date(expires.replace('expires=', ''));
+      if (!expires) {
+        delete this._expires;
+        this.triggerEvent('expires', this);
+        return;
       }
+
+      this._expires = new Date(expires.replace('expires=', ''));
     }
   }, {
     key: 'handleResponse',
@@ -133,7 +164,7 @@ var DomainRequest = function () {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var responseHandlerClass = this.constructor.responseHandlerClass;
 
-      if (options.saveCookies) {
+      if (options.saveCookies && response.headers['set-cookie']) {
         this.setCookies(response.headers['set-cookie']);
       }
       var handler = new responseHandlerClass(rawData);
@@ -166,7 +197,7 @@ var DomainRequest = function () {
   }]);
 
   return DomainRequest;
-}();
+}(_EventResource3.default);
 
 DomainRequest.responseHandlerClass = _DomainResponseHandler2.default;
 DomainRequest.DEFAULT_USER_AGENT = 'amoCRM-API-client/1.0';

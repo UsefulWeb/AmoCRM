@@ -10,8 +10,7 @@ beforeEach( done => {
     .then( done );
 });
 
-describe( 'AmoCRM connection', () => {
-
+describe( 'Requests', () => {
 
   it( 'should get account data', done => {
     client.request.get( '/api/v2/account' )

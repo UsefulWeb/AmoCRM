@@ -10,12 +10,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var RemoteResource = function () {
   /**
-   * @param request {DomainRequest}
+   * @param connection {AmoConnection}
    */
-  function RemoteResource(request) {
+  function RemoteResource(connection) {
     _classCallCheck(this, RemoteResource);
 
-    this._request = request;
+    this._connection = connection;
   }
 
   _createClass(RemoteResource, [{
@@ -23,7 +23,7 @@ var RemoteResource = function () {
     value: function request(method, path, data, options) {
       var responseHandlerClass = this.constructor.responseHandlerClass;
 
-      return this._request.request(path, data, method, options).then(function (response) {
+      return this._connection.request(path, data, method, options).then(function (response) {
         if (!responseHandlerClass) {
           return response;
         }

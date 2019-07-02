@@ -11,9 +11,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var ResourceFactory = function () {
 
   /**
-   * @param request {DomainRequest}
+   * @param connection {AmoConnection}
    */
-  function ResourceFactory(request) {
+  function ResourceFactory(connection) {
     _classCallCheck(this, ResourceFactory);
 
     var resourceClass = this.constructor.resourceClass;
@@ -21,7 +21,7 @@ var ResourceFactory = function () {
      * @param _resource {RemoteResource}
      */
 
-    this._resource = new resourceClass(request);
+    this._resource = new resourceClass(connection);
   }
   /**
    * @param resourceClass {RemoteResource}

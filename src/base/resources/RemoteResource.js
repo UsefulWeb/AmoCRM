@@ -2,15 +2,15 @@
 class RemoteResource {
   static responseHandlerClass;
   /**
-   * @param request {DomainRequest}
+   * @param connection {AmoConnection}
    */
-  constructor( request ) {
-    this._request = request;
+  constructor( connection ) {
+    this._connection = connection;
   }
 
   request( method, path, data, options ) {
     const { responseHandlerClass } = this.constructor;
-    return this._request.request( path, data, method, options )
+    return this._connection.request( path, data, method, options )
       .then( response => {
         if ( !responseHandlerClass ) {
           return response;

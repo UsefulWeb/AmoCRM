@@ -2,6 +2,8 @@
 
 import schema from '../apiUrls.js';
 import EventResource from './EventResource';
+import { delay } from '../helpers';
+import PrivateDomainRequest from "./requests/domain/PrivateDomainRequest";
 
 class AmoConnection extends EventResource {
 
@@ -15,92 +17,89 @@ class AmoConnection extends EventResource {
     'error'
   ];
 
-  constructor( request, options = {}) {
+  static SESSION_LIFETIME = 15 * 60 * 1000;
+
+  constructor( options = {}) {
     super();
-    this._request = request;
-    this._options = options;
+    this._request = new PrivateDomainRequest( options.domain );
+    this._options = options.auth;
     this._isConnected = false;
-    this._reconnectOptions = Object.assign({ disabled: false }, options.reconnection );
   }
 
   get connected() {
     return this._isConnected;
   }
 
-  reconnectAt( date, delay = 60 * 1000, accuracyTime = 60 * 1000 ) {
-    delete this._reconnectTimeout;
+  disconnect() {
+    this._request.clear();
+    this._isConnected = false;
 
-    let timeout;
-    const self = this,
-      onReconnect = new Promise( function check( resolve, reject ) {
-        if ( self._reconnectTimeout !== timeout ) {
-          return reject();
-        }
-        timeout = setTimeout(() => {
-          const now = new Date;
-
-          if ( now > date - accuracyTime ) {
-            return resolve();
-          }
-
-          check( resolve, reject );
-          self.triggerEvent( 'checkReconnect', true );
-        }, delay );
-
-        self._reconnectTimeout = timeout;
-      });
-
-    return onReconnect.then(() => {
-      this.triggerEvent( 'beforeReconnect', true );
-      return this.connect();
-    });
+    this.triggerEvent( 'disconnected', true );
   }
 
-  disconnect() {
-    if ( this._reconnectTimeout ) {
-      clearTimeout( this._reconnectTimeout );
-      this.triggerEvent( 'disconnected', true );
+  connectIfNeeded() {
+
+    if ( !this._isConnected ) {
+      return this.connect();
     }
+
+    this.triggerEvent( 'checkReconnect', true );
+
+    const { SESSION_LIFETIME } = this.constructor,
+      sessionExpiresAt = +this._lastRequestAt + SESSION_LIFETIME,
+      now = new Date;
+
+    if ( now > sessionExpiresAt ) {
+      return this.reconnect();
+    }
+
+    if ( this._request.expires && now > this._request.expires ) {
+      return this.reconnect();
+    }
+
+    return Promise.resolve();
+  }
+
+  async request( ...args ) {
+    await this.connectIfNeeded();
+    this._lastRequestAt = new Date;
+    return await this._request.request( ...args );
+  }
+
+
+  reconnect() {
     this._isConnected = false;
-    delete this._reconnectTimeout;
+    this.triggerEvent( 'beforeReconnect', true );
+    return this.connect();
   }
 
   connect() {
     if ( this._isConnected ) {
       return Promise.resolve( true );
     }
-    const { login, password, hash } = this._options,
-      reconnection = this._reconnectOptions,
-      { checkDelay, accuracyTime } = reconnection,
+    const { login, hash } = this._options,
       data = {
-        USER_LOGIN: login
+        USER_LOGIN: login,
+        USER_HASH: hash
       };
-
-    if ( hash ) {
-      data[ 'USER_HASH' ] = hash;
-    } else if ( password ) {
-      data[ 'USER_PASSWORD' ] = password;
-    }
 
     this.triggerEvent( 'beforeConnect', this );
 
+    this._lastConnectionRequestAt = new Date;
     return this._request.post( schema.auth, data, {
       headers: { 'Content-Type': 'application/json' },
       response: {
-        dataType: 'json',
-        saveCookies: true
+        saveCookies: true,
+        dataType: 'json'
       }
     })
       .then( data => {
-        if ( !reconnection.disabled ) {
-          this.reconnectAt( this._request.expires, checkDelay, accuracyTime );
-        }
-
         if ( data && data.response && data.response.auth ) {
           this._isConnected = data.response.auth === true;
         }
 
         if ( this._isConnected ) {
+          this._lastRequestAt = new Date;
           this.triggerEvent( 'connected', this );
           return true;
         }
