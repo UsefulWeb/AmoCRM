@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "babel-node spec/run.js",
+    "buildtest": "npm run build && npm run test",
     "build": "babel src -d dist"
   },
   "repository": {
