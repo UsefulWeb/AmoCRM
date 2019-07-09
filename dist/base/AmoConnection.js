@@ -18,8 +18,6 @@ var _PrivateDomainRequest2 = _interopRequireDefault(_PrivateDomainRequest);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -77,51 +75,32 @@ var AmoConnection = function (_EventResource) {
     }
   }, {
     key: 'request',
-    value: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var _request;
+    value: function request() {
+      var _this2 = this;
 
-        var _args = arguments;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return this.connectIfNeeded();
-
-              case 2:
-                this._lastRequestAt = new Date();
-                _context.next = 5;
-                return (_request = this._request).request.apply(_request, _args);
-
-              case 5:
-                return _context.abrupt('return', _context.sent);
-
-              case 6:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function request() {
-        return _ref.apply(this, arguments);
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
 
-      return request;
-    }()
+      return this.connectIfNeeded().then(function () {
+        var _request;
+
+        _this2._lastRequestAt = new Date();
+        return (_request = _this2._request).request.apply(_request, args);
+      });
+    }
   }, {
     key: 'reconnect',
     value: function reconnect() {
       this._isConnected = false;
+      this._request.clear();
       this.triggerEvent('beforeReconnect', true);
       return this.connect();
     }
   }, {
     key: 'connect',
     value: function connect() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this._isConnected) {
         return Promise.resolve(true);
@@ -146,20 +125,20 @@ var AmoConnection = function (_EventResource) {
         }
       }).then(function (data) {
         if (data && data.response && data.response.auth) {
-          _this2._isConnected = data.response.auth === true;
+          _this3._isConnected = data.response.auth === true;
         }
 
-        if (_this2._isConnected) {
-          _this2._lastRequestAt = new Date();
-          _this2.triggerEvent('connected', _this2);
+        if (_this3._isConnected) {
+          _this3._lastRequestAt = new Date();
+          _this3.triggerEvent('connected', _this3);
           return true;
         }
 
         var e = new Error('Auth Error');
         e.data = data.response;
 
-        _this2.triggerEvent('authError', e, _this2);
-        _this2.triggerEvent('error', e, _this2);
+        _this3.triggerEvent('authError', e, _this3);
+        _this3.triggerEvent('error', e, _this3);
 
         return Promise.reject(e);
       });

@@ -152,7 +152,7 @@ describe( 'AmoCRM connection', () => {
       });
   });
 
-  xit( 'long requests check', async done => {
+  fit( 'long requests check', async done => {
     const { domain, auth: { hash, login } } = config,
       crm = new AmoCRM({
         domain,
@@ -163,19 +163,24 @@ describe( 'AmoCRM connection', () => {
       delay = timeout => new Promise(
         resolve => setTimeout( resolve, timeout )
       ),
-      delayValue = 15 * 60 * 1000;
+      delayValue = 16 * 60 * 1000;
 
+    crm.on( 'connection:beforeReconnect', () => console.log( 'reconnected' ));
     await crm.connect();
+    console.log( 'connected' );
 
     for ( let i = 0; i < 5; i++ ) {
       const lead = new crm.Lead({
         name: 'Lead for deletion'
       });
       await lead.save();
+      console.log( 'saved' );
       await delay( delayValue );
       await lead.remove();
+      console.log( 'removed' );
       await delay( delayValue );
       await crm.request.get( '/api/v2/leads' );
+      console.log( 'info found' );
       await delay( delayValue );
     }
     done();

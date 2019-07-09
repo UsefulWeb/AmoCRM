@@ -60,15 +60,18 @@ class AmoConnection extends EventResource {
     return Promise.resolve();
   }
 
-  async request( ...args ) {
-    await this.connectIfNeeded();
-    this._lastRequestAt = new Date;
-    return await this._request.request( ...args );
+  request( ...args ) {
+    return this.connectIfNeeded()
+      .then(() => {
+        this._lastRequestAt = new Date;
+        return this._request.request( ...args );
+      });
   }
 
 
   reconnect() {
     this._isConnected = false;
+    this._request.clear();
     this.triggerEvent( 'beforeReconnect', true );
     return this.connect();
   }
