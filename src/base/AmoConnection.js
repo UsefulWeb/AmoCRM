@@ -71,6 +71,7 @@ class AmoConnection extends EventResource {
 
   reconnect() {
     this._isConnected = false;
+    this._request.clear();
     this.triggerEvent( 'beforeReconnect', true );
     return this.connect();
   }

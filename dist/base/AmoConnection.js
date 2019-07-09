@@ -93,6 +93,7 @@ var AmoConnection = function (_EventResource) {
     key: 'reconnect',
     value: function reconnect() {
       this._isConnected = false;
+      this._request.clear();
       this.triggerEvent('beforeReconnect', true);
       return this.connect();
     }
