@@ -1,8 +1,8 @@
 'use strict';
 
-import ActiveRecord from './BaseActiveRecord';
+import BaseActiveRecord from './BaseActiveRecord';
 
-class EntityActiveRecord extends ActiveRecord {
+class EntityActiveRecord extends BaseActiveRecord {
 
   fetch() {
     if ( this.isNew()) {
