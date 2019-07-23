@@ -65,6 +65,17 @@ var ResourceFactory = function () {
 
       return this.create(attributes);
     }
+  }, {
+    key: "from",
+    value: function from() {
+      var _this = this;
+
+      var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      return items.map(function (item) {
+        return _this.of(item);
+      });
+    }
   }], [{
     key: "createFromResource",
     value: function createFromResource(resource) {

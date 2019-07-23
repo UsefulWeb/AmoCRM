@@ -20,6 +20,10 @@ var _HasMultiactions = require('../../base/resources/behaviors/HasMultiactions')
 
 var _HasMultiactions2 = _interopRequireDefault(_HasMultiactions);
 
+var _Filterable = require('../../base/resources/behaviors/Filterable');
+
+var _Filterable2 = _interopRequireDefault(_Filterable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -44,8 +48,9 @@ var ContactResource = function (_EntityResource) {
 
 ContactResource.path = _apiUrls2.default.entities.contacts.path;
 ContactResource.deletePath = _apiUrls2.default.entities.contacts.deletePath;
+ContactResource.filterPath = _apiUrls2.default.entities.contacts.filter;
 ContactResource.ENTITY_TYPE = 17;
 ContactResource.NOTE_ELEMENT_TYPE = 1;
 ContactResource.TASK_ELEMENT_TYPE = 1;
-ContactResource.behaviors = [].concat(_toConsumableArray(_EntityResource3.default.behaviors), [new _PrivateRemovable2.default(), new _HasMultiactions2.default()]);
+ContactResource.behaviors = [].concat(_toConsumableArray(_EntityResource3.default.behaviors), [new _PrivateRemovable2.default(), new _HasMultiactions2.default(), new _Filterable2.default()]);
 exports.default = ContactResource;

@@ -11,7 +11,7 @@ export default class PipelineResponseHandler extends EntityResponseHandler {
       return this._response;
     }
 
-    const embedded = this.getEmbedded(),
+    const embedded = this._response._embedded,
       items = embedded && embedded.items;
 
     if ( typeof items === 'object' && !Array.isArray( items )) {

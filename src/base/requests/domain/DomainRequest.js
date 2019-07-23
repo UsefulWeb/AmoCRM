@@ -51,11 +51,11 @@ class DomainRequest extends EventResource {
   }
 
   getUrl( url, data = {}, method = 'GET', options = {}) {
-    if ( !options.useAPIAuth || method === 'GET' ) {
-      return url;
+    if ( options.useAPIAuth ) {
+      return url + '?' + qs.stringify( this._apiParams );
     }
 
-    return url + '?' + qs.stringify( this._apiParams );
+    return url;
   }
 
   addRequestToQueue( request, options ) {
@@ -71,6 +71,10 @@ class DomainRequest extends EventResource {
 
     if ( isGET && options.useAPIAuth ) {
       Object.assign( params, this._apiParams );
+    }
+
+    if ( options.useQueryString ) {
+      return qs.stringify( params );
     }
 
     return isGET ? qs.stringify( params ) : JSON.stringify( params );
@@ -127,6 +131,7 @@ class DomainRequest extends EventResource {
   createRequest(url, encodedData = '', method = 'GET', headers = {}) {
     const isGET = method === 'GET',
       path = isGET ? `${url}?${encodedData}`: url;
+
     return new HTTPRequest({
       path,
       hostname: this._hostname,

@@ -13,7 +13,8 @@ exports.default = {
       deleteOnePath: '/private/deals/delete.php'
     },
     contacts: {
-      path: '/api/v2/contacts'
+      path: '/api/v2/contacts',
+      filter: '/ajax/contacts/list/'
     },
     companies: {
       path: '/api/v2/companies'

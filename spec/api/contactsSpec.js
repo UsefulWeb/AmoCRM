@@ -48,4 +48,22 @@ describe( 'AmoCRM API Contact Interface', () => {
         done();
       });
   });
+
+  fit( 'create contact and filter it by name', async done => {
+    const name = 'Contact for deletion ' + new Date,
+      contact = new client.Contact({
+        name
+      });
+
+    await contact.save();
+
+    console.log( 'filtering' );
+    const items = await client.Contact.findByAttributes({ name });
+    console.log( items[ 0 ].attributes );
+
+    await contact.remove();
+    const removedContact = await client.Contact.findById( contact.id );
+    expect( removedContact ).toBeUndefined();
+    done();
+  }, 60 * 1000 );
 });

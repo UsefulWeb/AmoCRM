@@ -41,6 +41,10 @@ class ResourceFactory {
   of( attributes={}) {
     return this.create( attributes );
   }
+
+  from( items={}) {
+    return items.map( item => this.of( item ));
+  }
 }
 
 export default ResourceFactory;

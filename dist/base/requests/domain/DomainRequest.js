@@ -99,11 +99,11 @@ var DomainRequest = function (_EventResource) {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-      if (!options.useAPIAuth || method === 'GET') {
-        return url;
+      if (options.useAPIAuth) {
+        return url + '?' + _qs2.default.stringify(this._apiParams);
       }
 
-      return url + '?' + _qs2.default.stringify(this._apiParams);
+      return url;
     }
   }, {
     key: 'addRequestToQueue',
@@ -128,6 +128,10 @@ var DomainRequest = function (_EventResource) {
 
       if (isGET && options.useAPIAuth) {
         Object.assign(params, this._apiParams);
+      }
+
+      if (options.useQueryString) {
+        return _qs2.default.stringify(params);
       }
 
       return isGET ? _qs2.default.stringify(params) : JSON.stringify(params);
@@ -204,6 +208,7 @@ var DomainRequest = function (_EventResource) {
 
       var isGET = method === 'GET',
           path = isGET ? url + '?' + encodedData : url;
+
       return new _HTTPRequest2.default({
         path: path,
         hostname: this._hostname,

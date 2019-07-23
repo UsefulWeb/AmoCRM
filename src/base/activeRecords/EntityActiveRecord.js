@@ -19,6 +19,7 @@ class EntityActiveRecord extends BaseActiveRecord {
       return false;
     }
     this._attributes = attributes;
+    delete this._inclomplete;
     return this;
   }
 
@@ -47,7 +48,14 @@ class EntityActiveRecord extends BaseActiveRecord {
     return this;
   }
 
+  markAsIncomplete() {
+    this._inclomplete = true;
+  }
+
   update( newAttributes ) {
+    if ( !this._inclomplete === false ) {
+      throw new Error( 'EntityActiveRecord cannot be updated before calling fetch() method' );
+    }
     if ( this.isNew()) {
       throw new Error( 'EntityActiveRecord must exists for using EntityActiveRecord.update()!' );
     }

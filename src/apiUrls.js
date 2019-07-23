@@ -5,10 +5,11 @@ export default {
   entities: {
     leads: {
       path: '/api/v2/leads',
-      deleteOnePath: '/private/deals/delete.php',
+      deleteOnePath: '/private/deals/delete.php'
     },
     contacts: {
-      path: '/api/v2/contacts'
+      path: '/api/v2/contacts',
+      filter: '/ajax/contacts/list/'
     },
     companies: {
       path: '/api/v2/companies'

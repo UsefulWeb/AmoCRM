@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _BaseActiveRecord = require('./BaseActiveRecord');
+var _BaseActiveRecord2 = require('./BaseActiveRecord');
 
-var _BaseActiveRecord2 = _interopRequireDefault(_BaseActiveRecord);
+var _BaseActiveRecord3 = _interopRequireDefault(_BaseActiveRecord2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18,8 +18,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var EntityActiveRecord = function (_ActiveRecord) {
-  _inherits(EntityActiveRecord, _ActiveRecord);
+var EntityActiveRecord = function (_BaseActiveRecord) {
+  _inherits(EntityActiveRecord, _BaseActiveRecord);
 
   function EntityActiveRecord() {
     _classCallCheck(this, EntityActiveRecord);
@@ -47,6 +47,7 @@ var EntityActiveRecord = function (_ActiveRecord) {
         return false;
       }
       this._attributes = attributes;
+      delete this._inclomplete;
       return this;
     }
   }, {
@@ -82,10 +83,18 @@ var EntityActiveRecord = function (_ActiveRecord) {
       return this;
     }
   }, {
+    key: 'markAsIncomplete',
+    value: function markAsIncomplete() {
+      this._inclomplete = true;
+    }
+  }, {
     key: 'update',
     value: function update(newAttributes) {
       var _this4 = this;
 
+      if (!this._inclomplete === false) {
+        throw new Error('EntityActiveRecord cannot be updated before calling fetch() method');
+      }
       if (this.isNew()) {
         throw new Error('EntityActiveRecord must exists for using EntityActiveRecord.update()!');
       }
@@ -97,6 +106,6 @@ var EntityActiveRecord = function (_ActiveRecord) {
   }]);
 
   return EntityActiveRecord;
-}(_BaseActiveRecord2.default);
+}(_BaseActiveRecord3.default);
 
 exports.default = EntityActiveRecord;

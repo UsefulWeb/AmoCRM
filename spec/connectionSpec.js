@@ -152,7 +152,7 @@ describe( 'AmoCRM connection', () => {
       });
   });
 
-  fit( 'long requests check', async done => {
+  it( 'long requests check', async done => {
     const { domain, auth: { hash, login } } = config,
       crm = new AmoCRM({
         domain,

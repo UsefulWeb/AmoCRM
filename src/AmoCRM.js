@@ -56,9 +56,10 @@ class AmoCRM extends EventResource {
     return this._connection.disconnect();
   }
 
-  getAccountInfo( details = [], freeUsers = false ) {
+  getAccountInfo( options = {}) {
+    const { details = [], includeFreeUsers = false } = options;
     let url = schema.account + '?with=' + details.join( ',' );
-    if ( freeUsers ) {
+    if ( includeFreeUsers ) {
       url += '&free_users=Y';
     }
     return this.request.get( url );

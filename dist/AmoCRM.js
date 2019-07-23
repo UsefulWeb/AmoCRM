@@ -84,11 +84,14 @@ var AmoCRM = function (_EventResource) {
   }, {
     key: 'getAccountInfo',
     value: function getAccountInfo() {
-      var details = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      var freeUsers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var _options$details = options.details,
+          details = _options$details === undefined ? [] : _options$details,
+          _options$includeFreeU = options.includeFreeUsers,
+          includeFreeUsers = _options$includeFreeU === undefined ? false : _options$includeFreeU;
 
       var url = _apiUrls2.default.account + '?with=' + details.join(',');
-      if (freeUsers) {
+      if (includeFreeUsers) {
         url += '&free_users=Y';
       }
       return this.request.get(url);

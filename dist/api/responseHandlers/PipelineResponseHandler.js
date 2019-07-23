@@ -44,7 +44,7 @@ var PipelineResponseHandler = function (_EntityResponseHandle) {
         return this._response;
       }
 
-      var embedded = this.getEmbedded(),
+      var embedded = this._response._embedded,
           items = embedded && embedded.items;
 
       if ((typeof items === "undefined" ? "undefined" : _typeof(items)) === 'object' && !Array.isArray(items)) {

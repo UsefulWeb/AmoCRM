@@ -3,18 +3,16 @@ import RemoteResource from "../../base/resources/RemoteResource";
 import Removable from '../../base/resources/behaviors/Removable';
 import Updatable from '../../base/resources/behaviors/Updatable';
 import Insertable from '../../base/resources/behaviors/Insertable';
-import Findable from "../../base/resources/behaviors/Findable";
+import Findable from "./behaviors/Field/Findable";
 import hasElementTypeByKey from "../../base/resources/behaviors/static/hasElementTypeByKey";
 import EntityResponseHandler from "../../base/responseHandlers/EntityResponseHandler";
-
-const { find } = new Findable;
 
 class FieldResource extends RemoteResource {
   static path = schema.entities.fields.path;
   static getPath = schema.account;
   static deletePath = schema.entities.fields.path;
   static responseHandlerClass = EntityResponseHandler;
-  static behaviors = [ new Removable, new Updatable, new Insertable ];
+  static behaviors = [ new Removable, new Updatable, new Insertable, new Findable ];
 
   static ELEMENT_TYPES = {
     CONTACT: 1,
@@ -41,11 +39,6 @@ class FieldResource extends RemoteResource {
 
   static getElementType = hasElementTypeByKey( 'ELEMENT_TYPES' );
   static getType = hasElementTypeByKey( 'TYPES' );
-
-  find() {
-    return find.call( this, { with: 'custom_fields' })
-      .then( response => response.getEmbedded().custom_fields );
-  }
 }
 
 export default FieldResource;
