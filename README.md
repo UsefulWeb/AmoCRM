@@ -91,7 +91,7 @@ await lead.tasks.add( task );
 
 ### Основные функции
 
-1. [Аккаунт](docs/api/account.md) (crm.Lead)
+1. [Аккаунт](docs/api/account.md)
 2. [Сделки](docs/api/leads.md) (crm.Lead)
 3. [Контакты](docs/api/contacts.md) (crm.Contact)
 4. [Компании](docs/api/companies.md) (crm.Company)
