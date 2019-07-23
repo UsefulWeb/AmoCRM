@@ -16,14 +16,13 @@ class EntityFactory extends ResourceFactory {
   }
 
   updateActiveRecords( items = [], newData ) {
-    items.forEach(( item, index ) => {
+    return items.map(( item, index ) => {
       if ( !BaseActiveRecord.isActiveRecord( item )) {
-        return false;
+        return this.of( newData[ index ]);
       }
-      const attributes = newData[ index ];
-      item.attributes = attributes;
+      item.attributes = newData[ index ];
+      return item;
     });
-    return items;
   }
 
   getDataIdentifiers( data = []) {

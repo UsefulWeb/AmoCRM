@@ -22,7 +22,7 @@ class DomainResponseHandler extends ResponseHandler {
       const data = JSON.parse( this._response );
       return Promise.resolve( data );
     } catch ( e ) {
-      throw  Error( `cannot parse JSON: ${this._response}` );
+      throw Error( `cannot parse JSON: ${this._response}` );
     }
   }
 }

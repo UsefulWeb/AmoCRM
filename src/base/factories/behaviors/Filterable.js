@@ -67,7 +67,9 @@ class Filterable {
 
   afterFindByAttributes( items ) {
     const ids = items.map( item => item.id );
-    return this.findById( ids );
+    return this.find({
+      id: ids
+    });
   }
 
   findByCustomFields( query ) {
