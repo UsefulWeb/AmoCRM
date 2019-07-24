@@ -293,6 +293,7 @@ const lead = await crm.Lead.findById( 127311 );
 
 const company = await crm.Company.findById( 539712 );
 
+// Аналогично lead.linkCompany
 await lead.company.link( company );
 ```
 
@@ -303,6 +304,7 @@ await lead.company.link( company );
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
+// Аналогично lead.getCompany
 const company = await lead.company.get();
 ```
 
@@ -313,6 +315,7 @@ const company = await lead.company.get();
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
+// Аналогично lead.unlinkCompany
 await lead.company.unlink();
 ```
 
