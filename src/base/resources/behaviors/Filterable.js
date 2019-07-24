@@ -1,6 +1,6 @@
 class Filterable {
 
-  filter( query = {}) {
+  filter( query = {}, params = {}) {
     const { filterPath } = this.constructor;
     return this.request( 'POST', filterPath, query, {
       formData: true,

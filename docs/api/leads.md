@@ -360,7 +360,7 @@ const notes = await lead.notes.get({
 Параметры, которые можно задать, смотрите по ссылке в официальной документации:
 https://www.amocrm.ru/developers/content/api/notes
 
-### notes.add() / addNote()
+### notes.add() / addNotes()
 
 Прикрепляет к сделке массив примечаний.
 
@@ -371,6 +371,7 @@ const note = new crm.Note({
   text: 'Это важно!'
 });
 
+// аналогично lead.addNotes
 lead.notes.add([ note ]);
 ```
 
@@ -401,6 +402,7 @@ await task.save();
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
+// аналогично lead.getTasks
 const tasks = await lead.tasks.get();
 ```
 
@@ -418,7 +420,7 @@ const tasks = await lead.tasks.get({
 Параметры, которые можно задать, смотрите по ссылке в официальной документации:
 https://www.amocrm.ru/developers/content/api/tasks
 
-### tasks.add() / addTask()
+### tasks.add() / addTasks()
 
 Прикрепляет к сделке массив примечаний.
 
@@ -429,6 +431,7 @@ const task = new crm.Task({
   text: 'Это важно!'
 });
 
+// аналогично lead.addTasks
 lead.tasks.add([ task ]);
 ```
 
@@ -443,7 +446,7 @@ lead.tasks.add([ task ]);
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// аналогично lead.tasks.create
+// аналогично lead.fields.create
 const field = new lead.Field({
   name: "Выбор цветов",
   field_type: "5",
@@ -470,6 +473,7 @@ await field.save();
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
+// аналогично lead.getFields
 const fields = await lead.fields.get();
 ```
 
@@ -484,6 +488,7 @@ const field = new crm.Task({
   text: 'Это важно!'
 });
 
+// аналогично lead.addField
 lead.fields.add([ field ]);
 ```
 
@@ -516,15 +521,6 @@ const leads = await crm.Lead.remove([ 2381742, 9735134 ]);
 ### crm.Lead.findByAttributes
 
 Поиск по атрибутам сделки. Формирует запрос на портале.
-В качестве значения передаётся объект, где ключ - имя поля, 
-а значение - параметр, который ищется (предполагается частичное совпадение).
-
-```js
-const leads = await crm.Lead.findByAttributes({
-  name: 'Сдел' // найдётся "Сделка", "Сделать" и т.д.
-});
-```
-
 Описание этого метода нуждается в подробностях
 
 ### crm.Lead.findByCustomFields

@@ -8,12 +8,12 @@ class Filterable {
       .then( response => this.afterFilter( response ));
   }
 
-  filter( query ) {
+  filter( query, params ) {
     const criteria = {
       filter: query,
       useFilter: 'y'
     };
-    return this._resource.filter( criteria )
+    return this._resource.filter( criteria, params )
       .then( response => this.afterFilter( response ));
   }
 
@@ -21,8 +21,8 @@ class Filterable {
     return response.getItems();
   }
 
-  filterByAttributes( query ) {
-    return this.filter( query )
+  filterByAttributes( query, params ) {
+    return this.filter( query, params )
       .then( response => this.afterFilterByAttributes( response ));
   }
 
@@ -40,28 +40,28 @@ class Filterable {
     });
   }
 
-  filterByCustomFields( query ) {
+  filterByCustomFields( query, params ) {
     return this.filter({
       filter: {
         cf: query
       }
-    })
+    }, params )
       .then( response => this.afterFilterByAttributes( response ));
   }
 
-  filterByCustomField( id, value ) {
+  filterByCustomField( id, value, params ) {
     return this.filterByCustomFields({
       [ id ]: value
-    });
+    }, params );
   }
 
-  findByTerm( term ) {
-    return this.filterByTerm( term )
+  findByTerm( term, params ) {
+    return this.filterByTerm( term, params )
       .then( items => this.afterFindByAttributes( items ));
   }
 
-  findByAttributes( query ) {
-    return this.filterByAttributes( query )
+  findByAttributes( query, params ) {
+    return this.filterByAttributes( query, params )
       .then( items => this.afterFindByAttributes( items ));
   }
 
@@ -72,13 +72,13 @@ class Filterable {
     });
   }
 
-  findByCustomFields( query ) {
-    return this.filterByCustomFields( query )
+  findByCustomFields( query, params ) {
+    return this.filterByCustomFields( query, params )
       .then( items => this.afterFindByAttributes( items ));
   }
 
-  findByCustomField( id, value ) {
-    return this.filterByCustomField( id, value )
+  findByCustomField( id, value, params ) {
+    return this.filterByCustomField( id, value, params )
       .then( items => this.afterFindByAttributes( items ));
   }
 }
