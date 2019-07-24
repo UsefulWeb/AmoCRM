@@ -4,7 +4,8 @@ import NoteResource from "../../../api/resources/NoteResource";
 class Notable {
 
   get Note() {
-    if ( note.isNew()) {
+    console.log( this );
+    if ( this.isNew()) {
       throw new Error( 'record must exists!' );
     }
     const behavior = this;

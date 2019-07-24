@@ -56,24 +56,25 @@ var ResourceFactory = function () {
           type = activeRecordClass.name,
           entityTarget = new entityTargetClass(type);
 
+      entity.factory = this;
       return new Proxy(entityTarget, handler);
     }
   }, {
-    key: "of",
-    value: function of() {
+    key: "from",
+    value: function from() {
       var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       return this.create(attributes);
     }
   }, {
-    key: "from",
-    value: function from() {
+    key: "of",
+    value: function of() {
       var _this = this;
 
       var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       return items.map(function (item) {
-        return _this.of(item);
+        return _this.from(item);
       });
     }
   }], [{

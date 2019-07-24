@@ -26,8 +26,20 @@ var Taskable = function () {
   }
 
   _createClass(Taskable, [{
-    key: "addTask",
-    value: function addTask(task) {
+    key: "addTasks",
+    value: function addTasks(tasks) {
+      var _this = this;
+
+      var factory = tasks[0].factory,
+          data = tasks.map(function (task) {
+        return _this.prepareTask(task);
+      });
+
+      return factory.insert(data);
+    }
+  }, {
+    key: "prepareTask",
+    value: function prepareTask(task) {
       if (!task.isNew()) {
         throw new Error('task must not exists!');
       }
@@ -35,11 +47,12 @@ var Taskable = function () {
 
       task.element_type = TASK_ELEMENT_TYPE;
       task.element_id = this._attributes.id;
-      return task.save();
+      return task;
     }
   }, {
     key: "getTasks",
-    value: function getTasks(params) {
+    value: function getTasks() {
+      var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var factory = _factories2.default.Task,
           resource = this._resource,
           factoryInstance = factory.createFromResource(resource),
@@ -55,16 +68,34 @@ var Taskable = function () {
       return factoryInstance.find(criteria);
     }
   }, {
+    key: "Task",
+    get: function get() {
+      if (this.isNew()) {
+        throw new Error('record must exists!');
+      }
+      var behavior = this;
+      return function () {
+        var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var Task = _factories2.default.Task.createFromResource(behavior._resource),
+            task = Task.create(attributes);
+        return behavior.prepareTask(task);
+      };
+    }
+  }, {
     key: "tasks",
     get: function get() {
-      var _this = this;
+      var _this2 = this;
 
       return {
-        add: function add(task) {
-          return _this.addTask(task);
+        create: function create(attributes) {
+          return new _this2.Task(attributes);
+        },
+        add: function add(tasks) {
+          return _this2.addTasks(tasks);
         },
         get: function get(params) {
-          return _this.getTasks(params);
+          return _this2.getTasks(params);
         }
       };
     }

@@ -4,7 +4,7 @@ import TaskResource from "../../../api/resources/TaskResource";
 class Taskable {
 
   get Task() {
-    if ( note.isNew()) {
+    if ( this.isNew()) {
       throw new Error( 'record must exists!' );
     }
     const behavior = this;

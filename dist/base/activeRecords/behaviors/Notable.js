@@ -26,8 +26,20 @@ var Notable = function () {
   }
 
   _createClass(Notable, [{
-    key: "addNote",
-    value: function addNote(note) {
+    key: "addNotes",
+    value: function addNotes(notes) {
+      var _this = this;
+
+      var factory = notes[0].factory,
+          data = notes.map(function (note) {
+        return _this.prepareNote(note);
+      });
+
+      return factory.insert(data);
+    }
+  }, {
+    key: "prepareNote",
+    value: function prepareNote(note) {
       if (!note.isNew()) {
         throw new Error('note must not exists!');
       }
@@ -35,11 +47,12 @@ var Notable = function () {
 
       note.element_type = NOTE_ELEMENT_TYPE;
       note.element_id = this._attributes.id;
-      return note.save();
+      return note;
     }
   }, {
     key: "getNotes",
-    value: function getNotes(params) {
+    value: function getNotes() {
+      var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var factory = _factories2.default.Note,
           resource = this._resource,
           factoryInstance = factory.createFromResource(resource),
@@ -55,16 +68,35 @@ var Notable = function () {
       return factoryInstance.find(criteria);
     }
   }, {
+    key: "Note",
+    get: function get() {
+      console.log(this);
+      if (this.isNew()) {
+        throw new Error('record must exists!');
+      }
+      var behavior = this;
+      return function () {
+        var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var Note = _factories2.default.Note.createFromResource(behavior._resource),
+            note = Note.create(attributes);
+        return behavior.prepareNote(note);
+      };
+    }
+  }, {
     key: "notes",
     get: function get() {
-      var _this = this;
+      var _this2 = this;
 
       return {
-        add: function add(note) {
-          return _this.addNote(note);
+        create: function create(attributes) {
+          return new _this2.Note(attributes);
         },
         get: function get(params) {
-          return _this.getNotes(params);
+          return _this2.getNotes(params);
+        },
+        add: function add(notes) {
+          return _this2.addNotes(notes);
         }
       };
     }

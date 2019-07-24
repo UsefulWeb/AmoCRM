@@ -113,7 +113,9 @@ var Filterable = function () {
       var ids = items.map(function (item) {
         return item.id;
       });
-      return this.findById(ids);
+      return this.find({
+        id: ids
+      });
     }
   }, {
     key: 'findByCustomFields',

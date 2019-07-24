@@ -333,28 +333,159 @@ const note = new lead.Note({
 });
 
 // добавляем данные в CRM
-note.save();
+await note.save();
 ```
 
 ### notes.get() / getNotes()
 
+Получает список примечаний для данной сделки
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+const notes = await lead.notes.get();
+```
+
+Можно также задать дополнительный критерий получения примечаний.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+// найдёт 10 первых примечаний
+const notes = await lead.notes.get({
+  limit_rows: 10
+});
+```
+
+Параметры, которые можно задать, смотрите по ссылке в официальной документации:
+https://www.amocrm.ru/developers/content/api/notes
+
 ### notes.add() / addNote()
+
+Прикрепляет к сделке массив примечаний.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+const note = new crm.Note({
+  text: 'Это важно!'
+});
+
+lead.notes.add([ note ]);
+```
 
 ## Работа с задачами
 
 ### tasks.create() / new Task()
 
+Создаёт задачу, которая будет прикреплена к сделке.
+Данные не добавляются в AmoCRM, для этого вам нужно вручную вызвать
+*save()*.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+// аналогично lead.tasks.create
+const task = new lead.Task({
+  text: 'Не забыть перезвонить',
+});
+
+// добавляем данные в CRM
+await task.save();
+```
+
 ### tasks.get() / getTasks()
 
+Получает все задачи, прикреплённые к сделке
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+const tasks = await lead.tasks.get();
+```
+
+Можно также задать дополнительный критерий получения задач.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+// найдёт 10 первых задач
+const tasks = await lead.tasks.get({
+  limit_rows: 10
+});
+```
+
+Параметры, которые можно задать, смотрите по ссылке в официальной документации:
+https://www.amocrm.ru/developers/content/api/tasks
+
 ### tasks.add() / addTask()
+
+Прикрепляет к сделке массив примечаний.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+const task = new crm.Task({
+  text: 'Это важно!'
+});
+
+lead.tasks.add([ task ]);
+```
 
 ## Работа с дополнительными полями
 
 ### fields.create() / new Field()
 
+Создаёт дополнительное поле у сделки.
+Данные не добавляются в AmoCRM, для этого вам нужно вручную вызвать
+*save()*.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+// аналогично lead.tasks.create
+const field = new lead.Field({
+  name: "Выбор цветов",
+  field_type: "5",
+  origin: "528d0285c1f9180911159a9dc6f759b3_zendesk_widget",
+  is_editable: "0",
+  enums: [
+    "чёрный",
+    "белый",
+    "красный",
+    "жёлтый",
+    "синий",
+    "зелёный"
+  ]
+});
+
+// добавляем данные в CRM
+await field.save();
+```
+
 ### fields.get() / getFields()
 
+Получает все произвольные поля сделок.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+const fields = await lead.fields.get();
+```
+
 ### fields.add() / addField()
+
+Прикрепляет к сделке массив произвольных полей.
+
+```js
+const lead = await crm.Lead.findById( 127311 );
+
+const field = new crm.Task({
+  text: 'Это важно!'
+});
+
+lead.fields.add([ field ]);
+```
 
 ## Недокументированные возможности
 
@@ -384,9 +515,30 @@ const leads = await crm.Lead.remove([ 2381742, 9735134 ]);
 
 ### crm.Lead.findByAttributes
 
+Поиск по атрибутам сделки. Формирует запрос на портале.
+В качестве значения передаётся объект, где ключ - имя поля, 
+а значение - параметр, который ищется (предполагается частичное совпадение).
+
+```js
+const leads = await crm.Lead.findByAttributes({
+  name: 'Сдел' // найдётся "Сделка", "Сделать" и т.д.
+});
+```
+
+Описание этого метода нуждается в подробностях
+
 ### crm.Lead.findByCustomFields
+
+Поиск по произвольным полям. Формирует запрос на портале.
+Описание этого метода нуждается в подробностях
 
 ### crm.Lead.findByCustomField
 
+Поиск по произвольному полю. Формирует запрос на портале.
+Описание этого метода нуждается в подробностях
+
 ### crm.Lead.findByTerm
+
+Поиск по общему запросу. Формирует запрос на портале.
+Описание этого метода нуждается в подробностях
 

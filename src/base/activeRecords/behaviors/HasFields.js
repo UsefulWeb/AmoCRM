@@ -3,7 +3,7 @@ import factories from "../../../api/factories";
 class HasFields {
 
   get Field() {
-    if ( note.isNew()) {
+    if ( this.isNew()) {
       throw new Error( 'record must exists!' );
     }
     const behavior = this;

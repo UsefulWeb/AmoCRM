@@ -61,17 +61,18 @@ var EntityFactory = function (_ResourceFactory) {
   }, {
     key: 'updateActiveRecords',
     value: function updateActiveRecords() {
+      var _this2 = this;
+
       var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var newData = arguments[1];
 
-      items.forEach(function (item, index) {
+      return items.map(function (item, index) {
         if (!_BaseActiveRecord2.default.isActiveRecord(item)) {
-          return false;
+          return _this2.from(newData[index]);
         }
-        var attributes = newData[index];
-        item.attributes = attributes;
+        item.attributes = newData[index];
+        return item;
       });
-      return items;
     }
   }, {
     key: 'getDataIdentifiers',
