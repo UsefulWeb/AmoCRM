@@ -17,6 +17,7 @@ var Filterable = function () {
     key: 'filter',
     value: function filter() {
       var query = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var filterPath = this.constructor.filterPath;
 
       return this.request('POST', filterPath, query, {

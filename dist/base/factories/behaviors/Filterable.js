@@ -29,14 +29,14 @@ var Filterable = function () {
     }
   }, {
     key: 'filter',
-    value: function filter(query) {
+    value: function filter(query, params) {
       var _this2 = this;
 
       var criteria = {
         filter: query,
         useFilter: 'y'
       };
-      return this._resource.filter(criteria).then(function (response) {
+      return this._resource.filter(criteria, params).then(function (response) {
         return _this2.afterFilter(response);
       });
     }
@@ -47,10 +47,10 @@ var Filterable = function () {
     }
   }, {
     key: 'filterByAttributes',
-    value: function filterByAttributes(query) {
+    value: function filterByAttributes(query, params) {
       var _this3 = this;
 
-      return this.filter(query).then(function (response) {
+      return this.filter(query, params).then(function (response) {
         return _this3.afterFilterByAttributes(response);
       });
     }
@@ -73,37 +73,37 @@ var Filterable = function () {
     }
   }, {
     key: 'filterByCustomFields',
-    value: function filterByCustomFields(query) {
+    value: function filterByCustomFields(query, params) {
       var _this5 = this;
 
       return this.filter({
         filter: {
           cf: query
         }
-      }).then(function (response) {
+      }, params).then(function (response) {
         return _this5.afterFilterByAttributes(response);
       });
     }
   }, {
     key: 'filterByCustomField',
-    value: function filterByCustomField(id, value) {
-      return this.filterByCustomFields(_defineProperty({}, id, value));
+    value: function filterByCustomField(id, value, params) {
+      return this.filterByCustomFields(_defineProperty({}, id, value), params);
     }
   }, {
     key: 'findByTerm',
-    value: function findByTerm(term) {
+    value: function findByTerm(term, params) {
       var _this6 = this;
 
-      return this.filterByTerm(term).then(function (items) {
+      return this.filterByTerm(term, params).then(function (items) {
         return _this6.afterFindByAttributes(items);
       });
     }
   }, {
     key: 'findByAttributes',
-    value: function findByAttributes(query) {
+    value: function findByAttributes(query, params) {
       var _this7 = this;
 
-      return this.filterByAttributes(query).then(function (items) {
+      return this.filterByAttributes(query, params).then(function (items) {
         return _this7.afterFindByAttributes(items);
       });
     }
@@ -119,19 +119,19 @@ var Filterable = function () {
     }
   }, {
     key: 'findByCustomFields',
-    value: function findByCustomFields(query) {
+    value: function findByCustomFields(query, params) {
       var _this8 = this;
 
-      return this.filterByCustomFields(query).then(function (items) {
+      return this.filterByCustomFields(query, params).then(function (items) {
         return _this8.afterFindByAttributes(items);
       });
     }
   }, {
     key: 'findByCustomField',
-    value: function findByCustomField(id, value) {
+    value: function findByCustomField(id, value, params) {
       var _this9 = this;
 
-      return this.filterByCustomField(id, value).then(function (items) {
+      return this.filterByCustomField(id, value, params).then(function (items) {
         return _this9.afterFindByAttributes(items);
       });
     }
