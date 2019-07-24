@@ -27,7 +27,7 @@ describe( 'AmoCRM API Lead Interface', () => {
     expect( lead.id ).toBe( 1234 );
   });
 
-  it( 'create lead from instance', done => {
+  it( 'create lead of instance', done => {
     const lead = new client.Lead;
     lead.name = 'Test Lead';
     lead.save()
@@ -39,7 +39,7 @@ describe( 'AmoCRM API Lead Interface', () => {
       });
   });
 
-  it( 'create multiple leads at same time from constructor', done => {
+  it( 'create multiple leads at same time of constructor', done => {
     const leads = ( new Array( 10 )).fill( 0 ).map(( value, index ) => {
       const lead = new client.Lead;
       lead.name = `Test Lead #${ index + 1 }`;

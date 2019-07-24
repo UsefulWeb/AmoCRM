@@ -75,10 +75,10 @@ await lead.save();
 
 // Создаём примечание к сделке
 const note = new crm.Note({
-  text: 'Hello from Moscow!'
+  text: 'Это важно!'
 });
 
-await lead.notes.add( note );
+await lead.notes.add([ note ]);
 
 // Добавляем задачу к сделке
 const task = new crm.Task({
@@ -86,7 +86,7 @@ const task = new crm.Task({
   responsible_user_id: '504141'
 });
 
-await lead.tasks.add( task );
+await lead.tasks.add([ task ]);
 ```
 
 ### Основные функции

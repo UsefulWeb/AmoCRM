@@ -51,7 +51,7 @@ describe( 'AmoCRM API Task Interface', () => {
       });
   });
 
-  it( 'add task from taskable interface', done => {
+  fit( 'add task of taskable interface', done => {
     const lead = new client.Lead({
         name: 'Taskable Lead'
       }),
@@ -59,14 +59,14 @@ describe( 'AmoCRM API Task Interface', () => {
         text: 'Lead Task'
       });
     lead.save()
-      .then( lead => lead.tasks.add( task ))
+      .then( lead => lead.tasks.add([ task ]))
       .then( task => {
         expect( task.id ).toBeDefined();
         return task.getElement();
       })
       .then( taskLead => {
         expect( taskLead.id ).toBe( lead.id );
-        return lead.tasks.get();
+        return lead.tasks;
       })
       .then( tasks => {
         expect( tasks.length ).toBe( 1 );

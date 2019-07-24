@@ -35,15 +35,16 @@ class ResourceFactory {
       handler = new activeRecordHandlerClass( entity ),
       type = activeRecordClass.name,
       entityTarget = new entityTargetClass( type );
+    entity.factory = this;
     return new Proxy( entityTarget, handler );
   }
 
-  of( attributes={}) {
+  from(attributes={}) {
     return this.create( attributes );
   }
 
-  from( items={}) {
-    return items.map( item => this.of( item ));
+  of(items={}) {
+    return items.map( item => this.from( item ));
   }
 }
 

@@ -18,7 +18,7 @@ class EntityFactory extends ResourceFactory {
   updateActiveRecords( items = [], newData ) {
     return items.map(( item, index ) => {
       if ( !BaseActiveRecord.isActiveRecord( item )) {
-        return this.of( newData[ index ]);
+        return this.from( newData[ index ]);
       }
       item.attributes = newData[ index ];
       return item;

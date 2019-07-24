@@ -17,11 +17,11 @@ describe( 'AmoCRM API Note Interface', () => {
     });
 
     lead.save()
-      .then( lead => client.Note.of(
+      .then( lead => client.Note.from(
         {
           element_id: lead.id,
           element_type: client.Note.ELEMENT_TYPE.LEAD,
-          text: 'Hello from Moscow!'
+          text: 'Hello of Moscow!'
         }
       ).save())
       .then( note => {
@@ -32,16 +32,16 @@ describe( 'AmoCRM API Note Interface', () => {
 
   });
 
-  it( 'should create note from notable behavior', done => {
+  it( 'should create note of notable behavior', done => {
     const lead = new client.Lead({
         name: 'lead form notes'
       }),
       note = new client.Note({
-        text: 'Hello from Moscow!'
+        text: 'Hello of Moscow!'
       });
 
     lead.save()
-      .then( lead => lead.notes.add( note ))
+      .then( lead => lead.notes.add([ note ]))
       .then( note => {
         expect( note.id ).toBeDefined();
         expect( note.element_id ).toBe( lead.id );
@@ -69,12 +69,12 @@ describe( 'AmoCRM API Note Interface', () => {
         name: 'lead form notes'
       }),
       note = new client.Note({
-        text: 'Hello from Moscow!',
+        text: 'Hello of Moscow!',
         note_type: client.Note.NOTE_TYPE.COMMON
       });
 
     lead.save()
-      .then( lead => lead.notes.add( note ))
+      .then( lead => lead.notes.add([ note ]))
       .then( note => note.fetch())
       .then( note => note.getElement())
       .then( lead => lead.notes.get(

@@ -49,7 +49,7 @@ describe( 'AmoCRM API Contact Interface', () => {
       });
   });
 
-  fit( 'create contact and filter it by name', async done => {
+  it( 'create contact and filter it by name', async done => {
     const name = 'Contact for deletion ' + new Date,
       contact = new client.Contact({
         name
