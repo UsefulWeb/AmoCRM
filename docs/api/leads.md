@@ -25,8 +25,19 @@ https://www.amocrm.ru/developers/content/api/leads
 |update|Обновляет массив сделок одним запросом к CRM|
 |from|Преобразует массив атрибутов в массив объектов crm.Lead|
 |new crm.Lead|Создаёт объект сделки|
-|of|синоним new crm.Lead|
-|create|синоним new crm.Lead|
+
+<details>
+Синонимы
+<summary>
+
+| Метод | Описание |
+|-------|----------|
+|of|Синоним new crm.Lead|
+|create|Синоним new crm.Lead|
+
+</summary>
+</details>
+
 
 ### Работа с объектом сделки
 
@@ -45,9 +56,19 @@ https://www.amocrm.ru/developers/content/api/leads
 |contacts.link|Прикрепляет контакты к сделке|
 |contacts.get|Получает список контактов, прикреплённых к сделке|
 |contacts.unlink|Открепляет контакты от сделки|
+
+<details>
+Синонимы
+<summary>
+
+| Метод | Описание |
+|-------|----------|
 |linkContacts|Синоним contacts.link|
 |getContacts|Синоним contacts.get|
 |unlinkContacts|Синоним contacts.unlink|
+
+</summary>
+</details>
 
 ### Работа с компанией сделки
 
@@ -56,9 +77,19 @@ https://www.amocrm.ru/developers/content/api/leads
 |company.link|Прикрепляет компанию к сделке|
 |company.get|Получает компанию, которая прикреплена к сделке|
 |company.unlink|Открепляет компанию от сделки|
+
+<details>
+Синонимы
+<summary>
+
+| Метод | Описание |
+|-------|----------|
 |linkCompany|Синоним company.link|
 |getCompany|Синоним company.get|
 |unlinkCompany|Синоним company.unlink|
+
+</summary>
+</details>
 
 ### Работа с примечаниями сделки
 
@@ -67,9 +98,19 @@ https://www.amocrm.ru/developers/content/api/leads
 |new Note|   |
 |notes.get|   |
 |notes.add|   |
+
+<details>
+Синонимы
+<summary>
+
+| Метод | Описание |
+|-------|----------|
 |notes.create|Синоним|
 |getNotes|Синоним|
 |addNotes|Синоним|
+
+</summary>
+</details>
 
 ### Работа с задачами сделки
 
@@ -78,9 +119,19 @@ https://www.amocrm.ru/developers/content/api/leads
 |new Task|   |
 |tasks.get|   |
 |tasks.add|   |
+
+<details>
+Синонимы
+<summary>
+
+| Метод | Описание |
+|-------|----------|
 |tasks.create|Синоним|
 |getTasks|Синоним|
 |addTasks|Синоним|
+
+</summary>
+</details>
 
 ### Работа с дополнительными полями сделки
 
@@ -89,9 +140,19 @@ https://www.amocrm.ru/developers/content/api/leads
 |new crm.Lead.Field|   |
 |crm.Lead.fields.get|   |
 |crm.Lead.fields.add|   |
+
+<details>
+Синонимы
+<summary>
+
+| Метод | Описание |
+|-------|----------|
 |crm.Lead.fields.create|Синоним|
 |crm.Lead.getFields|Синоним|
 |crm.Lead.addFields|Синоним|
+
+</summary>
+</details>
 
 ## Множественные операции
 
