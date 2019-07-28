@@ -86,12 +86,12 @@ https://www.amocrm.ru/developers/content/api/leads
 
 | Метод | Описание |
 |-------|----------|
-|new Field|   |
-|fields.get|   |
-|fields.add|   |
-|fields.create|Синоним|
-|getFields|Синоним|
-|addFields|Синоним|
+|new crm.Lead.Field|   |
+|crm.Lead.fields.get|   |
+|crm.Lead.fields.add|   |
+|crm.Lead.fields.create|Синоним|
+|crm.Lead.getFields|Синоним|
+|crm.Lead.addFields|Синоним|
 
 ## Множественные операции
 
@@ -532,17 +532,15 @@ lead.tasks.add([ task ]);
 
 ## Работа с дополнительными полями
 
-### fields.create() / new Field()
+### crm.Lead.fields.create() / new crm.Lead.Field()
 
 Создаёт дополнительное поле у сделки.
 Данные не добавляются в AmoCRM, для этого вам нужно вручную вызвать
 *save()*.
 
 ```js
-const lead = await crm.Lead.findById( 127311 );
-
-// аналогично lead.fields.create
-const field = new lead.Field({
+// аналогично crm.Lead.fields.create
+const field = new crm.Lead.Field({
   name: "Выбор цветов",
   field_type: "5",
   origin: "528d0285c1f9180911159a9dc6f759b3_zendesk_widget",
@@ -561,30 +559,37 @@ const field = new lead.Field({
 await field.save();
 ```
 
-### fields.get() / getFields()
+### crm.Lead.fields.get() / crm.Lead.getFields()
 
 Получает все произвольные поля сделок.
 
 ```js
-const lead = await crm.Lead.findById( 127311 );
-
-// аналогично lead.getFields
-const fields = await lead.fields.get();
+// аналогично crm.Lead.getFields
+const fields = await crm.Lead.fields.get();
 ```
 
-### fields.add() / addFields()
+### crm.Lead.fields.add() / crm.Lead.addFields()
 
 Прикрепляет к сделке массив произвольных полей.
 
 ```js
-const lead = await crm.Lead.findById( 127311 );
-
-const field = new crm.Task({
-  text: 'Это важно!'
+const field = new crm.Field({
+  name: "Выбор цветов",
+  field_type: "5",
+  origin: "528d0285c1f9180911159a9dc6f759b3_zendesk_widget",
+  is_editable: "0",
+  enums: [
+    "чёрный",
+    "белый",
+    "красный",
+    "жёлтый",
+    "синий",
+    "зелёный"
+  ]
 });
 
-// аналогично lead.addFields
-lead.fields.add([ field ]);
+// аналогично crm.Lead.addFields
+await crm.Lead.fields.add([ field ]);
 ```
 
 ## Недокументированные возможности
