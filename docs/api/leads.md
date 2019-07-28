@@ -27,15 +27,15 @@ https://www.amocrm.ru/developers/content/api/leads
 |new crm.Lead|Создаёт объект сделки|
 
 <details>
-Синонимы
 <summary>
+Синонимы
+</summary>
 
 | Метод | Описание |
 |-------|----------|
 |of|Синоним new crm.Lead|
 |create|Синоним new crm.Lead|
 
-</summary>
 </details>
 
 
@@ -58,8 +58,9 @@ https://www.amocrm.ru/developers/content/api/leads
 |contacts.unlink|Открепляет контакты от сделки|
 
 <details>
-Синонимы
 <summary>
+Синонимы
+</summary>
 
 | Метод | Описание |
 |-------|----------|
@@ -67,7 +68,6 @@ https://www.amocrm.ru/developers/content/api/leads
 |getContacts|Синоним contacts.get|
 |unlinkContacts|Синоним contacts.unlink|
 
-</summary>
 </details>
 
 ### Работа с компанией сделки
@@ -79,8 +79,9 @@ https://www.amocrm.ru/developers/content/api/leads
 |company.unlink|Открепляет компанию от сделки|
 
 <details>
-Синонимы
 <summary>
+Синонимы
+</summary>
 
 | Метод | Описание |
 |-------|----------|
@@ -88,7 +89,6 @@ https://www.amocrm.ru/developers/content/api/leads
 |getCompany|Синоним company.get|
 |unlinkCompany|Синоним company.unlink|
 
-</summary>
 </details>
 
 ### Работа с примечаниями сделки
@@ -100,8 +100,9 @@ https://www.amocrm.ru/developers/content/api/leads
 |notes.add|   |
 
 <details>
-Синонимы
 <summary>
+Синонимы
+</summary>
 
 | Метод | Описание |
 |-------|----------|
@@ -109,7 +110,6 @@ https://www.amocrm.ru/developers/content/api/leads
 |getNotes|Синоним|
 |addNotes|Синоним|
 
-</summary>
 </details>
 
 ### Работа с задачами сделки
@@ -121,8 +121,9 @@ https://www.amocrm.ru/developers/content/api/leads
 |tasks.add|   |
 
 <details>
-Синонимы
 <summary>
+Синонимы
+</summary>
 
 | Метод | Описание |
 |-------|----------|
@@ -130,7 +131,6 @@ https://www.amocrm.ru/developers/content/api/leads
 |getTasks|Синоним|
 |addTasks|Синоним|
 
-</summary>
 </details>
 
 ### Работа с дополнительными полями сделки
@@ -142,16 +142,15 @@ https://www.amocrm.ru/developers/content/api/leads
 |crm.Lead.fields.add|   |
 
 <details>
-Синонимы
 <summary>
+Синонимы
+</summary>
 
 | Метод | Описание |
 |-------|----------|
 |crm.Lead.fields.create|Синоним|
 |crm.Lead.getFields|Синоним|
 |crm.Lead.addFields|Синоним|
-
-</summary>
 </details>
 
 ## Множественные операции
