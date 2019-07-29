@@ -12,23 +12,19 @@ var _Removable = require('../../base/activeRecords/behaviors/Removable');
 
 var _Removable2 = _interopRequireDefault(_Removable);
 
-var _Notable = require('../../base/activeRecords/behaviors/Notable');
+var _HasNotes = require('../../base/activeRecords/behaviors/HasNotes');
 
-var _Notable2 = _interopRequireDefault(_Notable);
+var _HasNotes2 = _interopRequireDefault(_HasNotes);
 
-var _Taskable = require('../../base/activeRecords/behaviors/Taskable');
+var _HasTasks = require('../../base/activeRecords/behaviors/HasTasks');
 
-var _Taskable2 = _interopRequireDefault(_Taskable);
-
-var _HasFields = require('../../base/activeRecords/behaviors/HasFields');
-
-var _HasFields2 = _interopRequireDefault(_HasFields);
+var _HasTasks2 = _interopRequireDefault(_HasTasks);
 
 var _HasContacts = require('./behaviors/Lead/HasContacts');
 
 var _HasContacts2 = _interopRequireDefault(_HasContacts);
 
-var _HasCompany = require('./behaviors/Lead/HasCompany');
+var _HasCompany = require('../../base/activeRecords/behaviors/HasCompany');
 
 var _HasCompany2 = _interopRequireDefault(_HasCompany);
 
@@ -52,5 +48,5 @@ var Lead = function (_EntityActiveRecord) {
   return Lead;
 }(_EntityActiveRecord3.default);
 
-Lead.behaviors = [new _Removable2.default(), new _Notable2.default(), new _Taskable2.default(), new _HasFields2.default(), new _HasContacts2.default(), new _HasCompany2.default()];
+Lead.behaviors = [new _Removable2.default(), new _HasNotes2.default(), new _HasTasks2.default(), new _HasContacts2.default(), new _HasCompany2.default()];
 exports.default = Lead;

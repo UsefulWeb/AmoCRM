@@ -20,6 +20,10 @@ var _Removable = require('../../base/factories/behaviors/Removable');
 
 var _Removable2 = _interopRequireDefault(_Removable);
 
+var _HasFields = require('../../base/factories/behaviors/HasFields');
+
+var _HasFields2 = _interopRequireDefault(_HasFields);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -44,5 +48,5 @@ var CompanyFactory = function (_EntityFactory) {
 
 CompanyFactory.activeRecordClass = _Company2.default;
 CompanyFactory.resourceClass = _CompanyResource2.default;
-CompanyFactory.behaviors = [].concat(_toConsumableArray(_EntityFactory3.default.behaviors), [new _Removable2.default()]);
+CompanyFactory.behaviors = [].concat(_toConsumableArray(_EntityFactory3.default.behaviors), [new _Removable2.default(), new _HasFields2.default()]);
 exports.default = CompanyFactory;

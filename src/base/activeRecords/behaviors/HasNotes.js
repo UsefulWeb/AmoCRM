@@ -1,7 +1,7 @@
 import factories from "../../../api/factories";
 import NoteResource from "../../../api/resources/NoteResource";
 
-class Notable {
+class HasNotes {
 
   get Note() {
     console.log( this );
@@ -57,4 +57,4 @@ class Notable {
   }
 }
 
-export default Notable;
+export default HasNotes;

@@ -24,6 +24,10 @@ var _Filterable = require('../../base/factories/behaviors/Filterable');
 
 var _Filterable2 = _interopRequireDefault(_Filterable);
 
+var _HasFields = require('../../base/factories/behaviors/HasFields');
+
+var _HasFields2 = _interopRequireDefault(_HasFields);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -48,5 +52,5 @@ var ContactFactory = function (_EntityFactory) {
 
 ContactFactory.activeRecordClass = _Contact2.default;
 ContactFactory.resourceClass = _ContactResource2.default;
-ContactFactory.behaviors = [].concat(_toConsumableArray(_EntityFactory3.default.behaviors), [new _Removable2.default(), new _Filterable2.default()]);
+ContactFactory.behaviors = [].concat(_toConsumableArray(_EntityFactory3.default.behaviors), [new _Removable2.default(), new _Filterable2.default(), new _HasFields2.default()]);
 exports.default = ContactFactory;

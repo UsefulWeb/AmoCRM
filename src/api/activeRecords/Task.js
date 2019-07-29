@@ -2,13 +2,13 @@
 
 import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 import Removable from "../../base/activeRecords/behaviors/Removable";
-import Notable from "../../base/activeRecords/behaviors/Notable";
+import HasNotes from "../../base/activeRecords/behaviors/HasNotes";
 import HasElementByField from "../../base/activeRecords/behaviors/HasElementByField";
 
 class Task extends EntityActiveRecord {
   static behaviors = [
     new Removable,
-    new Notable,
+    new HasNotes,
     new HasElementByField( 'TASK_ELEMENT_TYPE' )
   ];
 }

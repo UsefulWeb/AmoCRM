@@ -14,17 +14,13 @@ var _Removable = require('../../base/activeRecords/behaviors/Removable');
 
 var _Removable2 = _interopRequireDefault(_Removable);
 
-var _Notable = require('../../base/activeRecords/behaviors/Notable');
+var _HasNotes = require('../../base/activeRecords/behaviors/HasNotes');
 
-var _Notable2 = _interopRequireDefault(_Notable);
+var _HasNotes2 = _interopRequireDefault(_HasNotes);
 
-var _Taskable = require('../../base/activeRecords/behaviors/Taskable');
+var _HasTasks = require('../../base/activeRecords/behaviors/HasTasks');
 
-var _Taskable2 = _interopRequireDefault(_Taskable);
-
-var _HasFields = require('../../base/activeRecords/behaviors/HasFields');
-
-var _HasFields2 = _interopRequireDefault(_HasFields);
+var _HasTasks2 = _interopRequireDefault(_HasTasks);
 
 var _factories = require('../factories');
 
@@ -61,5 +57,5 @@ var Customer = function (_EntityActiveRecord) {
   return Customer;
 }(_EntityActiveRecord3.default);
 
-Customer.behaviors = [new _Removable2.default(), new _Notable2.default(), new _Taskable2.default(), new _HasFields2.default()];
+Customer.behaviors = [new _Removable2.default(), new _HasNotes2.default(), new _HasTasks2.default()];
 exports.default = Customer;

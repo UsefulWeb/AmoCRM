@@ -12,9 +12,9 @@ var _Removable = require('../../base/activeRecords/behaviors/Removable');
 
 var _Removable2 = _interopRequireDefault(_Removable);
 
-var _Notable = require('../../base/activeRecords/behaviors/Notable');
+var _HasNotes = require('../../base/activeRecords/behaviors/HasNotes');
 
-var _Notable2 = _interopRequireDefault(_Notable);
+var _HasNotes2 = _interopRequireDefault(_HasNotes);
 
 var _HasElementByField = require('../../base/activeRecords/behaviors/HasElementByField');
 
@@ -40,5 +40,5 @@ var Task = function (_EntityActiveRecord) {
   return Task;
 }(_EntityActiveRecord3.default);
 
-Task.behaviors = [new _Removable2.default(), new _Notable2.default(), new _HasElementByField2.default('TASK_ELEMENT_TYPE')];
+Task.behaviors = [new _Removable2.default(), new _HasNotes2.default(), new _HasElementByField2.default('TASK_ELEMENT_TYPE')];
 exports.default = Task;

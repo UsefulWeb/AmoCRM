@@ -1,7 +1,7 @@
 import factories from "../../../api/factories";
 import TaskResource from "../../../api/resources/TaskResource";
 
-class Taskable {
+class HasTasks {
 
   get Task() {
     if ( this.isNew()) {
@@ -56,4 +56,4 @@ class Taskable {
   }
 }
 
-export default Taskable;
+export default HasTasks;

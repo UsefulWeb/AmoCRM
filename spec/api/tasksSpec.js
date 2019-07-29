@@ -53,7 +53,7 @@ describe( 'AmoCRM API Task Interface', () => {
 
   it( 'add task of taskable interface', done => {
     const lead = new client.Lead({
-        name: 'Taskable Lead'
+        name: 'HasTasks Lead'
       }),
       task = new client.Task({
         text: 'Lead Task'

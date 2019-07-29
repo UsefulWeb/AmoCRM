@@ -2,11 +2,11 @@
 
 import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 import Removable from "../../base/activeRecords/behaviors/Removable";
-import Notable from "../../base/activeRecords/behaviors/Notable";
-import Taskable from "../../base/activeRecords/behaviors/Taskable";
+import HasNotes from "../../base/activeRecords/behaviors/HasNotes";
+import HasTasks from "../../base/activeRecords/behaviors/HasTasks";
 
 class Company extends EntityActiveRecord {
-  static behaviors = [ new Removable, new Notable, new Taskable ];
+  static behaviors = [ new Removable, new HasNotes, new HasTasks ];
 }
 
 export default Company;
