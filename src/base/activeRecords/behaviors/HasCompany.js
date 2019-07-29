@@ -1,4 +1,4 @@
-import factories from '../../../factories';
+import factories from '../../../api/factories';
 
 class HasCompany {
 
