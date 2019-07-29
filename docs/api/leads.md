@@ -17,24 +17,24 @@ https://www.amocrm.ru/developers/content/api/leads
 
 ### Множественные операции
 
-| Метод      | Описание                                              |
-|------------|-------------------------------------------------------|
-|find        |Находит сделки по заданному критерию                   |
-|findById    |Находит сделку с заданным id                           |
-|insert      |Создаёт массив сделок одним запросом к CRM             |
-|update      |Обновляет массив сделок одним запросом к CRM           |
-|from        |Преобразует массив атрибутов в массив объектов crm.Lead|
-|new crm.Lead|Создаёт объект сделки                                  |
+| Метод                      | Описание                                              |
+|----------------------------|-------------------------------------------------------|
+|[find](#crmleadfind)        |Находит сделки по заданному критерию                   |
+|[findById](#crmleadfindbyid)|Находит сделку с заданным id                           |
+|[insert](#crmleadinsert)    |Создаёт массив сделок одним запросом к CRM             |
+|[update](#crmleadupdate)    |Обновляет массив сделок одним запросом к CRM           |
+|[from](#crmleadfrom)        |Преобразует массив атрибутов в массив объектов crm.Lead|
+|[new crm.Lead](#создание)   |Создаёт объект сделки                                  |
 
 <details>
 <summary>
 Синонимы
 </summary>
 
-| Метод | Описание           |
-|-------|--------------------|
-|of     |Синоним new crm.Lead|
-|create |Синоним new crm.Lead|
+| Метод              | Описание           |
+|--------------------|--------------------|
+|[of](#создание)     |Синоним new crm.Lead|
+|[create](#создание) |Синоним new crm.Lead|
 
 </details>
 
@@ -43,19 +43,19 @@ https://www.amocrm.ru/developers/content/api/leads
 
 Работа с атрибутами сделки
 
-| Метод | Описание |
-|-------|----------|
-|save   |Сохраняет изменения в сделке.|
-|fetch|Заменяет все несохранённые данные актуальными из CRM|
-|exists|Проверяет, существует ли до сих пор сделка в CRM.|
+| Метод            | Описание                                           |
+|------------------|----------------------------------------------------|
+|[save](#save)     |Сохраняет изменения в сделке.                       |
+|[fetch](#fetch)   |Заменяет все несохранённые данные актуальными из CRM|
+|[exists](#exists) |Проверяет, существует ли до сих пор сделка в CRM    |
 
 ### Работа с контактами сделки
 
-| Метод | Описание |
-|-------|----------|
-|contacts.link|Прикрепляет контакты к сделке|
-|contacts.get|Получает список контактов, прикреплённых к сделке|
-|contacts.unlink|Открепляет контакты от сделки|
+| Метод                                            | Описание                                        |
+|--------------------------------------------------|-------------------------------------------------|
+|[contacts.link](#contactslink--linkcontacts)      |Прикрепляет контакты к сделке                    |
+|[contacts.get](#contactsget--getcontacts)         |Получает список контактов, прикреплённых к сделке|
+|[contacts.unlink](#contactsunlink--unlinkcontacts)|Открепляет контакты от сделки                    |
 
 <details>
 <summary>
@@ -63,94 +63,93 @@ https://www.amocrm.ru/developers/content/api/leads
 </summary>
 
 | Метод | Описание |
-|-------|----------|
-|linkContacts|Синоним contacts.link|
-|getContacts|Синоним contacts.get|
-|unlinkContacts|Синоним contacts.unlink|
+|-------------------------------------------------|-----------------------|
+|[linkContacts](#contactslink--linkcontacts)      |Синоним contacts.link  |
+|[getContacts](#contactsget--getcontacts)         |Синоним contacts.get   |
+|[unlinkContacts](#contactsunlink--unlinkcontacts)|Синоним contacts.unlink|
 
 </details>
 
 ### Работа с компанией сделки
 
-| Метод | Описание |
-|-------|----------|
-|company.link|Прикрепляет компанию к сделке|
-|company.get|Получает компанию, которая прикреплена к сделке|
-|company.unlink|Открепляет компанию от сделки|
+| Метод                                         | Описание                                      |
+|-----------------------------------------------|-----------------------------------------------|
+|[company.link](#companylink--linkcompany)      |Прикрепляет компанию к сделке                  |
+|[company.get](#companyget--getcompany)         |Получает компанию, которая прикреплена к сделке|
+|[company.unlink](#companyunlink--unlinkcompany)|Открепляет компанию от сделки                  |
 
 <details>
 <summary>
 Синонимы
 </summary>
 
-| Метод | Описание |
-|-------|----------|
-|linkCompany|Синоним company.link|
-|getCompany|Синоним company.get|
-|unlinkCompany|Синоним company.unlink|
-
+| Метод                                        | Описание             |
+|----------------------------------------------|----------------------|
+|[linkCompany](#companylink--linkcompany)      |Синоним company.link  |
+|[getCompany](#companyget--getcompany)         |Синоним company.get   |
+|[unlinkCompany](#companyunlink--unlinkcompany)|Синоним company.unlink|
 </details>
 
 ### Работа с примечаниями сделки
 
-| Метод | Описание |
-|-------|----------|
-|new Note|Создаёт заметку, которая будет прикреплена к сделке|
-|notes.get|Получает список примечаний для данной сделки|
-|notes.add|Прикрепляет к сделке массив примечаний|
+| Метод                            | Описание                                          |
+|----------------------------------|---------------------------------------------------|
+|[new Note](#notescreate--new-note)|Создаёт заметку, которая будет прикреплена к сделке|
+|[notes.get](#notesget--getnotes)  |Получает список примечаний для данной сделки       |
+|[notes.add](#notesadd--addnotes)  |Прикрепляет к сделке массив примечаний             |
 
 <details>
 <summary>
 Синонимы
 </summary>
 
-| Метод | Описание |
-|-------|----------|
-|notes.create|Синоним new Note|
-|getNotes|Синоним notes.get|
-|addNotes|Синоним notes.add|
+| Метод                                | Описание        |
+|--------------------------------------|-----------------|
+|[notes.create](#notescreate--new-note)|Синоним new Note |
+|[getNotes](#notesget--getnotes)       |Синоним notes.get|
+|[addNotes](#notesadd--addnotes)       |Синоним notes.add|
 
 </details>
 
 ### Работа с задачами сделки
 
-| Метод | Описание |
-|-------|----------|
-|new Task|Создаёт задачу, которая будет прикреплена к сделке|
-|tasks.get|Получает все задачи, прикреплённые к сделке|
-|tasks.add|Прикрепляет к сделке массив примечаний|
+| Метод                            | Описание                                         |
+|----------------------------------|--------------------------------------------------|
+|[new Task](#taskscreate--new-task)|Создаёт задачу, которая будет прикреплена к сделке|
+|[tasks.get](#tasksget--gettasks)  |Получает все задачи, прикреплённые к сделке       |
+|[tasks.add](#tasksadd--addtasks)  |Прикрепляет к сделке массив примечаний            |
 
 <details>
 <summary>
 Синонимы
 </summary>
 
-| Метод | Описание |
-|-------|----------|
-|tasks.create|Синоним new Task|
-|getTasks|Синоним tasks.get|
-|addTasks|Синоним tasks.add|
+| Метод                                | Описание        |
+|--------------------------------------|-----------------|
+|[tasks.create](#taskscreate--new-task)|Синоним new Task |
+|[getTasks](#tasksget--gettasks)       |Синоним tasks.get|
+|[addTasks](#tasksadd--addtasks)       |Синоним tasks.add|
 
 </details>
 
 ### Работа с дополнительными полями сделок
 
-| Метод | Описание |
-|-------|----------|
-|new crm.Lead.Field|Создаёт дополнительное поле у сделки|
-|crm.Lead.fields.get|Получает все произвольные поля сделок|
-|crm.Lead.fields.add|Прикрепляет к сделке массив произвольных полей|
+| Метод                                                      | Описание                                     |
+|------------------------------------------------------------|----------------------------------------------|
+|[new crm.Lead.Field](#crmleadfieldscreate--new-crmleadfield)|Создаёт дополнительное поле у сделки          |
+|[crm.Lead.fields.get](#crmleadfieldsget--crmleadgetfields)  |Получает все произвольные поля сделок         |
+|[crm.Lead.fields.add](#crmleadfieldsadd--crmleadaddfields)  |Прикрепляет к сделке массив произвольных полей|
 
 <details>
 <summary>
 Синонимы
 </summary>
 
-| Метод | Описание |
-|-------|----------|
-|crm.Lead.fields.create|Синоним new crm.Lead.Field|
-|crm.Lead.getFields|Синоним crm.Lead.fields.get|
-|crm.Lead.addFields|Синоним crm.Lead.fields.add|
+| Метод                                                          | Описание                  |
+|----------------------------------------------------------------|---------------------------|
+|[crm.Lead.fields.create](#crmleadfieldscreate--new-crmleadfield)|Синоним new crm.Lead.Field |
+|[crm.Lead.getFields](#crmleadfieldsget--crmleadgetfields)       |Синоним crm.Lead.fields.get|
+|[crm.Lead.addFields](#crmleadfieldsadd--crmleadaddfields)       |Синоним crm.Lead.fields.add|
 </details>
 
 ## Множественные операции
