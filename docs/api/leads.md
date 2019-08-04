@@ -389,7 +389,7 @@ console.log( await lead.exists()); // false
 
 ## Работа с контактами
 
-### contacts.link() / linkContacts()
+### linkContacts()
 
 Прикрепляет контакты к сделке.
 
@@ -424,7 +424,7 @@ await lead.contacts.link([
 Добавляет к свойству *contacts_id* новые значения (сохраняя прежние)
 и вызывает *save()* 
 
-### contacts.get() / getContacts()
+### getContacts()
 
 Получает список контактов, прикреплённых к сделке
 
@@ -449,7 +449,7 @@ const contacts = await lead.contacts.get({
 Параметры, которые можно задать, смотрите по ссылке в официальной документации:
 https://www.amocrm.ru/developers/content/api/contacts
 
-### contacts.unlink() / unlinkContacts()
+### unlinkContacts()
 
 Открепляет контакты от сделки
 
@@ -497,7 +497,7 @@ await lead.contacts.unlink( contacts );
 
 ## Работа с компанией
 
-### company.link() / linkCompany()
+### linkCompany()
 
 Прикрепляет компанию к сделке
 
@@ -515,7 +515,7 @@ await lead.company.link( company );
 Заменяет свойство *company_id* новоым значением
 и вызывает *save()* 
 
-### company.get() / getCompany()
+### getCompany()
 
 Получает компанию, которая прикреплена к сделке
 
@@ -526,7 +526,7 @@ const lead = await crm.Lead.findById( 127311 );
 const company = await lead.company.get();
 ```
 
-### company.unlink() / unlinkCompany()
+### unlinkCompany()
 
 Открепляет компанию от сделки
 
@@ -686,7 +686,7 @@ lead.addTasks([ task ]);
 
 ## Работа с дополнительными полями
 
-### crm.Lead.fields.create() / new crm.Lead.Field()
+### new crm.Lead.Field()
 
 Создаёт дополнительное поле у сделки.
 Данные не добавляются в AmoCRM, для этого вам нужно вручную вызвать
