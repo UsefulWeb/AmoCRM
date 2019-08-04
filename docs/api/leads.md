@@ -448,6 +448,11 @@ await lead.contacts.link([
 ]);
 ```
 
+#### Внутренняя работа метода
+
+Добавляет к свойству *contacts_id* новые значения (сохраняя прежние)
+и вызывает *save()* 
+
 ### contacts.get() / getContacts()
 
 Получает список контактов, прикреплённых к сделке
@@ -514,6 +519,11 @@ const contacts = await lead.contacts.get();
 await lead.contacts.unlink( contacts );
 ```
 
+#### Внутренняя работа метода
+
+Задаёт значение свойства *unlink.contacts_id* идентификаторам
+и вызывает *save()*
+
 ## Работа с компанией
 
 ### company.link() / linkCompany()
@@ -528,6 +538,11 @@ const company = await crm.Company.findById( 539712 );
 // Аналогично lead.linkCompany
 await lead.company.link( company );
 ```
+
+#### Внутренняя работа метода
+
+Заменяет свойство *company_id* новоым значением
+и вызывает *save()* 
 
 ### company.get() / getCompany()
 
@@ -551,6 +566,11 @@ const lead = await crm.Lead.findById( 127311 );
 await lead.company.unlink();
 ```
 
+#### Внутренняя работа метода
+
+Задаёт значение свойства *unlink.company_id* идентификаторам
+и вызывает *save()*
+
 ## Работа с примечениями
 
 ### notes.create() / new Note()
@@ -570,6 +590,12 @@ const note = new lead.Note({
 // добавляем данные в CRM
 await note.save();
 ```
+
+#### Внутренняя работа метода
+
+Задаёт соответствующие значения свойств 
+*element_type* и *element_id*
+у передаваемых объектов *Note*
 
 ### notes.get() / getNotes()
 
@@ -610,6 +636,13 @@ const note = new crm.Note({
 lead.notes.add([ note ]);
 ```
 
+#### Внутренняя работа метода
+
+Задаёт соответствующие значения свойств 
+*element_type* и *element_id*
+у передаваемых объектов *Note* 
+и вызывает *crm.Note.insert*
+
 ## Работа с задачами
 
 ### tasks.create() / new Task()
@@ -629,6 +662,12 @@ const task = new lead.Task({
 // добавляем данные в CRM
 await task.save();
 ```
+
+#### Внутренняя работа метода
+
+Задаёт соответствующие значения свойств 
+*element_type* и *element_id*
+у передаваемых объектов *Task*
 
 ### tasks.get() / getTasks()
 
@@ -670,6 +709,13 @@ const task = new crm.Task({
 lead.tasks.add([ task ]);
 ```
 
+#### Внутренняя работа метода
+
+Задаёт соответствующие значения свойств 
+*element_type* и *element_id*
+у передаваемых объектов *Task*
+и вызывает *crm.Task.insert*
+
 ## Работа с дополнительными полями
 
 ### crm.Lead.fields.create() / new crm.Lead.Field()
@@ -698,6 +744,10 @@ const field = new crm.Lead.Field({
 // добавляем данные в CRM
 await field.save();
 ```
+
+#### Внутренняя работа метода
+
+Задаёт соответствующее значение свойства *element_type*
 
 ### crm.Lead.fields.get() / crm.Lead.getFields()
 
@@ -731,6 +781,11 @@ const field = new crm.Field({
 // аналогично crm.Lead.addFields
 await crm.Lead.fields.add([ field ]);
 ```
+
+#### Внутренняя работа метода
+
+Задаёт соответствующее значение свойства *element_type*
+у всех объектов *crm.Field*
 
 ## Недокументированные возможности
 
