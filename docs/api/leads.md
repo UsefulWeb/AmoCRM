@@ -38,7 +38,6 @@ https://www.amocrm.ru/developers/content/api/leads
 
 </details>
 
-
 ### Работа с объектом сделки
 
 Работа с атрибутами сделки
@@ -160,7 +159,7 @@ https://www.amocrm.ru/developers/content/api/leads
 
 ```js
 const leads = await crm.Lead.find({
-    // принимает все параметры, описанные док
+    // принимает все параметры, описанные в документации
     query: 'Пропущенный звонок'
 });
 ```
