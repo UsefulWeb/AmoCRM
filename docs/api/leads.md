@@ -43,10 +43,10 @@ await lead.addTasks([ task ]);
 |-------------------|---------------------------------------------------------------------------------|
 |crm.Lead           |[Множественные операции](#множественные-операции)                                |
 |lead = new crm.Lead|[Работа с объектом сделки](#работа-с-объектом-сделки)                            |
-|lead.contacts      |[Работа с контактами сделки](#работа-с-контактами-сделки)                        |
-|lead.company       |[Работа с компанией сделки](#работа-с-компанией-сделки)                          |
-|lead.notes         |[Работа с примечаниями сделки](#работа-с-примечаниями-сделки)                    |
-|lead.tasks         |[Работа с задачми сделки](#работа-с-задачами-сделки)                             |
+|                   |[Работа с контактами сделки](#работа-с-контактами-сделки)                        |
+|                   |[Работа с компанией сделки](#работа-с-компанией-сделки)                          |
+|                   |[Работа с примечаниями сделки](#работа-с-примечаниями-сделки)                    |
+|                   |[Работа с задачми сделки](#работа-с-задачами-сделки)                             |
 |crm.Lead.Field     |[Работа с дополнительными полями сделок](#работа-с-дополнительными-полями-сделок)|
 
 ### Множественные операции
@@ -432,7 +432,7 @@ await lead.contacts.link([
 const lead = await crm.Lead.findById( 127311 );
 
 // аналогично lead.getContacts
-const contacts = await lead.contacts.get();
+const contacts = await lead.getContacts();
 ```
 
 Можно также задать дополнительный критерий получения контактов.
@@ -441,7 +441,7 @@ const contacts = await lead.contacts.get();
 const lead = await crm.Lead.findById( 127311 );
 
 // найдёт контакты для данной сделки с заданным ответственным пользователем
-const contacts = await lead.contacts.get({
+const contacts = await lead.getContacts({
   responsible_user_id: 181732
 });
 ```
@@ -484,7 +484,7 @@ await lead.contacts.unlink([
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-const contacts = await lead.contacts.get();
+const contacts = await lead.getContacts();
 
 // открепит все контакты от сделки
 await lead.contacts.unlink( contacts );
@@ -507,7 +507,7 @@ const lead = await crm.Lead.findById( 127311 );
 const company = await crm.Company.findById( 539712 );
 
 // Аналогично lead.linkCompany
-await lead.company.link( company );
+await lead.linkCompany( company );
 ```
 
 #### Внутренняя работа метода
@@ -523,7 +523,7 @@ await lead.company.link( company );
 const lead = await crm.Lead.findById( 127311 );
 
 // Аналогично lead.getCompany
-const company = await lead.company.get();
+const company = await lead.getCompany();
 ```
 
 ### unlinkCompany()
@@ -534,7 +534,7 @@ const company = await lead.company.get();
 const lead = await crm.Lead.findById( 127311 );
 
 // Аналогично lead.unlinkCompany
-await lead.company.unlink();
+await lead.unlinkCompany();
 ```
 
 #### Внутренняя работа метода
