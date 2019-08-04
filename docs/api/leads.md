@@ -26,7 +26,7 @@ const note = new crm.Note({
   text: 'Это важно!'
 });
 
-await lead.notes.add([ note ]);
+await lead.addNotes([ note ]);
 
 // Добавляем задачу к сделке
 const task = new crm.Task({
@@ -34,7 +34,7 @@ const task = new crm.Task({
   responsible_user_id: '504141'
 });
 
-await lead.tasks.add([ task ]);
+await lead.addTasks([ task ]);
 ```
 
 ## Описание методов
@@ -607,7 +607,7 @@ await lead.company.unlink();
 
 ## Работа с примечениями
 
-### notes.create() / new Note()
+### new Note()
 
 Создаёт заметку, которая будет прикреплена к сделке.
 Данные не добавляются в AmoCRM, для этого вам нужно вручную вызвать
@@ -616,7 +616,6 @@ await lead.company.unlink();
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// аналогично lead.notes.create
 const note = new lead.Note({
   text: 'Это важно!'
 });
@@ -631,14 +630,14 @@ await note.save();
 *element_type* и *element_id*
 у передаваемых объектов *Note*
 
-### notes.get() / getNotes()
+### getNotes()
 
 Получает список примечаний для данной сделки
 
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-const notes = await lead.notes.get();
+const notes = await lead.getNotes();
 ```
 
 Можно также задать дополнительный критерий получения примечаний.
@@ -647,7 +646,7 @@ const notes = await lead.notes.get();
 const lead = await crm.Lead.findById( 127311 );
 
 // найдёт 10 первых примечаний
-const notes = await lead.notes.get({
+const notes = await lead.getNotes({
   limit_rows: 10
 });
 ```
@@ -655,7 +654,7 @@ const notes = await lead.notes.get({
 Параметры, которые можно задать, смотрите по ссылке в официальной документации:
 https://www.amocrm.ru/developers/content/api/notes
 
-### notes.add() / addNotes()
+### addNotes()
 
 Прикрепляет к сделке массив примечаний.
 
@@ -667,7 +666,7 @@ const note = new crm.Note({
 });
 
 // аналогично lead.addNotes
-lead.notes.add([ note ]);
+lead.addNotes([ note ]);
 ```
 
 #### Внутренняя работа метода
@@ -679,7 +678,7 @@ lead.notes.add([ note ]);
 
 ## Работа с задачами
 
-### tasks.create() / new Task()
+### new Task()
 
 Создаёт задачу, которая будет прикреплена к сделке.
 Данные не добавляются в AmoCRM, для этого вам нужно вручную вызвать
@@ -688,7 +687,6 @@ lead.notes.add([ note ]);
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// аналогично lead.tasks.create
 const task = new lead.Task({
   text: 'Не забыть перезвонить',
 });
@@ -703,15 +701,14 @@ await task.save();
 *element_type* и *element_id*
 у передаваемых объектов *Task*
 
-### tasks.get() / getTasks()
+### getTasks()
 
 Получает все задачи, прикреплённые к сделке
 
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// аналогично lead.getTasks
-const tasks = await lead.tasks.get();
+const tasks = await lead.getTasks();
 ```
 
 Можно также задать дополнительный критерий получения задач.
@@ -720,7 +717,7 @@ const tasks = await lead.tasks.get();
 const lead = await crm.Lead.findById( 127311 );
 
 // найдёт 10 первых задач
-const tasks = await lead.tasks.get({
+const tasks = await lead.getTasks({
   limit_rows: 10
 });
 ```
@@ -740,7 +737,7 @@ const task = new crm.Task({
 });
 
 // аналогично lead.addTasks
-lead.tasks.add([ task ]);
+lead.addTasks([ task ]);
 ```
 
 #### Внутренняя работа метода
@@ -783,16 +780,15 @@ await field.save();
 
 Задаёт соответствующее значение свойства *element_type*
 
-### crm.Lead.fields.get() / crm.Lead.getFields()
+### crm.Lead.getFields()
 
 Получает все произвольные поля сделок.
 
 ```js
-// аналогично crm.Lead.getFields
-const fields = await crm.Lead.fields.get();
+const fields = await crm.Lead.getFields();
 ```
 
-### crm.Lead.fields.add() / crm.Lead.addFields()
+### crm.Lead.addFields()
 
 Прикрепляет к сделке массив произвольных полей.
 
@@ -813,7 +809,7 @@ const field = new crm.Field({
 });
 
 // аналогично crm.Lead.addFields
-await crm.Lead.fields.add([ field ]);
+await crm.Lead.addFields([ field ]);
 ```
 
 #### Внутренняя работа метода

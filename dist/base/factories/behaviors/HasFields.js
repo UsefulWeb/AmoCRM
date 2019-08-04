@@ -73,23 +73,6 @@ var HasFields = function () {
         return factory.prepareField(field);
       };
     }
-  }, {
-    key: "fields",
-    get: function get() {
-      var _this2 = this;
-
-      return {
-        create: function create(attributes) {
-          return new _this2.Field(attributes);
-        },
-        add: function add(fields) {
-          return _this2.addFields(fields);
-        },
-        get: function get(params) {
-          return _this2.getFields(params);
-        }
-      };
-    }
   }]);
 
   return HasFields;

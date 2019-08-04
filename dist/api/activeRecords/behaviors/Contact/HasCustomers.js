@@ -22,9 +22,24 @@ var HasCustomers = function () {
   }
 
   _createClass(HasCustomers, [{
+    key: "addCustomers",
+    value: function addCustomers(customers) {
+      var _customer = customer,
+          _customer$contacts_id = _customer.contacts_id,
+          contacts_id = _customer$contacts_id === undefined ? [] : _customer$contacts_id;
+
+      this._attributes.customers = contacts_id.push(this._attributes.id);
+      customer.contacts_id = contacts_id;
+      return customer.save();
+    }
+  }, {
     key: "addCustomer",
     value: function addCustomer(customer) {
-      customer.contact_id = this._attributes.id;
+      var _customer$contacts_id2 = customer.contacts_id,
+          contacts_id = _customer$contacts_id2 === undefined ? [] : _customer$contacts_id2;
+
+      contacts_id.push(this._attributes.id);
+      customer.contacts_id = contacts_id;
       return customer.save();
     }
   }, {
@@ -38,20 +53,6 @@ var HasCustomers = function () {
       });
 
       return factoryInstance.find(criteria);
-    }
-  }, {
-    key: "customers",
-    get: function get() {
-      var _this = this;
-
-      return {
-        add: function add(customer) {
-          return _this.addCustomer(customer);
-        },
-        get: function get(params) {
-          return _this.getCustomers(params);
-        }
-      };
     }
   }]);
 

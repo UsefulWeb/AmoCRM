@@ -82,23 +82,6 @@ var HasTasks = function () {
         return behavior.prepareTask(task);
       };
     }
-  }, {
-    key: "tasks",
-    get: function get() {
-      var _this2 = this;
-
-      return {
-        create: function create(attributes) {
-          return new _this2.Task(attributes);
-        },
-        add: function add(tasks) {
-          return _this2.addTasks(tasks);
-        },
-        get: function get(params) {
-          return _this2.getTasks(params);
-        }
-      };
-    }
   }]);
 
   return HasTasks;

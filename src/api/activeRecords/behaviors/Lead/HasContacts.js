@@ -2,14 +2,6 @@ import factories from "../../../factories";
 
 class HasContacts {
 
-  get contacts() {
-    return {
-      link: contacts => this.linkContacts( contacts ),
-      get: params =>  this.getContacts( params ),
-      unlink: contacts => this.unlinkContacts( contacts )
-    }
-  }
-
   linkContacts( contacts=[]) {
     const newIds = this.getDataIdentifiers( contacts ),
       { contacts_id=[]} = this._attributes;

@@ -59,7 +59,12 @@ var BaseActiveRecord = function () {
   }, {
     key: 'attributes',
     set: function set(attributes) {
+      var id = this._attributes.id;
+
       this._attributes = attributes;
+      if (id) {
+        this._attributes.id = id;
+      }
     },
     get: function get() {
       return this._attributes;

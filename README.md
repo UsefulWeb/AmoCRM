@@ -78,7 +78,7 @@ const note = new crm.Note({
   text: 'Это важно!'
 });
 
-await lead.notes.add([ note ]);
+await lead.addNotes([ note ]);
 
 // Добавляем задачу к сделке
 const task = new crm.Task({
@@ -86,7 +86,7 @@ const task = new crm.Task({
   responsible_user_id: '504141'
 });
 
-await lead.tasks.add([ task ]);
+await lead.addTasks([ task ]);
 ```
 
 ### Основные функции
@@ -100,7 +100,7 @@ await lead.tasks.add([ task ]);
 7. [Примечания](docs/api/notes.md) (crm.Note)
 8. [Неразобранное](docs/api/incomingLeads.md) (crm.IncomingLead)
 9. [Дополнительные поля](docs/api/fields.md) (crm.Field)
-10. [Воронки продаж](docs/api/pipelines.md) (crm.Field)
+10. [Воронки продаж](docs/api/pipelines.md) (crm.Pipeline)
 11. [Виджеты](docs/api/widgets.md) (crm.Widget)
 12. [WebHooks](docs/api/webhooks.md) (crm.WebHook)
 
@@ -109,6 +109,14 @@ await lead.tasks.add([ task ]);
 1. [Списки](docs/catalogs/catalogs.md) (crm.Pipeline)
 2. [Элементы](docs/catalogs/elements.md) (crm.Catalog)
 2. [Товары](docs/catalogs/product.md) (crm.Product)
+
+### API Телефонии
+
+### Digital Pipeline
+
+### API Чатов
+
+### API Центра Нотификаций
 
 ## События
 

@@ -46,23 +46,6 @@ var HasCompany = function () {
 
       return this.save();
     }
-  }, {
-    key: 'company',
-    get: function get() {
-      var _this = this;
-
-      return {
-        link: function link() {
-          return _this.linkCompany();
-        },
-        get: function get() {
-          return _this.getCompany();
-        },
-        unlink: function unlink() {
-          return _this.unlinkCompany();
-        }
-      };
-    }
   }]);
 
   return HasCompany;

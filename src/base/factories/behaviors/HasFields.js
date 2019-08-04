@@ -12,14 +12,6 @@ class HasFields {
     }
   }
 
-  get fields() {
-    return {
-      create: attributes => new this.Field( attributes ),
-      add: fields => this.addFields( fields ),
-      get: params => this.getFields( params )
-    };
-  };
-
   addFields( fields ) {
     const { factory } = fields[ 0 ],
       data = fields.map( field => this.prepareField( field ));

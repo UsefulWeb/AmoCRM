@@ -16,14 +16,6 @@ class HasNotes {
     }
   }
 
-  get notes() {
-    return {
-      create: attributes => new this.Note( attributes ),
-      get: params => this.getNotes( params ),
-      add: notes => this.addNotes( notes ),
-    }
-  };
-
   addNotes( notes ) {
     const { factory } = notes[ 0 ],
       data = notes.map( note => this.prepareNote( note ));

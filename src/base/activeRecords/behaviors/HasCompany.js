@@ -1,15 +1,7 @@
 import factories from '../../../api/factories';
 
 class HasCompany {
-
-  get company() {
-    return {
-      link: () => this.linkCompany(),
-      get: () => this.getCompany(),
-      unlink: () => this.unlinkCompany()
-    };
-  }
-
+  
   linkCompany( company ) {
     this._attributes.company_id = typeof company === 'object' ? company.id : company;
 

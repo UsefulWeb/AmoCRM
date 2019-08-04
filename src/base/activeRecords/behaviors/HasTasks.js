@@ -15,14 +15,6 @@ class HasTasks {
     }
   }
 
-  get tasks() {
-    return {
-      create: attributes => new this.Task( attributes ),
-      add: tasks => this.addTasks( tasks ),
-      get: params => this.getTasks( params )
-    };
-  };
-
   addTasks( tasks ) {
     const { factory } = tasks[ 0 ],
       data = tasks.map( task => this.prepareTask( task ));

@@ -1,15 +1,19 @@
 import factories from "../../../factories";
 
 class HasCustomers {
-  get customers() {
-    return {
-      add: customer => this.addCustomer( customer ),
-      get: params => this.getCustomers( params )
-    };
+
+  addCustomers( customers ) {
+    const { contacts_id=[]} = customer;
+    this._attributes.customers =
+    contacts_id.push( this._attributes.id );
+    customer.contacts_id = contacts_id;
+    return customer.save();
   }
 
   addCustomer( customer ) {
-    customer.contact_id = this._attributes.id;
+    const { contacts_id=[]} = customer;
+    contacts_id.push( this._attributes.id );
+    customer.contacts_id = contacts_id;
     return customer.save();
   }
 

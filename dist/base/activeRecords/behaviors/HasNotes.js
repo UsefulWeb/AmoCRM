@@ -83,23 +83,6 @@ var HasNotes = function () {
         return behavior.prepareNote(note);
       };
     }
-  }, {
-    key: "notes",
-    get: function get() {
-      var _this2 = this;
-
-      return {
-        create: function create(attributes) {
-          return new _this2.Note(attributes);
-        },
-        get: function get(params) {
-          return _this2.getNotes(params);
-        },
-        add: function add(notes) {
-          return _this2.addNotes(notes);
-        }
-      };
-    }
   }]);
 
   return HasNotes;

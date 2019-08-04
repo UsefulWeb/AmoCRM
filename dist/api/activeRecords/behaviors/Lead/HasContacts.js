@@ -66,23 +66,6 @@ var HasContacts = function () {
         id: ids
       }));
     }
-  }, {
-    key: "contacts",
-    get: function get() {
-      var _this = this;
-
-      return {
-        link: function link(contacts) {
-          return _this.linkContacts(contacts);
-        },
-        get: function get(params) {
-          return _this.getContacts(params);
-        },
-        unlink: function unlink(contacts) {
-          return _this.unlinkContacts(contacts);
-        }
-      };
-    }
   }]);
 
   return HasContacts;

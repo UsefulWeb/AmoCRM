@@ -50,6 +50,9 @@ https://www.amocrm.ru/developers/content/api/contacts
 |[exists](#exists) |Проверяет, существует ли до сих пор контакт в CRM   |
 
 ### Работа с покупателем контакта
+
+
+
 ### Работа со сделками контакта
 ### Работа с компанией контакта
 ### Работа с примечаниями контакта
@@ -245,3 +248,4 @@ delete contact.name;
 // Аналогично
 contact.removeAttribute( 'name' );
 ```
+
