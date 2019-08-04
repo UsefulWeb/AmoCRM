@@ -3,6 +3,40 @@
 Ссылка на документацию:
 https://www.amocrm.ru/developers/content/api/leads
 
+```js
+// Ищем первый контакт по телефону
+const contact = await crm.Contact.findOne({
+  query: '89991597532'
+});
+
+// Создаём сделку 
+const lead = new crm.Lead({
+  name: 'Покупка карандашей',
+  responsible_user_id: '957083',
+  contacts_id: [
+    contact.id
+  ],
+  sale: '5000'
+});
+
+await lead.save();
+
+// Создаём примечание к сделке
+const note = new crm.Note({
+  text: 'Это важно!'
+});
+
+await lead.notes.add([ note ]);
+
+// Добавляем задачу к сделке
+const task = new crm.Task({
+  text: 'Не забыть перезвонить',
+  responsible_user_id: '504141'
+});
+
+await lead.tasks.add([ task ]);
+```
+
 ## Описание методов
 
 | Объект            | Описание                                                                        |
