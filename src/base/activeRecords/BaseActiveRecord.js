@@ -25,7 +25,11 @@ class BaseActiveRecord {
   }
 
   set attributes( attributes ) {
+    const { id } = this._attributes;
     this._attributes = attributes;
+    if ( id ) {
+      this._attributes.id = id;
+    }
   }
 
   get attributes() {
