@@ -86,104 +86,41 @@ await lead.addTasks([ task ]);
 
 | Метод                                            | Описание                                        |
 |--------------------------------------------------|-------------------------------------------------|
-|[contacts.link](#contactslink--linkcontacts)      |Прикрепляет контакты к сделке                    |
-|[contacts.get](#contactsget--getcontacts)         |Получает список контактов, прикреплённых к сделке|
-|[contacts.unlink](#contactsunlink--unlinkcontacts)|Открепляет контакты от сделки                    |
-
-<details>
-<summary>
-Синонимы
-</summary>
-
-| Метод | Описание |
-|-------------------------------------------------|-----------------------|
-|[linkContacts](#contactslink--linkcontacts)      |Синоним contacts.link  |
-|[getContacts](#contactsget--getcontacts)         |Синоним contacts.get   |
-|[unlinkContacts](#contactsunlink--unlinkcontacts)|Синоним contacts.unlink|
-
-</details>
+|[linkContacts](#contactslink--linkcontacts)      |Прикрепляет контакты к сделке                    |
+|[getContacts](#contactsget--getcontacts)         |Получает список контактов, прикреплённых к сделке|
+|[unlinkContacts](#contactsunlink--unlinkcontacts)|Открепляет контакты от сделки                    |
 
 ### Работа с компанией сделки
 
 | Метод                                         | Описание                                      |
 |-----------------------------------------------|-----------------------------------------------|
-|[company.link](#companylink--linkcompany)      |Прикрепляет компанию к сделке                  |
-|[company.get](#companyget--getcompany)         |Получает компанию, которая прикреплена к сделке|
-|[company.unlink](#companyunlink--unlinkcompany)|Открепляет компанию от сделки                  |
-
-<details>
-<summary>
-Синонимы
-</summary>
-
-| Метод                                        | Описание             |
-|----------------------------------------------|----------------------|
-|[linkCompany](#companylink--linkcompany)      |Синоним company.link  |
-|[getCompany](#companyget--getcompany)         |Синоним company.get   |
-|[unlinkCompany](#companyunlink--unlinkcompany)|Синоним company.unlink|
-</details>
+|[linkCompany](#companylink--linkcompany)      |Прикрепляет компанию к сделке                  |
+|[getCompany](#companyget--getcompany)         |Получает компанию, которая прикреплена к сделке|
+|[unlinkCompany](#companyunlink--unlinkcompany)|Открепляет компанию от сделки                  |
 
 ### Работа с примечаниями сделки
 
 | Метод                            | Описание                                          |
 |----------------------------------|---------------------------------------------------|
 |[new Note](#notescreate--new-note)|Создаёт заметку, которая будет прикреплена к сделке|
-|[notes.get](#notesget--getnotes)  |Получает список примечаний для данной сделки       |
-|[notes.add](#notesadd--addnotes)  |Прикрепляет к сделке массив примечаний             |
-
-<details>
-<summary>
-Синонимы
-</summary>
-
-| Метод                                | Описание        |
-|--------------------------------------|-----------------|
-|[notes.create](#notescreate--new-note)|Синоним new Note |
-|[getNotes](#notesget--getnotes)       |Синоним notes.get|
-|[addNotes](#notesadd--addnotes)       |Синоним notes.add|
-
-</details>
+|[getNotes](#notesget--getnotes)  |Получает список примечаний для данной сделки       |
+|[addNotes](#notesadd--addnotes)  |Прикрепляет к сделке массив примечаний             |
 
 ### Работа с задачами сделки
 
 | Метод                            | Описание                                         |
 |----------------------------------|--------------------------------------------------|
 |[new Task](#taskscreate--new-task)|Создаёт задачу, которая будет прикреплена к сделке|
-|[tasks.get](#tasksget--gettasks)  |Получает все задачи, прикреплённые к сделке       |
-|[tasks.add](#tasksadd--addtasks)  |Прикрепляет к сделке массив примечаний            |
-
-<details>
-<summary>
-Синонимы
-</summary>
-
-| Метод                                | Описание        |
-|--------------------------------------|-----------------|
-|[tasks.create](#taskscreate--new-task)|Синоним new Task |
-|[getTasks](#tasksget--gettasks)       |Синоним tasks.get|
-|[addTasks](#tasksadd--addtasks)       |Синоним tasks.add|
-
-</details>
+|[getTasks](#tasksget--gettasks)  |Получает все задачи, прикреплённые к сделке       |
+|[addTasks](#tasksadd--addtasks)  |Прикрепляет к сделке массив примечаний            |
 
 ### Работа с дополнительными полями сделок
 
 | Метод                                                      | Описание                                     |
 |------------------------------------------------------------|----------------------------------------------|
 |[new crm.Lead.Field](#crmleadfieldscreate--new-crmleadfield)|Создаёт дополнительное поле у сделки          |
-|[crm.Lead.fields.get](#crmleadfieldsget--crmleadgetfields)  |Получает все произвольные поля сделок         |
-|[crm.Lead.fields.add](#crmleadfieldsadd--crmleadaddfields)  |Прикрепляет к сделке массив произвольных полей|
-
-<details>
-<summary>
-Синонимы
-</summary>
-
-| Метод                                                          | Описание                  |
-|----------------------------------------------------------------|---------------------------|
-|[crm.Lead.fields.create](#crmleadfieldscreate--new-crmleadfield)|Синоним new crm.Lead.Field |
-|[crm.Lead.getFields](#crmleadfieldsget--crmleadgetfields)       |Синоним crm.Lead.fields.get|
-|[crm.Lead.addFields](#crmleadfieldsadd--crmleadaddfields)       |Синоним crm.Lead.fields.add|
-</details>
+|[crm.Lead.getFields](#crmleadfieldsget--crmleadgetfields)  |Получает все произвольные поля сделок         |
+|[crm.Lead.addFields](#crmleadfieldsadd--crmleadaddfields)  |Прикрепляет к сделке массив произвольных полей|
 
 ## Множественные операции
 
