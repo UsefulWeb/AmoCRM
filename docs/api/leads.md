@@ -80,7 +80,6 @@ await lead.addTasks([ task ]);
     4. [crm.Lead.findByCustomFields](#crmleadfindbycustomfields)
     5. [crm.Lead.findByCustomField](#crmleadfindbycustomfield)
     6. [crm.Lead.findByTerm](#crmleadfindbyterm)
-    
 
 ### Множественные операции
 
