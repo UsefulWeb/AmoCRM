@@ -43,7 +43,7 @@ class ResourceFactory {
     return this.create( attributes );
   }
 
-  of(items={}) {
+  of(items=[]) {
     return items.map( item => this.from( item ));
   }
 }
