@@ -40,6 +40,10 @@ class BaseActiveRecord {
     delete this._attributes[ attribute ];
   }
 
+  setAttributes( attributes ) {
+    this.attributes = attributes;
+  }
+
   setAttribute( attribute, value ) {
     this._attributes[ attribute ] = value;
     return this;
