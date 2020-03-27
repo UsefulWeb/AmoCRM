@@ -73,6 +73,14 @@ await lead.addTasks([ task ]);
     2. [crm.Lead.getFields](#crmleadgetfields)
     3. [crm.Lead.addFields](#crmleadaddfields)
 8. [Атрибуты сделки](#работа-с-атрибутами-сделки)
+9. [Недокументированные возможности](#недокументированные-возможности)
+    1. [remove](#remove)
+    2. [crm.Lead.remove](#crmleadremove)
+    3. [crm.Lead.findByAttributes](#crmleadfindbyattributes)
+    4. [crm.Lead.findByCustomFields](#crmleadfindbycustomfields)
+    5. [crm.Lead.findByCustomField](#crmleadfindbycustomfield)
+    6. [crm.Lead.findByTerm](#crmleadfindbyterm)
+    
 
 ### Множественные операции
 
@@ -783,6 +791,16 @@ await crm.Lead.addFields([ field ]);
 
 Данные возможности не описаны в документации AmoCRM, их стабильность
 и поддержка в будущем не гарантируется.
+
+### remove
+
+Удаляет сделку из CRM
+
+```js
+const lead = await crm.Lead.findById( 2381742 );
+
+await lead.remove();
+```
 
 ### crm.Lead.remove
 
