@@ -60,18 +60,8 @@ https://www.amocrm.ru/developers/content/api/contacts
 |[update](#crmcontactupdate)    |Обновляет массив контактов одним запросом к CRM           |
 |[from](#создание)              |Преобразует массив атрибутов в массив объектов crm.Contact|
 |[new crm.Contact](#создание)   |Создаёт объект контакта                                   |
-
-<details>
-<summary>
-Синонимы
-</summary>
-
-| Метод              | Описание              |
-|--------------------|-----------------------|
-|[of](#создание)     |Синоним new crm.Contact|
-|[create](#создание) |Синоним new crm.Contact|
-
-</details>
+|[create](#создание)            |Аналогично new crm.Contact                                |
+|[of](#создание)                |Создаёт множество объектов контакта                       |
 
 ### Работа с объектом контакта
 
@@ -223,14 +213,7 @@ const contact = new crm.Contact({
 });
 ```
 
-Аналогичую работу выполняют *crm.Contact.of* и *crm.Contact.create*
-
-```js
-const contact = crm.Contact.of({
-  name: 'Иван',
-  responsible_user_id: '957083',
-});
-```
+Аналогичую работу выполняет *crm.Contact.create*
 
 ```js
 const contact = crm.Contact.create({
@@ -238,6 +221,27 @@ const contact = crm.Contact.create({
   responsible_user_id: '957083',
 });
 ```
+
+Для создания множества контактов с начальными атрибутами
+можно воспользоваться *crm.Contact.of*
+
+```js
+const contacts = crm.Contact.of([
+  {
+    name: 'Иван',
+    responsible_user_id: '957083',
+  },
+  {
+    name: 'Татьяна',
+    responsible_user_id: '957083',
+  }
+]);
+```
+
+Данные контакты не будут добавлены в CRM. Для их добавления
+потребуется вызвать метод *save()* у каждого. Если вы хотите
+сразу добавить или обновить контакты, рекомендуем воспользоваться
+*crm.Contact.insert* или *crm.Contact.update*.
 
 ### Работа с атрибутами контакта
 
