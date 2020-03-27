@@ -22,15 +22,33 @@ https://www.amocrm.ru/developers/content/api/contacts
     2. [getContacts](#getcontacts)
     3. [unlinkContacts](#unlinkcontacts)
 4. [Сделки контакта](#работа-со-сделками-контакта)
-    1.
-    2. 
-    3. 
+    1. [new Lead](#new-task)
+    2. [getLeads](#getleads)
+    3. [addLeads](#addleads)
 5. [Компания контакта](#работа-с-компанией-контакта)
+    1. [getCompany](#getсompany) 
+    2. [linkCompany](#linkсompany)
+    3. [unlinkCompany](#unlinkсompany)
 6. [Примечания контакта](#работа-с-примечаниями-контакта)
+    1. [new Note](#new-note)
+    2. [getNotes](#getnotes)
+    3. [addNotes](#addnotes)
 7. [Задачи контакта](#работа-с-задачми-контакта)
+    1. [new Task](#new-task)
+    2. [getTasks](#gettasks) 
+    3. [addTasks](#addtasks)
 8. [Дополнительные поля контактов](#работа-с-дополнительными-полями-контактов)
+    1. [new crm.Contact.Field](#new-crmcontactfield)
+    2. [crm.Contact.getFields](#crmcontactgetfields)
+    3. [crm.Contact.addFields](#crmcontactaddfields)
 9. [Атрибуты контакта](#работа-с-атрибутами-контакта)
 9. [Недокументированные возможности](#недокументированные-возможности)
+    1. [remove](#remove)
+    2. [crm.Contact.remove](#crmcontactremove)
+    3. [crm.Contact.findByAttributes](#crmcontactfindbyattributes)
+    4. [crm.Contact.findByCustomFields](#crmcontactfindbycustomfields)
+    5. [crm.Contact.findByCustomField](#crmcontactfindbycustomfield)
+    6. [crm.Contact.findByTerm](#crmcontactfindbyterm)
 
 ### Множественные операции
 
