@@ -3,6 +3,9 @@ import Customer from '../activeRecords/Customer';
 import CustomerResource from '../resources/CustomerResource';
 import HasFields from "../../base/factories/behaviors/HasFields";
 
+/**
+ * @mixes HasFields
+ */
 class CustomerFactory extends EntityFactory {
   static activeRecordClass = Customer;
   static resourceClass = CustomerResource;

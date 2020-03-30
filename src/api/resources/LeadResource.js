@@ -3,6 +3,10 @@ import EntityResource from '../../base/resources/EntityResource';
 import Removable from '../../base/resources/behaviors/PrivateRemovable';
 import HasMultiactions from '../../base/resources/behaviors/HasMultiactions';
 
+/**
+ * @mixes Removable
+ * @mixes HasMultiactions
+ */
 class LeadResource extends EntityResource {
   static path = schema.entities.leads.path;
   static deletePath = schema.entities.leads.deletePath;

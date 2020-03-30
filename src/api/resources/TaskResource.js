@@ -4,6 +4,11 @@ import Removable from "../../base/resources/behaviors/PrivateRemovable";
 import HasMultiactions from "../../base/resources/behaviors/HasMultiactions";
 import hasElementTypeByKey from "../../base/resources/behaviors/static/hasElementTypeByKey";
 
+/**
+ * @mixes Removable
+ * @mixes Removable
+ * @mixes HasMultiactions
+ */
 class TaskResource extends EntityResource {
   static path = schema.entities.tasks.path;
   static deletePath = schema.entities.tasks.deletePath;

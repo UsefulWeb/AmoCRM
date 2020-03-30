@@ -5,6 +5,11 @@ import Removable from "../../base/factories/behaviors/Removable";
 import RemovableById from "../../base/factories/behaviors/RemovableById";
 import HasFields from "../../base/factories/behaviors/HasFields";
 
+/**
+ * @mixes Removable
+ * @mixes RemovableById
+ * @mixes HasFields
+ */
 class LeadFactory extends EntityFactory {
   static activeRecordClass = Lead;
   static resourceClass = LeadResource;

@@ -5,6 +5,12 @@ import Insertable from "./behaviors/Insertable";
 import Findable from "./behaviors/Findable";
 import FindableById from "./behaviors/FindableById";
 
+/**
+ * @mixes Findable
+ * @mixes FindableById
+ * @mixes Updatable
+ * @mixes Insertable
+ */
 class EntityResource extends RemoteResource {
 
   static path;

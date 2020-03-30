@@ -4,6 +4,11 @@ import Removable from "../../base/resources/behaviors/PrivateRemovable";
 import HasMultiactions from "../../base/resources/behaviors/HasMultiactions";
 import Filterable from "../../base/resources/behaviors/Filterable";
 
+/**
+ * @mixes Removable
+ * @mixes HasMultiactions
+ * @mixes Filterable
+ */
 class ContactResource extends EntityResource {
   static path = schema.entities.contacts.path;
   static deletePath = schema.entities.contacts.deletePath;

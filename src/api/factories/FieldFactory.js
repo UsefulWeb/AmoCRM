@@ -5,6 +5,11 @@ import Updatable from "../../base/factories/behaviors/Updatable";
 import Insertable from "../../base/factories/behaviors/Insertable";
 import Removable from "../../base/factories/behaviors/Removable";
 
+/**
+ * @mixes Updatable
+ * @mixes Insertable
+ * @mixes Removable
+ */
 class FieldFactory extends ResourceFactory {
   static activeRecordClass = Field;
   static resourceClass = FieldResource;

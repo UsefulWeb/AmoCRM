@@ -5,6 +5,11 @@ import Removable from "../../base/activeRecords/behaviors/Removable";
 import HasNotes from "../../base/activeRecords/behaviors/HasNotes";
 import HasElementByField from "../../base/activeRecords/behaviors/HasElementByField";
 
+/**
+ * @mixes Removable
+ * @mixes HasNotes
+ * @mixes HasElementByField
+ */
 class Task extends EntityActiveRecord {
   static behaviors = [
     new Removable,

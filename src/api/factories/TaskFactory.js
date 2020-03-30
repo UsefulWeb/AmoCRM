@@ -3,6 +3,9 @@ import Task from '../activeRecords/Task';
 import TaskResource from '../resources/TaskResource';
 import Removable from '../../base/factories/behaviors/Removable';
 
+/**
+ * @mixes Removable
+ */
 class TaskFactory extends EntityFactory {
   static activeRecordClass = Task;
   static resourceClass = TaskResource;

@@ -7,6 +7,12 @@ import Findable from "./behaviors/Field/Findable";
 import hasElementTypeByKey from "../../base/resources/behaviors/static/hasElementTypeByKey";
 import EntityResponseHandler from "../../base/responseHandlers/EntityResponseHandler";
 
+/**
+ * @mixes Removable
+ * @mixes Updatable
+ * @mixes Insertable
+ * @mixes Findable
+ */
 class FieldResource extends RemoteResource {
   static path = schema.entities.fields.path;
   static getPath = schema.account;

@@ -2,6 +2,9 @@ import schema from '../../apiUrls';
 import EntityResource from '../../base/resources/EntityResource';
 import Removable from "../../base/resources/behaviors/Removable";
 
+/**
+ * @mixes Removable
+ */
 class CustomerResource extends EntityResource {
   static path = schema.entities.customers.path;
   static deletePath = schema.entities.customers.deletePath;

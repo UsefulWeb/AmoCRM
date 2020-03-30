@@ -4,6 +4,9 @@ import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 import NoteResource from "../resources/NoteResource";
 import HasElementByField from "../../base/activeRecords/behaviors/HasElementByField";
 
+/**
+ * @mixes HasElementByField
+ */
 class Note extends EntityActiveRecord {
   static behaviors = [ new HasElementByField( 'NOTE_ELEMENT_TYPE' )];
   fetch() {

@@ -433,8 +433,7 @@ console.log( await lead.exists()); // false
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// аналогично lead.linkContacts
-await lead.contacts.link([
+await lead.linkContacts([
   // массив идентификаторов контактов
   539712,
   781242
@@ -449,8 +448,7 @@ const lead = await crm.Lead.findById( 127311 );
 const contact1 = await crm.Contact.findById( 539712 );
 const contact2 = await crm.Contact.findById( 781242 );
 
-// аналогично lead.linkContacts
-await lead.contacts.link([
+await lead.linkContacts([
   contact1,
   contact2
 ]);
@@ -468,7 +466,6 @@ await lead.contacts.link([
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// аналогично lead.getContacts
 const contacts = await lead.getContacts();
 ```
 
@@ -493,8 +490,7 @@ https://www.amocrm.ru/developers/content/api/contacts
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// аналогично lead.unlinkContacts
-await lead.contacts.unlink([
+await lead.unlinkContacts([
   // массив идентификаторов контактов
   539712,
   781242
@@ -509,8 +505,7 @@ const lead = await crm.Lead.findById( 127311 );
 const contact1 = await crm.Contact.findById( 539712 );
 const contact2 = await crm.Contact.findById( 781242 );
 
-// аналогично lead.unlinkContacts
-await lead.contacts.unlink([
+await lead.unlinkContacts([
   contact1,
   contact2
 ]);
@@ -524,7 +519,7 @@ const lead = await crm.Lead.findById( 127311 );
 const contacts = await lead.getContacts();
 
 // открепит все контакты от сделки
-await lead.contacts.unlink( contacts );
+await lead.unlinkContacts( contacts );
 ```
 
 #### Внутренняя работа метода
@@ -543,7 +538,6 @@ const lead = await crm.Lead.findById( 127311 );
 
 const company = await crm.Company.findById( 539712 );
 
-// Аналогично lead.linkCompany
 await lead.linkCompany( company );
 ```
 
@@ -559,7 +553,6 @@ await lead.linkCompany( company );
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// Аналогично lead.getCompany
 const company = await lead.getCompany();
 ```
 
@@ -570,7 +563,6 @@ const company = await lead.getCompany();
 ```js
 const lead = await crm.Lead.findById( 127311 );
 
-// Аналогично lead.unlinkCompany
 await lead.unlinkCompany();
 ```
 
@@ -639,16 +631,8 @@ const note = new crm.Note({
   text: 'Это важно!'
 });
 
-// аналогично lead.addNotes
 lead.addNotes([ note ]);
 ```
-
-#### Внутренняя работа метода
-
-Задаёт соответствующие значения свойств 
-*element_type* и *element_id*
-у передаваемых объектов *Note* 
-и вызывает *crm.Note.insert*
 
 ## Работа с задачами
 
@@ -668,12 +652,6 @@ const task = new lead.Task({
 // добавляем данные в CRM
 await task.save();
 ```
-
-#### Внутренняя работа метода
-
-Задаёт соответствующие значения свойств 
-*element_type* и *element_id*
-у передаваемых объектов *Task*
 
 ### getTasks()
 
@@ -714,13 +692,6 @@ const task = new crm.Task({
 lead.addTasks([ task ]);
 ```
 
-#### Внутренняя работа метода
-
-Задаёт соответствующие значения свойств 
-*element_type* и *element_id*
-у передаваемых объектов *Task*
-и вызывает *crm.Task.insert*
-
 ## Работа с дополнительными полями
 
 ### new crm.Lead.Field()
@@ -750,10 +721,6 @@ const field = new crm.Lead.Field({
 await field.save();
 ```
 
-#### Внутренняя работа метода
-
-Задаёт соответствующее значение свойства *element_type*
-
 ### crm.Lead.getFields()
 
 Получает все произвольные поля сделок.
@@ -782,7 +749,6 @@ const field = new crm.Field({
   ]
 });
 
-// аналогично crm.Lead.addFields
 await crm.Lead.addFields([ field ]);
 ```
 

@@ -7,6 +7,13 @@ import HasTasks from '../../base/activeRecords/behaviors/HasTasks';
 import HasCustomers from "./behaviors/Contact/HasCustomers";
 import HasCompany from "../../base/activeRecords/behaviors/HasCompany";
 
+/**
+ * @mixes Removable
+ * @mixes HasNotes
+ * @mixes HasTasks
+ * @mixes HasCustomers
+ * @mixes HasCompany
+ */
 class Contact extends EntityActiveRecord {
   static behaviors = [
     new Removable,

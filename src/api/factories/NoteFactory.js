@@ -6,8 +6,13 @@ import Insertable from "../../base/factories/behaviors/Insertable";
 import FindableById from "../../base/factories/behaviors/FindableById";
 import Updatable from "../../base/factories/behaviors/Updatable";
 
-const { afterFindById } = new FindableById;
+const { afterFindById } = FindableById.prototype;
 
+/**
+ * @mixes Findable
+ * @mixes Insertable
+ * @mixes Updatable
+ */
 class NoteFactory extends EntityFactory {
   static activeRecordClass = Note;
   static resourceClass = NoteResource;

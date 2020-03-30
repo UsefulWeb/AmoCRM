@@ -4,6 +4,9 @@ import EntityActiveRecord from '../../base/activeRecords/EntityActiveRecord';
 import Removable from '../../base/activeRecords/behaviors/Removable';
 import factories from '../factories';
 
+/**
+ * @mixes Removable
+ */
 class Catalog extends EntityActiveRecord {
   static behaviors = [ new Removable ];
 

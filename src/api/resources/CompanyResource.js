@@ -3,6 +3,10 @@ import EntityResource from '../../base/resources/EntityResource';
 import Removable from "../../base/resources/behaviors/PrivateRemovable";
 import HasMultiactions from "../../base/resources/behaviors/HasMultiactions";
 
+/**
+ * @mixes Removable
+ * @mixes HasMultiactions
+ */
 class CompanyResource extends EntityResource {
   static path = schema.entities.companies.path;
   static ENTITY_TYPE = 3;

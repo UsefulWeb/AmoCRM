@@ -1,11 +1,24 @@
 'use strict';
 import EventResource from './base/EventResource';
-import AmoConnection from './base/AmoConnection';
+import Connection from './base/connection/Connection';
 import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
 import schema from './apiUrls';
+import ConnectionRequest from './base/connection/ConnectionRequest';
 
+/**
+ * @property {LeadFactory} Lead
+ * @property {ContactFactory} Contact
+ * @property {CatalogFactory} Catalog
+ * @property {CatalogElementFactory} CatalogElement
+ * @property {CompanyFactory} Company
+ * @property {NoteFactory} Note
+ * @property {TaskFactory} Task
+ * @property {CustomerFactory} Customer
+ * @property {IncomingLeadFactory} IncomingLead
+ * @property {FieldFactory} Field
+ * @property {PipelineFactory} Pipeline
+ */
 class AmoCRM extends EventResource {
-
   constructor( options ) {
     super();
     if ( !options ) {
@@ -16,16 +29,17 @@ class AmoCRM extends EventResource {
       auth: {}
     }, options );
 
+    const connection = new Connection( options );
     this._options = options;
-    this._connection = new AmoConnection( options );
+    this._connection = connection;
+    this._request = new ConnectionRequest( connection );
 
     this.registerEvents();
     this.assignFactories();
   }
 
   registerEvents() {
-
-    this.proxyEventHandlers( 'connection', AmoConnection.EVENTS, this._connection );
+    this.proxyEventHandlers( 'connection', Connection.EVENTS, this._connection );
     this._connection.on( 'error', ( ...args ) =>
       this.triggerEvent( 'error', ...args )
     );
@@ -38,10 +52,7 @@ class AmoCRM extends EventResource {
   }
 
   get request() {
-    return {
-      get: ( url, data, options ) => this._connection.request( url, data, 'GET', options ),
-      post: ( url, data, options ) => this._connection.request( url, data, 'POST', options )
-    };
+    return this._request;
   }
 
   get connection() {

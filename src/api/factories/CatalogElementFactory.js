@@ -3,6 +3,9 @@ import CatalogElementResource from '../resources/CatalogElementResource';
 import EntityFactory from '../../base/factories/EntityFactory';
 import Removable from '../../base/factories/behaviors/Removable';
 
+/**
+ * @mixes Removable
+ */
 class CatalogElementFactory extends EntityFactory {
   static activeRecordClass = CatalogElement;
   static resourceClass = CatalogElementResource;

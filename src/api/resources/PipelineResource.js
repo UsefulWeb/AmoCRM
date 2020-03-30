@@ -3,6 +3,9 @@ import EntityResource from '../../base/resources/EntityResource';
 import Findable from "../../base/resources/behaviors/Findable";
 import PipelineResponseHandler from "../responseHandlers/PipelineResponseHandler";
 
+/**
+ * @mixes Findable
+ */
 class PipelineResource extends EntityResource {
   static path = schema.entities.pipelines.path;
   static getPath = schema.entities.pipelines.getPath;

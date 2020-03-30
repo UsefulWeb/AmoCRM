@@ -6,6 +6,11 @@ import HasNotes from "../../base/activeRecords/behaviors/HasNotes";
 import HasTasks from "../../base/activeRecords/behaviors/HasTasks";
 import factories from '../factories';
 
+/**
+ * @mixes Removable
+ * @mixes HasNotes
+ * @mixes HasTasks
+ */
 class Customer extends EntityActiveRecord {
   static behaviors = [ new Removable, new HasNotes, new HasTasks ];
 

@@ -8,6 +8,13 @@ import HasTasks from '../../base/activeRecords/behaviors/HasTasks';
 import HasContacts from './behaviors/Lead/HasContacts';
 import HasCompany from '../../base/activeRecords/behaviors/HasCompany';
 
+/**
+ * @mixes Removable
+ * @mixes HasNotes
+ * @mixes HasTasks
+ * @mixes HasContacts
+ * @mixes HasCompany
+ */
 class Lead extends EntityActiveRecord {
   static behaviors = [
     new Removable,

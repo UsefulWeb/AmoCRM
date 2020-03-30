@@ -7,6 +7,12 @@ import Findable from "../../base/resources/behaviors/Findable";
 import FindableById from "../../base/resources/behaviors/FindableById";
 import Insertable from "../../base/resources/behaviors/Insertable";
 
+/**
+ * @mixes Findable
+ * @mixes Updatable
+ * @mixes Insertable
+ * @mixes HasMultiactions
+ */
 class NoteResource extends EntityResource {
   static path = schema.entities.notes.path;
   static deletePath = schema.entities.notes.deletePath;

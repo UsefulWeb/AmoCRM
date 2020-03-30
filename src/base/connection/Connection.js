@@ -1,11 +1,11 @@
 'use strict';
 
-import schema from '../apiUrls.js';
-import EventResource from './EventResource';
-import { delay } from '../helpers';
-import PrivateDomainRequest from "./requests/domain/PrivateDomainRequest";
+import schema from '../../apiUrls.js';
+import EventResource from '../EventResource';
+import { delay } from '../../helpers';
+import PrivateDomainRequest from "../requests/domain/PrivateDomainRequest";
 
-class AmoConnection extends EventResource {
+class Connection extends EventResource {
 
   static EVENTS = [
     'beforeReconnect',
@@ -117,4 +117,4 @@ class AmoConnection extends EventResource {
       });
   }
 }
-module.exports = AmoConnection;
+module.exports = Connection;

@@ -18,11 +18,11 @@ https://www.amocrm.ru/developers/content/api/contacts
     2. [fetch](#fetch)
     3. [exists](#exists)
 3. [Покупатель контакта](#работа-с-покупателем-контакта)
-    1. [linkContacts](#linkcontacts)
-    2. [getContacts](#getcontacts)
-    3. [unlinkContacts](#unlinkcontacts)
+    1. [getCustomers](#getcustomers)
+    2. [getCustomers](#getcustomers) 
+    3. [setCustomers](#setCustomers)
 4. [Сделки контакта](#работа-со-сделками-контакта)
-    1. [new Lead](#new-task)
+    1. [new Lead](#new-lead)
     2. [getLeads](#getleads)
     3. [addLeads](#addleads)
 5. [Компания контакта](#работа-с-компанией-контакта)
@@ -75,17 +75,17 @@ https://www.amocrm.ru/developers/content/api/contacts
 
 ### Работа с покупателем контакта
 
-| Метод                                            | Описание                                        |
-|--------------------------------------------------|-------------------------------------------------|
-|[linkContacts](#linkcontacts)                     |Прикрепляет контакты к сделке                    |
-|[getContacts](#getcontacts)                       |Получает список контактов, прикреплённых к сделке|
-|[unlinkContacts](#unlinkcontacts)                 |Открепляет контакты от сделки                    |
+| Метод                                            | Описание                                             |
+|--------------------------------------------------|------------------------------------------------------|
+|[getCustomers](#getcustomers)                     |Получает список покупателей, прикреплённых к контакту |
+|[setCustomer](#setCustomer)                       |Добавляет одного покупателя к контакту                |
+|[setCustomers](#setCustomers)                     |Добавляет список покупателей к контакту               |
 
 ### Работа со сделками контакта
 
 | Метод                                            | Описание                                        |
 |--------------------------------------------------|-------------------------------------------------|
-|[new Lead](#new-task)                             |Создаёт сделку, прикреплённый к контакту         |
+|[new Lead](#new-lead)                             |Создаёт сделку, прикреплённый к контакту         |
 |[getLeads](#getleads)                             |Получает список сделок, прикреплённых к контакту |
 |[addLeads](#addleads)                             |Прикрепляет к контакту список сделок             |
 
@@ -324,4 +324,217 @@ delete contact.name;
 // Аналогично
 contact.removeAttribute( 'name' );
 ```
+
+### crm.Contact.from
+
+Преобразует массив атрибутов в массив объектов *crm.Contact*
+
+```js
+const contacts = crm.Contact.from([
+  {
+    name: 'Сделка 1'
+  },
+  {
+    name: 'Сделка 2'
+  }
+]);
+```
+
+### attributes
+
+Возвращает объект с текущими атрибутами контакта
+
+```js
+const contact = await crm.Contact.findById( 127311 );
+
+console.log( contact.attributes );
+/*
+{
+  id: 127311,
+  name: 'Иван'
+}
+*/
+```
+
+### save()
+
+Сохраняет изменения в контакте.
+
+```js
+const contact = await crm.Contact.findById( 127311 );
+
+contact.name = 'Петр';
+
+contact.save();
+```
+
+### fetch()
+
+Заменяет все несохранённые данные актуальными из CRM.
+
+```js
+const contact = await crm.Contact.findById( 127311 );
+console.log( contact.name ); // Пётр
+
+contact.name = 'Это название контакта не сохранится, так как не вызван save()';
+
+contact.fetch();
+console.log( contact.name ); // Пётр
+```
+
+### exists()
+
+Проверяет, существует ли до сих пор контакт в CRM.
+
+```js
+const contact = await crm.Contact.findById( 127311 );
+
+// пока ещё контакт есть в CRM
+console.log( await contact.exists()); // true
+
+// ... спустя некоторое время менеджер удалил контакт в CRM ...
+
+console.log( await contact.exists()); // false
+```
+
+## Работа с покупателем контакта
+
+### getCustomers()
+
+Получает список покупателей, прикреплённых к контакту
+
+```js
+const contact = await crm.Contact.findById( 127311 ),
+  customers = await contact.getCustomers(); 
+```
+
+### setCustomer()
+
+Добавляет одного покупателя к контакту
+
+```js
+const contact = await crm.Contact.findById( 127311 );
+
+const customer = new crm.Customer({
+  name: 'Wabeco'
+});
+
+await contact.setCustomer( customer );
+```
+
+### setCustomers()
+
+Добавляет список покупателей к контакту
+
+```js
+const contact = await crm.Contact.findById( 127311 );
+
+const customers = await crm.Customer.find({
+  
+});
+
+await contact.setCustomers( customers );
+```
+
+## Работа со сделками контакта
+
+### new Lead
+
+Создаёт сделку, прикреплённую к контакту
+
+### getLeads()
+
+Получает список сделок, прикреплённых к контакту
+
+### addLeads()
+
+Прикрепляет к контакту список сделок
+
+## Работа с компанией контакта
+
+### getCompany()
+
+Возвращает компанию, прикреплённую к контакту
+
+### linkCompany()
+
+Прикрепляет компанию к контакту
+
+### unlinkCompany()
+
+Открепляет компанию от контакта
+
+## Работа с примечаниями контакта
+
+### new Note
+
+Создаёт примечание у заданного контакта
+
+### getNotes()
+
+Возвращает список примечаний у контакта
+
+### addNotes()
+
+Добавляет примечания контакту
+
+## Работа с задачми контакта
+
+### new Task
+
+Создаёт задачу, прикреплённый к контакту
+
+### getTasks()
+
+Получает список задач заданного контакта
+
+### addTasks()
+
+Добавляет список задач заданному контакту
+
+## Работа с дополнительными полями контактов
+
+### new crm.Contact.Field
+
+Создаёт дополнительное поле у контакта
+
+### crm.Contact.getFields
+
+Получает все произвольные поля контактов
+
+### crm.Contact.addFields
+
+Прикрепляет к контакту массив произвольных полей
+
+## Недокументированные возможности
+
+### remove
+
+Удаляет контакт из CRM
+
+### crm.Contact.remove
+
+Удаляет массив сделок
+
+Метод также может работать с массивом идентификаторов
+
+### crm.Contact.findByAttributes
+
+Поиск по атрибутам контакта. Формирует запрос на портале.
+Описание этого метода нуждается в подробностях
+
+### crm.Contact.findByCustomFields
+
+Поиск по произвольным полям. Формирует запрос на портале.
+Описание этого метода нуждается в подробностях
+
+### crm.Contact.findByCustomField
+
+Поиск по произвольному полю. Формирует запрос на портале.
+Описание этого метода нуждается в подробностях
+
+### crm.Contact.findByTerm
+
+Поиск по общему запросу. Формирует запрос на портале.
+Описание этого метода нуждается в подробностях
 

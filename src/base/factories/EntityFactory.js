@@ -5,6 +5,12 @@ import FindableById from "./behaviors/FindableById";
 import Insertable from "./behaviors/Insertable";
 import Updatable from "./behaviors/Updatable";
 
+/**
+ * @mixes Findable
+ * @mixes FindableById
+ * @mixes Insertable
+ * @mixes Updatable
+ */
 class EntityFactory extends ResourceFactory {
 
   static behaviors = [ new Findable, new FindableById, new Insertable, new Updatable ];
