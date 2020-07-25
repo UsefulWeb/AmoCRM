@@ -60,11 +60,14 @@ var AuthServer = function (_EventResource) {
     value: function handle(request, response) {
       var _url$parse = _url2.default.parse(request.url, true),
           query = _url$parse.query,
-          code = query.code;
+          code = query.code,
+          state = query.state;
 
-      console.log(query);
       response.end();
       if (!code) {
+        return;
+      }
+      if (state !== this._options.state) {
         return;
       }
       this.triggerEvent('code', code);

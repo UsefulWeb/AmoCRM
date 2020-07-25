@@ -127,6 +127,11 @@ var AmoConnection = function (_EventResource) {
       return url;
     }
   }, {
+    key: 'getToken',
+    value: function getToken() {
+      return this._request.getToken();
+    }
+  }, {
     key: 'fetchToken',
     value: function fetchToken() {
       var _this3 = this;
@@ -201,7 +206,9 @@ var AmoConnection = function (_EventResource) {
       if (this._server) {
         return;
       }
-      var server = new _AuthServer2.default(this._options.server);
+      var server = new _AuthServer2.default(_extends({}, this._options.server, {
+        state: this.getState()
+      }));
       this._server = server;
       return new Promise(function (resolve) {
         server.on('code', function (code) {
