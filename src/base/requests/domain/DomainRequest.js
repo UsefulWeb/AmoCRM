@@ -17,7 +17,6 @@ class DomainRequest extends EventResource {
     super();
     this._queue = new Queue( 1 );
     this._cookies = [];
-    this._token;
     this._hostname = domain.includes( '.' ) ? domain : domain + '.amocrm.ru';
   }
 
@@ -87,15 +86,19 @@ class DomainRequest extends EventResource {
 
   /**
    * @param {Array} token
-   * @param {Date} responseAt
+   * @param {Date} tokenHandledAt
    */
-  setToken( token, responseAt ) {
+  setToken( token, tokenHandledAt ) {
     const expiresIn = token.expires_in,
-      responseTimestamp = new Date( responseAt ) / 1000,
+      responseTimestamp = new Date( tokenHandledAt ) / 1000,
       expiresTimestamp = responseTimestamp + expiresIn,
       expires = new Date( expiresTimestamp * 1000 );
     this._expires = expires;
     this._token = token;
+  }
+
+  getToken() {
+    return this._token;
   }
 
   setCookies( cookies ) {

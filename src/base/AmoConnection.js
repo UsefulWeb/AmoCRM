@@ -8,33 +8,26 @@ import PrivateDomainRequest from "./requests/domain/PrivateDomainRequest";
 class AmoConnection extends EventResource {
 
   static EVENTS = [
-    'beforeReconnect',
     'beforeConnect',
-    'checkReconnect',
+    'beforeFetchToken',
+    'beforeRefreshToken',
+    'checkToken',
     'authError',
     'connected',
-    'disconnected',
     'error'
   ];
-
-  static SESSION_LIFETIME = 15 * 60 * 1000;
 
   constructor( options = {}) {
     super();
     this._request = new PrivateDomainRequest( options.domain );
-    this._options = options.auth;
+    this._options = {
+      ...options.auth
+    };
     this._isConnected = false;
   }
 
   get connected() {
     return this._isConnected;
-  }
-
-  disconnect() {
-    this._request.clear();
-    this._isConnected = false;
-
-    this.triggerEvent( 'disconnected', true );
   }
 
   connectIfNeeded() {
@@ -43,18 +36,12 @@ class AmoConnection extends EventResource {
       return this.connect();
     }
 
-    this.triggerEvent( 'checkReconnect', true );
+    this.triggerEvent( 'checkToken', true );
 
-    const { SESSION_LIFETIME } = this.constructor,
-      sessionExpiresAt = +this._lastRequestAt + SESSION_LIFETIME,
-      now = new Date;
-
-    if ( now > sessionExpiresAt ) {
-      return this.reconnect();
-    }
+    const now = new Date;
 
     if ( this._request.expires && now > this._request.expires ) {
-      return this.reconnect();
+      return this.refreshToken();
     }
 
     return Promise.resolve();
@@ -68,18 +55,18 @@ class AmoConnection extends EventResource {
       });
   }
 
+  setToken( token, tokenHandledAt ) {
+    this._request.setToken( token, tokenHandledAt );
+    return this;
+  }
 
-  reconnect() {
-    this._isConnected = false;
-    this._request.clear();
-    this.triggerEvent( 'beforeReconnect', true );
+  setCode( code ) {
+    this._options.code = code;
     return this.connect();
   }
 
-  connect() {
-    if ( this._isConnected ) {
-      return Promise.resolve( true );
-    }
+  fetchToken() {
+    this.triggerEvent( 'beforeFetchToken', this );
     const {
         client_id,
         client_secret,
@@ -94,19 +81,63 @@ class AmoConnection extends EventResource {
         grant_type: 'authorization_code',
       };
 
-    this.triggerEvent( 'beforeConnect', this );
-    // console.log({ data });
-    this._lastConnectionRequestAt = new Date;
     return this._request.post( schema.auth.token, data )
+      .then( response => {
+        this.handleToken( response );
+        return response;
+      });
+  }
+
+  refreshToken() {
+    this.triggerEvent( 'beforeRefreshToken', this );
+    console.log('refreshing token');
+    const {
+        client_id,
+        client_secret,
+        redirect_uri,
+      } = this._options,
+      token = this._request.getToken();
+    if ( !token ) {
+      console.log('no token');
+      return;
+    }
+    const { refresh_token } = token,
+      data = {
+        client_id,
+        client_secret,
+        redirect_uri,
+        refresh_token,
+        grant_type: 'refresh_token',
+      };
+
+    return this._request.post( schema.auth.token, data )
+      .then( response => {
+        this.handleToken( response );
+        return response;
+      });
+  }
+
+  handleToken( response ) {
+    if ( !response.data.token_type ) {
+      return;
+    }
+    const responseAt = response.info.headers.date;
+    this.setToken( response.data, responseAt );
+  }
+
+  connect() {
+    if ( this._isConnected ) {
+      return Promise.resolve( true );
+    }
+
+    this.triggerEvent( 'beforeConnect', this );
+    this._lastConnectionRequestAt = new Date;
+    const requestPromise = this._isConnected ? this.refreshToken() : this.fetchToken();
+
+    return requestPromise
       .then( response => {
         const { data = {}} = response;
         if ( data && data.token_type ) {
-          this._isConnected = true;
-        }
-
-        if ( this._isConnected ) {
-          const responseAt = response.info.headers.date;
-          this._request.setToken( data, responseAt );
           this._lastRequestAt = new Date;
           this.triggerEvent( 'connected', this );
           return true;

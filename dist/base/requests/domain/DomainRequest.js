@@ -48,7 +48,6 @@ var DomainRequest = function (_EventResource) {
 
     _this._queue = new _promiseQueue2.default(1);
     _this._cookies = [];
-    _this._token;
     _this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
     return _this;
   }
@@ -144,18 +143,23 @@ var DomainRequest = function (_EventResource) {
 
     /**
      * @param {Array} token
-     * @param {Date} responseAt
+     * @param {Date} tokenHandledAt
      */
 
   }, {
     key: 'setToken',
-    value: function setToken(token, responseAt) {
+    value: function setToken(token, tokenHandledAt) {
       var expiresIn = token.expires_in,
-          responseTimestamp = new Date(responseAt) / 1000,
+          responseTimestamp = new Date(tokenHandledAt) / 1000,
           expiresTimestamp = responseTimestamp + expiresIn,
           expires = new Date(expiresTimestamp * 1000);
       this._expires = expires;
       this._token = token;
+    }
+  }, {
+    key: 'getToken',
+    value: function getToken() {
+      return this._token;
     }
   }, {
     key: 'setCookies',

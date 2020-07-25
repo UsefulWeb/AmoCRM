@@ -25,7 +25,6 @@ class AmoCRM extends EventResource {
   }
 
   registerEvents() {
-
     this.proxyEventHandlers( 'connection', AmoConnection.EVENTS, this._connection );
     this._connection.on( 'error', ( ...args ) =>
       this.triggerEvent( 'error', ...args )

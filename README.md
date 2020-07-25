@@ -1,5 +1,25 @@
 # AmoCRM
+
 Javascript библиотека для работы с AmoCRM
+
+Данная версия библиотеки поддерживает OAuth авторизацию и использует адреса AmoRM API v4. 
+
+[Поблагодарить можно тут](https://yasobe.ru/na/cisterna_kofe_dlya_razrabot4ika_biblioteki_amocrm)
+
+## Изменения в 2.x.x по сравнению с 1.x.x
+
+1. Поддержка AmoCRM API v4
+2. Поддержка OAuth
+3. Поддержка метода PATCH
+4. Расширенная информация об ответе (статус ответа, время ответа и т.д)
+
+Если вам нужна поддержка AmoCRM API v2, используйте версии 1.x.x данного пакета. 
+
+## Установка
+
+```
+npm install amocrm-js
+```
 
 ## Подключение к CRM
 ```js
@@ -8,175 +28,98 @@ const AmoCRM = require( 'amocrm-js' );
 const crm = new AmoCRM({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
+    /* 
+      Информация об интеграции (подробности подключения 
+      описаны на https://www.amocrm.ru/developers/content/oauth/step-by-step)
+    */
     auth: {
-        login: 'mylogin',
-        hash: 'mytesthash', // API-ключ доступа
-    }
+      client_id: 'clientId', // ID интеграции
+      client_secret: 'clientSecret', // Секретный ключ
+      redirect_uri: 'redirectUri', // Ссылка для перенаправления
+      code: 'code' // Код авторизации
+    },
 });
 
-// Вход в портал
-crm.connect().then(() => {
-  console.log( `Вход в портал осуществлён` );
-})
-.catch( e => {
-  console.log( 'Ошибка входа', e );
-});
 ```
 
-### Выход из портала
+## Запросы к порталу
 
-Метод *disconnect()* позволяет выйти из портала.
-Он выключает таймер проверки времени истечения сессии.
-
-```javascript
-crm.disconnect();
-```
-
-## Свободный запрос к CRM
+С указанием метода:
 
 ```js
-// Получить данные по аккаунту (GET-запрос)
-crm.request
-.get( '/api/v2/account' )
-.then( data => {
-    console.log( 'Полученные данные', data );
-})
-.catch( e => {
-    console.log( 'Произошла ошибка', e );
-})
 
-// Создать новый контакт (POST-запрос)
-crm.request
-.post( '/api/v2/contacts', {
-    add: [
+const response = await crm.request( 'GET', '/api/v4/account' );
+// возвращает тело ответа 
+console.log( response.data );
+/* 
+  Возвращает расширенную информацию об ответе - 
+  экземпляр http.ServerResponse:
+  https://nodejs.org/api/http.html#http_class_http_serverresponse
+
+*/
+console.log( response.info );
+// к примеру, HTTP-статус ответа операции
+
+```
+
+Методы *crm.request*: get, post, patch
+
+```js
+const response = await crm.request.get( '/api/v4/contacts')
+```
+
+```js
+const response = await crm.request
+    .post( '/api/v4/contacts', 
+      [
         {
-            name: "Walter White",
-            request_id: 143,
-            // другие поля ...
+          name: "Walter White",
+          request_id: 143,
+          // другие поля ...
         }
+      ]
+    )
+```
+
+```js
+const response = await crm.request
+  .patch( '/api/v4/leads',
+    [
+      {
+        "id": 54886,
+        "pipeline_id": 47521,
+        "status_id": 143,
+        "date_close": 1589297221,
+        "loss_reason_id": 7323,
+        "updated_by": 0
+      }
     ]
-})
-.then( data => {
- console.log( 'Полученные данные', data );
-})
-.catch( e => {
- console.log( 'Произошла ошибка создания контакта', e );
-})
+  )
 ```
 
-## Фабрики
+## OAuth
 
-В настоящий момент доступны следующие фабрики:
-
-```js
-
-crm.Lead // манипуляции со сделками
-crm.Contact // манипуляции с контактами
-```
-
-Каждая из фабрик имеет методы для множественных операций со сделками:
-
-```js
-// Поиск сделок по критерию, возвращает [ Lead, Lead, ... ]
-crm.Lead.find( criteria );
-// Добавление сделок
-crm.Lead.insert([
-     {
-         name: "Walter White",
-         request_id: 143,
-         // другие поля ...
-     }
- ]);
-// Обновление сделок
-crm.Lead.update([
-    {
-        id: 1234
-        name: "Walter White",
-        request_id: 143,
-        // другие поля ...
-    }
-]);
-
-// Возвращает Lead
-crm.Lead.findById( id );
-```
-
-## Сделки
-
-```js
-// новая сделка
-const lead = new crm.Lead;
-lead.linked_company_id = 1245;
-lead.updated_at = 12345678;
-lead.price = 10000;
-
-lead.save(); // вернёт Promise
-// альтернативный вариант 1
-const lead = new crm.Lead({
-    linked_company_id: 1245,
-    updated_at: 12345678,
-    price: 10000
-});
-lead.save();
-
-// альтернативный вариант 2
-const lead = crm.Lead.of({
-    linked_company_id: 1245,
-    updated_at: 12345678,
-    price: 10000
-});
-lead.save();
-
-// Обновление сделки
-lead.name = "Заявка для Ивана";
-lead.save();
-
-// Поиск сделок
-
-crm.Lead.find({
-    status: 1 // найти сделки с нужным статусом
-    responsible_user_id: 34 // и определённым ответственным человеком
-})
-.then( leads => {
-    console.log( "Найденное", leads );
-})
-
-// Взять данные о сделке с сервера
-
-crm.Lead.findById( 123 )
-.then( lead => console.log( lead ));
-
-```
-
-### Удаление сделок
-
-Так как в официальном API данная возможность не документирована, лавка может в обозримом будущем прикрыться.
-Тем не менее, есть возможность удалять сделки.
-
-```js
-// список идентификаторов сделок
-crm.Lead.remove([ 12345, 568944 ])
-
-// удаление отедльной сделки
-crm.Lead.findById( 123 )
-.then( lead => lead.remove());
-```
-
-## Переподключение
-
-Переподключение к порталу в случае истечения сессии
-(15 минут бездействия или истечение cookie-файла в течение 2 лет) происходит автоматически.
+ Клиент автоматически получает новый токен по истечению
+ старого (при необходимости).
+ 
+ Методы:
+ 
+ 1. *crm.connection.setCode(code)* - устанавливает код авторизации 
+ и получает токен авторизации.
+ 2. *crm.connection.refreshToken()* - получает новый токен 
+ на основе текущего (по полю *refresh_token*). 
+ Вызывается автоматически при необходимости обновления.
 
 ## Работа с событиями
 
 В настоящий момент доступны следующие события:
 
-1. connection:beforeReconnect
-2. connection:beforeConnect
-3. connection:checkReconnect
-4. connection:authError
-5. connection:connected
-6. connection:disconnected
+1. connection:beforeConnect
+2. connection:beforeFetchToken
+3. connection:beforeRefreshToken
+4. connection:checkToken
+5. connection:authError
+6. connection:connected
 7. connection:error
 
 Добавление обработчика:
