@@ -59,7 +59,7 @@ console.log( response.data );
 */
 console.log( response.info );
 // к примеру, HTTP-статус ответа операции
-
+console.log( response.info.statusCode );
 ```
 
 Методы *crm.request*: get, post, patch
