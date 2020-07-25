@@ -48,6 +48,7 @@ var DomainRequest = function (_EventResource) {
 
     _this._queue = new _promiseQueue2.default(1);
     _this._cookies = [];
+    _this._token;
     _this._hostname = domain.includes('.') ? domain : domain + '.amocrm.ru';
     return _this;
   }
@@ -109,11 +110,21 @@ var DomainRequest = function (_EventResource) {
     }
   }, {
     key: 'getDefaultHeaders',
-    value: function getDefaultHeaders(headers) {
-      return Object.assign({}, headers, {
-        'Cookie': this._cookies.join(),
-        'User-Agent': this.constructor.DEFAULT_USER_AGENT
-      });
+    value: function getDefaultHeaders(options) {
+      var withToken = options.withToken !== false,
+          isJSON = options.json !== false,
+          headers = {};
+
+      if (withToken && this._token) {
+        headers['Authorization'] = 'Bearer ' + this._token.access_token;
+      } else if (!withToken) {
+        headers['Cookie'] = this._cookies.join();
+      }
+      if (isJSON && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      return Object.assign({}, options.headers, headers);
     }
   }, {
     key: 'getRequestHeaders',
@@ -123,12 +134,28 @@ var DomainRequest = function (_EventResource) {
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
       var isGET = method === 'GET',
-          headers = this.getDefaultHeaders(options.headers);
+          headers = this.getDefaultHeaders(options);
 
       if (!isGET && encodedData) {
         headers['Content-Length'] = Buffer.byteLength(encodedData);
       }
       return headers;
+    }
+
+    /**
+     * @param {Array} token
+     * @param {Date} responseAt
+     */
+
+  }, {
+    key: 'setToken',
+    value: function setToken(token, responseAt) {
+      var expiresIn = token.expires_in,
+          responseTimestamp = new Date(responseAt) / 1000,
+          expiresTimestamp = responseTimestamp + expiresIn,
+          expires = new Date(expiresTimestamp * 1000);
+      this._expires = expires;
+      this._token = token;
     }
   }, {
     key: 'setCookies',
@@ -167,7 +194,7 @@ var DomainRequest = function (_EventResource) {
       if (options.saveCookies && response.headers['set-cookie']) {
         this.setCookies(response.headers['set-cookie']);
       }
-      var handler = new responseHandlerClass(rawData);
+      var handler = new responseHandlerClass(rawData, response);
       return handler.toJSON(options);
     }
   }, {

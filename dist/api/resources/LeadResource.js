@@ -8,9 +8,9 @@ var _EntityResource = require('../../base/resources/EntityResource');
 
 var _EntityResource2 = _interopRequireDefault(_EntityResource);
 
-var _apiUrls = require('../../apiUrls');
+var _v = require('../../routes/v2');
 
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
+var _v2 = _interopRequireDefault(_v);
 
 var _RemovableEntityResource = require('../../base/resources/RemovableEntityResource');
 
@@ -36,7 +36,7 @@ var LeadResource = function (_RemoveableEntityReso) {
   return LeadResource;
 }(_RemovableEntityResource2.default);
 
-LeadResource.path = _apiUrls2.default.entities.leads.path;
-LeadResource.deletePath = _apiUrls2.default.entities.leads.deletePath;
+LeadResource.path = _v2.default.entities.leads.path;
+LeadResource.deletePath = _v2.default.entities.leads.deletePath;
 LeadResource.ENTITY_TYPE = 2;
 exports.default = LeadResource;

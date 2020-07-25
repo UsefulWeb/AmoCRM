@@ -1,13 +1,13 @@
 {
   "name": "amocrm-js",
-  "version": "1.0.18",
+  "version": "2.0.0",
   "description": "JS Library for AmoCRM",
   "main": "dist/AmoCRM.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "babel-node spec/run.js",
+    "test": "npm run build && babel-node spec/run.js",
     "build": "babel src -d dist"
   },
   "repository": {

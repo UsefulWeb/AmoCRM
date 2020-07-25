@@ -1,8 +1,8 @@
 'use strict';
 import EventResource from './base/EventResource';
 import AmoConnection from './base/AmoConnection';
-import PrivateDomainRequest from './base/requests/domain/PrivateDomainRequest';
 import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
+import ConnectionRequest from './base/requests/ConnectionRequest';
 
 class AmoCRM extends EventResource {
 
@@ -19,6 +19,7 @@ class AmoCRM extends EventResource {
     this._options = options;
     this._connection = new AmoConnection( options );
 
+    this.request = new ConnectionRequest( this._connection );
     this.registerEvents();
     this.assignFactories();
   }
@@ -35,13 +36,6 @@ class AmoCRM extends EventResource {
     const builder = new ResourceFactoryBuilder( this._connection ),
       factories = builder.getResourceFactories();
     Object.assign( this, factories );
-  }
-
-  get request() {
-    return {
-      get: ( url, data, options ) => this._connection.request( url, data, 'GET', options ),
-      post: ( url, data, options ) => this._connection.request( url, data, 'POST', options )
-    };
   }
 
   get connection() {

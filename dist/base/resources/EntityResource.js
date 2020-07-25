@@ -14,9 +14,9 @@ var _EntityResponseHandler = require('../responseHandlers/EntityResponseHandler'
 
 var _EntityResponseHandler2 = _interopRequireDefault(_EntityResponseHandler);
 
-var _apiUrls = require('../../apiUrls');
+var _v = require('../../routes/v2');
 
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
+var _v2 = _interopRequireDefault(_v);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -103,7 +103,7 @@ var EntityResource = function (_RemoteResource) {
   return EntityResource;
 }(_RemoteResource3.default);
 
-EntityResource.multiactionsPath = _apiUrls2.default.multiactions;
+EntityResource.multiactionsPath = _v2.default.multiactions;
 EntityResource.responseHandlerClass = _EntityResponseHandler2.default;
 EntityResource.DELETE_MULTIACTION_TYPE = 4;
 exports.default = EntityResource;

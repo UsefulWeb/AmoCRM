@@ -16,7 +16,7 @@ class PrivateDomainRequest extends DomainRequest {
 
   requestWithFormData( url, data = {}, method = 'GET', options = {}) {
     const headers = {
-      ...this.getDefaultHeaders( options.headers ),
+      ...this.getDefaultHeaders( options ),
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     };
     const encodedData = qs.stringify( data ),

@@ -17,6 +17,7 @@ class DomainRequest extends EventResource {
     super();
     this._queue = new Queue( 1 );
     this._cookies = [];
+    this._token;
     this._hostname = domain.includes( '.' ) ? domain : domain + '.amocrm.ru';
   }
 
@@ -56,21 +57,45 @@ class DomainRequest extends EventResource {
     return isGET ? qs.stringify( data ) : JSON.stringify( data );
   }
 
-  getDefaultHeaders( headers ) {
-    return Object.assign({}, headers, {
-      'Cookie': this._cookies.join(),
-      'User-Agent': this.constructor.DEFAULT_USER_AGENT
-    })
+  getDefaultHeaders( options ) {
+    const withToken = options.withToken !== false,
+      isJSON = options.json !== false,
+      headers = {};
+
+    if ( withToken && this._token ) {
+      headers[ 'Authorization' ] = 'Bearer ' + this._token.access_token;
+    }
+    else if ( !withToken ) {
+      headers[ 'Cookie' ] = this._cookies.join();
+    }
+    if ( isJSON && !headers[ 'Content-Type' ]) {
+      headers[ 'Content-Type' ] = 'application/json';
+    }
+
+    return Object.assign({}, options.headers, headers );
   }
 
   getRequestHeaders(url, encodedData = '', method = 'GET', options = {}) {
     const isGET = method === 'GET',
-      headers = this.getDefaultHeaders( options.headers );
+      headers = this.getDefaultHeaders( options );
 
     if ( !isGET && encodedData ) {
       headers[ 'Content-Length' ] = Buffer.byteLength( encodedData );
     }
     return headers;
+  }
+
+  /**
+   * @param {Array} token
+   * @param {Date} responseAt
+   */
+  setToken( token, responseAt ) {
+    const expiresIn = token.expires_in,
+      responseTimestamp = new Date( responseAt ) / 1000,
+      expiresTimestamp = responseTimestamp + expiresIn,
+      expires = new Date( expiresTimestamp * 1000 );
+    this._expires = expires;
+    this._token = token;
   }
 
   setCookies( cookies ) {
@@ -100,7 +125,7 @@ class DomainRequest extends EventResource {
     if ( options.saveCookies && response.headers[ 'set-cookie' ]) {
       this.setCookies( response.headers[ 'set-cookie' ]);
     }
-    const handler = new responseHandlerClass( rawData );
+    const handler = new responseHandlerClass( rawData, response );
     return handler.toJSON( options );
   }
 

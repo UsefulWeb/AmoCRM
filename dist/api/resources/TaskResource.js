@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _apiUrls = require('../../apiUrls');
+var _v = require('../../routes/v2');
 
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
+var _v2 = _interopRequireDefault(_v);
 
 var _RemovableEntityResource = require('../../base/resources/RemovableEntityResource');
 
@@ -32,6 +32,6 @@ var TaskResource = function (_RemoveableEntityReso) {
   return TaskResource;
 }(_RemovableEntityResource2.default);
 
-TaskResource.path = _apiUrls2.default.entities.tasks.path;
-TaskResource.deletePath = _apiUrls2.default.entities.tasks.deletePath;
+TaskResource.path = _v2.default.entities.tasks.path;
+TaskResource.deletePath = _v2.default.entities.tasks.deletePath;
 exports.default = TaskResource;

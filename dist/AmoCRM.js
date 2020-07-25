@@ -10,13 +10,13 @@ var _AmoConnection = require('./base/AmoConnection');
 
 var _AmoConnection2 = _interopRequireDefault(_AmoConnection);
 
-var _PrivateDomainRequest = require('./base/requests/domain/PrivateDomainRequest');
-
-var _PrivateDomainRequest2 = _interopRequireDefault(_PrivateDomainRequest);
-
 var _ResourceFactoryBuilder = require('./base/ResourceFactoryBuilder');
 
 var _ResourceFactoryBuilder2 = _interopRequireDefault(_ResourceFactoryBuilder);
+
+var _ConnectionRequest = require('./base/requests/ConnectionRequest');
+
+var _ConnectionRequest2 = _interopRequireDefault(_ConnectionRequest);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,6 +45,7 @@ var AmoCRM = function (_EventResource) {
     _this._options = options;
     _this._connection = new _AmoConnection2.default(options);
 
+    _this.request = new _ConnectionRequest2.default(_this._connection);
     _this.registerEvents();
     _this.assignFactories();
     return _this;
@@ -80,20 +81,6 @@ var AmoCRM = function (_EventResource) {
     key: 'disconnect',
     value: function disconnect() {
       return this._connection.disconnect();
-    }
-  }, {
-    key: 'request',
-    get: function get() {
-      var _this3 = this;
-
-      return {
-        get: function get(url, data, options) {
-          return _this3._connection.request(url, data, 'GET', options);
-        },
-        post: function post(url, data, options) {
-          return _this3._connection.request(url, data, 'POST', options);
-        }
-      };
     }
   }, {
     key: 'connection',

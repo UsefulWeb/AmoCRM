@@ -1,12 +1,13 @@
 class ResponseHandler {
   static errorHandlerClass;
 
-  constructor( response ) {
+  constructor( responseData, responseInfo ) {
     const { errorHandlerClass } = this.constructor;
-    this._response = response;
+    this._response = responseData;
+    this._responseInfo = responseInfo;
     if ( errorHandlerClass ) {
-      const errorHandler = new errorHandlerClass( response );
-      errorHandler.handleErrors( response );
+      const errorHandler = new errorHandlerClass( responseData, responseInfo );
+      errorHandler.handleErrors();
     }
   }
 

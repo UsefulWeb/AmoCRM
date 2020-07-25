@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _apiUrls = require('../../apiUrls');
+var _v = require('../../routes/v2');
 
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
+var _v2 = _interopRequireDefault(_v);
 
 var _RemovableEntityResource = require('../../base/resources/RemovableEntityResource');
 
@@ -32,6 +32,6 @@ var NoteResource = function (_RemoveableEntityReso) {
   return NoteResource;
 }(_RemovableEntityResource2.default);
 
-NoteResource.path = _apiUrls2.default.entities.notes.path;
-NoteResource.deletePath = _apiUrls2.default.entities.notes.deletePath;
+NoteResource.path = _v2.default.entities.notes.path;
+NoteResource.deletePath = _v2.default.entities.notes.deletePath;
 exports.default = NoteResource;

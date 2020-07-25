@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _apiUrls = require('../../apiUrls');
+var _v = require('../../routes/v2');
 
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
+var _v2 = _interopRequireDefault(_v);
 
 var _RemovableEntityResource = require('../../base/resources/RemovableEntityResource');
 
@@ -32,6 +32,6 @@ var CompanyResource = function (_RemoveableEntityReso) {
   return CompanyResource;
 }(_RemovableEntityResource2.default);
 
-CompanyResource.path = _apiUrls2.default.entities.companies.path;
-CompanyResource.deletePath = _apiUrls2.default.entities.companies.deletePath;
+CompanyResource.path = _v2.default.entities.companies.path;
+CompanyResource.deletePath = _v2.default.entities.companies.deletePath;
 exports.default = CompanyResource;

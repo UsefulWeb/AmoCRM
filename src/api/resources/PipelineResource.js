@@ -1,4 +1,4 @@
-import schema from '../../apiUrls';
+import schema from '../../routes/v2';
 import EntityResource from '../../base/resources/EntityResource';
 
 class PipelineResource extends EntityResource {

@@ -1,6 +1,6 @@
 import RemoteResource from './RemoteResource';
 import EntityResponseHandler from "../responseHandlers/EntityResponseHandler";
-import schema from '../../apiUrls';
+import schema from '../../routes/v2';
 
 class EntityResource extends RemoteResource {
 

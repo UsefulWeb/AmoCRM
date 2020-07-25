@@ -2,9 +2,9 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _apiUrls = require('../apiUrls.js');
+var _v = require('../routes/v4');
 
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
+var _v2 = _interopRequireDefault(_v);
 
 var _EventResource2 = require('./EventResource');
 
@@ -106,36 +106,40 @@ var AmoConnection = function (_EventResource) {
         return Promise.resolve(true);
       }
       var _options = this._options,
-          login = _options.login,
-          hash = _options.hash,
+          client_id = _options.client_id,
+          client_secret = _options.client_secret,
+          redirect_uri = _options.redirect_uri,
+          code = _options.code,
           data = {
-        USER_LOGIN: login,
-        USER_HASH: hash
+        client_id: client_id,
+        client_secret: client_secret,
+        redirect_uri: redirect_uri,
+        code: code,
+        grant_type: 'authorization_code'
       };
 
 
       this.triggerEvent('beforeConnect', this);
-
+      // console.log({ data });
       this._lastConnectionRequestAt = new Date();
-      return this._request.post(_apiUrls2.default.auth, data, {
-        headers: { 'Content-Type': 'application/json' },
-        response: {
-          saveCookies: true,
-          dataType: 'json'
-        }
-      }).then(function (data) {
-        if (data && data.response && data.response.auth) {
-          _this3._isConnected = data.response.auth === true;
+      return this._request.post(_v2.default.auth.token, data).then(function (response) {
+        var _response$data = response.data,
+            data = _response$data === undefined ? {} : _response$data;
+
+        if (data && data.token_type) {
+          _this3._isConnected = true;
         }
 
         if (_this3._isConnected) {
+          var responseAt = response.info.headers.date;
+          _this3._request.setToken(data, responseAt);
           _this3._lastRequestAt = new Date();
           _this3.triggerEvent('connected', _this3);
           return true;
         }
 
         var e = new Error('Auth Error');
-        e.data = data.response;
+        e.data = data;
 
         _this3.triggerEvent('authError', e, _this3);
         _this3.triggerEvent('error', e, _this3);

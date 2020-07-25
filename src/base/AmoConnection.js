@@ -1,6 +1,6 @@
 'use strict';
 
-import schema from '../apiUrls.js';
+import schema from '../routes/v4';
 import EventResource from './EventResource';
 import { delay } from '../helpers';
 import PrivateDomainRequest from "./requests/domain/PrivateDomainRequest";
@@ -80,35 +80,40 @@ class AmoConnection extends EventResource {
     if ( this._isConnected ) {
       return Promise.resolve( true );
     }
-    const { login, hash } = this._options,
+    const {
+        client_id,
+        client_secret,
+        redirect_uri,
+        code
+      } = this._options,
       data = {
-        USER_LOGIN: login,
-        USER_HASH: hash
+        client_id,
+        client_secret,
+        redirect_uri,
+        code,
+        grant_type: 'authorization_code',
       };
 
     this.triggerEvent( 'beforeConnect', this );
-
+    // console.log({ data });
     this._lastConnectionRequestAt = new Date;
-    return this._request.post( schema.auth, data, {
-      headers: { 'Content-Type': 'application/json' },
-      response: {
-        saveCookies: true,
-        dataType: 'json'
-      }
-    })
-      .then( data => {
-        if ( data && data.response && data.response.auth ) {
-          this._isConnected = data.response.auth === true;
+    return this._request.post( schema.auth.token, data )
+      .then( response => {
+        const { data = {}} = response;
+        if ( data && data.token_type ) {
+          this._isConnected = true;
         }
 
         if ( this._isConnected ) {
+          const responseAt = response.info.headers.date;
+          this._request.setToken( data, responseAt );
           this._lastRequestAt = new Date;
           this.triggerEvent( 'connected', this );
           return true;
         }
 
         const e = new Error( 'Auth Error' );
-        e.data = data.response;
+        e.data = data;
 
         this.triggerEvent( 'authError', e, this );
         this.triggerEvent( 'error', e, this );

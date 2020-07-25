@@ -62,7 +62,7 @@ var PrivateDomainRequest = function (_DomainRequest) {
       var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-      var headers = _extends({}, this.getDefaultHeaders(options.headers), {
+      var headers = _extends({}, this.getDefaultHeaders(options), {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       });
       var encodedData = _qs2.default.stringify(data),

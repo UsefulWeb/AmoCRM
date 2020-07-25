@@ -3,6 +3,10 @@ import EntityResponseErrorHandler from "./EntityResponseErrorHandler";
 class PrivateDomainResponseErrorHandler extends EntityResponseErrorHandler {
 
   getErrorsData() {
+    const { status } = this._response;
+    if ( status && status >= 400 && this._response.detail ) {
+      return [ this._response.detail ];
+    }
     // for multiactions
     if ( this._response.response && this._response.response.multiactions ) {
       return this._response.response.multiactions.set.errors;

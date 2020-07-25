@@ -1,4 +1,4 @@
-import schema from '../../apiUrls';
+import schema from '../../routes/v2';
 import RemoveableEntityResource from '../../base/resources/RemovableEntityResource';
 
 class TaskResource extends RemoveableEntityResource {
