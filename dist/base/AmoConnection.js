@@ -4,6 +4,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _qs = require('qs');
+
+var _qs2 = _interopRequireDefault(_qs);
+
 var _v = require('../routes/v4');
 
 var _v2 = _interopRequireDefault(_v);
@@ -17,6 +21,10 @@ var _helpers = require('../helpers');
 var _PrivateDomainRequest = require('./requests/domain/PrivateDomainRequest');
 
 var _PrivateDomainRequest2 = _interopRequireDefault(_PrivateDomainRequest);
+
+var _AuthServer = require('./auth/AuthServer');
+
+var _AuthServer2 = _interopRequireDefault(_AuthServer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -89,6 +97,36 @@ var AmoConnection = function (_EventResource) {
       return this.connect();
     }
   }, {
+    key: 'setState',
+    value: function setState(state) {
+      this._state = state;
+      return this;
+    }
+  }, {
+    key: 'getState',
+    value: function getState(state) {
+      return this._state;
+    }
+  }, {
+    key: 'getAuthUrl',
+    value: function getAuthUrl() {
+      var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'popup';
+      var baseUrl = 'https://www.amocrm.ru/oauth',
+          client_id = this._options.client_id,
+          params = {
+        client_id: client_id,
+        mode: mode
+      },
+          state = this.getState();
+
+      if (state) {
+        params.state = state;
+      }
+      var paramsStr = _qs2.default.stringify(params),
+          url = baseUrl + '?' + paramsStr;
+      return url;
+    }
+  }, {
     key: 'fetchToken',
     value: function fetchToken() {
       var _this3 = this;
@@ -156,9 +194,28 @@ var AmoConnection = function (_EventResource) {
       this.setToken(response.data, responseAt);
     }
   }, {
+    key: 'waitUserAuth',
+    value: function waitUserAuth() {
+      var _this5 = this;
+
+      if (this._server) {
+        return;
+      }
+      var server = new _AuthServer2.default(this._options.server);
+      this._server = server;
+      return new Promise(function (resolve) {
+        server.on('code', function (code) {
+          server.stop();
+          _this5._server = null;
+          _this5.setCode(code).then(resolve);
+        });
+        server.run();
+      });
+    }
+  }, {
     key: 'connect',
     value: function connect() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this._isConnected) {
         return Promise.resolve(true);
@@ -166,23 +223,33 @@ var AmoConnection = function (_EventResource) {
 
       this.triggerEvent('beforeConnect', this);
       this._lastConnectionRequestAt = new Date();
-      var requestPromise = this._isConnected ? this.refreshToken() : this.fetchToken();
+      var requestPromise = void 0;
+
+      if (this._isConnected) {
+        requestPromise = this.refreshToken();
+      } else if (this._options.code) {
+        requestPromise = this.fetchToken();
+      } else if (this._options.server) {
+        return this.waitUserAuth();
+      } else {
+        return;
+      }
 
       return requestPromise.then(function (response) {
         var _response$data = response.data,
             data = _response$data === undefined ? {} : _response$data;
 
         if (data && data.token_type) {
-          _this5._lastRequestAt = new Date();
-          _this5.triggerEvent('connected', _this5);
+          _this6._lastRequestAt = new Date();
+          _this6.triggerEvent('connected', _this6);
           return true;
         }
 
         var e = new Error('Auth Error');
         e.data = data;
 
-        _this5.triggerEvent('authError', e, _this5);
-        _this5.triggerEvent('error', e, _this5);
+        _this6.triggerEvent('authError', e, _this6);
+        _this6.triggerEvent('error', e, _this6);
 
         return Promise.reject(e);
       });

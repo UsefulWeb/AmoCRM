@@ -19,4 +19,25 @@ describe( 'AmoCRM connection', () => {
       .then( response => console.log( response.data ))
       .then( done );
   });
+
+  fit( 'should auth with server', done => {
+    const url = client.connection.getAuthUrl();
+    console.log({
+      url
+    });
+    client.connection.connect()
+      .then( response => {
+        return client.connection.refreshToken();
+      })
+      .then( response => console.log( response.data ))
+      .then( done );
+  }, 60 * 1000 );
+
+  it( 'should return authUrl', done => {
+    const url = client.connection.getAuthUrl();
+    console.log({
+      url
+    });
+    done();
+  });
 });
