@@ -9,15 +9,16 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ResponseHandler = function () {
-  function ResponseHandler(response) {
+  function ResponseHandler(responseData, responseInfo) {
     _classCallCheck(this, ResponseHandler);
 
     var errorHandlerClass = this.constructor.errorHandlerClass;
 
-    this._response = response;
+    this._response = responseData;
+    this._responseInfo = responseInfo;
     if (errorHandlerClass) {
-      var errorHandler = new errorHandlerClass(response);
-      errorHandler.handleErrors(response);
+      var errorHandler = new errorHandlerClass(responseData, responseInfo);
+      errorHandler.handleErrors();
     }
   }
 

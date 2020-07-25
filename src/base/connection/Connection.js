@@ -1,40 +1,33 @@
 'use strict';
 
-import schema from '../../apiUrls.js';
-import EventResource from '../EventResource';
-import { delay } from '../../helpers';
-import PrivateDomainRequest from "../requests/domain/PrivateDomainRequest";
+import schema from '../routes/v4';
+import EventResource from './EventResource';
+import { delay } from '../helpers';
+import PrivateDomainRequest from "./requests/domain/PrivateDomainRequest";
 
-class Connection extends EventResource {
+class AmoConnection extends EventResource {
 
   static EVENTS = [
-    'beforeReconnect',
     'beforeConnect',
-    'checkReconnect',
+    'beforeFetchToken',
+    'beforeRefreshToken',
+    'checkToken',
     'authError',
     'connected',
-    'disconnected',
     'error'
   ];
-
-  static SESSION_LIFETIME = 15 * 60 * 1000;
 
   constructor( options = {}) {
     super();
     this._request = new PrivateDomainRequest( options.domain );
-    this._options = options.auth;
+    this._options = {
+      ...options.auth
+    };
     this._isConnected = false;
   }
 
   get connected() {
     return this._isConnected;
-  }
-
-  disconnect() {
-    this._request.clear();
-    this._isConnected = false;
-
-    this.triggerEvent( 'disconnected', true );
   }
 
   connectIfNeeded() {
@@ -43,18 +36,12 @@ class Connection extends EventResource {
       return this.connect();
     }
 
-    this.triggerEvent( 'checkReconnect', true );
+    this.triggerEvent( 'checkToken', true );
 
-    const { SESSION_LIFETIME } = this.constructor,
-      sessionExpiresAt = +this._lastRequestAt + SESSION_LIFETIME,
-      now = new Date;
-
-    if ( now > sessionExpiresAt ) {
-      return this.reconnect();
-    }
+    const now = new Date;
 
     if ( this._request.expires && now > this._request.expires ) {
-      return this.reconnect();
+      return this.refreshToken();
     }
 
     return Promise.resolve();
@@ -68,47 +55,96 @@ class Connection extends EventResource {
       });
   }
 
+  setToken( token, tokenHandledAt ) {
+    this._request.setToken( token, tokenHandledAt );
+    return this;
+  }
 
-  reconnect() {
-    this._isConnected = false;
-    this._request.clear();
-    this.triggerEvent( 'beforeReconnect', true );
+  setCode( code ) {
+    this._options.code = code;
     return this.connect();
+  }
+
+  fetchToken() {
+    this.triggerEvent( 'beforeFetchToken', this );
+    const {
+        client_id,
+        client_secret,
+        redirect_uri,
+        code
+      } = this._options,
+      data = {
+        client_id,
+        client_secret,
+        redirect_uri,
+        code,
+        grant_type: 'authorization_code',
+      };
+
+    return this._request.post( schema.auth.token, data )
+      .then( response => {
+        this.handleToken( response );
+        return response;
+      });
+  }
+
+  refreshToken() {
+    this.triggerEvent( 'beforeRefreshToken', this );
+    console.log('refreshing token');
+    const {
+        client_id,
+        client_secret,
+        redirect_uri,
+      } = this._options,
+      token = this._request.getToken();
+    if ( !token ) {
+      console.log('no token');
+      return;
+    }
+    const { refresh_token } = token,
+      data = {
+        client_id,
+        client_secret,
+        redirect_uri,
+        refresh_token,
+        grant_type: 'refresh_token',
+      };
+
+    return this._request.post( schema.auth.token, data )
+      .then( response => {
+        this.handleToken( response );
+        return response;
+      });
+  }
+
+  handleToken( response ) {
+    if ( !response.data.token_type ) {
+      return;
+    }
+    const responseAt = response.info.headers.date;
+    this.setToken( response.data, responseAt );
   }
 
   connect() {
     if ( this._isConnected ) {
       return Promise.resolve( true );
     }
-    const { login, hash } = this._options,
-      data = {
-        USER_LOGIN: login,
-        USER_HASH: hash
-      };
 
     this.triggerEvent( 'beforeConnect', this );
-
     this._lastConnectionRequestAt = new Date;
-    return this._request.post( schema.auth, data, {
-      headers: { 'Content-Type': 'application/json' },
-      response: {
-        saveCookies: true,
-        dataType: 'json'
-      }
-    })
-      .then( data => {
-        if ( data && data.response && data.response.auth ) {
-          this._isConnected = data.response.auth === true;
-        }
+    const requestPromise = this._isConnected ? this.refreshToken() : this.fetchToken();
 
-        if ( this._isConnected ) {
+    return requestPromise
+      .then( response => {
+        const { data = {}} = response;
+        if ( data && data.token_type ) {
           this._lastRequestAt = new Date;
           this.triggerEvent( 'connected', this );
           return true;
         }
 
         const e = new Error( 'Auth Error' );
-        e.data = data.response;
+        e.data = data;
 
         this.triggerEvent( 'authError', e, this );
         this.triggerEvent( 'error', e, this );
@@ -117,4 +153,4 @@ class Connection extends EventResource {
       });
   }
 }
-module.exports = Connection;
+module.exports = AmoConnection;

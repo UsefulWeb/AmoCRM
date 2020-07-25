@@ -1,4 +1,4 @@
-import schema from '../../apiUrls';
+import schema from '../../routes/v2';
 import EntityResource from '../../base/resources/EntityResource';
 import Findable from "../../base/resources/behaviors/Findable";
 import PipelineResponseHandler from "../responseHandlers/PipelineResponseHandler";

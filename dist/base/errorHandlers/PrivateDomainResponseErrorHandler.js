@@ -34,6 +34,11 @@ var PrivateDomainResponseErrorHandler = function (_EntityResponseErrorH) {
   _createClass(PrivateDomainResponseErrorHandler, [{
     key: "getErrorsData",
     value: function getErrorsData() {
+      var status = this._response.status;
+
+      if (status && status >= 400 && this._response.detail) {
+        return [this._response.detail];
+      }
       // for multiactions
       if (this._response.response && this._response.response.multiactions) {
         return this._response.response.multiactions.set.errors;

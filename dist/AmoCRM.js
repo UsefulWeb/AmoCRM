@@ -14,9 +14,9 @@ var _ResourceFactoryBuilder = require('./base/ResourceFactoryBuilder');
 
 var _ResourceFactoryBuilder2 = _interopRequireDefault(_ResourceFactoryBuilder);
 
-var _apiUrls = require('./apiUrls');
+var _ConnectionRequest = require('./base/requests/ConnectionRequest');
 
-var _apiUrls2 = _interopRequireDefault(_apiUrls);
+var _ConnectionRequest2 = _interopRequireDefault(_ConnectionRequest);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,6 +45,7 @@ var AmoCRM = function (_EventResource) {
     _this._options = options;
     _this._connection = new _AmoConnection2.default(options);
 
+    _this.request = new _ConnectionRequest2.default(_this._connection);
     _this.registerEvents();
     _this.assignFactories();
     return _this;
@@ -80,35 +81,6 @@ var AmoCRM = function (_EventResource) {
     key: 'disconnect',
     value: function disconnect() {
       return this._connection.disconnect();
-    }
-  }, {
-    key: 'getAccountInfo',
-    value: function getAccountInfo() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var _options$details = options.details,
-          details = _options$details === undefined ? [] : _options$details,
-          _options$includeFreeU = options.includeFreeUsers,
-          includeFreeUsers = _options$includeFreeU === undefined ? false : _options$includeFreeU;
-
-      var url = _apiUrls2.default.account + '?with=' + details.join(',');
-      if (includeFreeUsers) {
-        url += '&free_users=Y';
-      }
-      return this.request.get(url);
-    }
-  }, {
-    key: 'request',
-    get: function get() {
-      var _this3 = this;
-
-      return {
-        get: function get(url, data, options) {
-          return _this3._connection.request(url, data, 'GET', options);
-        },
-        post: function post(url, data, options) {
-          return _this3._connection.request(url, data, 'POST', options);
-        }
-      };
     }
   }, {
     key: 'connection',

@@ -138,11 +138,21 @@ var DomainRequest = function (_EventResource) {
     }
   }, {
     key: 'getDefaultHeaders',
-    value: function getDefaultHeaders(headers) {
-      return Object.assign({}, headers, {
-        'Cookie': this._cookies.join(),
-        'User-Agent': this.constructor.DEFAULT_USER_AGENT
-      });
+    value: function getDefaultHeaders(options) {
+      var withToken = options.withToken !== false,
+          isJSON = options.json !== false,
+          headers = {};
+
+      if (withToken && this._token) {
+        headers['Authorization'] = 'Bearer ' + this._token.access_token;
+      } else if (!withToken) {
+        headers['Cookie'] = this._cookies.join();
+      }
+      if (isJSON && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      return Object.assign({}, options.headers, headers);
     }
   }, {
     key: 'getRequestHeaders',
@@ -152,12 +162,33 @@ var DomainRequest = function (_EventResource) {
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
       var isGET = method === 'GET',
-          headers = this.getDefaultHeaders(options.headers);
+          headers = this.getDefaultHeaders(options);
 
       if (!isGET && encodedData) {
         headers['Content-Length'] = Buffer.byteLength(encodedData);
       }
       return headers;
+    }
+
+    /**
+     * @param {Array} token
+     * @param {Date} tokenHandledAt
+     */
+
+  }, {
+    key: 'setToken',
+    value: function setToken(token, tokenHandledAt) {
+      var expiresIn = token.expires_in,
+          responseTimestamp = new Date(tokenHandledAt) / 1000,
+          expiresTimestamp = responseTimestamp + expiresIn,
+          expires = new Date(expiresTimestamp * 1000);
+      this._expires = expires;
+      this._token = token;
+    }
+  }, {
+    key: 'getToken',
+    value: function getToken() {
+      return this._token;
     }
   }, {
     key: 'setCookies',
@@ -196,7 +227,7 @@ var DomainRequest = function (_EventResource) {
       if (options.saveCookies && response.headers['set-cookie']) {
         this.setCookies(response.headers['set-cookie']);
       }
-      var handler = new responseHandlerClass(rawData);
+      var handler = new responseHandlerClass(rawData, response);
       return handler.toJSON(options);
     }
   }, {

@@ -1,24 +1,11 @@
 'use strict';
 import EventResource from './base/EventResource';
-import Connection from './base/connection/Connection';
+import AmoConnection from './base/AmoConnection';
 import ResourceFactoryBuilder from './base/ResourceFactoryBuilder';
-import schema from './apiUrls';
-import ConnectionRequest from './base/connection/ConnectionRequest';
+import ConnectionRequest from './base/requests/ConnectionRequest';
 
-/**
- * @property {LeadFactory} Lead
- * @property {ContactFactory} Contact
- * @property {CatalogFactory} Catalog
- * @property {CatalogElementFactory} CatalogElement
- * @property {CompanyFactory} Company
- * @property {NoteFactory} Note
- * @property {TaskFactory} Task
- * @property {CustomerFactory} Customer
- * @property {IncomingLeadFactory} IncomingLead
- * @property {FieldFactory} Field
- * @property {PipelineFactory} Pipeline
- */
 class AmoCRM extends EventResource {
+
   constructor( options ) {
     super();
     if ( !options ) {
@@ -29,17 +16,16 @@ class AmoCRM extends EventResource {
       auth: {}
     }, options );
 
-    const connection = new Connection( options );
     this._options = options;
-    this._connection = connection;
-    this._request = new ConnectionRequest( connection );
+    this._connection = new AmoConnection( options );
 
+    this.request = new ConnectionRequest( this._connection );
     this.registerEvents();
     this.assignFactories();
   }
 
   registerEvents() {
-    this.proxyEventHandlers( 'connection', Connection.EVENTS, this._connection );
+    this.proxyEventHandlers( 'connection', AmoConnection.EVENTS, this._connection );
     this._connection.on( 'error', ( ...args ) =>
       this.triggerEvent( 'error', ...args )
     );
@@ -49,10 +35,6 @@ class AmoCRM extends EventResource {
     const builder = new ResourceFactoryBuilder( this._connection ),
       factories = builder.getResourceFactories();
     Object.assign( this, factories );
-  }
-
-  get request() {
-    return this._request;
   }
 
   get connection() {
@@ -65,15 +47,6 @@ class AmoCRM extends EventResource {
 
   disconnect() {
     return this._connection.disconnect();
-  }
-
-  getAccountInfo( options = {}) {
-    const { details = [], includeFreeUsers = false } = options;
-    let url = schema.account + '?with=' + details.join( ',' );
-    if ( includeFreeUsers ) {
-      url += '&free_users=Y';
-    }
-    return this.request.get( url );
   }
 }
 

@@ -1,6 +1,7 @@
 class ResponseErrorHandler {
-  constructor( response ) {
+  constructor( response, responseInfo ) {
     this._response = response;
+    this._responseInfo = responseInfo;
   }
 
   handleErrors() {
