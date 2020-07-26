@@ -36,6 +36,11 @@ var BaseActiveRecord = function () {
       delete this._attributes[attribute];
     }
   }, {
+    key: 'setAttributes',
+    value: function setAttributes(attributes) {
+      this.attributes = attributes;
+    }
+  }, {
     key: 'setAttribute',
     value: function setAttribute(attribute, value) {
       this._attributes[attribute] = value;

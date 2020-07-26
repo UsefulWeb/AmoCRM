@@ -71,7 +71,7 @@ var ResourceFactory = function () {
     value: function of() {
       var _this = this;
 
-      var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
       return items.map(function (item) {
         return _this.from(item);

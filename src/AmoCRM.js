@@ -17,7 +17,7 @@ class AmoCRM extends EventResource {
     }, options );
 
     this._options = options;
-    this._connection = new AmoConnection( options );
+    this._auth = new Auth( options );
 
     this.request = new ConnectionRequest( this._connection );
     this.registerEvents();
@@ -39,14 +39,6 @@ class AmoCRM extends EventResource {
 
   get connection() {
     return this._connection;
-  }
-
-  connect() {
-    return this._connection.connect();
-  }
-
-  disconnect() {
-    return this._connection.disconnect();
   }
 }
 

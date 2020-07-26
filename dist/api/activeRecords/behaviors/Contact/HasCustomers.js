@@ -22,21 +22,18 @@ var HasCustomers = function () {
   }
 
   _createClass(HasCustomers, [{
-    key: "addCustomers",
-    value: function addCustomers(customers) {
-      var _customer = customer,
-          _customer$contacts_id = _customer.contacts_id,
-          contacts_id = _customer$contacts_id === undefined ? [] : _customer$contacts_id;
-
-      this._attributes.customers = contacts_id.push(this._attributes.id);
-      customer.contacts_id = contacts_id;
-      return customer.save();
+    key: "setCustomers",
+    value: function setCustomers(customers) {
+      this._attributes.customers_id = customers.map(function (customer) {
+        return customer._attributes.id;
+      });
+      return this.save();
     }
   }, {
-    key: "addCustomer",
-    value: function addCustomer(customer) {
-      var _customer$contacts_id2 = customer.contacts_id,
-          contacts_id = _customer$contacts_id2 === undefined ? [] : _customer$contacts_id2;
+    key: "setCustomer",
+    value: function setCustomer(customer) {
+      var _customer$contacts_id = customer.contacts_id,
+          contacts_id = _customer$contacts_id === undefined ? [] : _customer$contacts_id;
 
       contacts_id.push(this._attributes.id);
       customer.contacts_id = contacts_id;

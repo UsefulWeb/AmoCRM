@@ -73,16 +73,6 @@ var AmoCRM = function (_EventResource) {
       Object.assign(this, factories);
     }
   }, {
-    key: 'connect',
-    value: function connect() {
-      return this._connection.connect();
-    }
-  }, {
-    key: 'disconnect',
-    value: function disconnect() {
-      return this._connection.disconnect();
-    }
-  }, {
     key: 'connection',
     get: function get() {
       return this._connection;

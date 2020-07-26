@@ -11,7 +11,7 @@ beforeEach( done => {
 describe( 'Requests', () => {
 
   it( 'should create custom request', done => {
-    client.request( 'GET', '/api/v4/account' )
+    client.request( 'GET', '/api2/v4/account' )
       .then( response => {
         const { data } = response;
         expect( data ).toBeDefined();
@@ -20,7 +20,7 @@ describe( 'Requests', () => {
       .catch( console.log );
   });
   it( 'should create custom request', done => {
-    client.request.get( '/api/v4/leads' )
+    client.request.get( '/api2/v4/leads' )
       .then( done );
   });
 });

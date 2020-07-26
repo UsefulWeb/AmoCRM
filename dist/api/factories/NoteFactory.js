@@ -42,14 +42,19 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var _ref = new _FindableById2.default(),
-    afterFindById = _ref.afterFindById;
+var afterFindById = _FindableById2.default.prototype.afterFindById;
+
+/**
+ * @mixes Findable
+ * @mixes Insertable
+ * @mixes Updatable
+ */
 
 var NoteFactory = function (_EntityFactory) {
   _inherits(NoteFactory, _EntityFactory);
 
   function NoteFactory() {
-    var _ref2;
+    var _ref;
 
     _classCallCheck(this, NoteFactory);
 
@@ -57,7 +62,7 @@ var NoteFactory = function (_EntityFactory) {
       args[_key] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_ref2 = NoteFactory.__proto__ || Object.getPrototypeOf(NoteFactory)).call.apply(_ref2, [this].concat(args)));
+    var _this = _possibleConstructorReturn(this, (_ref = NoteFactory.__proto__ || Object.getPrototypeOf(NoteFactory)).call.apply(_ref, [this].concat(args)));
 
     _this.ELEMENT_TYPE = _NoteResource2.default.ELEMENT_TYPES;
     _this.ELEMENT_TYPE_NAME = _NoteResource2.default.ELEMENT_TYPE_NAMES;

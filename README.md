@@ -139,7 +139,7 @@ const crm = new AmoCRM({
 
 ```js
 
-const response = await crm.request( 'GET', '/api/v4/account' );
+const response = await crm.request( 'GET', api2 );
 // возвращает тело ответа 
 console.log( response.data );
 /* 
@@ -156,7 +156,7 @@ console.log( response.info.statusCode );
 Методы *crm.request*: get, post, patch
 
 ```js
-const response = await crm.request.get( '/api/v4/contacts')
+const response = await crm.request.get( api2)
 ```
 
 ```js
