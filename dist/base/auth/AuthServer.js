@@ -51,8 +51,8 @@ var AuthServer = function (_EventResource) {
     value: function stop() {
       var _this2 = this;
 
-      return new Promise(function (resolve) {
-        return _this2._server.close().on('close', resolve);
+      return new Promise(function (resolve, reject) {
+        return _this2._server.close().on('close', resolve).on('error', reject);
       });
     }
   }, {

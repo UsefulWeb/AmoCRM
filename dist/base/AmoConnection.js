@@ -162,7 +162,6 @@ var AmoConnection = function (_EventResource) {
       var _this4 = this;
 
       this.triggerEvent('beforeRefreshToken', this);
-      console.log('refreshing token');
 
       var _options2 = this._options,
           client_id = _options2.client_id,
@@ -199,24 +198,32 @@ var AmoConnection = function (_EventResource) {
       this.setToken(response.data, responseAt);
     }
   }, {
-    key: 'waitUserAuth',
-    value: function waitUserAuth() {
+    key: 'waitUserAction',
+    value: function waitUserAction() {
       var _this5 = this;
 
       if (this._server) {
         return;
       }
-      var server = new _AuthServer2.default(_extends({}, this._options.server, {
+      var options = _extends({}, this._options.server, {
         state: this.getState()
-      }));
+      }),
+          server = new _AuthServer2.default(options);
+
       this._server = server;
-      return new Promise(function (resolve) {
+      var handleCode = new Promise(function (resolve) {
         server.on('code', function (code) {
-          server.stop();
-          _this5._server = null;
-          _this5.setCode(code).then(resolve);
+          resolve(code);
         });
         server.run();
+      });
+
+      return handleCode.then(function (code) {
+        server.stop();
+        return code;
+      }).then(function (code) {
+        _this5._server = null;
+        return _this5.setCode(code);
       });
     }
   }, {
@@ -237,7 +244,7 @@ var AmoConnection = function (_EventResource) {
       } else if (this._options.code) {
         requestPromise = this.fetchToken();
       } else if (this._options.server) {
-        return this.waitUserAuth();
+        return this.waitUserAction();
       } else {
         return;
       }

@@ -121,7 +121,6 @@ class AmoConnection extends EventResource {
 
   refreshToken() {
     this.triggerEvent( 'beforeRefreshToken', this );
-    console.log('refreshing token');
     const {
         client_id,
         client_secret,
@@ -156,24 +155,33 @@ class AmoConnection extends EventResource {
     this.setToken( response.data, responseAt );
   }
 
-  waitUserAuth() {
+  waitUserAction() {
     if ( this._server ) {
       return;
     }
-    const server = new AuthServer({
-      ...this._options.server,
-      state: this.getState()
-    });
+    const options = {
+        ...this._options.server,
+        state: this.getState()
+      },
+      server = new AuthServer( options );
+
     this._server = server;
-    return new Promise( resolve => {
+    const handleCode = new Promise( resolve => {
       server.on('code', code => {
-        server.stop();
-        this._server = null;
-        this.setCode( code )
-          .then( resolve );
+        resolve( code );
       });
       server.run();
-    })
+    });
+
+    return handleCode
+      .then( code => {
+        server.stop();
+        return code;
+      })
+      .then( code => {
+        this._server = null;
+        return this.setCode( code );
+      });
   }
 
   connect() {
@@ -192,7 +200,7 @@ class AmoConnection extends EventResource {
       requestPromise = this.fetchToken();
     }
     else if ( this._options.server ) {
-      return this.waitUserAuth();
+      return this.waitUserAction();
     }
     else {
       return;

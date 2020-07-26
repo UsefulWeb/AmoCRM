@@ -14,9 +14,10 @@ class AuthServer extends EventResource {
       .listen( port );
   }
   stop() {
-    return new Promise( resolve =>
+    return new Promise(( resolve, reject ) =>
       this._server.close()
         .on( 'close', resolve )
+        .on( 'error', reject )
     );
   }
   handle( request, response ) {
