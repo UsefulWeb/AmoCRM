@@ -12,14 +12,14 @@ import IncomingLeadFactory from './factories/IncomingLeadFactory';
 
 export default {
   Lead: LeadFactory,
-  Contact: ContactFactory,
-  Catalog: CatalogFactory,
-  CatalogElement: CatalogElementFactory,
-  Company: CompanyFactory,
-  Note: NoteFactory,
-  Task: TaskFactory,
-  Customer: CustomerFactory,
-  IncomingLead: IncomingLeadFactory,
-  Field: FieldFactory,
-  Pipeline: PipelineFactory
+  // Contact: ContactFactory,
+  // Catalog: CatalogFactory,
+  // CatalogElement: CatalogElementFactory,
+  // Company: CompanyFactory,
+  // Note: NoteFactory,
+  // Task: TaskFactory,
+  // Customer: CustomerFactory,
+  // IncomingLead: IncomingLeadFactory,
+  // Field: FieldFactory,
+  // Pipeline: PipelineFactory
 };

@@ -3,14 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var ConnectionRequest = function ConnectionRequest(connection) {
+var ConnectionRequest = function ConnectionRequest(auth) {
   var handler = function handler(method, url, data, options) {
     return request({
       url: url,
       data: data,
       method: method,
       options: options,
-      connection: connection
+      auth: auth
     });
   },
       requestWithMethod = function requestWithMethod(method) {
@@ -27,17 +27,16 @@ var ConnectionRequest = function ConnectionRequest(connection) {
   });
 
   return handler;
-};
-
-var request = function request(params) {
-  var connection = params.connection,
+},
+    request = function request(params) {
+  var auth = params.auth,
       method = params.method,
       url = params.url,
       _params$options = params.options,
       options = _params$options === undefined ? {} : _params$options,
       data = params.data;
 
-  return connection.request(url, data, method, options);
+  return auth.request(url, data, method, options);
 };
 
 exports.default = ConnectionRequest;

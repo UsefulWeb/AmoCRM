@@ -17,10 +17,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ResourceFactoryBuilder = function () {
-  function ResourceFactoryBuilder(connection) {
+  function ResourceFactoryBuilder(auth) {
     _classCallCheck(this, ResourceFactoryBuilder);
 
-    this._connection = connection;
+    this._auth = auth;
   }
 
   _createClass(ResourceFactoryBuilder, [{
@@ -36,7 +36,7 @@ var ResourceFactoryBuilder = function () {
   }, {
     key: 'createResourceFactory',
     value: function createResourceFactory(name) {
-      var factory = new this.constructor.factories[name](this._connection),
+      var factory = new this.constructor.factories[name](this._auth),
           handler = this.createFactoryHandler(factory),
           constructor = function constructor() {};
       return new Proxy(constructor, handler);

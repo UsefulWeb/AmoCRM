@@ -3,8 +3,8 @@ import factories from '../api/factories';
 class ResourceFactoryBuilder {
   static factories = factories;
 
-  constructor( connection ) {
-    this._connection = connection;
+  constructor( auth ) {
+    this._auth = auth;
   }
 
   getResourceFactories() {
@@ -15,7 +15,7 @@ class ResourceFactoryBuilder {
   }
 
   createResourceFactory( name ) {
-    const factory = new this.constructor.factories[ name ]( this._connection ),
+    const factory = new this.constructor.factories[ name ]( this._auth ),
       handler = this.createFactoryHandler( factory ),
       constructor = function constructor() {};
     return new Proxy( constructor, handler );

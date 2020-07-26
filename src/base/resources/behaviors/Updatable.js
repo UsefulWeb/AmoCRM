@@ -2,7 +2,7 @@ class Updatable {
 
   update( ids = []) {
     const { path, updatePath } = this.constructor;
-    return this.request( 'POST', updatePath || path, {
+    return this.request( 'PATCH', updatePath || path, {
       update: ids
     });
   }

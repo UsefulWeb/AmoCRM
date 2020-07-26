@@ -6,9 +6,9 @@ var _EventResource2 = require('./base/EventResource');
 
 var _EventResource3 = _interopRequireDefault(_EventResource2);
 
-var _AmoConnection = require('./base/AmoConnection');
+var _Auth = require('./base/auth/Auth');
 
-var _AmoConnection2 = _interopRequireDefault(_AmoConnection);
+var _Auth2 = _interopRequireDefault(_Auth);
 
 var _ResourceFactoryBuilder = require('./base/ResourceFactoryBuilder');
 
@@ -43,9 +43,9 @@ var AmoCRM = function (_EventResource) {
     }, options);
 
     _this._options = options;
-    _this._connection = new _AmoConnection2.default(options);
 
-    _this.request = new _ConnectionRequest2.default(_this._connection);
+    _this.auth = new _Auth2.default(options);
+    _this.request = new _ConnectionRequest2.default(_this.auth);
     _this.registerEvents();
     _this.assignFactories();
     return _this;
@@ -56,7 +56,7 @@ var AmoCRM = function (_EventResource) {
     value: function registerEvents() {
       var _this2 = this;
 
-      this.proxyEventHandlers('connection', _AmoConnection2.default.EVENTS, this._connection);
+      this.proxyEventHandlers('auth', _Auth2.default.EVENTS, this.auth);
       this._connection.on('error', function () {
         for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
@@ -68,14 +68,9 @@ var AmoCRM = function (_EventResource) {
   }, {
     key: 'assignFactories',
     value: function assignFactories() {
-      var builder = new _ResourceFactoryBuilder2.default(this._connection),
+      var builder = new _ResourceFactoryBuilder2.default(this.auth),
           factories = builder.getResourceFactories();
       Object.assign(this, factories);
-    }
-  }, {
-    key: 'connection',
-    get: function get() {
-      return this._connection;
     }
   }]);
 

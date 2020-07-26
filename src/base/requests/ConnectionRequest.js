@@ -1,36 +1,35 @@
-const ConnectionRequest = function (connection ) {
-  const handler = ( method, url, data, options ) => {
-      return request({
-        url,
-        data,
-        method,
-        options,
-        connection
-      });
-    },
-    requestWithMethod = method => handler.bind( null, method ),
-    get = requestWithMethod( 'GET' ),
-    post = requestWithMethod( 'POST' ),
-    patch = requestWithMethod( 'PATCH' );
+const ConnectionRequest = function ConnectionRequest( auth ) {
+    const handler = ( method, url, data, options ) => {
+        return request({
+          url,
+          data,
+          method,
+          options,
+          auth
+        });
+      },
+      requestWithMethod = method => handler.bind( null, method ),
+      get = requestWithMethod( 'GET' ),
+      post = requestWithMethod( 'POST' ),
+      patch = requestWithMethod( 'PATCH' );
 
-  Object.assign( handler, {
-    get,
-    post,
-    patch
-  });
+    Object.assign( handler, {
+      get,
+      post,
+      patch
+    });
 
-  return handler;
-};
-
-const request = params => {
-  const {
-      connection,
+    return handler;
+  },
+  request = params => {
+    const {
+      auth,
       method,
       url,
       options = {},
       data
     } = params;
-  return connection.request( url, data, method, options );
-};
+    return auth.request( url, data, method, options );
+  };
 
 export default ConnectionRequest;

@@ -6,9 +6,6 @@ let client;
 
 beforeEach( done => {
   client = new AmoCRM( config );
-  client
-    .connect()
-    .then( done );
 });
 
 fdescribe( 'AmoCRM API Lead Interface', () => {

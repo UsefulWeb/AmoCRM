@@ -1,4 +1,4 @@
-import schema from '../../apiUrls';
+import schema from '../../routes/v4';
 import EntityResource from '../../base/resources/EntityResource';
 import Removable from '../../base/resources/behaviors/PrivateRemovable';
 import HasMultiactions from '../../base/resources/behaviors/HasMultiactions';
