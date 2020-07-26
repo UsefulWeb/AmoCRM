@@ -19,7 +19,7 @@ describe( 'Requests', () => {
       .then( done )
       .catch( console.log );
   });
-  fit( 'should create custom request', done => {
+  it( 'should create custom request', done => {
     client.request.get( '/api/v4/leads' )
       .then( done );
   });

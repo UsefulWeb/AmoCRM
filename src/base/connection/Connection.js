@@ -1,9 +1,11 @@
 'use strict';
 
+import qs from 'qs';
 import schema from '../routes/v4';
 import EventResource from './EventResource';
 import { delay } from '../helpers';
 import PrivateDomainRequest from "./requests/domain/PrivateDomainRequest";
+import AuthServer from "./auth/AuthServer";
 
 class AmoConnection extends EventResource {
 
@@ -65,6 +67,35 @@ class AmoConnection extends EventResource {
     return this.connect();
   }
 
+  setState( state ) {
+    this._state = state;
+    return this;
+  }
+
+  getState( state ) {
+    return this._state;
+  }
+
+  getAuthUrl( mode = 'popup' ) {
+    const baseUrl = 'https://www.amocrm.ru/oauth',
+      { client_id } = this._options,
+      params = {
+        client_id,
+        mode
+      },
+      state = this.getState();
+    if ( state ) {
+      params.state = state;
+    }
+    const paramsStr = qs.stringify( params ),
+      url = `${baseUrl}?${paramsStr}`;
+    return url;
+  }
+
+  getToken() {
+    return this._request.getToken();
+  }
+
   fetchToken() {
     this.triggerEvent( 'beforeFetchToken', this );
     const {
@@ -90,7 +121,6 @@ class AmoConnection extends EventResource {
 
   refreshToken() {
     this.triggerEvent( 'beforeRefreshToken', this );
-    console.log('refreshing token');
     const {
         client_id,
         client_secret,
@@ -125,6 +155,35 @@ class AmoConnection extends EventResource {
     this.setToken( response.data, responseAt );
   }
 
+  waitUserAction() {
+    if ( this._server ) {
+      return;
+    }
+    const options = {
+        ...this._options.server,
+        state: this.getState()
+      },
+      server = new AuthServer( options );
+
+    this._server = server;
+    const handleCode = new Promise( resolve => {
+      server.on('code', code => {
+        resolve( code );
+      });
+      server.run();
+    });
+
+    return handleCode
+      .then( code => {
+        server.stop();
+        return code;
+      })
+      .then( code => {
+        this._server = null;
+        return this.setCode( code );
+      });
+  }
+
   connect() {
     if ( this._isConnected ) {
       return Promise.resolve( true );
@@ -132,7 +191,20 @@ class AmoConnection extends EventResource {
 
     this.triggerEvent( 'beforeConnect', this );
     this._lastConnectionRequestAt = new Date;
-    const requestPromise = this._isConnected ? this.refreshToken() : this.fetchToken();
+    let requestPromise;
+
+    if ( this._isConnected ) {
+      requestPromise = this.refreshToken();
+    }
+    else if ( this._options.code ) {
+      requestPromise = this.fetchToken();
+    }
+    else if ( this._options.server ) {
+      return this.waitUserAction();
+    }
+    else {
+      return;
+    }
 
     return requestPromise
       .then( response => {
