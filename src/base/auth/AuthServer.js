@@ -22,12 +22,13 @@ class AuthServer extends EventResource {
   }
   handle( request, response ) {
     const { query } = url.parse( request.url, true ),
+      currentState = this._options.state,
       { code, state } = query;
     response.end();
     if ( !code ) {
       return;
     }
-    if ( state !== this._options.state ) {
+    if ( currentState && state !== currentState ) {
       return;
     }
     this.triggerEvent( 'code', code );

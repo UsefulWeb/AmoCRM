@@ -60,6 +60,7 @@ var AuthServer = function (_EventResource) {
     value: function handle(request, response) {
       var _url$parse = _url2.default.parse(request.url, true),
           query = _url$parse.query,
+          currentState = this._options.state,
           code = query.code,
           state = query.state;
 
@@ -67,7 +68,7 @@ var AuthServer = function (_EventResource) {
       if (!code) {
         return;
       }
-      if (state !== this._options.state) {
+      if (currentState && state !== currentState) {
         return;
       }
       this.triggerEvent('code', code);
