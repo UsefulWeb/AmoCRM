@@ -2,7 +2,7 @@
 
 Javascript библиотека для работы с AmoCRM
 
-Данная версия библиотеки поддерживает OAuth авторизацию и использует адреса AmoRM API v4. 
+Данная версия библиотеки поддерживает OAuth авторизацию и использует адреса AmoCRM API v4. 
 
 [Поблагодарить можно тут](https://yasobe.ru/na/cisterna_kofe_dlya_razrabot4ika_biblioteki_amocrm)
 
