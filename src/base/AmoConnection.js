@@ -13,6 +13,7 @@ class AmoConnection extends EventResource {
     'beforeConnect',
     'beforeFetchToken',
     'beforeRefreshToken',
+    'newToken',
     'checkToken',
     'authError',
     'connected',
@@ -151,6 +152,7 @@ class AmoConnection extends EventResource {
     if ( !response.data.token_type ) {
       return;
     }
+    this.triggerEvent( 'newToken', response );
     const responseAt = response.info.headers.date;
     this.setToken( response.data, responseAt );
   }
@@ -193,7 +195,7 @@ class AmoConnection extends EventResource {
     this._lastConnectionRequestAt = new Date;
     let requestPromise;
 
-    if ( this._isConnected ) {
+    if ( this._request.getToken() ) {
       requestPromise = this.refreshToken();
     }
     else if ( this._options.code ) {

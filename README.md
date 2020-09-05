@@ -248,3 +248,23 @@ crm.off( 'connection:error' );
 // удалить все обработчики всех событий
 crm.off();
 ```
+
+### Сохранение авторизации между сессиями
+
+Может быть полезным сохранять авторизацию между запусками приложения. Для этого есть событие `connection:newToken`, в которое приходит новый токен при каждом сохранении. 
+
+Этот токен можно сохранять куда вам удобно (БД, файлы и тд). При инициализации соединения можно заранее установить токен для восстановления авторизации:
+`crm.connection.setToken(currentToken, 0)`
+
+Ниже пример реализации через сохранение в файл token.json который лежит рядом со скриптом
+```javascript
+  crm.on('connection:newToken', (token) => {
+    fs.writeFileSync('./token.json', JSON.stringify(token.data))
+  })
+  try {
+    const currentToken = require('./token.json')
+    crm.connection.setToken(currentToken, 0)
+  } catch (e) {
+    // Token file not found
+  }
+```
