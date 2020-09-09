@@ -194,6 +194,7 @@ var AmoConnection = function (_EventResource) {
       if (!response.data.token_type) {
         return;
       }
+      this.triggerEvent('newToken', response);
       var responseAt = response.info.headers.date;
       this.setToken(response.data, responseAt);
     }
@@ -239,7 +240,7 @@ var AmoConnection = function (_EventResource) {
       this._lastConnectionRequestAt = new Date();
       var requestPromise = void 0;
 
-      if (this._isConnected) {
+      if (this._request.getToken()) {
         requestPromise = this.refreshToken();
       } else if (this._options.code) {
         requestPromise = this.fetchToken();
@@ -278,6 +279,6 @@ var AmoConnection = function (_EventResource) {
   return AmoConnection;
 }(_EventResource3.default);
 
-AmoConnection.EVENTS = ['beforeConnect', 'beforeFetchToken', 'beforeRefreshToken', 'checkToken', 'authError', 'connected', 'error'];
+AmoConnection.EVENTS = ['beforeConnect', 'beforeFetchToken', 'beforeRefreshToken', 'newToken', 'checkToken', 'authError', 'connected', 'error'];
 
 module.exports = AmoConnection;
