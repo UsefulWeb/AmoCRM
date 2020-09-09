@@ -27,6 +27,7 @@ class AmoConnection extends EventResource {
       ...options.auth
     };
     this._isConnected = false;
+    this._code = this._options.code;
   }
 
   get connected() {
@@ -34,23 +35,29 @@ class AmoConnection extends EventResource {
   }
 
   connectIfNeeded() {
-
     if ( !this._isConnected ) {
       return this.connect();
     }
 
     this.triggerEvent( 'checkToken', true );
 
-    const now = new Date;
-
-    if ( this._request.expires && now > this._request.expires ) {
+    if ( this.isRequestExpired()) {
       return this.refreshToken();
     }
 
     return Promise.resolve();
   }
 
+  isRequestExpired() {
+    if ( !this.getToken()) {
+      return false;
+    }
+    const now = new Date;
+    return this._request.expires && now > this._request.expires;
+  }
+
   request( ...args ) {
+    console.log( 'this._isConnected', this._isConnected );
     return this.connectIfNeeded()
       .then(() => {
         this._lastRequestAt = new Date;
@@ -60,11 +67,12 @@ class AmoConnection extends EventResource {
 
   setToken( token, tokenHandledAt ) {
     this._request.setToken( token, tokenHandledAt );
+    this._isConnected = !this.isRequestExpired();
     return this;
   }
 
   setCode( code ) {
-    this._options.code = code;
+    this._code = code;
     return this.connect();
   }
 
@@ -103,16 +111,14 @@ class AmoConnection extends EventResource {
         client_id,
         client_secret,
         redirect_uri,
-        code
       } = this._options,
       data = {
         client_id,
         client_secret,
         redirect_uri,
-        code,
+        code: this._code,
         grant_type: 'authorization_code',
       };
-
     return this._request.post( schema.auth.token, data )
       .then( response => {
         this.handleToken( response );
@@ -127,10 +133,10 @@ class AmoConnection extends EventResource {
         client_secret,
         redirect_uri,
       } = this._options,
-      token = this._request.getToken();
+      token = this.getToken();
     if ( !token ) {
       console.log('no token');
-      return;
+      return Promise.reject( 'no token' );
     }
     const { refresh_token } = token,
       data = {
@@ -159,7 +165,7 @@ class AmoConnection extends EventResource {
 
   waitUserAction() {
     if ( this._server ) {
-      return;
+      return Promise.resolve;
     }
     const options = {
         ...this._options.server,
@@ -169,7 +175,8 @@ class AmoConnection extends EventResource {
 
     this._server = server;
     const handleCode = new Promise( resolve => {
-      server.on('code', code => {
+      server.on('code', event => {
+        const { code } = event;
         resolve( code );
       });
       server.run();
@@ -193,27 +200,21 @@ class AmoConnection extends EventResource {
 
     this.triggerEvent( 'beforeConnect', this );
     this._lastConnectionRequestAt = new Date;
-    let requestPromise;
 
-    if ( this._request.getToken() ) {
-      requestPromise = this.refreshToken();
-    }
-    else if ( this._options.code ) {
-      requestPromise = this.fetchToken();
-    }
-    else if ( this._options.server ) {
+    if ( !this._code && this._options.server ) {
       return this.waitUserAction();
     }
-    else {
+    else if ( !this._code ) {
       return;
     }
 
-    return requestPromise
+    return this.fetchToken()
       .then( response => {
         const { data = {}} = response;
         if ( data && data.token_type ) {
           this._lastRequestAt = new Date;
           this.triggerEvent( 'connected', this );
+          this._isConnected = true;
           return true;
         }
 

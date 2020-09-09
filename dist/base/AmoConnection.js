@@ -47,26 +47,33 @@ var AmoConnection = function (_EventResource) {
     _this._request = new _PrivateDomainRequest2.default(options.domain);
     _this._options = _extends({}, options.auth);
     _this._isConnected = false;
+    _this._code = _this._options.code;
     return _this;
   }
 
   _createClass(AmoConnection, [{
     key: 'connectIfNeeded',
     value: function connectIfNeeded() {
-
       if (!this._isConnected) {
         return this.connect();
       }
 
       this.triggerEvent('checkToken', true);
 
-      var now = new Date();
-
-      if (this._request.expires && now > this._request.expires) {
+      if (this.isRequestExpired()) {
         return this.refreshToken();
       }
 
       return Promise.resolve();
+    }
+  }, {
+    key: 'isRequestExpired',
+    value: function isRequestExpired() {
+      if (!this.getToken()) {
+        return false;
+      }
+      var now = new Date();
+      return this._request.expires && now > this._request.expires;
     }
   }, {
     key: 'request',
@@ -77,6 +84,7 @@ var AmoConnection = function (_EventResource) {
         args[_key] = arguments[_key];
       }
 
+      console.log('this._isConnected', this._isConnected);
       return this.connectIfNeeded().then(function () {
         var _request;
 
@@ -88,12 +96,13 @@ var AmoConnection = function (_EventResource) {
     key: 'setToken',
     value: function setToken(token, tokenHandledAt) {
       this._request.setToken(token, tokenHandledAt);
+      this._isConnected = !this.isRequestExpired();
       return this;
     }
   }, {
     key: 'setCode',
     value: function setCode(code) {
-      this._options.code = code;
+      this._code = code;
       return this.connect();
     }
   }, {
@@ -141,15 +150,13 @@ var AmoConnection = function (_EventResource) {
           client_id = _options.client_id,
           client_secret = _options.client_secret,
           redirect_uri = _options.redirect_uri,
-          code = _options.code,
           data = {
         client_id: client_id,
         client_secret: client_secret,
         redirect_uri: redirect_uri,
-        code: code,
+        code: this._code,
         grant_type: 'authorization_code'
       };
-
 
       return this._request.post(_v2.default.auth.token, data).then(function (response) {
         _this3.handleToken(response);
@@ -162,16 +169,15 @@ var AmoConnection = function (_EventResource) {
       var _this4 = this;
 
       this.triggerEvent('beforeRefreshToken', this);
-
       var _options2 = this._options,
           client_id = _options2.client_id,
           client_secret = _options2.client_secret,
           redirect_uri = _options2.redirect_uri,
-          token = this._request.getToken();
+          token = this.getToken();
 
       if (!token) {
         console.log('no token');
-        return;
+        return Promise.reject('no token');
       }
       var refresh_token = token.refresh_token,
           data = {
@@ -204,7 +210,7 @@ var AmoConnection = function (_EventResource) {
       var _this5 = this;
 
       if (this._server) {
-        return;
+        return Promise.resolve;
       }
       var options = _extends({}, this._options.server, {
         state: this.getState()
@@ -213,7 +219,9 @@ var AmoConnection = function (_EventResource) {
 
       this._server = server;
       var handleCode = new Promise(function (resolve) {
-        server.on('code', function (code) {
+        server.on('code', function (event) {
+          var code = event.code;
+
           resolve(code);
         });
         server.run();
@@ -238,25 +246,21 @@ var AmoConnection = function (_EventResource) {
 
       this.triggerEvent('beforeConnect', this);
       this._lastConnectionRequestAt = new Date();
-      var requestPromise = void 0;
 
-      if (this._request.getToken()) {
-        requestPromise = this.refreshToken();
-      } else if (this._options.code) {
-        requestPromise = this.fetchToken();
-      } else if (this._options.server) {
+      if (!this._code && this._options.server) {
         return this.waitUserAction();
-      } else {
+      } else if (!this._code) {
         return;
       }
 
-      return requestPromise.then(function (response) {
+      return this.fetchToken().then(function (response) {
         var _response$data = response.data,
             data = _response$data === undefined ? {} : _response$data;
 
         if (data && data.token_type) {
           _this6._lastRequestAt = new Date();
           _this6.triggerEvent('connected', _this6);
+          _this6._isConnected = true;
           return true;
         }
 

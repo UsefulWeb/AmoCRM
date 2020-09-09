@@ -1,4 +1,5 @@
-import AmoCRM from '../dist/AmoCRM';
+// import AmoCRM from '../dist/AmoCRM';
+import AmoCRM from '../src/AmoCRM';
 import config from './support/config';
 
 let client;
@@ -23,4 +24,16 @@ describe( 'Requests', () => {
     client.request.get( '/api/v4/leads' )
       .then( done );
   });
+  it( 'should work with 2 requests', done => {
+    const url = client.connection.getAuthUrl();
+    console.log({
+      url
+    });
+    client.request.get( '/api/v4/leads' )
+      .then(data => {
+        console.log({ data });
+        client.request.get( '/api/v4/leads' );
+      })
+      .then( done );
+  }, 60 * 1000 );
 });

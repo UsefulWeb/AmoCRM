@@ -20,7 +20,7 @@ describe( 'AmoCRM connection', () => {
       .then( done );
   });
 
-  fit( 'should auth with server', done => {
+  it( 'should auth with server', done => {
     client.connection.setState( 'helloworld' );
     const url = client.connection.getAuthUrl();
     console.log({

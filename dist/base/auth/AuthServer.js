@@ -71,7 +71,10 @@ var AuthServer = function (_EventResource) {
       if (currentState && state !== currentState) {
         return;
       }
-      this.triggerEvent('code', code);
+      this.triggerEvent('code', {
+        code: code,
+        state: state
+      });
     }
   }]);
 

@@ -31,7 +31,10 @@ class AuthServer extends EventResource {
     if ( currentState && state !== currentState ) {
       return;
     }
-    this.triggerEvent( 'code', code );
+    this.triggerEvent( 'code', {
+      code,
+      state
+    });
   }
 }
 
