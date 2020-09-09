@@ -57,7 +57,6 @@ class AmoConnection extends EventResource {
   }
 
   request( ...args ) {
-    console.log( 'this._isConnected', this._isConnected );
     return this.connectIfNeeded()
       .then(() => {
         this._lastRequestAt = new Date;
