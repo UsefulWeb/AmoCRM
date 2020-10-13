@@ -262,7 +262,9 @@ var AmoConnection = function (_EventResource) {
 
       if (!this._code && this._options.server) {
         return this.waitUserAction();
-      } else if (!this._code) {
+      } else if (!this._code && this.getToken() && this.isRequestExpired()) {
+        return this.refreshToken();
+      } else if (!this.code) {
         return Promise.resolve(false);
       }
 
