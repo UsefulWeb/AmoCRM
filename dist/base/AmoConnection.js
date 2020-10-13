@@ -264,7 +264,7 @@ var AmoConnection = function (_EventResource) {
         return this.waitUserAction();
       } else if (!this._code && this.getToken() && this.isRequestExpired()) {
         return this.refreshToken();
-      } else if (!this.code) {
+      } else if (!this._code) {
         return Promise.resolve(false);
       }
 
