@@ -142,50 +142,29 @@ var DomainRequest = function (_EventResource) {
     }
 
     /**
-     * @param {Array} token
-     * @param {Date} tokenHandledAt
+     * @param {Object} token
      */
 
   }, {
     key: 'setToken',
-    value: function setToken(token, tokenHandledAt) {
-      var expiresIn = token.expires_in,
-          responseTimestamp = new Date(tokenHandledAt) / 1000,
-          expiresTimestamp = responseTimestamp + expiresIn,
-          expires = new Date(expiresTimestamp * 1000);
-      this._expires = expires;
+    value: function setToken(token) {
       this._token = token;
+      if (!token) {
+        delete this._expires;
+        return;
+      }
+      if (!token.expires_at) {
+        var now = new Date();
+        this._expires = now;
+        return;
+      }
+
+      this._expires = new Date(token.expires_at);
     }
   }, {
     key: 'getToken',
     value: function getToken() {
       return this._token;
-    }
-  }, {
-    key: 'setCookies',
-    value: function setCookies(cookies) {
-      this._cookies = cookies;
-      var expiresCookie = cookies.find(function (cookie) {
-        return cookie.includes('expires=');
-      });
-
-      if (!expiresCookie) {
-        delete this._expires;
-        this.triggerEvent('expires', this);
-        return;
-      }
-
-      var expires = expiresCookie.split('; ').find(function (cookie) {
-        return cookie.startsWith('expires=');
-      });
-
-      if (!expires) {
-        delete this._expires;
-        this.triggerEvent('expires', this);
-        return;
-      }
-
-      this._expires = new Date(expires.replace('expires=', ''));
     }
   }, {
     key: 'handleResponse',
@@ -195,9 +174,6 @@ var DomainRequest = function (_EventResource) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var responseHandlerClass = this.constructor.responseHandlerClass;
 
-      if (options.saveCookies && response.headers['set-cookie']) {
-        this.setCookies(response.headers['set-cookie']);
-      }
       var handler = new responseHandlerClass(rawData, response);
       return handler.toJSON(options);
     }

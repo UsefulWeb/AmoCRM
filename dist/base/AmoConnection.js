@@ -84,7 +84,6 @@ var AmoConnection = function (_EventResource) {
         args[_key] = arguments[_key];
       }
 
-      console.log('this._isConnected', this._isConnected);
       return this.connectIfNeeded().then(function () {
         var _request;
 
@@ -94,8 +93,8 @@ var AmoConnection = function (_EventResource) {
     }
   }, {
     key: 'setToken',
-    value: function setToken(token, tokenHandledAt) {
-      this._request.setToken(token, tokenHandledAt);
+    value: function setToken(token) {
+      this._request.setToken(token);
       this._isConnected = !this.isRequestExpired();
       return this;
     }
@@ -197,12 +196,26 @@ var AmoConnection = function (_EventResource) {
   }, {
     key: 'handleToken',
     value: function handleToken(response) {
-      if (!response.data.token_type) {
+      var token = response.data;
+      if (!token.token_type) {
         return;
       }
-      this.triggerEvent('newToken', response);
-      var responseAt = response.info.headers.date;
-      this.setToken(response.data, responseAt);
+
+      if (!token.expires_at) {
+        var headers = response.info.headers,
+            responseAt = new Date(headers.date),
+            responseTimestamp = responseAt.getTime(),
+            expiresIn = token.expires_in * 1000;
+
+
+        token.expires_at = responseTimestamp + expiresIn;
+      }
+
+      var event = _extends({}, response, {
+        data: token
+      });
+      this.triggerEvent('newToken', event);
+      this.setToken(token);
     }
   }, {
     key: 'waitUserAction',
@@ -250,7 +263,7 @@ var AmoConnection = function (_EventResource) {
       if (!this._code && this._options.server) {
         return this.waitUserAction();
       } else if (!this._code) {
-        return;
+        return Promise.resolve(false);
       }
 
       return this.fetchToken().then(function (response) {

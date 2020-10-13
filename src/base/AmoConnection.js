@@ -64,8 +64,8 @@ class AmoConnection extends EventResource {
       });
   }
 
-  setToken( token, tokenHandledAt ) {
-    this._request.setToken( token, tokenHandledAt );
+  setToken( token ) {
+    this._request.setToken( token );
     this._isConnected = !this.isRequestExpired();
     return this;
   }
@@ -154,12 +154,26 @@ class AmoConnection extends EventResource {
   }
 
   handleToken( response ) {
-    if ( !response.data.token_type ) {
+    const token = response.data;
+    if ( !token.token_type ) {
       return;
     }
-    this.triggerEvent( 'newToken', response );
-    const responseAt = response.info.headers.date;
-    this.setToken( response.data, responseAt );
+
+    if ( !token.expires_at ) {
+      const { headers } = response.info,
+        responseAt = new Date( headers.date ),
+        responseTimestamp = responseAt.getTime(),
+        expiresIn = token.expires_in * 1000;
+
+      token.expires_at = responseTimestamp + expiresIn;
+    }
+
+    const event = {
+      ...response,
+      data: token
+    };
+    this.triggerEvent( 'newToken', event );
+    this.setToken( token );
   }
 
   waitUserAction() {
@@ -204,7 +218,7 @@ class AmoConnection extends EventResource {
       return this.waitUserAction();
     }
     else if ( !this._code ) {
-      return;
+      return Promise.resolve( false );
     }
 
     return this.fetchToken()

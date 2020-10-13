@@ -85,49 +85,29 @@ class DomainRequest extends EventResource {
   }
 
   /**
-   * @param {Array} token
-   * @param {Date} tokenHandledAt
+   * @param {Object} token
    */
-  setToken( token, tokenHandledAt ) {
-    const expiresIn = token.expires_in,
-      responseTimestamp = new Date( tokenHandledAt ) / 1000,
-      expiresTimestamp = responseTimestamp + expiresIn,
-      expires = new Date( expiresTimestamp * 1000 );
-    this._expires = expires;
+  setToken( token ) {
     this._token = token;
+    if ( !token ) {
+      delete this._expires;
+      return;
+    }
+    if ( !token.expires_at ) {
+      const now = new Date;
+      this._expires = now;
+      return;
+    }
+
+    this._expires = new Date( token.expires_at );
   }
 
   getToken() {
     return this._token;
   }
 
-  setCookies( cookies ) {
-    this._cookies = cookies;
-    const expiresCookie = cookies.find( cookie => cookie.includes( 'expires=' ));
-
-    if ( !expiresCookie ) {
-      delete this._expires;
-      this.triggerEvent( 'expires', this );
-      return;
-    }
-
-    const expires = expiresCookie.split( '; ' )
-      .find( cookie => cookie.startsWith( 'expires=' ));
-
-    if ( !expires ) {
-      delete this._expires;
-      this.triggerEvent( 'expires', this );
-      return;
-    }
-
-    this._expires = new Date( expires.replace( 'expires=', '' ));
-  }
-
   handleResponse({ rawData, response }, options = {}) {
     const { responseHandlerClass } = this.constructor;
-    if ( options.saveCookies && response.headers[ 'set-cookie' ]) {
-      this.setCookies( response.headers[ 'set-cookie' ]);
-    }
     const handler = new responseHandlerClass( rawData, response );
     return handler.toJSON( options );
   }

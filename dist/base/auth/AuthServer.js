@@ -42,9 +42,16 @@ var AuthServer = function (_EventResource) {
     key: 'run',
     value: function run() {
       var port = this._options.port,
-          handler = this.handle.bind(this);
+          handler = this.handle.bind(this),
+          onListenStart = this.onListenStart.bind(this);
 
-      this._server = _http2.default.createServer(handler).listen(port);
+      this._server = _http2.default.createServer(handler).listen(port, onListenStart);
+    }
+  }, {
+    key: 'onListenStart',
+    value: function onListenStart() {
+      // const { port } = this._options;
+      // console.log( `listening on port ${port}` );
     }
   }, {
     key: 'stop',

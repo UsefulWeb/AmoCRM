@@ -9,9 +9,15 @@ class AuthServer extends EventResource {
   }
   run() {
     const { port } = this._options,
-      handler = this.handle.bind( this );
-    this._server = http.createServer( handler )
-      .listen( port );
+      handler = this.handle.bind( this ),
+      onListenStart = this.onListenStart.bind( this );
+    this._server = http
+      .createServer( handler )
+      .listen( port, onListenStart );
+  }
+  onListenStart() {
+    // const { port } = this._options;
+    // console.log( `listening on port ${port}` );
   }
   stop() {
     return new Promise(( resolve, reject ) =>

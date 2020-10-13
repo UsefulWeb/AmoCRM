@@ -212,8 +212,7 @@ const response = await crm.request
  (используется для проверки подлинности во встроенном сервере авторизации)
  5. *crm.connection.getState(state)* - возвращает строку состояния
  6. *crm.connection.getToken()* - возвращает текущий токен авторизации
- 7. *crm.connection.setToken( token, responseAt )* - задаёт токен авторизации. responseAt - экземпляр Date, 
- когда токен был получен (это не дата истечения срока годности). 
+ 7. *crm.connection.setToken( token )* - задаёт токен авторизации. Токен должен включать поле expires_at (timestamp, когда токен истечёт)
  
 ## Работа с событиями
 
@@ -226,6 +225,7 @@ const response = await crm.request
 5. connection:authError
 6. connection:connected
 7. connection:error
+8. connection:newToken
 
 Добавление обработчика:
 
@@ -254,16 +254,16 @@ crm.off();
 Может быть полезным сохранять авторизацию между запусками приложения. Для этого есть событие `connection:newToken`, в которое приходит новый токен при каждом сохранении. 
 
 Этот токен можно сохранять куда вам удобно (БД, файлы и тд). При инициализации соединения можно заранее установить токен для восстановления авторизации:
-`crm.connection.setToken(currentToken, 0)`
+`crm.connection.setToken( currentToken )`
 
 Ниже пример реализации через сохранение в файл token.json который лежит рядом со скриптом
 ```javascript
-  crm.on('connection:newToken', (token) => {
-    fs.writeFileSync('./token.json', JSON.stringify(token.data))
-  })
+  crm.on( 'connection:newToken', response => {
+    fs.writeFileSync( './token.json', JSON.stringify( response.data ));
+  });
   try {
-    const currentToken = require('./token.json')
-    crm.connection.setToken(currentToken, 0)
+    const currentToken = require( './token.json' );
+    crm.connection.setToken( currentToken );
   } catch (e) {
     // Token file not found
   }
