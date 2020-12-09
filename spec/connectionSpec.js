@@ -42,7 +42,7 @@ describe( 'AmoCRM connection', () => {
     done();
   });
 
-  fit( 'should get new token', async done => {
+  it( 'should get new token', async done => {
     const url = client.connection.getAuthUrl();
     console.log({
       mode: 'should restore token',
