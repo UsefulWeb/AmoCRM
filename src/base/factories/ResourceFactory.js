@@ -16,7 +16,7 @@ class ResourceFactory {
     this._resource = new resourceClass( connection );
   }
 
-  create( attributes={}) {
+  create( attributes = {}) {
     return new this.constructor.entityClass( this._resource, attributes );
   }
 }

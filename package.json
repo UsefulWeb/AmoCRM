@@ -9,7 +9,9 @@
   "scripts": {
     "test-build": "npm run build && babel-node spec/run.js",
     "test": "babel-node spec/run.js",
-    "build": "babel src -d dist"
+    "build": "babel src -d dist",
+    "lint": "eslint '{src,spec}/**/*.js'",
+    "lint:fix": "eslint '{src,spec}/**/*.js' --fix"
   },
   "repository": {
     "type": "git",
@@ -27,10 +29,16 @@
   },
   "homepage": "https://github.com/UsefulWeb/AmoCRM#readme",
   "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/eslint-parser": "^7.12.1",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^7.15.0",
+    "eslint-config-idiomatic": "^4.0.0",
     "eslint-plugin-jasmine": "^2.10.1",
     "jasmine": "^3.3.0"
   },

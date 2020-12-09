@@ -1,19 +1,19 @@
-import ResourceFactory from "./ResourceFactory";
-import EntityHandler from "../EntityProxyHandler";
-import EntityTarget from "../EntityTarget";
+import ResourceFactory from './ResourceFactory';
+import EntityHandler from '../EntityProxyHandler';
+import EntityTarget from '../EntityTarget';
 
 class EntityFactory extends ResourceFactory {
   static entityHandlerClass = EntityHandler;
   static entityTargetClass = EntityTarget;
 
-  create( attributes={}) {
+  create( attributes = {}) {
     const { entityClass, entityHandlerClass, entityTargetClass } = this.constructor,
       entity = new entityClass( this._resource, attributes ),
       handler = new entityHandlerClass( entity );
     return new Proxy( new entityTargetClass( entityClass.name ), handler );
   }
 
-  of( attributes={}) {
+  of( attributes = {}) {
     return this.create( attributes );
   }
 

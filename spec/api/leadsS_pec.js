@@ -1,6 +1,5 @@
 import AmoCRM from '../../dist/AmoCRM';
 import config from '../support/config';
-import Lead from '../../src/api/activeRecords/Lead';
 
 let client;
 
@@ -33,7 +32,7 @@ describe( 'AmoCRM API Lead Interface', () => {
     lead.save()
       .then( item => {
         expect( item.id ).toBeDefined();
-        expect( item.isNew() ).toBe( false );
+        expect( item.isNew()).toBe( false );
         expect( lead.id ).toBe( item.id );
         done();
       });

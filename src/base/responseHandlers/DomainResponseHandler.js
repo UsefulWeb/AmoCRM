@@ -4,13 +4,13 @@ import { parseString } from 'xml2js';
 class DomainResponseHandler extends ResponseHandler {
 
   toJSON( options ) {
-    const resonseData = this._response;
-    if ( !resonseData ) {
+    const responseData = this._response;
+    if ( !responseData ) {
       return Promise.resolve({});
     }
     if ( options.dataType === 'xml' ) {
       return new Promise(( resolve, reject ) => {
-        parseString( resonseData, ( err, data ) => {
+        parseString( responseData, ( err, data ) => {
           if ( err ) {
             return reject( err );
           }
@@ -22,9 +22,9 @@ class DomainResponseHandler extends ResponseHandler {
     let data;
 
     try {
-      data = JSON.parse( resonseData );
+      data = JSON.parse( responseData );
     } catch ( e ) {
-      throw  Error( `cannot parse JSON: ${resonseData}` );
+      throw Error( `cannot parse JSON: ${responseData}` );
     }
     return Promise.resolve({
       info: this._responseInfo,

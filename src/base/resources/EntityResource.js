@@ -1,5 +1,5 @@
 import RemoteResource from './RemoteResource';
-import EntityResponseHandler from "../responseHandlers/EntityResponseHandler";
+import EntityResponseHandler from '../responseHandlers/EntityResponseHandler';
 import schema from '../../routes/v2';
 
 class EntityResource extends RemoteResource {
@@ -24,21 +24,21 @@ class EntityResource extends RemoteResource {
     return this.request( 'GET', getPath || path, query );
   }
 
-  insert( data=[]) {
+  insert( data = []) {
     const { insertPath, path } = this.constructor;
     return this.request( 'POST', insertPath || path, {
       add: data
     });
   }
 
-  update( data=[]) {
+  update( data = []) {
     const { path, updatePath } = this.constructor;
     return this.request( 'POST', updatePath || path, {
       update: data
     });
   }
 
-  multiactions( ids, data= {}, multiaction_type ) {
+  multiactions( ids, data = {}, multiaction_type ) {
     const { multiactionsPath, ENTITY_TYPE } = this.constructor;
     return this.request( 'POST', multiactionsPath,
       {

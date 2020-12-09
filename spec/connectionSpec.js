@@ -27,7 +27,7 @@ describe( 'AmoCRM connection', () => {
       url
     });
     client.connection.connect()
-      .then( response => {
+      .then(() => {
         return client.connection.refreshToken();
       })
       .then( response => console.log( response.data ))

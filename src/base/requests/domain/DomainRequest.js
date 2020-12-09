@@ -50,7 +50,7 @@ class DomainRequest extends EventResource {
     });
   }
 
-  encodeData( url, data = {}, method = 'GET', options = {}) {
+  encodeData( url, data = {}, method = 'GET' ) {
     const isGET = method === 'GET';
 
     return isGET ? qs.stringify( data ) : JSON.stringify( data );
@@ -63,8 +63,7 @@ class DomainRequest extends EventResource {
 
     if ( withToken && this._token ) {
       headers[ 'Authorization' ] = 'Bearer ' + this._token.access_token;
-    }
-    else if ( !withToken ) {
+    } else if ( !withToken ) {
       headers[ 'Cookie' ] = this._cookies.join();
     }
     if ( isJSON && !headers[ 'Content-Type' ]) {
@@ -74,7 +73,7 @@ class DomainRequest extends EventResource {
     return Object.assign({}, options.headers, headers );
   }
 
-  getRequestHeaders(url, encodedData = '', method = 'GET', options = {}) {
+  getRequestHeaders( url, encodedData = '', method = 'GET', options = {}) {
     const isGET = method === 'GET',
       headers = this.getDefaultHeaders( options );
 
@@ -107,14 +106,14 @@ class DomainRequest extends EventResource {
   }
 
   handleResponse({ rawData, response }, options = {}) {
-    const { responseHandlerClass } = this.constructor;
-    const handler = new responseHandlerClass( rawData, response );
+    const { responseHandlerClass } = this.constructor,
+      handler = new responseHandlerClass( rawData, response );
     return handler.toJSON( options );
   }
 
-  createRequest(url, encodedData = '', method = 'GET', headers = {}) {
+  createRequest( url, encodedData = '', method = 'GET', headers = {}) {
     const isGET = method === 'GET',
-      path = isGET ? `${url}?${encodedData}`: url;
+      path = isGET ? `${url}?${encodedData}` : url;
 
     return new HTTPRequest({
       path,

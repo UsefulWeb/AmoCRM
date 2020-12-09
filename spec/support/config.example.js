@@ -5,4 +5,4 @@ export default {
     password: '',
     hash: ''
   }
-}
+};

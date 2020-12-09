@@ -27,7 +27,7 @@ class BaseActiveRecord {
   }
 
   hasAttribute( attribute ) {
-    return this._attributes.hasOwnProperty( attribute );
+    return Object.prototype.hasOwnProperty.call( this._attributes, attribute );
   }
 
   getAttribute( attribute ) {

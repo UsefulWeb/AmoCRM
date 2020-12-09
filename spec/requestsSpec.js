@@ -30,7 +30,7 @@ describe( 'Requests', () => {
       url
     });
     client.request.get( '/api/v4/leads' )
-      .then(data => {
+      .then( data => {
         console.log({ data });
         client.request.get( '/api/v4/leads' );
       })

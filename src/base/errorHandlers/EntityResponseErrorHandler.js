@@ -23,6 +23,7 @@ class EntityResponseErrorHandler extends ResponseErrorHandler {
       return new Error( `${errorsNamespace} failed with code ${code}: ${message}`, code );
     }
 
+    // eslint-disable-next-line one-var
     const firstErrorKey = Object.keys( errorsList )[ 0 ],
       message = errorsList[ firstErrorKey ];
 

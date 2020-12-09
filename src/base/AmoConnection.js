@@ -3,9 +3,8 @@
 import qs from 'qs';
 import schema from '../routes/v4';
 import EventResource from './EventResource';
-import { delay } from '../helpers';
-import PrivateDomainRequest from "./requests/domain/PrivateDomainRequest";
-import AuthServer from "./auth/AuthServer";
+import PrivateDomainRequest from './requests/domain/PrivateDomainRequest';
+import AuthServer from './auth/AuthServer';
 
 class AmoConnection extends EventResource {
 
@@ -80,7 +79,7 @@ class AmoConnection extends EventResource {
     return this;
   }
 
-  getState( state ) {
+  getState() {
     return this._state;
   }
 
@@ -91,12 +90,12 @@ class AmoConnection extends EventResource {
         client_id,
         mode
       },
-      state = this.getState();
+      state = this.getState(),
+      paramsStr = qs.stringify( params ),
+      url = `${baseUrl}?${paramsStr}`;
     if ( state ) {
       params.state = state;
     }
-    const paramsStr = qs.stringify( params ),
-      url = `${baseUrl}?${paramsStr}`;
     return url;
   }
 
@@ -134,9 +133,10 @@ class AmoConnection extends EventResource {
       } = this._options,
       token = this.getToken();
     if ( !token ) {
-      console.log('no token');
+      console.log( 'no token' );
       return Promise.reject( 'no token' );
     }
+    // eslint-disable-next-line one-var
     const { refresh_token } = token,
       data = {
         client_id,
@@ -168,6 +168,7 @@ class AmoConnection extends EventResource {
       token.expires_at = responseTimestamp + expiresIn;
     }
 
+    // eslint-disable-next-line one-var
     const event = {
       ...response,
       data: token
@@ -187,8 +188,9 @@ class AmoConnection extends EventResource {
       server = new AuthServer( options );
 
     this._server = server;
+    // eslint-disable-next-line one-var
     const handleCode = new Promise( resolve => {
-      server.on('code', event => {
+      server.on( 'code', event => {
         const { code } = event;
         resolve( code );
       });
@@ -216,17 +218,15 @@ class AmoConnection extends EventResource {
 
     if ( !this._code && this._options.server ) {
       return this.waitUserAction();
-    }
-    else if ( !this._code && this.getToken() && this.isRequestExpired()) {
+    } else if ( !this._code && this.getToken() && this.isRequestExpired()) {
       return this.refreshToken();
-    }
-    else if ( !this._code ) {
+    } else if ( !this._code ) {
       return Promise.resolve( false );
     }
 
     return this.fetchToken()
       .then( response => {
-        const { data = {}} = response;
+        const { data = {} } = response;
         if ( data && data.token_type ) {
           this._lastRequestAt = new Date;
           this.triggerEvent( 'connected', this );
@@ -234,6 +234,7 @@ class AmoConnection extends EventResource {
           return true;
         }
 
+        // eslint-disable-next-line one-var
         const e = new Error( 'Auth Error' );
         e.data = data;
 

@@ -28,8 +28,7 @@ class PrivateRequest {
 
       if ( form ) {
         form.pipe( request );
-      }
-      else if ( method !== 'GET' ) {
+      } else if ( method !== 'GET' ) {
         request.write( data );
       }
       request.on( 'error', this.onError( reject ));
@@ -43,7 +42,9 @@ class PrivateRequest {
 
   onResponse( callback ) {
     let rawData = '';
-    const onResponseData = chunk => { rawData += chunk; console.log( chunk )},
+    const onResponseData = chunk => {
+        rawData += chunk; console.log( chunk );
+      },
       onRequestEnd = response => () => callback({ response, rawData });
 
     return response => {
@@ -54,4 +55,4 @@ class PrivateRequest {
 
 }
 
-export default HTTPRequest;
+export default PrivateRequest;

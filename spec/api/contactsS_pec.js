@@ -31,6 +31,7 @@ describe( 'AmoCRM API Contact Interface', () => {
     contact.updated_at = Math.floor( new Date / 1000 ) + 10;
     await contact.save();
 
+    // eslint-disable-next-line one-var
     const existingContact = await client.Contact.findById( contact.id );
 
     expect( existingContact.name ).toBe( 'Updated Name' );

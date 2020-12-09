@@ -1,4 +1,4 @@
-import EntityResponseErrorHandler from "./EntityResponseErrorHandler";
+import EntityResponseErrorHandler from './EntityResponseErrorHandler';
 
 class PrivateDomainResponseErrorHandler extends EntityResponseErrorHandler {
 
