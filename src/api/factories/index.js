@@ -1,5 +1,5 @@
-import LeadFactory from './factories/LeadFactory';
-import ContactFactory from './factories/ContactFactory';
+import LeadFactory from './LeadFactory';
+import ContactFactory from './ContactFactory';
 // import CustomerFactory from './factories/CustomerFactory';
 // import FieldFactory from './factories/FieldFactory';
 // import NoteFactory from './factories/NoteFactory';
