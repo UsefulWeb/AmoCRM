@@ -178,7 +178,7 @@ class AmoConnection extends EventResource {
 
   waitUserAction() {
     if ( this._server ) {
-      return Promise.resolve;
+      return Promise.resolve();
     }
     const options = {
         ...this._options.server,
@@ -217,10 +217,9 @@ class AmoConnection extends EventResource {
     if ( !this._code && this._options.server ) {
       return this.waitUserAction();
     }
-    else if ( !this._code && this.getToken() && this.isRequestExpired()) {
+    else if ( this.getToken() && this.isRequestExpired()) {
       return this.refreshToken();
-    }
-    else if ( !this._code ) {
+    } else if ( !this._code && !this.getToken() ) {
       return Promise.resolve( false );
     }
 
@@ -231,7 +230,7 @@ class AmoConnection extends EventResource {
           this._lastRequestAt = new Date;
           this.triggerEvent( 'connected', this );
           this._isConnected = true;
-          return true;
+          return Promise.resolve( true );
         }
 
         const e = new Error( 'Auth Error' );

@@ -42,7 +42,7 @@ describe( 'AmoCRM connection', () => {
     done();
   });
 
-  fit( 'should get new token', async done => {
+  it( 'should get new token', async done => {
     const url = client.connection.getAuthUrl();
     console.log({
       mode: 'should restore token',
@@ -58,6 +58,15 @@ describe( 'AmoCRM connection', () => {
       });
       done();
     });
+    // done();
+  }, 60 * 1000 );
+
+  it( 'should set old token', async done => {
+    client.connection.setToken( config.token );
+    client.connection.connect();
+    if ( !client.connection.isRequestExpired()) {
+      done();
+    }
     // done();
   }, 60 * 1000 );
 
