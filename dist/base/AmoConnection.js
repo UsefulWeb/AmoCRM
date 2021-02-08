@@ -223,7 +223,7 @@ var AmoConnection = function (_EventResource) {
       var _this5 = this;
 
       if (this._server) {
-        return Promise.resolve;
+        return Promise.resolve();
       }
       var options = _extends({}, this._options.server, {
         state: this.getState()
@@ -262,9 +262,9 @@ var AmoConnection = function (_EventResource) {
 
       if (!this._code && this._options.server) {
         return this.waitUserAction();
-      } else if (!this._code && this.getToken() && this.isRequestExpired()) {
+      } else if (this.getToken() && this.isRequestExpired()) {
         return this.refreshToken();
-      } else if (!this._code) {
+      } else if (!this._code && !this.getToken()) {
         return Promise.resolve(false);
       }
 
@@ -276,7 +276,7 @@ var AmoConnection = function (_EventResource) {
           _this6._lastRequestAt = new Date();
           _this6.triggerEvent('connected', _this6);
           _this6._isConnected = true;
-          return true;
+          return Promise.resolve(true);
         }
 
         var e = new Error('Auth Error');
