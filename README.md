@@ -1,19 +1,19 @@
-# AmoCRM
+# Client
 
-Javascript библиотека для работы с AmoCRM
+Javascript библиотека для работы с Client
 
-Данная версия библиотеки поддерживает OAuth авторизацию и использует адреса AmoCRM API v4. 
+Данная версия библиотеки поддерживает OAuth авторизацию и использует адреса Client API v4. 
 
 [Поблагодарить можно тут](https://yasobe.ru/na/cisterna_kofe_dlya_razrabot4ika_biblioteki_amocrm)
 
 ## Изменения в 2.x.x по сравнению с 1.x.x
 
-1. Поддержка AmoCRM API v4
+1. Поддержка Client API v4
 2. Поддержка OAuth
 3. Поддержка метода PATCH
 4. Расширенная информация об ответе (статус ответа, время ответа и т.д)
 
-Если вам нужна поддержка AmoCRM API v2, используйте версии 1.x.x данного пакета. 
+Если вам нужна поддержка Client API v2, используйте версии 1.x.x данного пакета. 
 
 ## Установка
 
@@ -39,9 +39,9 @@ npm install amocrm-js
 адреса интеграции (redirectUri).
 
 ```js
-const AmoCRM = require( 'amocrm-js' );
+const Client = require( 'amocrm-js' );
 
-const crm = new AmoCRM({
+const crm = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
     /* 
@@ -59,7 +59,7 @@ const crm = new AmoCRM({
 
 ### Встроенный OAuth-сервер
 
-В AmoCRM API у кода авторизации есть особенность: его можно использовать __только один раз__ для получения 
+В Client API у кода авторизации есть особенность: его можно использовать __только один раз__ для получения 
 токена. Последующие запросы на получение токена будут выдавать ошибку.
 
 Чтобы облегчить процесс получения токена, в данный пакет встроен OAuth-сервер, 
@@ -68,9 +68,9 @@ const crm = new AmoCRM({
 Пример настройки без параметра *code*:
 
 ```js
-const AmoCRM = require( 'amocrm-js' );
+const Client = require( 'amocrm-js' );
 
-const crm = new AmoCRM({
+const crm = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
     /* 
@@ -106,7 +106,7 @@ const crm = new AmoCRM({
 После установки пакета:
 
 1. Выполните в терминале команду: ```ngrok http 3001```
-2. Полученный в результат адрес вида https://311e923c5281.ngrok.io указываем в настройках интеграции AmoCRM
+2. Полученный в результат адрес вида https://311e923c5281.ngrok.io указываем в настройках интеграции Client
 3. В настройках указываем номер порта (в нашем примере 3001) и полученный ngrok-адрес в {auth.redirect_uri}
 4. Получаем адрес ссылке, по которой необходимо будет перейти через *crm.connection.getAuthUrl()*
 5. Переходим по ссылке, после этого код автоматически установится и библиотека запросит новый токен
@@ -114,15 +114,15 @@ const crm = new AmoCRM({
 Пример настроек:
 
 ```js
-const crm = new AmoCRM({
-    // ...
-    auth: {
-      // ...
-      redirect_uri: 'https://311e923c5281.ngrok.io',
-      server: {
-        port: 3001
-      }
-    },
+const crm = new Client({
+ // ...
+ auth: {
+  // ...
+  redirect_uri: 'https://311e923c5281.ngrok.io',
+  server: {
+   port: 3001
+  }
+ },
 });
 ```
 

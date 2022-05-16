@@ -1,10 +1,12 @@
 {
   "extends": [
     "eslint:recommended",
-    "idiomatic"
+    "plugin:@typescript-eslint/recommended"
   ],
+  "parser": ",@typescript-eslint/parser",
   "plugins": [
-    "jasmine"
+    "jest:recommended",
+    "@typescript-eslint"
   ],
   "parserOptions": {
     "ecmaVersion": 8,

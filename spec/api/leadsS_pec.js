@@ -1,6 +1,6 @@
-import AmoCRM from '../../dist/AmoCRM';
+import AmoCRM from '../../dist/Client';
 import config from '../support/config';
-import Lead from '../../src/api/activeRecords/Lead';
+import Lead from '../../src.old/api/activeRecords/Lead';
 
 let client;
 
@@ -11,7 +11,7 @@ beforeEach( done => {
     .then( done );
 });
 
-describe( 'AmoCRM API Lead Interface', () => {
+describe( 'Client API Lead Interface', () => {
 
   it( 'basic existence', () => {
     expect( client.Lead ).toBeDefined();

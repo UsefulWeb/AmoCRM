@@ -1,5 +1,5 @@
-// import AmoCRM from '../dist/AmoCRM';
-import AmoCRM from '../src/AmoCRM';
+// import Client from '../dist/Client';
+import AmoCRM from '../src.old/AmoCRM';
 import config from './support/config';
 
 let client;

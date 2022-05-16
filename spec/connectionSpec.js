@@ -1,4 +1,4 @@
-import AmoCRM from '../src/AmoCRM';
+import AmoCRM from '../src.old/AmoCRM';
 import config from './support/config';
 
 let client;
@@ -8,7 +8,7 @@ beforeEach( done => {
   done();
 });
 
-describe( 'AmoCRM connection', () => {
+describe( 'Client connection', () => {
 
   it( 'should refreshToken', done => {
     client.connection.connect()

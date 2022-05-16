@@ -1,4 +1,4 @@
-import AmoCRM from '../../dist/AmoCRM';
+import AmoCRM from '../../dist/Client';
 import config from '../support/config';
 
 let client;
@@ -10,7 +10,7 @@ beforeEach( done => {
     .then( done );
 });
 
-describe( 'AmoCRM API Contact Interface', () => {
+describe( 'Client API Contact Interface', () => {
   it( 'should create contact', done => {
     const contact = new client.Contact({
       name: 'Прокофий'
