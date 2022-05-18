@@ -95,8 +95,8 @@ class AmoConnection extends EventResource {
     if ( state ) {
       params.state = state;
     }
-    const paramsStr = qs.stringify( params ),
-      url = `${baseUrl}?${paramsStr}`;
+    const paramsStr = qs.stringify( params );
+    const url = `${baseUrl}?${paramsStr}`;
     return url;
   }
 
@@ -233,7 +233,7 @@ class AmoConnection extends EventResource {
           return Promise.resolve( true );
         }
 
-        const e = new Error( 'Auth Error' );
+        const e = new Error( 'Connection Error' );
         e.data = data;
 
         this.triggerEvent( 'authError', e, this );
