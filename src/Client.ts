@@ -12,35 +12,23 @@ import { IoC } from "./types";
 
 export default class Client extends EventEmitter {
     protected readonly environment: Environment;
-    protected readonly request: ClientRequest;
+    protected readonly token: Token;
+    public readonly request: ClientRequest;
+    public readonly connection: Connection;
 
     constructor(options: ClientOptions) {
         super();
         this.environment = container.get(IoC.Environment);
+        this.token = container.get(IoC.Token);
+        this.connection = container.get(IoC.Connection);
         this.request = container.get(IoC.ClientRequest);
         this.environment.set(options);
-        this.subscribeEvents();
-        // this.assignFactories();
+
+        this.subscribeToComponents();
     }
 
-    subscribeEvents() {
-        const token: Token = container.get(IoC.Token);
-        const connection: Connection = container.get(IoC.Connection);
-        token.subscribe(this);
-        connection.subscribe(this);
+    subscribeToComponents() {
+        this.token.subscribe(this);
+        this.connection.subscribe(this);
     }
-
-    // assignFactories() {
-    //     const builder = new ResourceFactoryBuilder(this.connection),
-    //         factories = builder.getResourceFactories();
-    //     Object.assign(this, factories);
-    // }
-    //
-    // connect() {
-    //     return this.connection.connect();
-    // }
-    //
-    // disconnect() {
-    //     return this.connection.disconnect();
-    // }
 }

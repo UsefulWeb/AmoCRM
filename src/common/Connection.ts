@@ -9,24 +9,29 @@ import AuthServer from "./AuthServer";
 
 @injectable()
 export default class Connection extends EventEmitter {
+    protected readonly token: Token;
+    protected readonly environment: Environment;
+
     protected connected: boolean = false;
     protected authServer: AuthServer | null = null;
-    protected code: string | null;
+    protected code?: string;
 
     constructor(
-        @inject(new LazyServiceIdentifer(() => IoC.Token)) protected readonly token: Token,
-        @inject(new LazyServiceIdentifer(() => IoC.Environment)) protected readonly environment: Environment
+        @inject(IoC.Token) token: Token,
+        @inject(IoC.Environment) environment: Environment
     ) {
         super();
-        this.code = this.environment.get('auth.code', null)
+        this.token = token;
+        this.environment = environment;
+        this.code = this.environment.get<string>('auth.code');
     }
 
     async update(): Promise<boolean> {
         if (!this.connected) {
             return await this.connect();
         }
-        this.emit('check', true);
 
+        this.emit('check', true);
         if (this.token.exists() || this.isTokenExpired()) {
             await this.token.refresh();
             return this.isTokenExpired();
@@ -41,9 +46,7 @@ export default class Connection extends EventEmitter {
 
     public isTokenExpired(): boolean {
         const expired = this.token.isExpired();
-        if (expired) {
-            this.connected = false;
-        }
+        this.connected = !expired;
         return expired;
     }
 
@@ -62,6 +65,7 @@ export default class Connection extends EventEmitter {
             await this.waitForUserAction();
             return true;
         }
+        this.emit('check', true);
         if (tokenExists && this.isTokenExpired()) {
             await this.token.refresh();
             this.connected = this.token.isExpired();
@@ -87,7 +91,7 @@ export default class Connection extends EventEmitter {
         if (this.authServer) {
             return Promise.resolve(true);
         }
-        const options: AuthServerOptions = this.environment.get('auth.server');
+        const options = this.environment.get<AuthServerOptions>('auth.server');
         const server = new AuthServer(options);
 
         this.authServer = server;
@@ -109,7 +113,7 @@ export default class Connection extends EventEmitter {
     async makeRequest(method: string, url: string, data?: RequestData, options?: RequestOptions) {
         await this.update();
         const token = this.token.getValue();
-        const domain: string = this.environment.get('domain');
+        const domain = this.environment.get<string>('domain');
         const config = {
             domain,
             method,

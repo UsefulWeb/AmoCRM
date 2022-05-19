@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import EventEmitter from "./EventEmitter";
-import { APIResponse, TokenData } from "../interfaces/common";
+import { APIResponse, AuthOptions, TokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import Environment from "./Environment";
 import { IoC, StringValueObject } from "../types";
@@ -50,7 +50,7 @@ export default class Token extends EventEmitter {
     }
 
     getBaseClientOptions() {
-        const auth = this.environment.get('auth');
+        const auth = this.environment.get<AuthOptions>('auth');
         const {
             client_id,
             client_secret,
@@ -116,7 +116,7 @@ export default class Token extends EventEmitter {
     }
 
     protected makeRequest(data: StringValueObject) {
-        const domain = this.environment.get('domain');
+        const domain = this.environment.get<string>('domain');
         const method = 'POST';
         const url = schema.auth.token;
         const config = {
