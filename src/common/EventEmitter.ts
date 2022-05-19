@@ -1,5 +1,4 @@
 import { EventEmitter as EventEmitterBase } from "events";
-import {injectable} from "inversify";
 
 export default class EventEmitter extends EventEmitterBase {
     protected subscribers: EventEmitter[] = [];

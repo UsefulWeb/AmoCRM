@@ -1,5 +1,5 @@
 import http from 'http';
-import { StringValueObject, RequestData } from "../types";
+import { StringValueObject, RequestData, JSONValue } from "../types";
 
 export interface TokenOptions {
     client_id: string;
@@ -40,27 +40,19 @@ export interface DomainRequestOptions {
     data?: RequestData;
     options?: RequestOptions;
     token?: TokenData;
+    parser?: ResponseParser<string, any>
 }
 
-export interface APIResponse {
+export interface APIResponse<T> {
     response: http.IncomingMessage,
-    data: any
-}
-
-export interface JSONResponse {
-    response: http.IncomingMessage,
-    data: JSONValue
+    data: T
 }
 
 export interface AuthServerOptions {
-    code: string;
     state?: string;
     port: number;
 }
 
-type JSONValue =
-    | string
-    | number
-    | boolean
-    | { [x: string]: JSONValue }
-    | Array<JSONValue>;
+export interface ResponseParser<T, R> {
+    parse(result: APIResponse<T>): APIResponse<R>;
+}

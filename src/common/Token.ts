@@ -3,7 +3,7 @@ import EventEmitter from "./EventEmitter";
 import { APIResponse, AuthOptions, TokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import Environment from "./Environment";
-import { IoC, StringValueObject } from "../types";
+import { IoC, JSONValue, StringValueObject } from "../types";
 import DomainRequest from "./DomainRequest";
 import * as domain from "domain";
 
@@ -11,11 +11,13 @@ import * as domain from "domain";
 export default class Token extends EventEmitter {
     protected value?: TokenData;
     protected expiresAt?: Date;
+    protected code?: string;
 
     protected readonly environment: Environment;
     constructor(@inject(IoC.Environment) environment: Environment) {
         super();
         this.environment = environment;
+        this.code = this.environment.get<string>('auth.code');
     }
 
     isExpired(): boolean {
@@ -24,6 +26,18 @@ export default class Token extends EventEmitter {
             return false;
         }
         return now > this.expiresAt;
+    }
+
+    getCode() {
+        return this.code;
+    }
+
+    setCode(code: string) {
+        this.code = code;
+    }
+
+    hasCode() {
+        return this.code !== undefined;
     }
 
     exists() {
@@ -51,6 +65,9 @@ export default class Token extends EventEmitter {
 
     getBaseClientOptions() {
         const auth = this.environment.get<AuthOptions>('auth');
+        if (!auth) {
+            throw new Error('NO_AUTH_OPTIONS');
+        }
         const {
             client_id,
             client_secret,
@@ -67,7 +84,7 @@ export default class Token extends EventEmitter {
     async fetch() {
         this.emit( 'beforeFetch', this );
         const baseClientOptions = this.getBaseClientOptions();
-        const { code } = this.environment.get('auth.code');
+        const code = this.environment.get<string>('auth.code');
 
         const data = {
             ...baseClientOptions,
@@ -99,7 +116,7 @@ export default class Token extends EventEmitter {
         return response;
     }
 
-    handleResponse(apiResponse: APIResponse) {
+    handleResponse(apiResponse: APIResponse<TokenData>) {
         const token: TokenData = apiResponse.data;
         if (!token.token_type) {
             return;
@@ -126,6 +143,6 @@ export default class Token extends EventEmitter {
             url
         };
         const request = new DomainRequest(config);
-        return request.process();
+        return request.process<TokenData>();
     }
 }

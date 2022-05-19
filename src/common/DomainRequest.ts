@@ -3,10 +3,11 @@ import https from 'https';
 import http from 'http';
 import * as Buffer from "buffer";
 
-import {APIResponse, DomainRequestOptions, RequestOptions} from "../interfaces/common";
+import { APIResponse, DomainRequestOptions } from "../interfaces/common";
 import { StringValueObject } from "../types";
 import {HttpMethod} from "../enums";
 import EventEmitter from "./EventEmitter";
+import JSONResponseParser from "./response/JSONResponseParser";
 
 
 export default class DomainRequest extends EventEmitter {
@@ -77,7 +78,17 @@ export default class DomainRequest extends EventEmitter {
         }
         return domain + '.amocrm.ru';
     }
-    process(): Promise<APIResponse> {
+    async process<T>(): Promise<APIResponse<T>> {
+        const apiResponse = await this.makeRequest();
+        return this.parseResponse<T>(apiResponse);
+    }
+
+    protected parseResponse<T>(apiResponse: APIResponse<string>): APIResponse<T> {
+        const { parser = new JSONResponseParser } = this.config;
+        return parser.parse(apiResponse);
+    }
+
+    protected makeRequest(): Promise<APIResponse<string>> {
         const path = this.getPath();
         const headers = this.getHeaders();
         const data = this.getData();
@@ -91,7 +102,7 @@ export default class DomainRequest extends EventEmitter {
         };
 
         const onResponse = this.onResponse.bind(this);
-        return new Promise<APIResponse>((resolve, reject) => {
+        return new Promise<APIResponse<string>>((resolve, reject) => {
             const request = https.request(options, onResponse(resolve));
             if (method !== HttpMethod.GET) {
                 request.write(data);
@@ -101,12 +112,13 @@ export default class DomainRequest extends EventEmitter {
         });
     }
 
+
     protected onResponse(callback: CallableFunction) {
         let buffer: Buffer[] = [];
         const onResponseData = (chunk: Buffer) => buffer.push(chunk);
         const onResponseEnd = (response: http.IncomingMessage) => {
             const data = buffer.join('');
-            const result: APIResponse = {
+            const result: APIResponse<string> = {
                 response,
                 data
             };

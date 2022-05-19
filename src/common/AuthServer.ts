@@ -1,7 +1,7 @@
 import http from "http";
 import EventEmitter from "./EventEmitter";
 import { AuthServerOptions } from "../interfaces/common";
-import {StringValueObject} from "../types";
+import { StringValueObject } from "../types";
 
 export default class AuthServer extends EventEmitter {
     protected readonly options: AuthServerOptions;

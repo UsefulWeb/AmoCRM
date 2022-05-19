@@ -7,3 +7,10 @@ export const IoC = {
     Connection: Symbol.for('Connection'),
     Token: Symbol.for('Token'),
 }
+
+export type JSONValue =
+    | string
+    | number
+    | boolean
+    | { [x: string]: JSONValue }
+    | Array<JSONValue>;

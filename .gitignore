@@ -38,4 +38,5 @@ jspm_packages
 # WebStorm
 .idea
 
+tests/config.ts
 /src.old

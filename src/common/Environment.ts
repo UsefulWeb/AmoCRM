@@ -5,6 +5,9 @@ import { ClientOptions } from "../interfaces/common";
 class Environment {
     protected options?: ClientOptions;
     set(options: ClientOptions) {
+        if (this.options) {
+            throw new Error('ENVIRONMENT_IS_READONLY');
+        }
         this.options = options;
     }
     get<T>(path?: string, defaultValue?: any): T {
@@ -25,7 +28,7 @@ class Environment {
         return value;
     }
 
-    exists(path: string) {
+    exists(path: string): boolean {
         return this.get(path) !== undefined;
     }
 }

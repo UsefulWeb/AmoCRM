@@ -1,6 +1,6 @@
 import { inject, injectable, LazyServiceIdentifer } from "inversify";
 import EventEmitter from "./EventEmitter";
-import {AuthServerOptions, RequestOptions} from "../interfaces/common";
+import { AuthServerOptions, JSONResponse, RequestOptions } from "../interfaces/common";
 import Token from "./Token";
 import Environment from "./Environment";
 import {IoC, RequestData} from "../types";
@@ -14,7 +14,6 @@ export default class Connection extends EventEmitter {
 
     protected connected: boolean = false;
     protected authServer: AuthServer | null = null;
-    protected code?: string;
 
     constructor(
         @inject(IoC.Token) token: Token,
@@ -23,7 +22,6 @@ export default class Connection extends EventEmitter {
         super();
         this.token = token;
         this.environment = environment;
-        this.code = this.environment.get<string>('auth.code');
     }
 
     async update(): Promise<boolean> {
@@ -40,10 +38,6 @@ export default class Connection extends EventEmitter {
         return true;
     }
 
-    public setCode(code: string) {
-        this.code = code;
-    }
-
     public isTokenExpired(): boolean {
         const expired = this.token.isExpired();
         this.connected = !expired;
@@ -57,11 +51,11 @@ export default class Connection extends EventEmitter {
 
         this.emit('beforeConnect');
 
-        const hasCode = this.code !== null;
+        const tokenHasCode = this.token.hasCode();
         const hasAuthServer = this.environment.exists('auth.server');
         const tokenExists = this.token.exists();
 
-        if (!hasCode && hasAuthServer) {
+        if (!tokenHasCode && hasAuthServer) {
             await this.waitForUserAction();
             return true;
         }
@@ -71,7 +65,7 @@ export default class Connection extends EventEmitter {
             this.connected = this.token.isExpired();
             return this.connected;
         }
-        if (!hasCode && !tokenExists) {
+        if (!tokenHasCode && !tokenExists) {
             return false;
         }
 
@@ -91,7 +85,11 @@ export default class Connection extends EventEmitter {
         if (this.authServer) {
             return Promise.resolve(true);
         }
-        const options = this.environment.get<AuthServerOptions>('auth.server');
+        const { state, port } = this.environment.get('auth.server');
+        const options: AuthServerOptions = {
+            state,
+            port
+        };
         const server = new AuthServer(options);
 
         this.authServer = server;
@@ -106,7 +104,7 @@ export default class Connection extends EventEmitter {
 
         await server.stop();
         this.authServer = null;
-        this.setCode(code);
+        this.token.setCode(code);
         return this.connect();
     }
 
@@ -123,6 +121,6 @@ export default class Connection extends EventEmitter {
             token
         };
         const domainRequest = new DomainRequest(config);
-        return await domainRequest.process();
+        return await domainRequest.process<JSONResponse>();
     }
 }
