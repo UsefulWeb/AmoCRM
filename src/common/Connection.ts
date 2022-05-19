@@ -1,10 +1,9 @@
-import { injectable } from "inversify";
+import { inject, injectable, LazyServiceIdentifer } from "inversify";
 import EventEmitter from "./EventEmitter";
 import {AuthServerOptions, RequestOptions} from "../interfaces/common";
 import Token from "./Token";
-import { container } from "../inversify.config";
 import Environment from "./Environment";
-import { RequestData } from "../types";
+import {IoC, RequestData} from "../types";
 import DomainRequest from "./DomainRequest";
 import AuthServer from "./AuthServer";
 
@@ -15,8 +14,8 @@ export default class Connection extends EventEmitter {
     protected code: string | null;
 
     constructor(
-        protected readonly token: Token,
-        protected readonly environment: Environment
+        @inject(new LazyServiceIdentifer(() => IoC.Token)) protected readonly token: Token,
+        @inject(new LazyServiceIdentifer(() => IoC.Environment)) protected readonly environment: Environment
     ) {
         super();
         this.code = this.environment.get('auth.code', null)

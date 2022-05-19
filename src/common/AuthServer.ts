@@ -5,7 +5,7 @@ import {StringValueObject} from "../types";
 
 export default class AuthServer extends EventEmitter {
     protected readonly options: AuthServerOptions;
-    protected instance?: http.Server:
+    protected instance?: http.Server;
     constructor(options: AuthServerOptions) {
         super();
         this.options = options;

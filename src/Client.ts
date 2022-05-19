@@ -1,14 +1,14 @@
 import "reflect-metadata";
-import { injectable } from "inversify";
+import { inject } from "inversify";
 import { container } from "./inversify.config";
 import EventEmitter from "./common/EventEmitter";
 import Connection from './common/Connection';
 // import ResourceFactoryBuilder from './common/ResourceFactoryBuilder';
-import ConnectionRequest from './common/ClientRequest';
 import { ClientOptions } from "./interfaces/common";
 import Environment from "./common/Environment";
 import ClientRequest from "./common/ClientRequest";
 import Token from "./common/Token";
+import { IoC } from "./types";
 
 export default class Client extends EventEmitter {
     protected readonly environment: Environment;
@@ -16,19 +16,18 @@ export default class Client extends EventEmitter {
 
     constructor(options: ClientOptions) {
         super();
-        this.environment = container.get(Environment);
+        this.environment = container.get(IoC.Environment);
+        this.request = container.get(IoC.ClientRequest);
         this.environment.set(options);
-
-        this.request = container.get(ClientRequest);
         this.subscribeEvents();
         // this.assignFactories();
     }
 
     subscribeEvents() {
-        const token = container.get(Token);
-        const auth = container.get(Connection);
+        const token: Token = container.get(IoC.Token);
+        const connection: Connection = container.get(IoC.Connection);
         token.subscribe(this);
-        auth.subscribe(this);
+        connection.subscribe(this);
     }
 
     // assignFactories() {
