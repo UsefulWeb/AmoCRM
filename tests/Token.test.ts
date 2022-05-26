@@ -1,3 +1,4 @@
+import './bootstrap';
 import Client from "../src/Client";
 import config, { CODE } from "./config";
 import { TokenData } from "../src/interfaces/common";

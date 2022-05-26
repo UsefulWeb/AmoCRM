@@ -34,25 +34,31 @@ export default class AuthServer extends EventEmitter {
         });
     }
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
-        const { url } = request;
-        if (!url) {
+        console.log('handled auth server callback');
+        if (!request.url) {
+            response.end({
+                message: 'NO_URL'
+            });
             return;
         }
-        const location = new URL(url);
-        const query: StringValueObject = Object.fromEntries(location.searchParams);
+        const params = request.url.substring(2);
+        const searchParams = new URLSearchParams(params);
+        const query: StringValueObject = Object.fromEntries(searchParams);
         const currentState = this.options.state;
         const { code, state } = query;
-        response.end();
         if (!code) {
+            response.end('NO_CODE');
             return;
         }
         if (currentState && state !== currentState) {
+            response.end('STATE_MISMATCH');
             return;
         }
-        console.log('recieved code: ' + code);
         this.emit( 'code', {
             code,
             state
         });
+
+        response.end('VALID_CODE');
     }
 }

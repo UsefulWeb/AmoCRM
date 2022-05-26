@@ -75,8 +75,6 @@ export default class DomainRequest extends EventEmitter {
         const path = location.pathname;
         const queryStringData: StringValueObject = Object.fromEntries(location.searchParams);
 
-        console.log({location, queryStringData })
-
         const mergedData = {
             ...data,
             ...queryStringData

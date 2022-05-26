@@ -37,7 +37,7 @@ export default class Auth extends EventEmitter{
     }
 
     hasCode() {
-        return this.code !== undefined;
+        return Boolean(this.code);
     }
 
     getUrl(mode = 'popup') {

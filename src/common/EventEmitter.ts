@@ -17,7 +17,8 @@ export default class EventEmitter extends EventEmitterBase {
         if (context instanceof EventEmitter) {
             return result;
         }
-        const id = this.constructor.name.toLowerCase();
+        const { name } = this.constructor;
+        const id = name[0].toLowerCase() + name.substring(1);
         const subscriberEventName = id+':'+eventName.toString();
         this.subscribers.forEach(
             subscriber => subscriber.emit(subscriberEventName, this, ...args)
