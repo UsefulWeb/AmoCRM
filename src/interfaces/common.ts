@@ -9,8 +9,8 @@ export interface TokenOptions {
 }
 
 export interface AuthOptions extends TokenOptions {
+    state?: string;
     server?: {
-        state?: string;
         port?: number;
     }
 }
@@ -51,6 +51,20 @@ export interface APIResponse<T> {
 export interface AuthServerOptions {
     state?: string;
     port: number;
+}
+
+export interface AuthUrlParams {
+    client_id: string;
+    mode: string;
+    state?: string;
+}
+
+export interface APIResponseErrorValue {
+    hint: string;
+    title: string;
+    type: string;
+    status: number;
+    detail: string;
 }
 
 export interface ResponseParser<T, R> {

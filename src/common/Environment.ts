@@ -1,13 +1,8 @@
-import { injectable } from "inversify";
 import { ClientOptions } from "../interfaces/common";
 
-@injectable()
 class Environment {
-    protected options?: ClientOptions;
-    set(options: ClientOptions) {
-        if (this.options) {
-            throw new Error('ENVIRONMENT_IS_READONLY');
-        }
+    protected readonly options: ClientOptions;
+    constructor(options: ClientOptions) {
         this.options = options;
     }
     get<T>(path?: string, defaultValue?: any): T {
@@ -24,6 +19,9 @@ class Environment {
                 return defaultValue;
             }
             value = value[key];
+        }
+        if (value === undefined) {
+            return defaultValue;
         }
         return value;
     }

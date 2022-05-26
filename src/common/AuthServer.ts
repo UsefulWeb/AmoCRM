@@ -21,7 +21,7 @@ export default class AuthServer extends EventEmitter {
     }
     onListenStart() {
         const { port } = this.options;
-        console.log( `auth server listening on port ${port}` );
+        console.log(`auth server listening on port ${port}`);
     }
     stop(): Promise<void> {
         return new Promise((resolve, reject) => {
@@ -50,6 +50,7 @@ export default class AuthServer extends EventEmitter {
         if (currentState && state !== currentState) {
             return;
         }
+        console.log('recieved code: ' + code);
         this.emit( 'code', {
             code,
             state

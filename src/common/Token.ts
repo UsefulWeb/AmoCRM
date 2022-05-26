@@ -1,23 +1,22 @@
-import { inject, injectable } from "inversify";
 import EventEmitter from "./EventEmitter";
 import { APIResponse, AuthOptions, TokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import Environment from "./Environment";
-import { IoC, JSONValue, StringValueObject } from "../types";
+import { StringValueObject } from "../types";
 import DomainRequest from "./DomainRequest";
-import * as domain from "domain";
+import Auth from "./Auth";
 
-@injectable()
 export default class Token extends EventEmitter {
     protected value?: TokenData;
     protected expiresAt?: Date;
     protected code?: string;
 
     protected readonly environment: Environment;
-    constructor(@inject(IoC.Environment) environment: Environment) {
+    protected readonly auth: Auth;
+    constructor(environment: Environment, auth: Auth) {
         super();
         this.environment = environment;
-        this.code = this.environment.get<string>('auth.code');
+        this.auth = auth;
     }
 
     isExpired(): boolean {
@@ -26,18 +25,6 @@ export default class Token extends EventEmitter {
             return false;
         }
         return now > this.expiresAt;
-    }
-
-    getCode() {
-        return this.code;
-    }
-
-    setCode(code: string) {
-        this.code = code;
-    }
-
-    hasCode() {
-        return this.code !== undefined;
     }
 
     exists() {
@@ -82,19 +69,21 @@ export default class Token extends EventEmitter {
     }
 
     async fetch() {
-        this.emit( 'beforeFetch', this );
+        this.emit( 'beforeFetch');
         const baseClientOptions = this.getBaseClientOptions();
-        const code = this.environment.get<string>('auth.code');
+        const code = this.auth.getCode();
 
-        const data = {
+        if (!code) {
+            throw new Error('NO_AUTH_CODE');
+        }
+
+        const data: StringValueObject = {
             ...baseClientOptions,
             code,
             grant_type: 'authorization_code',
         };
-
         const response = await this.makeRequest(data);
-        this.handleResponse(response);
-        return response;
+        return this.handleResponse(response);
     }
 
     async refresh() {
@@ -112,8 +101,7 @@ export default class Token extends EventEmitter {
             };
 
         const response = await this.makeRequest(data);
-        this.handleResponse(response);
-        return response;
+        return this.handleResponse(response);
     }
 
     handleResponse(apiResponse: APIResponse<TokenData>) {
@@ -130,6 +118,7 @@ export default class Token extends EventEmitter {
             token.expires_at = responseTimestamp + expiresIn;
         }
         this.setValue(token);
+        return token;
     }
 
     protected makeRequest(data: StringValueObject) {
@@ -142,6 +131,7 @@ export default class Token extends EventEmitter {
             data,
             url
         };
+        console.log({config});
         const request = new DomainRequest(config);
         return request.process<TokenData>();
     }

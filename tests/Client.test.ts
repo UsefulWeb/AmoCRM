@@ -17,21 +17,18 @@ describe('Client', () => {
         }).toThrowError(new Error('NO_OPTIONS'));
     });
     test('empty auth config', async () => {
-        const client = new Client({});
-        client.connection.connect()
-            .catch(e => {
-                console.log(e);
-                expect(e).toEqual({
-                    error: 'NO_AUTH_OPTIONS'
-                })
-            });
+        expect(() => {
+            const client = new Client({});
+        }).toThrowError(new Error('NO_AUTH_OPTIONS'))
     });
     test('multiple configs', async () => {
         const client1 = new Client({
             domain: 'domain1',
+            auth: config.auth
         });
         const client2 = new Client({
-            domain: 'domain2'
+            domain: 'domain2',
+            auth: config.auth
         });
         const env1 = client1.environment.get();
         const env2 = client2.environment.get();
@@ -41,9 +38,11 @@ describe('Client', () => {
     test('multiple configs', async () => {
         const client1 = new Client({
             domain: 'domain1',
+            auth: config.auth
         });
         const client2 = new Client({
-            domain: 'domain2'
+            domain: 'domain2',
+            auth: config.auth
         });
         const env1 = client1.environment.get();
         const env2 = client2.environment.get();

@@ -2,17 +2,22 @@ import qs from 'qs';
 import https from 'https';
 import http from 'http';
 import * as Buffer from "buffer";
+import FormData from 'form-data';
 
 import { APIResponse, DomainRequestOptions } from "../interfaces/common";
 import { StringValueObject } from "../types";
 import {HttpMethod} from "../enums";
 import EventEmitter from "./EventEmitter";
 import JSONResponseParser from "./response/JSONResponseParser";
+import { hostname } from "os";
 
 
 export default class DomainRequest extends EventEmitter {
+    protected readonly hostname: string;
+
     constructor(protected readonly config: DomainRequestOptions) {
         super();
+        this.hostname = this.getHostname();
     }
     protected isFormData(): boolean {
         const { data, options } = this.config;
@@ -55,9 +60,18 @@ export default class DomainRequest extends EventEmitter {
         }
         return JSON.stringify(data);
     }
+    protected getLocation() {
+        const { url } = this.config;
+        const re = /^https?:\/\//i;
+        if (!re.test(url)) {
+            const fullURL = `https://${this.hostname}${url}`;
+            return new URL(fullURL);
+        }
+        return new URL(url);
+    }
     protected getPath(): string {
         const { method, data, url } = this.config;
-        const location = new URL(url);
+        const location = this.getLocation();
         const path = location.pathname;
         const searchParams = Object.entries(location.searchParams);
         const queryStringData: StringValueObject = Object.fromEntries(searchParams);
@@ -93,7 +107,7 @@ export default class DomainRequest extends EventEmitter {
         const headers = this.getHeaders();
         const data = this.getData();
         const method = this.getMethod();
-        const hostname = this.getHostname();
+        const hostname = this.hostname;;
         const options = {
             hostname,
             path,
@@ -116,7 +130,7 @@ export default class DomainRequest extends EventEmitter {
     protected onResponse(callback: CallableFunction) {
         let buffer: Buffer[] = [];
         const onResponseData = (chunk: Buffer) => buffer.push(chunk);
-        const onResponseEnd = (response: http.IncomingMessage) => {
+        const onResponseEnd = (response: http.IncomingMessage) => () => {
             const data = buffer.join('');
             const result: APIResponse<string> = {
                 response,

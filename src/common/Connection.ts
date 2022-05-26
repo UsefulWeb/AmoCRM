@@ -1,27 +1,25 @@
-import { inject, injectable, LazyServiceIdentifer } from "inversify";
 import EventEmitter from "./EventEmitter";
-import { AuthServerOptions, JSONResponse, RequestOptions } from "../interfaces/common";
+import { AuthOptions, AuthServerOptions, RequestOptions } from "../interfaces/common";
 import Token from "./Token";
 import Environment from "./Environment";
-import {IoC, RequestData} from "../types";
+import { JSONValue, RequestData } from "../types";
 import DomainRequest from "./DomainRequest";
 import AuthServer from "./AuthServer";
+import Auth from "./Auth";
 
-@injectable()
 export default class Connection extends EventEmitter {
     protected readonly token: Token;
     protected readonly environment: Environment;
+    protected readonly auth: Auth;
 
     protected connected: boolean = false;
     protected authServer: AuthServer | null = null;
 
-    constructor(
-        @inject(IoC.Token) token: Token,
-        @inject(IoC.Environment) environment: Environment
-    ) {
+    constructor(environment: Environment, token: Token, auth: Auth) {
         super();
         this.token = token;
         this.environment = environment;
+        this.auth = auth;
     }
 
     async update(): Promise<boolean> {
@@ -51,22 +49,23 @@ export default class Connection extends EventEmitter {
 
         this.emit('beforeConnect');
 
-        const tokenHasCode = this.token.hasCode();
+        const hasCode = this.auth.hasCode();
         const hasAuthServer = this.environment.exists('auth.server');
         const tokenExists = this.token.exists();
 
-        if (!tokenHasCode && hasAuthServer) {
+        if (!hasCode && hasAuthServer) {
             await this.waitForUserAction();
             return true;
         }
+
         this.emit('check', true);
         if (tokenExists && this.isTokenExpired()) {
             await this.token.refresh();
             this.connected = this.token.isExpired();
             return this.connected;
         }
-        if (!tokenHasCode && !tokenExists) {
-            return false;
+        if (!hasCode && !tokenExists) {
+            throw new Error('NO_TOKEN_AND_CODE');
         }
 
         try {
@@ -83,15 +82,17 @@ export default class Connection extends EventEmitter {
 
     protected async waitForUserAction(): Promise<boolean> {
         if (this.authServer) {
-            return Promise.resolve(true);
+            return false;
         }
-        const { state, port } = this.environment.get('auth.server');
+        const authOptions = this.environment.get<AuthOptions>('auth');
+        const port = 3000 || authOptions.server?.port
+        const state = this.auth.getState();
         const options: AuthServerOptions = {
             state,
             port
         };
         const server = new AuthServer(options);
-
+        server.subscribe(this);
         this.authServer = server;
 
         const code: string = await new Promise( resolve => {
@@ -103,8 +104,12 @@ export default class Connection extends EventEmitter {
         });
 
         await server.stop();
+
+        this.authServer.unsubsscribe(this);
         this.authServer = null;
-        this.token.setCode(code);
+
+        this.auth.setCode(code);
+
         return this.connect();
     }
 
@@ -121,6 +126,6 @@ export default class Connection extends EventEmitter {
             token
         };
         const domainRequest = new DomainRequest(config);
-        return await domainRequest.process<JSONResponse>();
+        return await domainRequest.process<JSONValue>();
     }
 }

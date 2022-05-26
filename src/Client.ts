@@ -1,30 +1,33 @@
 import "reflect-metadata";
 import { ClientOptions } from "./interfaces/common";
-import { container } from "./inversify.config";
 import EventEmitter from "./common/EventEmitter";
 import Connection from './common/Connection';
-// import ResourceFactoryBuilder from './common/ResourceFactoryBuilder';
 import Environment from "./common/Environment";
 import ClientRequest from "./common/ClientRequest";
+import Auth from "./common/Auth";
 import Token from "./common/Token";
-import { IoC } from "./types";
 
 export default class Client extends EventEmitter {
     protected readonly token: Token;
     public readonly environment: Environment;
     public readonly request: ClientRequest;
     public readonly connection: Connection;
+    public readonly auth: Auth;
 
     constructor(options: ClientOptions) {
         super();
         if (!options) {
             throw new Error('NO_OPTIONS');
         }
-        this.environment = container.get(IoC.Environment);
-        this.token = container.get(IoC.Token);
-        this.connection = container.get(IoC.Connection);
-        this.request = container.get(IoC.ClientRequest);
-        this.environment.set(options);
+        this.environment = new Environment(options);
+        this.auth = new Auth(this.environment);
+        this.token = new Token(this.environment, this.auth);
+        this.connection = new Connection(
+            this.environment,
+            this.token,
+            this.auth
+        );
+        this.request = new ClientRequest(this.connection);
 
         this.subscribeToComponents();
     }
@@ -32,5 +35,7 @@ export default class Client extends EventEmitter {
     subscribeToComponents() {
         this.token.subscribe(this);
         this.connection.subscribe(this);
+        this.auth.subscribe(this);
+        this.token.subscribe(this);
     }
 }

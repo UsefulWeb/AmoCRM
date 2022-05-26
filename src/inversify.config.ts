@@ -3,6 +3,7 @@ import {EventEmitter} from "events";
 import Environment from "./common/Environment";
 import Connection from "./common/Connection";
 import ClientRequest from "./common/ClientRequest";
+import Auth from "./common/Auth";
 import Token from "./common/Token";
 import { IoC } from "./types";
 
@@ -16,5 +17,6 @@ container.bind<Environment>(IoC.Environment).to(Environment);
 container.bind<ClientRequest>(IoC.ClientRequest).to(ClientRequest);
 container.bind<Connection>(IoC.Connection).to(Connection);
 container.bind<Token>(IoC.Token).to(Token);
+container.bind<Auth>(IoC.Auth).to(Auth);
 
 export { container };
