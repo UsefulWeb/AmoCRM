@@ -39,8 +39,7 @@ export default class AuthServer extends EventEmitter {
             return;
         }
         const location = new URL(url);
-        const queryEntries = location.searchParams.entries();
-        const query: StringValueObject = Object.fromEntries(queryEntries);
+        const query: StringValueObject = Object.fromEntries(location.searchParams);
         const currentState = this.options.state;
         const { code, state } = query;
         response.end();

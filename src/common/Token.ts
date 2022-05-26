@@ -2,9 +2,9 @@ import EventEmitter from "./EventEmitter";
 import { APIResponse, AuthOptions, TokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import Environment from "./Environment";
-import { StringValueObject } from "../types";
 import DomainRequest from "./DomainRequest";
 import Auth from "./Auth";
+import { StringValueObject } from "../types";
 
 export default class Token extends EventEmitter {
     protected value?: TokenData;

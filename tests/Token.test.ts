@@ -1,10 +1,7 @@
-import Connection from "../src/common/Connection";
 import Client from "../src/Client";
 import config, { CODE } from "./config";
-import APIResponseError from "../src/common/APIResponseError";
 import { TokenData } from "../src/interfaces/common";
 
-let url;
 jest.setTimeout(60 * 1000);
 
 describe('Token', () => {
@@ -70,7 +67,7 @@ describe('Token', () => {
         expect(token?.access_token).not.toBe(newToken?.access_token);
     });
 
-    test.only('handle token after connection', async () => {
+    test('handle token after connection', async () => {
         const client = new Client({
             ...config,
             auth: {
@@ -84,5 +81,21 @@ describe('Token', () => {
         });
         const currentToken = client.token.getValue();
         expect(token?.access_token).toBe(currentToken?.access_token);
+    });
+
+    test('no need to update token when it not expired', async () => {
+        const client = new Client({
+            ...config,
+            auth: {
+                ...config.auth,
+                code: CODE
+            }
+        });
+        await client.connection.connect();
+        const currentToken = client.token.getValue();
+        await client.connection.update();
+        const token = client.token.getValue();
+
+        expect(currentToken?.access_token).toBe(token?.access_token);
     });
 });

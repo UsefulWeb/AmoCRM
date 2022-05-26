@@ -73,8 +73,9 @@ export default class DomainRequest extends EventEmitter {
         const { method, data, url } = this.config;
         const location = this.getLocation();
         const path = location.pathname;
-        const searchParams = Object.entries(location.searchParams);
-        const queryStringData: StringValueObject = Object.fromEntries(searchParams);
+        const queryStringData: StringValueObject = Object.fromEntries(location.searchParams);
+
+        console.log({location, queryStringData })
 
         const mergedData = {
             ...data,
@@ -114,7 +115,6 @@ export default class DomainRequest extends EventEmitter {
             method,
             headers
         };
-
         const onResponse = this.onResponse.bind(this);
         return new Promise<APIResponse<string>>((resolve, reject) => {
             const request = https.request(options, onResponse(resolve));
