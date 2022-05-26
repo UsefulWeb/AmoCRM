@@ -1,3 +1,5 @@
+export const CODE = '';
+
 export default {
     domain: 'test',
     auth: {

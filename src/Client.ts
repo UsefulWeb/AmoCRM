@@ -8,7 +8,7 @@ import Auth from "./common/Auth";
 import Token from "./common/Token";
 
 export default class Client extends EventEmitter {
-    protected readonly token: Token;
+    public readonly token: Token;
     public readonly environment: Environment;
     public readonly request: ClientRequest;
     public readonly connection: Connection;

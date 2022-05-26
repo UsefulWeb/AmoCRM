@@ -28,7 +28,7 @@ export default class Connection extends EventEmitter {
         }
 
         this.emit('check', true);
-        if (this.token.exists() || this.isTokenExpired()) {
+        if (this.token.exists() && this.isTokenExpired()) {
             await this.token.refresh();
             return this.isTokenExpired();
         }

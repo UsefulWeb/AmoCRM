@@ -32,18 +32,21 @@ export default class Token extends EventEmitter {
     }
 
     setValue(value: TokenData) {
-        this.emit('set', value);
+        this.emit('beforeChange', value);
         this.value = value;
         if (!value) {
             delete this.expiresAt;
-            return;
         }
-        if (!value.expires_at) {
-            this.expiresAt = new Date;
-            return;
+        else {
+            let expiresAt = value.expires_at;
+            if (!expiresAt) {
+                const now = new Date;
+                expiresAt = now.valueOf() + value.expires_in * 1000;
+            }
+            this.expiresAt = new Date(expiresAt);
         }
 
-        this.expiresAt = new Date(value.expires_at);
+        this.emit('change', value);
     }
 
     getValue() {
@@ -83,7 +86,9 @@ export default class Token extends EventEmitter {
             grant_type: 'authorization_code',
         };
         const response = await this.makeRequest(data);
-        return this.handleResponse(response);
+        const tokenResponse = this.handleResponse(response);
+        this.emit( 'fetch');
+        return tokenResponse;
     }
 
     async refresh() {
@@ -101,7 +106,9 @@ export default class Token extends EventEmitter {
             };
 
         const response = await this.makeRequest(data);
-        return this.handleResponse(response);
+        const tokenResponse = this.handleResponse(response);
+        this.emit('refresh');
+        return tokenResponse;
     }
 
     handleResponse(apiResponse: APIResponse<TokenData>) {
@@ -131,7 +138,6 @@ export default class Token extends EventEmitter {
             data,
             url
         };
-        console.log({config});
         const request = new DomainRequest(config);
         return request.process<TokenData>();
     }
