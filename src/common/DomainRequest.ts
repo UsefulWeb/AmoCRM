@@ -1,8 +1,7 @@
-import qs from 'qs';
-import https from 'https';
-import http from 'http';
+import * as qs from 'qs';
+import * as https from 'https';
+import * as http from 'http';
 import * as Buffer from "buffer";
-import FormData from 'form-data';
 
 import { APIResponse, DomainRequestOptions } from "../interfaces/common";
 import { StringValueObject } from "../types";
@@ -20,10 +19,7 @@ export default class DomainRequest extends EventEmitter {
         this.hostname = this.getHostname();
     }
     protected isFormData(): boolean {
-        const { data, options } = this.config;
-        if (data instanceof FormData) {
-            return true;
-        }
+        const { options } = this.config;
         if (options?.useFormData) {
             return true;
         }

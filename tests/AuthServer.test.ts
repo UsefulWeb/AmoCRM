@@ -27,7 +27,7 @@ describe('AuthServer', () => {
         await delay(1000);
     });
 
-    test.only('getting token', async () => {
+    test('getting token', async () => {
         const client = new Client({
             ...config,
             auth: {

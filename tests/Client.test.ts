@@ -13,11 +13,13 @@ describe('Client', () => {
     });
     test('empty config', async () => {
         expect(() => {
+            // @ts-ignore
             new Client;
         }).toThrowError(new Error('NO_OPTIONS'));
     });
     test('empty auth config', async () => {
         expect(() => {
+            // @ts-ignore
             const client = new Client({});
         }).toThrowError(new Error('NO_AUTH_OPTIONS'))
     });

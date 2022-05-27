@@ -1,4 +1,4 @@
-import qs from "qs";
+import * as qs from "qs";
 import EventEmitter from "./EventEmitter";
 import Environment from "./Environment";
 

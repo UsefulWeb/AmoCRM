@@ -1,4 +1,4 @@
-import http from 'http';
+import * as http from 'http';
 import { StringValueObject, RequestData, JSONValue } from "../types";
 
 export interface TokenOptions {

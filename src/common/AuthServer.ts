@@ -1,4 +1,4 @@
-import http from "http";
+import * as http from "http";
 import EventEmitter from "./EventEmitter";
 import { AuthServerOptions } from "../interfaces/common";
 import { StringValueObject } from "../types";
