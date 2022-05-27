@@ -5,11 +5,16 @@ var qs = tslib_1.__importStar(require("qs"));
 var EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
 var Auth = /** @class */ (function (_super) {
     tslib_1.__extends(Auth, _super);
-    function Auth(environment) {
+    function Auth(environment, token) {
         var _this = _super.call(this) || this;
         _this.environment = environment;
+        _this.token = token;
         return _this;
     }
+    Auth.prototype.setCode = function (code) {
+        this.environment.set('auth.code', code);
+        this.token.clear();
+    };
     Auth.prototype.getUrl = function (mode) {
         if (mode === void 0) { mode = 'popup'; }
         var baseUrl = 'https://www.amocrm.ru/oauth';

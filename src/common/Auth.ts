@@ -3,12 +3,20 @@ import EventEmitter from "./EventEmitter";
 import Environment from "./Environment";
 
 import { AuthUrlParams, ClientOptions } from "../interfaces/common";
+import Token from "./Token";
 
 export default class Auth extends EventEmitter{
     protected readonly environment: Environment;
-    constructor(environment: Environment) {
+    protected readonly token: Token;
+    constructor(environment: Environment, token: Token) {
         super();
         this.environment = environment;
+        this.token = token;
+    }
+
+    public setCode(code: string) {
+        this.environment.set('auth.code', code);
+        this.token.clear();
     }
 
     getUrl(mode = 'popup') {

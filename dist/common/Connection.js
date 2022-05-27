@@ -49,7 +49,7 @@ var Connection = /** @class */ (function (_super) {
                             return [2 /*return*/, true];
                         }
                         this.emit('beforeConnect');
-                        code = this.environment.get('code');
+                        code = this.environment.get('auth.code');
                         hasCode = Boolean(code);
                         hasAuthServer = this.environment.exists('auth.server');
                         tokenExists = this.token.exists();
@@ -80,8 +80,8 @@ var Connection = /** @class */ (function (_super) {
                         return [2 /*return*/, true];
                     case 7:
                         e_1 = _a.sent();
-                        this.emit('error');
-                        throw new Error('CONNECTION_ERROR');
+                        this.emit('connectionError', e_1);
+                        throw e_1;
                     case 8: return [2 /*return*/];
                 }
             });
@@ -108,10 +108,7 @@ var Connection = /** @class */ (function (_super) {
                         server.subscribe(this);
                         this.authServer = server;
                         return [4 /*yield*/, new Promise(function (resolve) {
-                                server.on('code', function (event) {
-                                    var code = event.code;
-                                    resolve(code);
-                                });
+                                server.on('code', resolve);
                                 server.run();
                             })];
                     case 1:

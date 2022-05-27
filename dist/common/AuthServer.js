@@ -21,6 +21,7 @@ var AuthServer = /** @class */ (function (_super) {
     AuthServer.prototype.onListenStart = function () {
         var port = this.options.port;
         console.log("auth server listening on port ".concat(port));
+        this.emit('listen');
     };
     AuthServer.prototype.stop = function () {
         var _this = this;
@@ -29,23 +30,28 @@ var AuthServer = /** @class */ (function (_super) {
                 return resolve();
             }
             _this.instance.close()
-                .on('close', resolve)
-                .on('error', reject);
+                .on('close', function () {
+                _this.emit('close');
+                resolve();
+            })
+                .on('error', function (e) {
+                _this.emit('serverError', e);
+                reject();
+            });
         });
     };
     AuthServer.prototype.handle = function (request, response) {
+        var url = request.url;
         console.log('handled auth server callback');
-        if (!request.url) {
-            response.end({
-                message: 'NO_URL'
-            });
+        if (!url) {
+            response.end('NO_URL');
             return;
         }
-        var params = request.url.substring(2);
-        var searchParams = new URLSearchParams(params);
-        var query = Object.fromEntries(searchParams);
+        var urlParams = url.substring(2);
+        var searchParams = new URLSearchParams(urlParams);
+        var queryString = Object.fromEntries(searchParams);
         var currentState = this.options.state;
-        var code = query.code, state = query.state;
+        var code = queryString.code, state = queryString.state;
         if (!code) {
             response.end('NO_CODE');
             return;
@@ -54,10 +60,8 @@ var AuthServer = /** @class */ (function (_super) {
             response.end('STATE_MISMATCH');
             return;
         }
-        this.emit('code', {
-            code: code,
-            state: state
-        });
+        console.log('handled auth code:', code);
+        this.emit('code', code);
         response.end('VALID_CODE');
     };
     return AuthServer;

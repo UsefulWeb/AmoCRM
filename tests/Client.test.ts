@@ -17,12 +17,6 @@ describe('Client', () => {
             new Client;
         }).toThrowError(new Error('NO_OPTIONS'));
     });
-    test('empty auth config', async () => {
-        expect(() => {
-            // @ts-ignore
-            const client = new Client({});
-        }).toThrowError(new Error('NO_AUTH_OPTIONS'))
-    });
     test('multiple configs', async () => {
         const client1 = new Client({
             domain: 'domain1',

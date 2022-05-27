@@ -19,24 +19,23 @@ var Token = /** @class */ (function (_super) {
         }
         return now > this.expiresAt;
     };
+    Token.prototype.clear = function () {
+        this.value = undefined;
+        delete this.expiresAt;
+    };
     Token.prototype.exists = function () {
-        return this.value !== undefined;
+        return this.value !== null;
     };
     Token.prototype.setValue = function (value) {
-        this.emit('beforeChange', value);
+        this.emit('beforeChange');
         this.value = value;
-        if (!value) {
-            delete this.expiresAt;
+        var expiresAt = value.expires_at;
+        if (!expiresAt) {
+            var now = new Date;
+            expiresAt = now.valueOf() + value.expires_in * 1000;
         }
-        else {
-            var expiresAt = value.expires_at;
-            if (!expiresAt) {
-                var now = new Date;
-                expiresAt = now.valueOf() + value.expires_in * 1000;
-            }
-            this.expiresAt = new Date(expiresAt);
-        }
-        this.emit('change', value);
+        this.expiresAt = new Date(expiresAt);
+        this.emit('change');
     };
     Token.prototype.getValue = function () {
         return this.value;

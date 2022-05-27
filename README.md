@@ -8,6 +8,8 @@ JavaScript библиотека для работы с AmoCRM
 
 Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4. 
 
+По вопросам сотрудничества и проектам [пишите в Telegram](https://t.me/neizerth).
+
 ## Изменения в 3.x.x по сравнению с 2.x.x
 
 1. TypeScript исходная версия кода
@@ -28,6 +30,18 @@ Yarn
 yarn add amocrm-js
 ```
 
+## Использование
+
+```js
+const Client = require('amocrm-js');
+```
+
+ES6:
+```js
+import Client from 'amocrm-js';
+```
+
+
 ## Подключение к CRM
 
 Подключение возможно:
@@ -42,7 +56,10 @@ yarn add amocrm-js
 адреса интеграции (redirectUri).
 
 ```js
-const Client = require( 'amocrm-js' );
+
+/* 
+    const Client = 
+*/
 
 const client = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
@@ -77,8 +94,6 @@ const client = new Client({
 Пример настройки без параметра *code*:
 
 ```js
-const Client = require('amocrm-js');
-
 const client = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
@@ -100,7 +115,7 @@ const client = new Client({
 
 #### Процесс авторизации:
 
-1. Сервер ожидает перехода пользователя по адресу: *crm.connection.getAuthUrl(mode)*
+1. Сервер ожидает перехода пользователя по адресу: *crm.auth.getUrl(mode)*
 2. При успешном переходе пользователь перенаправляется на {redirectUri}, заданный в интеграции
 3. Сервер авторизации перехватывает запрос на {redirectUri} 
 (как это сделать, описано ниже), извлекает код авторизации и
@@ -112,28 +127,7 @@ const client = new Client({
 Пакет перенаправляет трафик с вашего компьютера на заданный публичный IP, который можно задать в
 адресе интеграции.
 
-После установки пакета:
-
-1. Выполните в терминале команду: ```ngrok http 3001```
-2. Полученный в результат адрес вида https://311e923c5281.ngrok.io указываем в настройках интеграции AmoCRM
-3. В настройках указываем номер порта (в нашем примере 3001) и полученный ngrok-адрес в {auth.redirect_uri}
-4. Получаем адрес ссылке, по которой необходимо будет перейти через *crm.auth.getUrl()*
-5. Переходим по ссылке, после этого код автоматически установится и библиотека запросит новый токен
-
-Пример настроек:
-
-```js
-const client = new Client({
- // ...
- auth: {
-  // ...
-  redirect_uri: 'https://311e923c5281.ngrok.io',
-  server: {
-   port: 3001
-  }
- },
-});
-```
+[Пример использования ngrok.](./examples/javascript/01-get-development-token.js)
 
 #### Разработка на production-сервере
 
@@ -276,14 +270,17 @@ client.environment.get('auth.redirect_uri'); // 'redirectUri'
 Устанавливает новое значение в окружении
 
 ```js
-client.environment.set('auth.code', 'newCode');
+client.environment.set('auth.state', 'newsState');
 ```
 
 ### client.connection
 
 #### client.connection.connect()
 
-Получает токен на основе кода авторизации (config.auth.code)
+Получает токен на основе (в зависимости от ситуации):
+1. Кода авторизации (config.auth.code)
+2. Старого токена, если он истёк (refresh_token)
+3. Кода авторизации, полученного с помощью перехода пользователя по ссылке. Использует встроенный сервер авторизации
 
 #### client.connection.update()
 
@@ -292,14 +289,14 @@ client.environment.set('auth.code', 'newCode');
 - check. Проверка
 - beforeConnect. Возникает перед началом соединения
 - connected. Успешное соединение
-- error. Ошибка соединения
+- connectionError. Ошибка соединения
 - authServer:code. Успешное получение кода авторизации
 - authServer:listen. Начало работы сервера авторизации
 - authServer:close. Сервер авторизации завершает прослушивать сооб
-- authServer:error. Ошибка сервера авторизации
+- authServer:serverError. Ошибка сервера авторизации
 
 ```js
-client.connection.on('error', () => {
+client.connection.on('connectionError', () => {
     console.error('Произошла ошибка соединения');
 })
 ```
@@ -315,6 +312,11 @@ client.connection.on('error', () => {
 2. _post_message_ – перенаправление произойдет в окне, которое было открыто, 
 после обработки кода авторизации вам нужно закрыть окно
 
+#### client.auth.setCode(code)
+
+Устанавливает код авторизации и удаляет информацию о текущем токене. Желательно применять именно этот метод
+в сравнение с client.environment.set('auth.code');
+
 ### client.token
 
 #### client.token.setValue(value)
@@ -324,6 +326,18 @@ client.connection.on('error', () => {
 #### client.token.getValue()
 
 Возвращает текущее значение токена.
+
+#### client.token.refresh()
+
+Обновляет токен по значению refresh_token текущего. Явно вызывать нет необходимости, так как
+при каждом запросе идёт проверка токена на актуальность. Если время жизни токена истекло, этот метод
+будет вызван автоматически.
+
+После обновления, токен автоматически устанавливается в приложении.
+
+#### client.token.fetch()
+
+Получение токена по коду авторизации. После обновления, токен автоматически устанавливается в приложении.
 
 #### События
 
@@ -382,8 +396,49 @@ client.connection.on('change', () => {
   }
 ```
 
+## Переход с версии 2.x.x
+
+### Методы
+
+- client.connect -> client.connection.connect
+- client.connection.getAuthUrl() -> client.auth.getUrl()
+- client.connection.setState(state) -> client.environment.set('auth.state', state)
+- client.connection.getState() -> client.environment.get('auth.state')
+- client.connection.getToken() -> client.token.getValue()
+- client.connection.setToken(token) -> client.token.setValue(token)
+- client.connection.refreshToken() -> client.token.refresh()
+
+#### client.connection.setCode(code)
+
+Замена: client.auth.setCode(code)
+
+Вызов этого метода в версии 2.x.x приводит к обновлению токена по только что заданному коду.
+
+В текущей версии это происходит при последующем запросе к API. Старая версия эквивалентна:
+
+```js
+client.auth.setCode(code);
+await client.connection.connect();
+```
+
+### События
+
+- client.on('connection:beforeConnect') -> client.connection.on('beforeConnect') 
+- client.on('connection:beforeFetchToken') -> client.token.on('beforeFetch')
+- client.on('connection:beforeRefreshToken') -> client.token.on('beforeRefresh')
+- client.on('connection:checkToken') -> client.token.on('expirationCheck')
+- client.on('connection:authError') -> client.connection.on('connectionError')
+- client.on('connection:connected') -> client.connection.on('connected')
+- client.on('connection:error') -> client.connection.on('connectionError')
+- client.on('connection:newToken') -> client.token.on('change')
+
 ## Доска почёта
 
 Спасибо @amorev, @maxism за вклад в разработку этого проекта
 
 Отдельная благодарность @dmitrytemlead за возможность протестировать библиотеку в стороннем проекте
+
+## Сообщество
+
+По всем вопросам работы библиотеки, заходите в [чат проекта в Telegram](https://t.me/+QKoG6INanhIyYTAy).
+Сделаем вместе пространство уютным :)

@@ -20,22 +20,15 @@ export default class Client extends EventEmitter {
             throw new Error('NO_OPTIONS');
         }
         this.environment = new Environment(options);
-        this.auth = new Auth(this.environment);
         this.token = new Token(this.environment);
+        this.auth = new Auth(this.environment, this.token);
         this.connection = new Connection(
             this.environment,
             this.token,
             this.auth
         );
         this.request = new ClientRequest(this.connection);
-
-        this.subscribeToComponents();
-    }
-
-    subscribeToComponents() {
-        this.token.subscribe(this);
-        this.connection.subscribe(this);
-        this.auth.subscribe(this);
-        this.token.subscribe(this);
     }
 }
+
+module.exports = Client;

@@ -3,7 +3,6 @@ import { APIResponse, AuthOptions, TokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import Environment from "./Environment";
 import DomainRequest from "./DomainRequest";
-import Auth from "./Auth";
 import { StringValueObject } from "../types";
 
 export default class Token extends EventEmitter {
@@ -26,24 +25,25 @@ export default class Token extends EventEmitter {
         return now > this.expiresAt;
     }
 
+    clear() {
+        this.value = undefined;
+        delete this.expiresAt;
+    }
+
     exists() {
-        return this.value !== undefined;
+        return this.value !== null;
     }
 
     setValue(value: TokenData) {
         this.emit('beforeChange');
         this.value = value;
-        if (!value) {
-            delete this.expiresAt;
+
+        let expiresAt = value.expires_at;
+        if (!expiresAt) {
+            const now = new Date;
+            expiresAt = now.valueOf() + value.expires_in * 1000;
         }
-        else {
-            let expiresAt = value.expires_at;
-            if (!expiresAt) {
-                const now = new Date;
-                expiresAt = now.valueOf() + value.expires_in * 1000;
-            }
-            this.expiresAt = new Date(expiresAt);
-        }
+        this.expiresAt = new Date(expiresAt);
 
         this.emit('change');
     }

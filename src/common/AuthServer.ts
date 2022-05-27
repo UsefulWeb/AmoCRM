@@ -30,21 +30,29 @@ export default class AuthServer extends EventEmitter {
                 return resolve();
             }
             this.instance.close()
-                .on('close', resolve)
-                .on('error', reject)
+                .on('close', () => {
+                    this.emit('close');
+                    resolve();
+                })
+                .on('error', e => {
+                    this.emit('serverError', e);
+                    reject();
+                });
         });
     }
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
+        const { url } = request;
         console.log('handled auth server callback');
-        if (!request.url) {
+        if (!url) {
             response.end('NO_URL');
             return;
         }
-        const params = request.url.substring(2);
-        const searchParams = new URLSearchParams(params);
-        const query: StringValueObject = Object.fromEntries(searchParams);
+        const urlParams = url.substring(2);
+        const searchParams = new URLSearchParams(urlParams);
+        const queryString: StringValueObject = Object.fromEntries(searchParams);
         const currentState = this.options.state;
-        const { code, state } = query;
+        const { code, state } = queryString;
+
         if (!code) {
             response.end('NO_CODE');
             return;
@@ -53,10 +61,10 @@ export default class AuthServer extends EventEmitter {
             response.end('STATE_MISMATCH');
             return;
         }
-        this.emit( 'code', {
-            code,
-            state
-        });
+
+        console.log('handled auth code:', code);
+
+        this.emit( 'code', code);
 
         response.end('VALID_CODE');
     }

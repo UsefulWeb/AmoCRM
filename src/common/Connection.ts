@@ -48,7 +48,7 @@ export default class Connection extends EventEmitter {
 
         this.emit('beforeConnect');
 
-        const code = this.environment.get<string>('code');
+        const code = this.environment.get<string>('auth.code');
         const hasCode = Boolean(code);
         const hasAuthServer = this.environment.exists('auth.server');
         const tokenExists = this.token.exists();
@@ -74,8 +74,8 @@ export default class Connection extends EventEmitter {
             return true;
         }
         catch (e) {
-            this.emit('error');
-            throw new Error('CONNECTION_ERROR');
+            this.emit('connectionError', e);
+            throw e;
         }
     }
 
@@ -95,10 +95,7 @@ export default class Connection extends EventEmitter {
         this.authServer = server;
 
         const code: string = await new Promise( resolve => {
-            server.on('code', event => {
-                const { code } = event;
-                resolve(code);
-            });
+            server.on('code', resolve);
             server.run();
         });
 
