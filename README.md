@@ -351,7 +351,7 @@ client.connection.on('connectionError', () => {
 
 ```js
 client.connection.on('change', () => {
-    console.error('Произошла ошибка соединения');
+    console.error('Токен обновлён');
 })
 ```
 
