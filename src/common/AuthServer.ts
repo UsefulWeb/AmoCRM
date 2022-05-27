@@ -22,6 +22,7 @@ export default class AuthServer extends EventEmitter {
     onListenStart() {
         const { port } = this.options;
         console.log(`auth server listening on port ${port}`);
+        this.emit('listen');
     }
     stop(): Promise<void> {
         return new Promise((resolve, reject) => {
@@ -36,9 +37,7 @@ export default class AuthServer extends EventEmitter {
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
         console.log('handled auth server callback');
         if (!request.url) {
-            response.end({
-                message: 'NO_URL'
-            });
+            response.end('NO_URL');
             return;
         }
         const params = request.url.substring(2);

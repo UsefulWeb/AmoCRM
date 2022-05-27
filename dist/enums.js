@@ -6,3 +6,4 @@ var HttpMethod;
     HttpMethod["GET"] = "GET";
     HttpMethod["POST"] = "POST";
 })(HttpMethod = exports.HttpMethod || (exports.HttpMethod = {}));
+//# sourceMappingURL=enums.js.map

@@ -35,3 +35,4 @@ var EventEmitter = /** @class */ (function (_super) {
     return EventEmitter;
 }(events_1.EventEmitter));
 exports.default = EventEmitter;
+//# sourceMappingURL=EventEmitter.js.map

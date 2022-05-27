@@ -24,7 +24,6 @@ var Connection = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.connect()];
                     case 1: return [2 /*return*/, _a.sent()];
                     case 2:
-                        this.emit('check', true);
                         if (!(this.token.exists() && this.isTokenExpired())) return [3 /*break*/, 4];
                         return [4 /*yield*/, this.token.refresh()];
                     case 3:
@@ -42,7 +41,7 @@ var Connection = /** @class */ (function (_super) {
     };
     Connection.prototype.connect = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var hasCode, hasAuthServer, tokenExists, e_1;
+            var code, hasCode, hasAuthServer, tokenExists, e_1;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -50,7 +49,8 @@ var Connection = /** @class */ (function (_super) {
                             return [2 /*return*/, true];
                         }
                         this.emit('beforeConnect');
-                        hasCode = this.auth.hasCode();
+                        code = this.environment.get('code');
+                        hasCode = Boolean(code);
                         hasAuthServer = this.environment.exists('auth.server');
                         tokenExists = this.token.exists();
                         if (!(!hasCode && hasAuthServer)) return [3 /*break*/, 2];
@@ -59,7 +59,6 @@ var Connection = /** @class */ (function (_super) {
                         _a.sent();
                         return [2 /*return*/, true];
                     case 2:
-                        this.emit('check', true);
                         if (!(tokenExists && this.isTokenExpired())) return [3 /*break*/, 4];
                         return [4 /*yield*/, this.token.refresh()];
                     case 3:
@@ -81,8 +80,8 @@ var Connection = /** @class */ (function (_super) {
                         return [2 /*return*/, true];
                     case 7:
                         e_1 = _a.sent();
-                        this.emit('error', e_1);
-                        throw e_1;
+                        this.emit('error');
+                        throw new Error('CONNECTION_ERROR');
                     case 8: return [2 /*return*/];
                 }
             });
@@ -100,7 +99,7 @@ var Connection = /** @class */ (function (_super) {
                         }
                         authOptions = this.environment.get('auth');
                         port = 3000 || ((_a = authOptions.server) === null || _a === void 0 ? void 0 : _a.port);
-                        state = this.auth.getState();
+                        state = this.environment.get('auth.state');
                         options = {
                             state: state,
                             port: port
@@ -122,7 +121,7 @@ var Connection = /** @class */ (function (_super) {
                         _b.sent();
                         this.authServer.unsubsscribe(this);
                         this.authServer = null;
-                        this.auth.setCode(code);
+                        this.environment.set('auth.code', code);
                         return [2 /*return*/, this.connect()];
                 }
             });
@@ -156,3 +155,4 @@ var Connection = /** @class */ (function (_super) {
     return Connection;
 }(EventEmitter_1.default));
 exports.default = Connection;
+//# sourceMappingURL=Connection.js.map

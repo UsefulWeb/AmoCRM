@@ -8,30 +8,8 @@ var Auth = /** @class */ (function (_super) {
     function Auth(environment) {
         var _this = _super.call(this) || this;
         _this.environment = environment;
-        var auth = environment.get('auth');
-        if (!auth) {
-            throw new Error('NO_AUTH_OPTIONS');
-        }
-        var _a = auth.code, code = _a === void 0 ? '' : _a, _b = auth.state, state = _b === void 0 ? '' : _b;
-        _this.state = state;
-        _this.code = code;
         return _this;
     }
-    Auth.prototype.getState = function () {
-        return this.state;
-    };
-    Auth.prototype.setState = function (state) {
-        this.state = state;
-    };
-    Auth.prototype.getCode = function () {
-        return this.code;
-    };
-    Auth.prototype.setCode = function (code) {
-        this.code = code;
-    };
-    Auth.prototype.hasCode = function () {
-        return Boolean(this.code);
-    };
     Auth.prototype.getUrl = function (mode) {
         if (mode === void 0) { mode = 'popup'; }
         var baseUrl = 'https://www.amocrm.ru/oauth';
@@ -41,7 +19,7 @@ var Auth = /** @class */ (function (_super) {
             client_id: client_id,
             mode: mode
         };
-        var state = this.getState();
+        var state = this.environment.get('auth.state');
         if (state) {
             params.state = state;
         }
@@ -51,3 +29,4 @@ var Auth = /** @class */ (function (_super) {
     return Auth;
 }(EventEmitter_1.default));
 exports.default = Auth;
+//# sourceMappingURL=Auth.js.map

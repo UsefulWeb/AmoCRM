@@ -43,3 +43,4 @@ exports.default = {
         decline: '/api/v2/incoming_leads/decline'
     }
 };
+//# sourceMappingURL=v2.js.map

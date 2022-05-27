@@ -25,9 +25,32 @@ var Environment = /** @class */ (function () {
         }
         return value;
     };
+    Environment.prototype.set = function (path, value) {
+        if (!this.options) {
+            throw new Error('NO_ENVIRONMENT_OPTIONS');
+        }
+        var handler = this.options;
+        var parts = path.split('.');
+        if (parts.length === 0) {
+            throw new Error('PATH_IS_EMPTY');
+        }
+        for (var i = 0; i < parts.length - 1; i++) {
+            var key = parts[i];
+            if (!handler[key]) {
+                handler[key] = {};
+            }
+            handler = handler[key];
+        }
+        var lastKey = parts.pop();
+        if (!lastKey) {
+            throw new Error('INVALID_PATH');
+        }
+        handler[lastKey] = value;
+    };
     Environment.prototype.exists = function (path) {
         return this.get(path) !== undefined;
     };
     return Environment;
 }());
 exports.default = Environment;
+//# sourceMappingURL=Environment.js.map

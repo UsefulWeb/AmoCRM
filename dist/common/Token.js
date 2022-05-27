@@ -6,13 +6,13 @@ var v4_1 = tslib_1.__importDefault(require("../schema/v4"));
 var DomainRequest_1 = tslib_1.__importDefault(require("./DomainRequest"));
 var Token = /** @class */ (function (_super) {
     tslib_1.__extends(Token, _super);
-    function Token(environment, auth) {
+    function Token(environment) {
         var _this = _super.call(this) || this;
         _this.environment = environment;
-        _this.auth = auth;
         return _this;
     }
     Token.prototype.isExpired = function () {
+        this.emit('expirationCheck');
         var now = new Date;
         if (this.expiresAt === undefined) {
             return false;
@@ -61,7 +61,7 @@ var Token = /** @class */ (function (_super) {
                     case 0:
                         this.emit('beforeFetch');
                         baseClientOptions = this.getBaseClientOptions();
-                        code = this.auth.getCode();
+                        code = this.environment.get('auth.code');
                         if (!code) {
                             throw new Error('NO_AUTH_CODE');
                         }
@@ -130,3 +130,4 @@ var Token = /** @class */ (function (_super) {
     return Token;
 }(EventEmitter_1.default));
 exports.default = Token;
+//# sourceMappingURL=Token.js.map

@@ -63,3 +63,4 @@ var AuthServer = /** @class */ (function (_super) {
     return AuthServer;
 }(EventEmitter_1.default));
 exports.default = AuthServer;
+//# sourceMappingURL=AuthServer.js.map

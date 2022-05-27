@@ -12,14 +12,13 @@ export default class Token extends EventEmitter {
     protected code?: string;
 
     protected readonly environment: Environment;
-    protected readonly auth: Auth;
-    constructor(environment: Environment, auth: Auth) {
+    constructor(environment: Environment) {
         super();
         this.environment = environment;
-        this.auth = auth;
     }
 
     isExpired(): boolean {
+        this.emit('expirationCheck');
         const now = new Date;
         if (this.expiresAt === undefined) {
             return false;
@@ -32,7 +31,7 @@ export default class Token extends EventEmitter {
     }
 
     setValue(value: TokenData) {
-        this.emit('beforeChange', value);
+        this.emit('beforeChange');
         this.value = value;
         if (!value) {
             delete this.expiresAt;
@@ -46,7 +45,7 @@ export default class Token extends EventEmitter {
             this.expiresAt = new Date(expiresAt);
         }
 
-        this.emit('change', value);
+        this.emit('change');
     }
 
     getValue() {
@@ -74,7 +73,7 @@ export default class Token extends EventEmitter {
     async fetch() {
         this.emit( 'beforeFetch');
         const baseClientOptions = this.getBaseClientOptions();
-        const code = this.auth.getCode();
+        const code = this.environment.get<string>('auth.code');
 
         if (!code) {
             throw new Error('NO_AUTH_CODE');

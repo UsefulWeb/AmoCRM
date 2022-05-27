@@ -2,42 +2,13 @@ import * as qs from "qs";
 import EventEmitter from "./EventEmitter";
 import Environment from "./Environment";
 
-import { AuthOptions, AuthUrlParams, ClientOptions } from "../interfaces/common";
+import { AuthUrlParams, ClientOptions } from "../interfaces/common";
 
 export default class Auth extends EventEmitter{
     protected readonly environment: Environment;
-    protected state: string;
-    protected code: string;
     constructor(environment: Environment) {
         super();
         this.environment = environment;
-        const auth = environment.get<AuthOptions>('auth');
-        if (!auth) {
-            throw new Error('NO_AUTH_OPTIONS');
-        }
-        const { code = '', state = '' } = auth;
-        this.state = state;
-        this.code = code;
-    }
-
-    getState() {
-        return this.state;
-    }
-
-    setState(state: string) {
-        this.state = state;
-    }
-
-    getCode() {
-        return this.code;
-    }
-
-    setCode(code: string) {
-        this.code = code;
-    }
-
-    hasCode() {
-        return Boolean(this.code);
     }
 
     getUrl(mode = 'popup') {
@@ -48,7 +19,7 @@ export default class Auth extends EventEmitter{
             client_id,
             mode
         };
-        const state = this.getState();
+        const state = this.environment.get<string>('auth.state');
 
         if (state) {
             params.state = state;

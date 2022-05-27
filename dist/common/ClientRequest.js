@@ -24,3 +24,4 @@ var ClientRequest = /** @class */ (function (_super) {
     return ClientRequest;
 }(EventEmitter_1.default));
 exports.default = ClientRequest;
+//# sourceMappingURL=ClientRequest.js.map

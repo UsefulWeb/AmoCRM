@@ -5,3 +5,4 @@ exports.default = {
         token: '/oauth2/access_token'
     }
 };
+//# sourceMappingURL=v4.js.map

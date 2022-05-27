@@ -17,7 +17,7 @@ var Client = /** @class */ (function (_super) {
         }
         _this.environment = new Environment_1.default(options);
         _this.auth = new Auth_1.default(_this.environment);
-        _this.token = new Token_1.default(_this.environment, _this.auth);
+        _this.token = new Token_1.default(_this.environment);
         _this.connection = new Connection_1.default(_this.environment, _this.token, _this.auth);
         _this.request = new ClientRequest_1.default(_this.connection);
         _this.subscribeToComponents();
@@ -32,3 +32,4 @@ var Client = /** @class */ (function (_super) {
     return Client;
 }(EventEmitter_1.default));
 exports.default = Client;
+//# sourceMappingURL=Client.js.map

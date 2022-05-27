@@ -27,7 +27,6 @@ export default class Connection extends EventEmitter {
             return await this.connect();
         }
 
-        this.emit('check', true);
         if (this.token.exists() && this.isTokenExpired()) {
             await this.token.refresh();
             return this.isTokenExpired();
@@ -49,7 +48,8 @@ export default class Connection extends EventEmitter {
 
         this.emit('beforeConnect');
 
-        const hasCode = this.auth.hasCode();
+        const code = this.environment.get<string>('code');
+        const hasCode = Boolean(code);
         const hasAuthServer = this.environment.exists('auth.server');
         const tokenExists = this.token.exists();
 
@@ -58,7 +58,6 @@ export default class Connection extends EventEmitter {
             return true;
         }
 
-        this.emit('check', true);
         if (tokenExists && this.isTokenExpired()) {
             await this.token.refresh();
             this.connected = this.token.isExpired();
@@ -75,8 +74,8 @@ export default class Connection extends EventEmitter {
             return true;
         }
         catch (e) {
-            this.emit('error', e);
-            throw e;
+            this.emit('error');
+            throw new Error('CONNECTION_ERROR');
         }
     }
 
@@ -86,7 +85,7 @@ export default class Connection extends EventEmitter {
         }
         const authOptions = this.environment.get<AuthOptions>('auth');
         const port = 3000 || authOptions.server?.port
-        const state = this.auth.getState();
+        const state = this.environment.get<string>('auth.state');
         const options: AuthServerOptions = {
             state,
             port
@@ -108,7 +107,7 @@ export default class Connection extends EventEmitter {
         this.authServer.unsubsscribe(this);
         this.authServer = null;
 
-        this.auth.setCode(code);
+        this.environment.set('auth.code', code);
 
         return this.connect();
     }

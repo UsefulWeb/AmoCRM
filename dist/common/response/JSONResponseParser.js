@@ -11,13 +11,13 @@ var JSONResponseParser = /** @class */ (function (_super) {
     JSONResponseParser.prototype.parse = function (apiResponse) {
         var response = apiResponse.response;
         var data = JSON.parse(apiResponse.data);
-        this.checkErrors(data);
+        this.checkErrors(data, response);
         return {
             response: response,
             data: data
         };
     };
-    JSONResponseParser.prototype.checkErrors = function (data) {
+    JSONResponseParser.prototype.checkErrors = function (data, response) {
         if (!data) {
             throw new Error('NO_JSON_RESPONSE');
         }
@@ -25,9 +25,10 @@ var JSONResponseParser = /** @class */ (function (_super) {
             throw new Error('INVALID_JSON_RESPONSE');
         }
         if ('status' in data) {
-            throw new APIResponseError_1.default('API_RESPONSE_ERROR', data);
+            throw new APIResponseError_1.default('API_RESPONSE_ERROR', data, response);
         }
     };
     return JSONResponseParser;
 }(EventEmitter_1.default));
 exports.default = JSONResponseParser;
+//# sourceMappingURL=JSONResponseParser.js.map

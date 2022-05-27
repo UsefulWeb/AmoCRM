@@ -1,3 +1,4 @@
+import * as http from 'http';
 import EventEmitter from "../EventEmitter";
 import { APIResponse, ResponseParser } from "../../interfaces/common";
 import { APIResponseValue, JSONValue } from "../../types";
@@ -8,13 +9,13 @@ export default class JSONResponseParser extends EventEmitter implements Response
         const { response } = apiResponse;
         const data: APIResponseValue = JSON.parse(apiResponse.data);
 
-        this.checkErrors(data);
+        this.checkErrors(data, response);
         return {
             response,
             data
         };
     }
-    checkErrors(data: APIResponseValue) {
+    checkErrors(data: APIResponseValue, response: http.IncomingMessage) {
         if (!data) {
             throw new Error('NO_JSON_RESPONSE');
         }
@@ -22,7 +23,7 @@ export default class JSONResponseParser extends EventEmitter implements Response
             throw new Error('INVALID_JSON_RESPONSE');
         }
         if ('status' in data) {
-            throw new APIResponseError('API_RESPONSE_ERROR', data);
+            throw new APIResponseError('API_RESPONSE_ERROR', data, response);
         }
     }
 }

@@ -21,7 +21,7 @@ export default class Client extends EventEmitter {
         }
         this.environment = new Environment(options);
         this.auth = new Auth(this.environment);
-        this.token = new Token(this.environment, this.auth);
+        this.token = new Token(this.environment);
         this.connection = new Connection(
             this.environment,
             this.token,

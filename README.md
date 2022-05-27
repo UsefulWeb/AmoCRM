@@ -1,24 +1,31 @@
-# Client
+# AmoCRM
 
-Javascript библиотека для работы с Client
+[![npm version](https://img.shields.io/npm/v/amocrm-js.svg?style=flat-square)](https://github.com/UsefulWeb/AmoCRM/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/UsefulWeb/AmoCRM)](https://github.com/UsefulWeb/AmoCRM/stargazers)
+[![GitHub license](https://img.shields.io/github/license/UsefulWeb/AmoCRM)](https://github.com/UsefulWeb/AmoCRM/blob/master/LICENSE)
 
-Данная версия библиотеки поддерживает OAuth авторизацию и использует адреса Client API v4. 
+JavaScript библиотека для работы с AmoCRM
 
-[Поблагодарить можно тут](https://yasobe.ru/na/cisterna_kofe_dlya_razrabot4ika_biblioteki_amocrm)
+Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4. 
 
-## Изменения в 2.x.x по сравнению с 1.x.x
+## Изменения в 3.x.x по сравнению с 2.x.x
 
-1. Поддержка Client API v4
-2. Поддержка OAuth
-3. Поддержка метода PATCH
-4. Расширенная информация об ответе (статус ответа, время ответа и т.д)
-
-Если вам нужна поддержка Client API v2, используйте версии 1.x.x данного пакета. 
+1. TypeScript исходная версия кода
+2. Подсветка синтаксиса на основе TS-интерфейсов
+3. Удобная передача GET-параметров 
+4. Добавлен выброс ошибок приложения и API-запросов
+5. Добавлены новые события в компоненты приложения
 
 ## Установка
 
+npm
 ```
 npm install amocrm-js
+```
+
+Yarn
+```
+yarn add amocrm-js
 ```
 
 ## Подключение к CRM
@@ -29,10 +36,6 @@ npm install amocrm-js
 (например, с помощью [упрощённой авторизации](https://www.amocrm.ru/developers/content/oauth/easy-auth))
 2. С помощью встроенного OAuth-сервера (см. пример ниже)
 
-## Что такое OAuth и как всё настроить?
-
-Я снял для вас отдельное видео, ознакомьтесь с основами работы нового протокола и библиотеки: https://youtu.be/eK7xYAbxJHo
-
 ### Код авторизации известен
 
 Его можно получить с помощью упрощенной авторизации или самостоятельно написанного обработчика 
@@ -41,7 +44,7 @@ npm install amocrm-js
 ```js
 const Client = require( 'amocrm-js' );
 
-const crm = new Client({
+const client = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
     /* 
@@ -52,25 +55,31 @@ const crm = new Client({
       client_id: 'clientId', // ID интеграции
       client_secret: 'clientSecret', // Секретный ключ
       redirect_uri: 'redirectUri', // Ссылка для перенаправления
-      code: 'code' // Код авторизации
+      code: 'code', // Код для упрощённой авторизации, необязательный
+      /*
+        Параметр состояния для проверки на корректность. Необязательный. Используется встроенным сервером авторизации
+        см. https://www.amocrm.ru/developers/content/oauth/step-by-step#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-Authorization-code
+      */
+      state: 'state',
     },
 });
 ```
 
 ### Встроенный OAuth-сервер
 
-В Client API у кода авторизации есть особенность: его можно использовать __только один раз__ для получения 
+В AmoCRM API код авторизации можно использовать __только один раз__ для получения 
 токена. Последующие запросы на получение токена будут выдавать ошибку.
 
 Чтобы облегчить процесс получения токена, в данный пакет встроен OAuth-сервер, 
-который может обрабатывать указанный адрес перенаправления.
+который может обрабатывать указанный адрес перенаправления. Сервер включает прослушивание по необходимости
+и закрывает соединение по получению кода авторизации.
 
 Пример настройки без параметра *code*:
 
 ```js
-const Client = require( 'amocrm-js' );
+const Client = require('amocrm-js');
 
-const crm = new Client({
+const client = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
     /* 
@@ -89,7 +98,7 @@ const crm = new Client({
 });
 ```
 
-Как выглядит процесс авторизации:
+#### Процесс авторизации:
 
 1. Сервер ожидает перехода пользователя по адресу: *crm.connection.getAuthUrl(mode)*
 2. При успешном переходе пользователь перенаправляется на {redirectUri}, заданный в интеграции
@@ -106,15 +115,15 @@ const crm = new Client({
 После установки пакета:
 
 1. Выполните в терминале команду: ```ngrok http 3001```
-2. Полученный в результат адрес вида https://311e923c5281.ngrok.io указываем в настройках интеграции Client
+2. Полученный в результат адрес вида https://311e923c5281.ngrok.io указываем в настройках интеграции AmoCRM
 3. В настройках указываем номер порта (в нашем примере 3001) и полученный ngrok-адрес в {auth.redirect_uri}
-4. Получаем адрес ссылке, по которой необходимо будет перейти через *crm.connection.getAuthUrl()*
+4. Получаем адрес ссылке, по которой необходимо будет перейти через *crm.auth.getUrl()*
 5. Переходим по ссылке, после этого код автоматически установится и библиотека запросит новый токен
 
 Пример настроек:
 
 ```js
-const crm = new Client({
+const client = new Client({
  // ...
  auth: {
   // ...
@@ -137,135 +146,240 @@ const crm = new Client({
 После остаётся только заменить адрес {redirectUri} на адрес 
 вашего хоста в настройках библиотеки и интеграции. 
 
+```js
+const client = new Client({
+ // ...
+ auth: {
+  // ...
+  redirect_uri: 'redirectUri',
+  server: {
+   port: 3001
+  }
+ },
+});
+```
+
 ## Запросы к порталу
 
 С указанием метода:
 
 ```js
-
-const response = await crm.request( 'GET', '/api/v4/account' );
+const result = await client.request.make( 'GET', '/api/v4/account' );
 // возвращает тело ответа 
-console.log( response.data );
+console.log(result.data);
 /* 
   Возвращает расширенную информацию об ответе - 
-  экземпляр http.ServerResponse:
-  https://nodejs.org/api/http.html#http_class_http_serverresponse
-
+  экземпляр http.IncomingMessage:
+  https://nodejs.org/api/http.html#class-httpincomingmessage
 */
-console.log( response.info );
+console.log(result.response);
 // к примеру, HTTP-статус ответа операции
-console.log( response.info.statusCode );
+console.log(result.response.statusCode);
 ```
 
-Методы *crm.request*: get, post, patch
+## Методы *client.request*: get, post, patch
+
+### GET
 
 ```js
-const response = await crm.request.get( '/api/v4/contacts')
+const response = await client.request.get('/api/v4/contacts')
 ```
 
-```js
-const response = await crm.request
-    .post( '/api/v4/contacts', 
-      [
-        {
-          name: "Walter White",
-          request_id: 143,
-          // другие поля ...
-        }
-      ]
-    )
-```
+#### Передача параметров
+
+С помощью querystring:
 
 ```js
-const response = await crm.request
-  .patch( '/api/v4/leads',
-    [
-      {
-        "id": 54886,
-        "pipeline_id": 47521,
-        "status_id": 143,
-        "date_close": 1589297221,
-        "loss_reason_id": 7323,
-        "updated_by": 0
-      }
-    ]
-  )
+const response = await client.request.get('/api/v4/contacts?with=version');
+```
+
+объектом:
+```js
+const response = await client.request.get('/api/v4/contacts', {
+ with: 'version'
+});
+```
+
+### POST
+
+```js
+const response = await client.request.post('/api/v4/contacts', [
+    {
+      name: "Walter White",
+      request_id: 143,
+      // другие поля ...
+    }
+  ]
+);
+```
+
+### PATCH
+
+```js
+const response = await client.request.patch( '/api/v4/leads', [
+     {
+       "id": 54886,
+       "pipeline_id": 47521,
+       "status_id": 143,
+       "date_close": 1589297221,
+       "loss_reason_id": 7323,
+       "updated_by": 0
+     }
+   ]
+ )
 ```
 
 ## OAuth
 
- Клиент автоматически получает новый токен по истечению
- старого (при необходимости).
- 
- Методы:
- 
- 1. *crm.connection.setCode(code)* - устанавливает код авторизации 
- и получает токен авторизации.
- 2. *crm.connection.refreshToken()* - получает новый токен 
- на основе текущего (по полю *refresh_token*). 
- Вызывается автоматически при необходимости обновления.
- 3. *crm.connection.getAuthUrl(mode)* - возвращает адрес ссылки, по которой должен перейти пользователь.
- Параметр mode отвечает за обработку запроса на Redirect URI. 
- В случае popup – окно авторизации будет закрыто, а переход на Redirect URI будет выполнен в основном окне. 
- В случае передачи значения post_message – перенаправление произойдет в окне, которое было открыто, после обработки кода авторизации вам нужно закрыть окно
- 4. *crm.connection.setState(state)* - задаёт произвольную строку состояния 
- (используется для проверки подлинности во встроенном сервере авторизации)
- 5. *crm.connection.getState(state)* - возвращает строку состояния
- 6. *crm.connection.getToken()* - возвращает текущий токен авторизации
- 7. *crm.connection.setToken( token )* - задаёт токен авторизации. Токен должен включать поле expires_at (timestamp, когда токен истечёт)
- 
+Клиент автоматически получает новый токен по истечению старого перед формированием запроса
+
+## Компоненты
+
+### client.environment
+
+В нём хранятся все переданные ранее настройки
+
+#### client.environment.get(path?)
+
+Получить настройки, переданные конструктору Client
+
+```js
+const Client = require( 'amocrm-js' );
+
+const client = new Client({
+    // логин пользователя в портале, где адрес портала domain.amocrm.ru
+    domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
+    /* 
+      Информация об интеграции (подробности подключения 
+      описаны на https://www.amocrm.ru/developers/content/oauth/step-by-step)
+    */
+    auth: {
+      client_id: 'clientId', // ID интеграции
+      client_secret: 'clientSecret', // Секретный ключ
+      redirect_uri: 'redirectUri', // Ссылка для перенаправления
+      code: 'code', // Код для упрощённой авторизации, необязательный
+      /*
+        Параметр состояния для проверки на корректность. Необязательный. Используется встроенным сервером авторизации
+        см. https://www.amocrm.ru/developers/content/oauth/step-by-step#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-Authorization-code
+      */
+      state: 'state',
+    },
+});
+
+client.environment.get(); // возвращает весь объект настроек
+client.environment.get('domain'); // 'domain';
+client.environment.get('auth.redirect_uri'); // 'redirectUri'
+```
+
+#### client.environment.set(path, value)
+
+Устанавливает новое значение в окружении
+
+```js
+client.environment.set('auth.code', 'newCode');
+```
+
+### client.connection
+
+#### client.connection.connect()
+
+Получает токен на основе кода авторизации (config.auth.code)
+
+#### client.connection.update()
+
+#### События
+
+- check. Проверка
+- beforeConnect. Возникает перед началом соединения
+- connected. Успешное соединение
+- error. Ошибка соединения
+- authServer:code. Успешное получение кода авторизации
+- authServer:listen. Начало работы сервера авторизации
+- authServer:close. Сервер авторизации завершает прослушивать сооб
+- authServer:error. Ошибка сервера авторизации
+
+```js
+client.connection.on('error', () => {
+    console.error('Произошла ошибка соединения');
+})
+```
+
+### client.auth
+
+#### client.auth.getUrl(mode)
+
+Возвращает адрес ссылки на портал AmoCRM, по которой должен перейти пользователь для получения кода авторизации.
+
+Параметр mode отвечает за обработку запроса на Redirect URI.
+1. _popup_ – окно авторизации будет закрыто, а переход на Redirect URI будет выполнен в основном окне.
+2. _post_message_ – перенаправление произойдет в окне, которое было открыто, 
+после обработки кода авторизации вам нужно закрыть окно
+
+### client.token
+
+#### client.token.setValue(value)
+
+Устанавливает новое значение токена.
+
+#### client.token.getValue()
+
+Возвращает текущее значение токена.
+
+#### События
+
+- beforeChange. Возникает до 
+- change
+- expirationCheck
+- beforeFetch
+- fetch
+- beforeRefresh
+- refresh
+
+```js
+client.connection.on('change', () => {
+    console.error('Произошла ошибка соединения');
+})
+```
+
 ## Работа с событиями
 
-В настоящий момент доступны следующие события:
+Все компоненты приложения (auth, token, connection) унаследованы от класса 
+[EventEmitter](https://nodejs.org/api/events.html). То есть они все поддерживают 
+методы подписки на события (on, off, removeAllListeners) и отписки от них, принятые в EventEmitter.
 
-1. connection:beforeConnect
-2. connection:beforeFetchToken
-3. connection:beforeRefreshToken
-4. connection:checkToken
-5. connection:authError
-6. connection:connected
-7. connection:error
-8. connection:newToken
 
-Добавление обработчика:
+## Ошибки
 
-```javascript
-crm.on( 'connection:error', () => console.log( 'Ошибка соединения' ));
-```
+- NO_JSON_RESPONSE. Пустой ответ
+- INVALID_JSON_RESPONSE. Некорректный JSON вет
+- API_RESPONSE_ERROR. Ошибка в ответе по API
+- NO_TOKEN_AND_CODE. В настройках отсуствует код и не установлен токен
+- CONNECTION_ERROR. Неудачное соединение
+- NO_ENVIRONMENT_OPTIONS. Отсутствуют настройки
+- PATH_IS_EMPTY. Попытка установить client.environment.set без переданного первого пути  
+- INVALID_PATH. Неверный
+- NO_AUTH_OPTIONS. Отсутствуют настройки config.auth
 
-Удаление обработчика:
+## Сохранение авторизации между сессиями
 
-```javascript
-const handler = () => console.log( 'Ошибка соединения' );
-crm.on( 'connection:error', handler );
-
-// удалить конкретный обработчик
-crm.off( 'connection:error', handler );
-
-// удалить все обработчики конкретного события
-crm.off( 'connection:error' );
-
-// удалить все обработчики всех событий
-crm.off();
-```
-
-### Сохранение авторизации между сессиями
-
-Может быть полезным сохранять авторизацию между запусками приложения. Для этого есть событие `connection:newToken`, в которое приходит новый токен при каждом сохранении. 
+Может быть полезным сохранять авторизацию между запусками приложения. Для этого есть событие `change` 
+компонента client.token, в которое приходит новый токен при каждом сохранении. 
 
 Этот токен можно сохранять куда вам удобно (БД, файлы и тд). При инициализации соединения можно заранее установить токен для восстановления авторизации:
-`crm.connection.setToken( currentToken )`
+`crm.token.setValue(currentToken)`
 
 Ниже пример реализации через сохранение в файл token.json который лежит рядом со скриптом
-```javascript
-  crm.on( 'connection:newToken', response => {
-    fs.writeFileSync( './token.json', JSON.stringify( response.data ));
+
+```js
+  client.connection.on('change', () => {
+      const token = client.token.getValue();
+      fs.writeFileSync('./token.json', JSON.stringify(token));
   });
   try {
-    const currentToken = require( './token.json' );
-    crm.connection.setToken( currentToken );
+      const currentToken = require('./token.json');
+      client.token.setValue(currentToken);
   } catch (e) {
-    // Token file not found
+    // Файл не найден
   }
 ```
 

@@ -1,0 +1,1 @@
+{"version":3,"file":"APIResponseError.js","sourceRoot":"","sources":["../../src/common/APIResponseError.ts"],"names":[],"mappings":";;;AAGA;IAA8C,4CAAK;IAG/C,0BAAY,OAAe,EAAE,WAA6B,EAAE,QAA8B;QAA1F,YACI,kBAAM,OAAO,CAAC,SAGjB;QAFG,KAAI,CAAC,WAAW,GAAG,WAAW,CAAC;QAC/B,KAAI,CAAC,QAAQ,GAAG,QAAQ,CAAC;;IAC7B,CAAC;IACL,uBAAC;AAAD,CAAC,AARD,CAA8C,KAAK,GAQlD"}
