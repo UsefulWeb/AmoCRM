@@ -37,7 +37,6 @@
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "babel-jest": "^28.1.0",
-    "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "babel-preset-env": "^1.7.0",
     "eslint-plugin-jasmine": "^2.10.1",
     "jest": "^28.1.0",

@@ -244,7 +244,7 @@ const response = await client.request.patch( '/api/v4/leads', [
 Получить настройки, переданные конструктору Client
 
 ```js
-const Client = require( 'amocrm-js' );
+const Client = require('amocrm-js');
 
 const client = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
@@ -327,13 +327,13 @@ client.connection.on('error', () => {
 
 #### События
 
-- beforeChange. Возникает до 
-- change
-- expirationCheck
-- beforeFetch
-- fetch
-- beforeRefresh
-- refresh
+- beforeChange. Возникает после получения по API токена и до того как он будет установлен в приложении
+- change. Возникает после установления нового значения в приложении
+- expirationCheck. Возникает при проверке актуальности токена
+- beforeFetch. Возникает перед попыткой получения токена по коду авторизации
+- fetch. Возникает после получения токена по коду авторизации
+- beforeRefresh. Возникает перед попыткой обновления токена по значению refresh_token текущего
+- refresh. Возникает после получения нового токена по значению refresh_token старого
 
 ```js
 client.connection.on('change', () => {
@@ -346,7 +346,6 @@ client.connection.on('change', () => {
 Все компоненты приложения (auth, token, connection) унаследованы от класса 
 [EventEmitter](https://nodejs.org/api/events.html). То есть они все поддерживают 
 методы подписки на события (on, off, removeAllListeners) и отписки от них, принятые в EventEmitter.
-
 
 ## Ошибки
 
