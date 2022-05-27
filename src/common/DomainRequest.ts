@@ -8,8 +8,6 @@ import { StringValueObject } from "../types";
 import {HttpMethod} from "../enums";
 import EventEmitter from "./EventEmitter";
 import JSONResponseParser from "./response/JSONResponseParser";
-import { hostname } from "os";
-
 
 export default class DomainRequest extends EventEmitter {
     protected readonly hostname: string;
