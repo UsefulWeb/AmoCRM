@@ -158,7 +158,7 @@ const client = new Client({
 С указанием метода:
 
 ```js
-const result = await client.request.make( 'GET', '/api/v4/account' );
+const result = await client.request.make('GET', '/api/v4/account');
 // возвращает тело ответа 
 console.log(result.data);
 /* 
