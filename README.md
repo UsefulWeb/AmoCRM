@@ -56,11 +56,6 @@ import Client from 'amocrm-js';
 адреса интеграции (redirectUri).
 
 ```js
-
-/* 
-    const Client = 
-*/
-
 const client = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
     domain: 'domain', // может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com
