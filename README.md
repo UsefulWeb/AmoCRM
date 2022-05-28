@@ -401,6 +401,7 @@ client.connection.on('change', () => {
 ### Методы
 
 - client.connect -> client.connection.connect
+- client.request(method, path, params, options) -> client.request.make(method, path, params, options)
 - client.connection.getAuthUrl() -> client.auth.getUrl()
 - client.connection.setState(state) -> client.environment.set('auth.state', state)
 - client.connection.getState() -> client.environment.get('auth.state')
