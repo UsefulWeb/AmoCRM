@@ -1,11 +1,16 @@
 import "reflect-metadata";
-import { ClientOptions } from "./interfaces/common";
+import { Class, IClientOptions } from "./interfaces/common";
 import EventEmitter from "./common/EventEmitter";
 import Connection from './common/Connection';
 import Environment from "./common/Environment";
 import ClientRequest from "./common/ClientRequest";
 import Auth from "./common/Auth";
 import Token from "./common/Token";
+
+import LeadFactory from "./api/factories/LeadFactory";
+import Lead from "./api/activeRecords/Lead";
+import { JSONObject } from "./types";
+import { IEntityConstructor, IResourceFactory } from "./interfaces/api";
 
 export default class Client extends EventEmitter {
     public readonly token: Token;
@@ -14,7 +19,11 @@ export default class Client extends EventEmitter {
     public readonly connection: Connection;
     public readonly auth: Auth;
 
-    constructor(options: ClientOptions) {
+    public readonly Lead: IEntityConstructor<Lead>;
+
+    public readonly leads: LeadFactory;
+
+    constructor(options: IClientOptions) {
         super();
         if (!options) {
             throw new Error('NO_OPTIONS');
@@ -28,6 +37,15 @@ export default class Client extends EventEmitter {
             this.auth
         );
         this.request = new ClientRequest(this.connection);
+
+        this.leads = new LeadFactory(this.request);
+        this.Lead = this.assignEntity(this.leads);
+    }
+
+    protected assignEntity<T>(factory: IResourceFactory<T>): IEntityConstructor<T> {
+        return function (attributes?:JSONObject) {
+            return factory.create(attributes);
+        }
     }
 }
 

@@ -3,8 +3,8 @@ import * as https from 'https';
 import * as http from 'http';
 import * as Buffer from "buffer";
 
-import { APIResponse, DomainRequestOptions } from "../interfaces/common";
-import { StringValueObject } from "../types";
+import { IAPIResponse, DomainRequestOptions } from "../interfaces/common";
+import { TStringValueObject } from "../types";
 import {HttpMethod} from "../enums";
 import EventEmitter from "./EventEmitter";
 import JSONResponseParser from "./response/JSONResponseParser";
@@ -23,10 +23,10 @@ export default class DomainRequest extends EventEmitter {
         }
         return false;
     }
-    protected getHeaders(): StringValueObject {
+    protected getHeaders(): TStringValueObject {
         const baseHeaders = this.config.options?.headers || {};
         const { token, method } = this.config;
-        const clientHeaders: StringValueObject = {};
+        const clientHeaders: TStringValueObject = {};
         if (token) {
             clientHeaders['Authorization'] = 'Bearer ' + token.access_token;
         }
@@ -67,7 +67,7 @@ export default class DomainRequest extends EventEmitter {
         const { method, data, url } = this.config;
         const location = this.getLocation();
         const path = location.pathname;
-        const queryStringData: StringValueObject = Object.fromEntries(location.searchParams);
+        const queryStringData: TStringValueObject = Object.fromEntries(location.searchParams);
 
         const mergedData = {
             ...data,
@@ -85,17 +85,18 @@ export default class DomainRequest extends EventEmitter {
         }
         return domain + '.amocrm.ru';
     }
-    async process<T>(): Promise<APIResponse<T>> {
+    async process<T>(): Promise<IAPIResponse<T>> {
         const apiResponse = await this.makeRequest();
         return this.parseResponse<T>(apiResponse);
     }
 
-    protected parseResponse<T>(apiResponse: APIResponse<string>): APIResponse<T> {
-        const { parser = new JSONResponseParser } = this.config;
+    protected parseResponse<T>(apiResponse: IAPIResponse<string>): IAPIResponse<T> {
+        const { options = {}} = this.config;
+        const { parser = new JSONResponseParser } = options;
         return parser.parse(apiResponse);
     }
 
-    protected makeRequest(): Promise<APIResponse<string>> {
+    protected makeRequest(): Promise<IAPIResponse<string>> {
         const path = this.getPath();
         const headers = this.getHeaders();
         const data = this.getData();
@@ -108,7 +109,7 @@ export default class DomainRequest extends EventEmitter {
             headers
         };
         const onResponse = this.onResponse.bind(this);
-        return new Promise<APIResponse<string>>((resolve, reject) => {
+        return new Promise<IAPIResponse<string>>((resolve, reject) => {
             const request = https.request(options, onResponse(resolve));
             if (method !== HttpMethod.GET) {
                 request.write(data);
@@ -124,7 +125,7 @@ export default class DomainRequest extends EventEmitter {
         const onResponseData = (chunk: Buffer) => buffer.push(chunk);
         const onResponseEnd = (response: http.IncomingMessage) => () => {
             const data = buffer.join('');
-            const result: APIResponse<string> = {
+            const result: IAPIResponse<string> = {
                 response,
                 data
             };

@@ -1,8 +1,8 @@
-import { ClientOptions } from "../interfaces/common";
+import { IClientOptions } from "../interfaces/common";
 
 class Environment {
-    protected readonly options: ClientOptions;
-    constructor(options: ClientOptions) {
+    protected readonly options: IClientOptions;
+    constructor(options: IClientOptions) {
         this.options = options;
     }
     get<T>(path?: string, defaultValue?: any): T {

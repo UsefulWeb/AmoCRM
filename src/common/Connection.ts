@@ -1,11 +1,11 @@
 import EventEmitter from "./EventEmitter";
-import { AuthOptions, AuthServerOptions, RequestOptions } from "../interfaces/common";
+import { IAuthOptions, IAuthServerOptions, IRequestOptions } from "../interfaces/common";
 import Token from "./Token";
 import Environment from "./Environment";
-import { JSONValue, RequestData } from "../types";
 import DomainRequest from "./DomainRequest";
 import AuthServer from "./AuthServer";
 import Auth from "./Auth";
+import { JSONObject } from "../types";
 
 export default class Connection extends EventEmitter {
     protected readonly token: Token;
@@ -83,10 +83,10 @@ export default class Connection extends EventEmitter {
         if (this.authServer) {
             return false;
         }
-        const authOptions = this.environment.get<AuthOptions>('auth');
+        const authOptions = this.environment.get<IAuthOptions>('auth');
         const port = 3000 || authOptions.server?.port
         const state = this.environment.get<string>('auth.state');
-        const options: AuthServerOptions = {
+        const options: IAuthServerOptions = {
             state,
             port
         };
@@ -109,7 +109,7 @@ export default class Connection extends EventEmitter {
         return this.connect();
     }
 
-    async makeRequest(method: string, url: string, data?: RequestData, options?: RequestOptions) {
+    async makeRequest(method: string, url: string, data?: object, options?: IRequestOptions) {
         await this.update();
         const token = this.token.getValue();
         const domain = this.environment.get<string>('domain');
@@ -122,6 +122,6 @@ export default class Connection extends EventEmitter {
             token
         };
         const domainRequest = new DomainRequest(config);
-        return await domainRequest.process<JSONValue>();
+        return await domainRequest.process<any>();
     }
 }

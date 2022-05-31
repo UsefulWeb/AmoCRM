@@ -1,7 +1,7 @@
 import './bootstrap';
 import Client from "../src/Client";
 import config, { CODE } from "./config";
-import { TokenData } from "../src/interfaces/common";
+import { ITokenData } from "../src/interfaces/common";
 
 jest.setTimeout(60 * 1000);
 
@@ -59,7 +59,7 @@ describe('Token', () => {
         const token = client.token.getValue();
         const now = new Date;
         const expired = new Date(now.valueOf() - 1000);
-        client.token.setValue(<TokenData>{
+        client.token.setValue(<ITokenData>{
             ...token,
             expires_at: expired.valueOf()
         });
@@ -76,7 +76,7 @@ describe('Token', () => {
                 code: CODE
             }
         });
-        const token: TokenData = await new Promise(resolve => {
+        const token: ITokenData = await new Promise(resolve => {
             client.token.on('change', resolve);
             client.connection.connect();
         });

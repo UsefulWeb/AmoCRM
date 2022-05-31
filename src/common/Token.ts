@@ -1,12 +1,12 @@
 import EventEmitter from "./EventEmitter";
-import { APIResponse, AuthOptions, TokenData } from "../interfaces/common";
+import { IAPIResponse, IAuthOptions, ITokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import Environment from "./Environment";
 import DomainRequest from "./DomainRequest";
-import { StringValueObject } from "../types";
+import { TStringValueObject } from "../types";
 
 export default class Token extends EventEmitter {
-    protected value?: TokenData;
+    protected value?: ITokenData;
     protected expiresAt?: Date;
     protected code?: string;
 
@@ -34,7 +34,7 @@ export default class Token extends EventEmitter {
         return this.value !== null;
     }
 
-    setValue(value: TokenData) {
+    setValue(value: ITokenData) {
         this.emit('beforeChange');
         this.value = value;
 
@@ -53,7 +53,7 @@ export default class Token extends EventEmitter {
     }
 
     getBaseClientOptions() {
-        const auth = this.environment.get<AuthOptions>('auth');
+        const auth = this.environment.get<IAuthOptions>('auth');
         if (!auth) {
             throw new Error('NO_AUTH_OPTIONS');
         }
@@ -79,7 +79,7 @@ export default class Token extends EventEmitter {
             throw new Error('NO_AUTH_CODE');
         }
 
-        const data: StringValueObject = {
+        const data: TStringValueObject = {
             ...baseClientOptions,
             code,
             grant_type: 'authorization_code',
@@ -110,8 +110,8 @@ export default class Token extends EventEmitter {
         return tokenResponse;
     }
 
-    handleResponse(apiResponse: APIResponse<TokenData>) {
-        const token: TokenData = apiResponse.data;
+    handleResponse(apiResponse: IAPIResponse<ITokenData>) {
+        const token: ITokenData = apiResponse.data;
         if (!token.token_type) {
             return;
         }
@@ -127,7 +127,7 @@ export default class Token extends EventEmitter {
         return token;
     }
 
-    protected makeRequest(data: StringValueObject) {
+    protected makeRequest(data: TStringValueObject) {
         const domain = this.environment.get<string>('domain');
         const method = 'POST';
         const url = schema.auth.token;
@@ -138,6 +138,6 @@ export default class Token extends EventEmitter {
             url
         };
         const request = new DomainRequest(config);
-        return request.process<TokenData>();
+        return request.process<ITokenData>();
     }
 }

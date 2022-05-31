@@ -1,8 +1,7 @@
-import { APIResponseErrorValue } from "./interfaces/common";
+import { IAPIResponseErrorValue } from "./interfaces/common";
 
-export type StringValueObject = { [name: string]: string };
-export type RequestData = StringValueObject | FormData;
-export type APIResponseValue = JSONValue | APIResponseErrorValue;
+export type TStringValueObject = { [name: string]: string };
+export type TAPIResponseValue = JSONValue | IAPIResponseErrorValue;
 
 export type JSONValue =
     | string
@@ -10,3 +9,5 @@ export type JSONValue =
     | boolean
     | { [x: string]: JSONValue }
     | Array<JSONValue>;
+
+export type JSONObject = { [x: string]: JSONValue };

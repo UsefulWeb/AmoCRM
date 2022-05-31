@@ -1,26 +1,26 @@
 import * as http from 'http';
-import { StringValueObject, RequestData, JSONValue } from "../types";
+import { TStringValueObject } from "../types";
 
-export interface TokenOptions {
+export interface ITokenOptions {
     client_id: string;
     client_secret: string;
     redirect_uri: string;
     code?: string;
 }
 
-export interface AuthOptions extends TokenOptions {
+export interface IAuthOptions extends ITokenOptions {
     state?: string;
     server?: {
         port?: number;
     }
 }
 
-export interface ClientOptions {
+export interface IClientOptions {
     domain: string;
-    auth: AuthOptions;
+    auth: IAuthOptions;
 }
 
-export interface TokenData {
+export interface ITokenData {
     token_type: string;
     expires_in: number;
     access_token: string;
@@ -28,38 +28,38 @@ export interface TokenData {
     expires_at?: number
 }
 
-export interface RequestOptions {
-    headers?: StringValueObject;
+export interface IRequestOptions {
+    headers?: TStringValueObject;
     useFormData?: boolean;
+    parser?: IResponseParser<string, any>;
 }
 
 export interface DomainRequestOptions {
     domain: string,
     method: string;
     url: string;
-    data?: RequestData;
-    options?: RequestOptions;
-    token?: TokenData;
-    parser?: ResponseParser<string, any>
+    data?: object;
+    options?: IRequestOptions;
+    token?: ITokenData;
 }
 
-export interface APIResponse<T> {
+export interface IAPIResponse<T> {
     response: http.IncomingMessage,
     data: T
 }
 
-export interface AuthServerOptions {
+export interface IAuthServerOptions {
     state?: string;
     port: number;
 }
 
-export interface AuthUrlParams {
+export interface IAuthUrlParams {
     client_id: string;
     mode: string;
     state?: string;
 }
 
-export interface APIResponseErrorValue {
+export interface IAPIResponseErrorValue {
     hint: string;
     title: string;
     type: string;
@@ -67,6 +67,10 @@ export interface APIResponseErrorValue {
     detail: string;
 }
 
-export interface ResponseParser<T, R> {
-    parse(result: APIResponse<T>): APIResponse<R>;
+export interface IResponseParser<T, R> {
+    parse(result: IAPIResponse<T>): IAPIResponse<R>;
+}
+
+export interface Class<T> {
+    new(...args: any[]): T;
 }

@@ -1,12 +1,12 @@
 import * as http from "http";
 import EventEmitter from "./EventEmitter";
-import { AuthServerOptions } from "../interfaces/common";
-import { StringValueObject } from "../types";
+import { IAuthServerOptions } from "../interfaces/common";
+import { TStringValueObject } from "../types";
 
 export default class AuthServer extends EventEmitter {
-    protected readonly options: AuthServerOptions;
+    protected readonly options: IAuthServerOptions;
     protected instance?: http.Server;
-    constructor(options: AuthServerOptions) {
+    constructor(options: IAuthServerOptions) {
         super();
         this.options = options;
     }
@@ -49,7 +49,7 @@ export default class AuthServer extends EventEmitter {
         }
         const urlParams = url.substring(2);
         const searchParams = new URLSearchParams(urlParams);
-        const queryString: StringValueObject = Object.fromEntries(searchParams);
+        const queryString: TStringValueObject = Object.fromEntries(searchParams);
         const currentState = this.options.state;
         const { code, state } = queryString;
 

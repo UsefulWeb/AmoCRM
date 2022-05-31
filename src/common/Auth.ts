@@ -2,7 +2,7 @@ import * as qs from "qs";
 import EventEmitter from "./EventEmitter";
 import Environment from "./Environment";
 
-import { AuthUrlParams, ClientOptions } from "../interfaces/common";
+import { IAuthUrlParams, IClientOptions } from "../interfaces/common";
 import Token from "./Token";
 
 export default class Auth extends EventEmitter{
@@ -21,9 +21,9 @@ export default class Auth extends EventEmitter{
 
     getUrl(mode = 'popup') {
         const baseUrl = 'https://www.amocrm.ru/oauth';
-        const options = this.environment.get<ClientOptions>();
+        const options = this.environment.get<IClientOptions>();
         const { client_id } = options.auth;
-        const params: AuthUrlParams = {
+        const params: IAuthUrlParams = {
             client_id,
             mode
         };

@@ -1,13 +1,13 @@
 import * as http from 'http';
 import EventEmitter from "../EventEmitter";
-import { APIResponse, ResponseParser } from "../../interfaces/common";
-import { APIResponseValue, JSONValue } from "../../types";
+import { IAPIResponse, IResponseParser } from "../../interfaces/common";
 import APIResponseError from "../APIResponseError";
+import { JSONObject } from "../../types";
 
-export default class JSONResponseParser extends EventEmitter implements ResponseParser<string, APIResponseValue> {
-    parse(apiResponse: APIResponse<string>) {
+export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject> {
+    parse(apiResponse: IAPIResponse<string>) {
         const { response } = apiResponse;
-        const data: APIResponseValue = JSON.parse(apiResponse.data);
+        const data: JSONObject = JSON.parse(apiResponse.data);
 
         this.checkErrors(data, response);
         return {
@@ -15,7 +15,7 @@ export default class JSONResponseParser extends EventEmitter implements Response
             data
         };
     }
-    checkErrors(data: APIResponseValue, response: http.IncomingMessage) {
+    checkErrors(data: object, response: http.IncomingMessage) {
         if (!data) {
             throw new Error('NO_JSON_RESPONSE');
         }
