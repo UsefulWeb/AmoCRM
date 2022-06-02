@@ -1,0 +1,1 @@
+{"version":3,"file":"fillable.js","sourceRoot":"","sources":["../../../../src/api/activeRecords/decorators/fillable.ts"],"names":[],"mappings":";;AAEA,SAAwB,QAAQ;IAC5B,OAAO,UAAU,MAAW,EAAE,WAAmB;QAC7C,IAAI,CAAC,CAAC,UAAU,IAAI,MAAM,CAAC,EAAE;YACzB,OAAM;SACT;QACD,MAAM,CAAC,QAAQ,CAAC,IAAI,CAAC,WAAW,CAAC,CAAC;IACtC,CAAC,CAAA;AACL,CAAC;AAPD,2BAOC"}
