@@ -66,6 +66,10 @@ var Connection = /** @class */ (function (_super) {
                         this.connected = this.token.isExpired();
                         return [2 /*return*/, this.connected];
                     case 4:
+                        if (tokenExists) {
+                            this.connected = true;
+                            return [2 /*return*/, this.connected];
+                        }
                         if (!hasCode && !tokenExists) {
                             throw new Error('NO_TOKEN_AND_CODE');
                         }
