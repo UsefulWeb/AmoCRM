@@ -5,7 +5,6 @@ import Environment from "./Environment";
 import DomainRequest from "./DomainRequest";
 import AuthServer from "./AuthServer";
 import Auth from "./Auth";
-import { JSONObject } from "../types";
 
 export default class Connection extends EventEmitter {
     protected readonly token: Token;

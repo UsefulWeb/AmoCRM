@@ -61,14 +61,18 @@ var DomainRequest = /** @class */ (function (_super) {
     };
     DomainRequest.prototype.getPath = function () {
         var _a = this.config, method = _a.method, data = _a.data, url = _a.url;
+        if (method !== enums_1.HttpMethod.GET) {
+            return url;
+        }
         var location = this.getLocation();
         var path = location.pathname;
         var queryStringData = Object.fromEntries(location.searchParams);
         var mergedData = tslib_1.__assign(tslib_1.__assign({}, data), queryStringData);
-        if (method === enums_1.HttpMethod.GET) {
-            return path + '?' + qs.stringify(mergedData);
+        var queryString = qs.stringify(mergedData);
+        if (!queryString) {
+            return path;
         }
-        return url;
+        return path + '?' + queryString;
     };
     DomainRequest.prototype.getHostname = function () {
         var domain = this.config.domain;

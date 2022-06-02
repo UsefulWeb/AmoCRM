@@ -4,11 +4,14 @@ import { IAPIResponse, IResponseParser } from "../../interfaces/common";
 import APIResponseError from "../APIResponseError";
 import { JSONObject } from "../../types";
 
-export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject> {
+export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject | null> {
     parse(apiResponse: IAPIResponse<string>) {
         const { response } = apiResponse;
         if (!apiResponse.data) {
-            throw new Error('NO_JSON_RESPONSE');
+            return {
+                response,
+                data: null
+            }
         }
         const data: JSONObject = JSON.parse(apiResponse.data);
 

@@ -21,4 +21,5 @@ export default class Lead extends ResourceEntity {
     score?: number | null;
     account_id?: number;
     is_price_modified_by_robot?: boolean;
+    _embedded?: JSONObject;
 }

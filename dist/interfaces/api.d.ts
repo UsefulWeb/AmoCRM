@@ -9,9 +9,9 @@ export interface IResourcePagination<T> {
     getData(): T[];
 }
 export interface IPaginationLinks {
-    next: string;
-    prev: string;
-    first: string;
+    next?: string;
+    prev?: string;
+    first?: string;
 }
 export interface IResourcePaginationParams<T> {
     url: string;
@@ -25,10 +25,10 @@ export interface ILinkResponse {
 export interface IPaginatedResponse {
     _page: number;
     _links: {
-        "self": ILinkResponse;
-        "next": ILinkResponse;
-        "first": ILinkResponse;
-        "prev": ILinkResponse;
+        self?: ILinkResponse;
+        next?: ILinkResponse;
+        first?: ILinkResponse;
+        prev?: ILinkResponse;
     };
     _embedded: JSONObject;
 }

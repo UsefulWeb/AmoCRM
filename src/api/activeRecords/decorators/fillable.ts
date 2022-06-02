@@ -1,10 +1,11 @@
 import ResourceEntity from "../../ResourceEntity";
 
-export default function fillable() {
-    return function (target: any, propertyKey: string) {
-        if (!('fillable' in target)) {
-            return
-        }
-        target.fillable.push(propertyKey);
-    }
+const metadataKey = Symbol('fillable');
+
+export function fillable() {
+    return Reflect.metadata(metadataKey, true);
+}
+
+export function isFillable(target: ResourceEntity, propertyKey: string) {
+    return Reflect.getMetadata(metadataKey, target, propertyKey) || false;
 }

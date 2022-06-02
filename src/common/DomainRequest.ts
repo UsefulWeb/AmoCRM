@@ -65,6 +65,10 @@ export default class DomainRequest extends EventEmitter {
     }
     protected getPath(): string {
         const { method, data, url } = this.config;
+
+        if (method !== HttpMethod.GET) {
+            return url;
+        }
         const location = this.getLocation();
         const path = location.pathname;
         const queryStringData: TStringValueObject = Object.fromEntries(location.searchParams);
@@ -73,10 +77,12 @@ export default class DomainRequest extends EventEmitter {
             ...data,
             ...queryStringData
         };
-        if (method === HttpMethod.GET) {
-            return path + '?' + qs.stringify(mergedData);
+        const queryString = qs.stringify(mergedData);
+
+        if (!queryString) {
+            return path;
         }
-        return url;
+        return path + '?' + queryString;
     }
     protected getHostname(): string {
         const { domain } = this.config;

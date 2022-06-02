@@ -8,7 +8,9 @@ var ResourceFactory = /** @class */ (function () {
         this.request = request;
     }
     ResourceFactory.prototype.create = function (attributes) {
-        return new this.entityClass(this.request, attributes);
+        var instance = new this.entityClass(this.request);
+        instance.setAttributes(attributes);
+        return instance;
     };
     return ResourceFactory;
 }());

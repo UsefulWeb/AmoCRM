@@ -3,8 +3,11 @@ import * as http from 'http';
 import EventEmitter from "../EventEmitter";
 import { IAPIResponse, IResponseParser } from "../../interfaces/common";
 import { JSONObject } from "../../types";
-export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject> {
+export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject | null> {
     parse(apiResponse: IAPIResponse<string>): {
+        response: http.IncomingMessage;
+        data: null;
+    } | {
         response: http.IncomingMessage;
         data: JSONObject;
     };

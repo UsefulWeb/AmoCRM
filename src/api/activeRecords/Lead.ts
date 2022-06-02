@@ -1,6 +1,6 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
-import fillable from "./decorators/fillable";
+import { fillable } from "./decorators/fillable";
 
 export default class Lead extends ResourceEntity {
     @fillable()
@@ -43,4 +43,7 @@ export default class Lead extends ResourceEntity {
     public account_id?: number;
     @fillable()
     public is_price_modified_by_robot?: boolean;
+    @fillable()
+    public _embedded?: JSONObject;
+
 }

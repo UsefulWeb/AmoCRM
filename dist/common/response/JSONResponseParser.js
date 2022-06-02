@@ -10,6 +10,12 @@ var JSONResponseParser = /** @class */ (function (_super) {
     }
     JSONResponseParser.prototype.parse = function (apiResponse) {
         var response = apiResponse.response;
+        if (!apiResponse.data) {
+            return {
+                response: response,
+                data: null
+            };
+        }
         var data = JSON.parse(apiResponse.data);
         this.checkErrors(data, response);
         return {
