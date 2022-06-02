@@ -1,12 +1,12 @@
 /// <reference types="node" />
 import * as http from 'http';
 import EventEmitter from "../EventEmitter";
-import { APIResponse, ResponseParser } from "../../interfaces/common";
-import { APIResponseValue } from "../../types";
-export default class JSONResponseParser extends EventEmitter implements ResponseParser<string, APIResponseValue> {
-    parse(apiResponse: APIResponse<string>): {
+import { IAPIResponse, IResponseParser } from "../../interfaces/common";
+import { JSONObject } from "../../types";
+export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject> {
+    parse(apiResponse: IAPIResponse<string>): {
         response: http.IncomingMessage;
-        data: APIResponseValue;
+        data: JSONObject;
     };
-    checkErrors(data: APIResponseValue, response: http.IncomingMessage): void;
+    checkErrors(data: object, response: http.IncomingMessage): void;
 }

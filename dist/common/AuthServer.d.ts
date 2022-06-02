@@ -1,11 +1,11 @@
 /// <reference types="node" />
 import * as http from "http";
 import EventEmitter from "./EventEmitter";
-import { AuthServerOptions } from "../interfaces/common";
+import { IAuthServerOptions } from "../interfaces/common";
 export default class AuthServer extends EventEmitter {
-    protected readonly options: AuthServerOptions;
+    protected readonly options: IAuthServerOptions;
     protected instance?: http.Server;
-    constructor(options: AuthServerOptions);
+    constructor(options: IAuthServerOptions);
     run(): void;
     onListenStart(): void;
     stop(): Promise<void>;

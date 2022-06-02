@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import * as path from "path";
 import './bootstrap';
 import Client from "../src/Client";
 import config, { CODE } from "./config";
@@ -98,5 +100,25 @@ describe('Token', () => {
         const token = client.token.getValue();
 
         expect(currentToken?.access_token).toBe(token?.access_token);
+    });
+
+    test('storing', async () => {
+        const client = new Client({
+            ...config,
+            auth: {
+                ...config.auth,
+                code: CODE
+            }
+        });
+
+        await client.connection.connect();
+        const currentToken = client.token.getValue();
+        await client.connection.update();
+        const token = client.token.getValue();
+        const data = JSON.stringify(token);
+        const file = path.resolve(__dirname, 'token.json');
+        fs.writeFileSync(file, data);
+        const json = fs.readFileSync(file);
+        expect(json).toBeDefined();
     });
 });

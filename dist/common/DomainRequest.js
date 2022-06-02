@@ -91,7 +91,8 @@ var DomainRequest = /** @class */ (function (_super) {
         });
     };
     DomainRequest.prototype.parseResponse = function (apiResponse) {
-        var _a = this.config.parser, parser = _a === void 0 ? new JSONResponseParser_1.default : _a;
+        var _a = this.config.options, options = _a === void 0 ? {} : _a;
+        var _b = options.parser, parser = _b === void 0 ? new JSONResponseParser_1.default : _b;
         return parser.parse(apiResponse);
     };
     DomainRequest.prototype.makeRequest = function () {

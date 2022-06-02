@@ -7,6 +7,9 @@ import { JSONObject } from "../../types";
 export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject> {
     parse(apiResponse: IAPIResponse<string>) {
         const { response } = apiResponse;
+        if (!apiResponse.data) {
+            throw new Error('NO_JSON_RESPONSE');
+        }
         const data: JSONObject = JSON.parse(apiResponse.data);
 
         this.checkErrors(data, response);

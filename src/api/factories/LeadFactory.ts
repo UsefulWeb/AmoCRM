@@ -5,7 +5,7 @@ import schema from '../../schema/v4';
 import { IResourceFactory } from "../../interfaces/api";
 import ResourcePagination from "../ResourcePagination";
 
-interface LeadsFindCriteria {
+export interface LeadsGetCriteria {
     with?: string;
     page?: number;
     limit?: number;
@@ -14,10 +14,14 @@ interface LeadsFindCriteria {
     order?: string;
 }
 
+export interface LeadsGetByIdCriteria {
+    with?: string;
+}
+
 export default class LeadFactory extends ResourceFactory {
     protected readonly entityClass = Lead;
 
-    async find(criteria: LeadsFindCriteria = {}) {
+    async get(criteria: LeadsGetCriteria = {}) {
         const url = schema.entities.leads.path;
         const params = {
             url,
@@ -28,5 +32,10 @@ export default class LeadFactory extends ResourceFactory {
         const pagination = new ResourcePagination(this.request, params);
         await pagination.fetch();
         return pagination;
+    }
+
+    async getById(id: number, criteria: LeadsGetByIdCriteria = {}) {
+        // const url = schema.entities.leads.path + '/' + id;
+
     }
 }

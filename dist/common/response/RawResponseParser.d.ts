@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import EventEmitter from "../EventEmitter";
-import { APIResponse, ResponseParser } from "../../interfaces/common";
-export default class RawResponseParser extends EventEmitter implements ResponseParser<string, string> {
-    parse(apiResponse: APIResponse<string>): {
+import { IAPIResponse, IResponseParser } from "../../interfaces/common";
+export default class RawResponseParser extends EventEmitter implements IResponseParser<string, string> {
+    parse(apiResponse: IAPIResponse<string>): {
         response: import("http").IncomingMessage;
         data: string;
     };

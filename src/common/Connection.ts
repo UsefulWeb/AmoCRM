@@ -63,6 +63,10 @@ export default class Connection extends EventEmitter {
             this.connected = this.token.isExpired();
             return this.connected;
         }
+        if (tokenExists) {
+            this.connected = true;
+            return this.connected;
+        }
         if (!hasCode && !tokenExists) {
             throw new Error('NO_TOKEN_AND_CODE');
         }

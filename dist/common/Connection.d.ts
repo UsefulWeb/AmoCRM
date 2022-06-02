@@ -1,8 +1,7 @@
 import EventEmitter from "./EventEmitter";
-import { RequestOptions } from "../interfaces/common";
+import { IRequestOptions } from "../interfaces/common";
 import Token from "./Token";
 import Environment from "./Environment";
-import { JSONValue, RequestData } from "../types";
 import AuthServer from "./AuthServer";
 import Auth from "./Auth";
 export default class Connection extends EventEmitter {
@@ -16,5 +15,5 @@ export default class Connection extends EventEmitter {
     isTokenExpired(): boolean;
     connect(): Promise<boolean>;
     protected waitForUserAction(): Promise<boolean>;
-    makeRequest(method: string, url: string, data?: RequestData, options?: RequestOptions): Promise<import("../interfaces/common").APIResponse<JSONValue>>;
+    makeRequest(method: string, url: string, data?: object, options?: IRequestOptions): Promise<import("../interfaces/common").IAPIResponse<any>>;
 }

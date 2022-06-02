@@ -1,9 +1,9 @@
 import EventEmitter from "./EventEmitter";
-import { APIResponse, TokenData } from "../interfaces/common";
+import { IAPIResponse, ITokenData } from "../interfaces/common";
 import Environment from "./Environment";
-import { StringValueObject } from "../types";
+import { TStringValueObject } from "../types";
 export default class Token extends EventEmitter {
-    protected value?: TokenData;
+    protected value?: ITokenData;
     protected expiresAt?: Date;
     protected code?: string;
     protected readonly environment: Environment;
@@ -11,15 +11,15 @@ export default class Token extends EventEmitter {
     isExpired(): boolean;
     clear(): void;
     exists(): boolean;
-    setValue(value: TokenData): void;
-    getValue(): TokenData | undefined;
+    setValue(value: ITokenData): void;
+    getValue(): ITokenData | undefined;
     getBaseClientOptions(): {
         client_id: string;
         client_secret: string;
         redirect_uri: string;
     };
-    fetch(): Promise<TokenData | undefined>;
-    refresh(): Promise<TokenData | undefined>;
-    handleResponse(apiResponse: APIResponse<TokenData>): TokenData | undefined;
-    protected makeRequest(data: StringValueObject): Promise<APIResponse<TokenData>>;
+    fetch(): Promise<ITokenData | undefined>;
+    refresh(): Promise<ITokenData | undefined>;
+    handleResponse(apiResponse: IAPIResponse<ITokenData>): ITokenData | undefined;
+    protected makeRequest(data: TStringValueObject): Promise<IAPIResponse<ITokenData>>;
 }
