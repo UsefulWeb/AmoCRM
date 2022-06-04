@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Class, IClientOptions } from "./interfaces/common";
+import { IClientOptions } from "./interfaces/common";
 import EventEmitter from "./common/EventEmitter";
 import Connection from './common/Connection';
 import Environment from "./common/Environment";
@@ -44,7 +44,7 @@ export default class Client extends EventEmitter {
 
     protected assignEntity<T>(factory: IResourceFactory<T>): IEntityConstructor<T> {
         return function (attributes?:JSONObject) {
-            return factory.create(attributes);
+            return factory.from(attributes);
         }
     }
 }

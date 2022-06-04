@@ -22,13 +22,13 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
         if (!url) {
             url = this.params.url;
         }
-        const { criteria } = this.params;
-        const apiResponse = await this.request.get(url, criteria);
+        const { criteria, options } = this.params;
+        const apiResponse = await this.request.get(url, criteria, options);
         const data: IPaginatedResponse = apiResponse.data;
-
         this.page = data?._page || 1;
         this.parseData(data);
-        this.parseLinks(data)
+        this.parseLinks(data);
+        return this;
     }
 
     hasNext() {
@@ -71,6 +71,7 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
             prev: links.prev?.href,
             first: links.first?.href
         };
+        return this;
     }
 
     protected parseData(response?: IPaginatedResponse) {
@@ -80,9 +81,9 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
             return;
         }
         this.data = data.map(attributes => {
-            const item = factory.create(attributes);
-            return item;
+            return factory.from(attributes);
         });
+        return this;
     }
 
     getPage() {

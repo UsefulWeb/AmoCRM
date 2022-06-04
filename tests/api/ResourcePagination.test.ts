@@ -3,8 +3,7 @@ import * as path from "path";
 
 import Client from "../../src/Client";
 import config from "../config";
-import ResourcePagination from "../../dist/api/ResourcePagination";
-import Lead from "../../dist/api/activeRecords/Lead";
+import ResourcePagination from "../../src/api/ResourcePagination";
 
 jest.setTimeout(60 * 1000);
 
@@ -16,6 +15,13 @@ beforeEach(() => {
     const data = JSON.parse(json);
     client = new Client(config);
     client.token.setValue(data);
+
+    client.token.on('change', () => {
+        const token = client.token.getValue();
+        const data = JSON.stringify(token);
+        const file = path.resolve(__dirname, 'token.json');
+        fs.writeFileSync(file, data);
+    });
 });
 
 describe('ResourcePagination',() => {
@@ -30,9 +36,26 @@ describe('ResourcePagination',() => {
         const leads = await client.leads.get();
         expect(leads.getPage()).toBe(1);
     });
-    test.only('check first result', async () => {
+    test('check first result', async () => {
         const leads = await client.leads.get();
         const [lead] = leads.getData();
         expect(typeof lead.id).toBe('number');
+    });
+    test('page number changes', async () => {
+        const pagination = await client.leads.get({
+            limit: 1
+        });
+        await pagination.next();
+        expect(pagination.getPage()).toBe(2);
+    });
+    test('paged leads must changes', async () => {
+        const leads = await client.leads.get({
+            limit: 1
+        });
+        const [lead1] = leads.getData();
+        await leads.next();
+        const [lead2] = leads.getData();
+
+        expect(lead1.id).not.toEqual(lead2.id);
     });
 });

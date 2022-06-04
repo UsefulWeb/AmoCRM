@@ -31,7 +31,7 @@ export default class Token extends EventEmitter {
     }
 
     exists() {
-        return this.value !== null;
+        return this.value !== undefined;
     }
 
     setValue(value: ITokenData) {

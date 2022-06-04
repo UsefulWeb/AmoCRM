@@ -51,12 +51,10 @@ export default class Connection extends EventEmitter {
         const hasCode = Boolean(code);
         const hasAuthServer = this.environment.exists('auth.server');
         const tokenExists = this.token.exists();
-
         if (!hasCode && hasAuthServer) {
             await this.waitForUserAction();
             return true;
         }
-
         if (tokenExists && this.isTokenExpired()) {
             await this.token.refresh();
             this.connected = this.token.isExpired();

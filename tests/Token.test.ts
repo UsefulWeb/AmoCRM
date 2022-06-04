@@ -102,7 +102,7 @@ describe('Token', () => {
         expect(currentToken?.access_token).toBe(token?.access_token);
     });
 
-    test('storing', async () => {
+    test.only('storing', async () => {
         const client = new Client({
             ...config,
             auth: {
@@ -112,8 +112,6 @@ describe('Token', () => {
         });
 
         await client.connection.connect();
-        const currentToken = client.token.getValue();
-        await client.connection.update();
         const token = client.token.getValue();
         const data = JSON.stringify(token);
         const file = path.resolve(__dirname, 'token.json');

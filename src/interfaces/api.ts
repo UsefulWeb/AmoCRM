@@ -1,9 +1,10 @@
 import ClientRequest from "../common/ClientRequest";
 import { JSONObject } from "../types";
 import exp from "constants";
+import { IRequestOptions } from "./common";
 
 export interface IResourceFactory<T> {
-    create(attributes?: JSONObject): T
+    from(attributes?: JSONObject): T
 }
 
 export interface IResourceEntity {
@@ -24,9 +25,10 @@ export interface IPaginationLinks {
 
 export interface IResourcePaginationParams<T> {
     url: string;
-    criteria: object;
+    criteria?: object;
     factory: IResourceFactory<T>;
     embedded: string;
+    options?: IRequestOptions;
 }
 
 export interface ILinkResponse {

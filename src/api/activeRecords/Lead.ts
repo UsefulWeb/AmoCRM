@@ -4,7 +4,7 @@ import { fillable } from "./decorators/fillable";
 
 export default class Lead extends ResourceEntity {
     @fillable()
-    protected id?: number;
+    public id?: number;
     @fillable()
     public name?: string;
     @fillable()

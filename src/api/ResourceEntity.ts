@@ -1,14 +1,14 @@
-import ClientRequest from "../common/ClientRequest";
 import { JSONObject } from "../types";
 import { IResourceEntity } from "../interfaces/api";
 import { isFillable } from "./activeRecords/decorators/fillable";
+import ResourceFactory from "./ResourceFactory";
 
 export default class ResourceEntity implements IResourceEntity {
     [index: string]: any;
-    protected readonly request: ClientRequest;
+    protected readonly factory: ResourceFactory;
     public required: string[] = [];
-    constructor(request: ClientRequest) {
-        this.request = request;
+    constructor(factory: ResourceFactory) {
+        this.factory = factory;
     }
 
     setAttributes(attributes?: JSONObject) {
@@ -16,7 +16,6 @@ export default class ResourceEntity implements IResourceEntity {
             return;
         }
         for (const attr in attributes) {
-            const canFill = isFillable(this, attr);
             if (isFillable(this, attr)) {
                 this[attr] = attributes[attr];
             }

@@ -11,8 +11,8 @@ export default class ResourceFactory {
         this.request = request;
     }
 
-    create(attributes: JSONObject) {
-        const instance = new this.entityClass(this.request);
+    from(attributes?: JSONObject) {
+        const instance = new this.entityClass(this);
         instance.setAttributes(attributes);
         return instance;
     }
