@@ -4,11 +4,16 @@
 [![GitHub stars](https://img.shields.io/github/stars/UsefulWeb/AmoCRM)](https://github.com/UsefulWeb/AmoCRM/stargazers)
 [![GitHub license](https://img.shields.io/github/license/UsefulWeb/AmoCRM)](https://github.com/UsefulWeb/AmoCRM/blob/master/LICENSE)
 
-JavaScript библиотека для работы с AmoCRM
+NodeJS библиотека для работы с AmoCRM
 
 Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4. 
 
 По вопросам сотрудничества и проектам [пишите в Telegram](https://t.me/neizerth).
+
+## Сообщество и вопросы
+
+По всем вопросам работы библиотеки, заходите в [чат проекта в Telegram](https://t.me/+QKoG6INanhIyYTAy).
+Сделаем вместе пространство уютным :)
 
 ## Изменения в 3.x.x по сравнению с 2.x.x
 
@@ -430,11 +435,7 @@ await client.connection.connect();
 
 ## Доска почёта
 
-Спасибо @amorev, @maxism за вклад в разработку этого проекта
+Спасибо @amorev, @maxism, @shuraman69 за вклад в разработку этого проекта
 
 Отдельная благодарность @dmitrytemlead за возможность протестировать библиотеку в стороннем проекте
 
-## Сообщество
-
-По всем вопросам работы библиотеки, заходите в [чат проекта в Telegram](https://t.me/+QKoG6INanhIyYTAy).
-Сделаем вместе пространство уютным :)
