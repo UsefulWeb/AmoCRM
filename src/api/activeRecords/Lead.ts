@@ -45,5 +45,4 @@ export default class Lead extends ResourceEntity {
     public is_price_modified_by_robot?: boolean;
     @fillable()
     public _embedded?: JSONObject;
-
 }

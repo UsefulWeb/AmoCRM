@@ -10,4 +10,4 @@ export type JSONValue =
     | { [x: string]: JSONValue }
     | Array<JSONValue>;
 
-export type JSONObject = { [x: string]: JSONValue };
+export type JSONObject = { [x: string]: any };

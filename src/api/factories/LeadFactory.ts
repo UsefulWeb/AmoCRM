@@ -30,8 +30,39 @@ export interface LeadsCreateCriteria {
     loss_reason_id?: number;
     responsible_user_id?: number;
     custom_fields_values?: JSONObject[] | null;
-    _embedded: JSONObject;
+    _embedded?: JSONObject;
+
+    request_id?: string;
 }
+
+export interface LeadCreateResult {
+    id: number;
+    request_id: string;
+}
+
+export interface LeadsUpdateCriteria {
+    id: number;
+    name?: string;
+    price?: number;
+    status_id?: number;
+    pipeline_id?: number;
+    created_by?: number;
+    closed_at?: number;
+    created_at?: number;
+    updated_at?: number;
+    loss_reason_id?: number;
+    responsible_user_id?: number;
+    custom_fields_values?: JSONObject[];
+
+    request_id?: string;
+}
+
+export interface LeadUpdateResult {
+    id: number;
+    request_id: string;
+    updated_at: number
+}
+
 
 export default class LeadFactory extends ResourceFactory implements IResourceFactory<Lead> {
     protected readonly entityClass = Lead;
@@ -56,13 +87,19 @@ export default class LeadFactory extends ResourceFactory implements IResourceFac
         return this.from(data);
     }
 
-    async create(criteria: LeadsGetByIdCriteria[]): Promise<Lead[]> {
+    async create(criteria: (LeadsCreateCriteria | Lead)[]): Promise<Lead[]> {
         const url = schema.entities.leads.path;
-        const { data } = await this.request.post(url, criteria);
-        const { leads = [] } = data?._embedded;
+        const requestCriteria = this.getEntityCriteria(criteria);
+        const { data } = await this.request.post(url, requestCriteria);
+        const response = data?._embedded?.leads || [];
 
-        return leads.map((attributes?: JSONObject) => {
-            return this.from(attributes);
+        return response.map((attributes: LeadCreateResult, index: number) => {
+            const entityCriteria = criteria[index];
+            const lead = entityCriteria instanceof Lead ?
+                entityCriteria :
+                this.from(entityCriteria);
+            lead.id = attributes.id;
+            return lead;
         });
     }
 
@@ -70,7 +107,20 @@ export default class LeadFactory extends ResourceFactory implements IResourceFac
 
     }
 
-    async update() {
+    async update(criteria: (LeadsUpdateCriteria | Lead)[]): Promise<Lead[]> {
+        const url = schema.entities.leads.path;
+        const requestCriteria = this.getEntityCriteria(criteria);
+        const { data } = await this.request.patch(url, requestCriteria);
+        const response = data?._embedded?.leads || [];
 
+        return response.map((attributes: LeadUpdateResult, index: number) => {
+            const entityCriteria = criteria[index];
+            const lead = entityCriteria instanceof Lead ?
+                entityCriteria :
+                this.from(entityCriteria);
+            lead.id = attributes.id;
+            lead.updated_at = attributes.updated_at;
+            return lead;
+        });
     }
 }
