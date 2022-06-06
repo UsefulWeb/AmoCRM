@@ -111,7 +111,7 @@ var DomainRequest = /** @class */ (function (_super) {
         var onResponse = this.onResponse.bind(this);
         return new Promise(function (resolve, reject) {
             var request = https.request(options, onResponse(resolve));
-            if (method !== enums_1.HttpMethod.GET) {
+            if (method !== enums_1.HttpMethod.GET && data) {
                 request.write(data);
             }
             request.on('error', _this.onError(reject));

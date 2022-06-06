@@ -110,7 +110,7 @@ export default class DomainRequest extends EventEmitter {
         const onResponse = this.onResponse.bind(this);
         return new Promise<APIResponse<string>>((resolve, reject) => {
             const request = https.request(options, onResponse(resolve));
-            if (method !== HttpMethod.GET) {
+            if (method !== HttpMethod.GET && data) {
                 request.write(data);
             }
             request.on('error', this.onError(reject));
