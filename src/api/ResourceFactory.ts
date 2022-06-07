@@ -1,19 +1,24 @@
 import { IResourceFactory } from "../interfaces/api";
 import ClientRequest from "../common/ClientRequest";
-import { JSONObject, TStringValueObject } from "../types";
+import { JSONObject } from "../types";
 import ResourceEntity from "./ResourceEntity";
-import Lead from "./activeRecords/Lead";
+import EventEmitter from "../common/EventEmitter";
 
-export default class ResourceFactory {
+export default abstract class ResourceFactory<T extends ResourceEntity<ResourceFactory<T>>>
+    extends EventEmitter
+    implements IResourceFactory<T>
+{
     protected readonly request: ClientRequest;
-    protected readonly entityClass: typeof ResourceEntity = ResourceEntity;
 
     constructor(request: ClientRequest) {
+        super();
         this.request = request;
     }
 
-    from(attributes?: JSONObject) {
-        const instance = new this.entityClass(this.request);
+    abstract createEntity(): T;
+
+    from(attributes?: JSONObject): T {
+        const instance = this.createEntity();
         instance.setAttributes(attributes);
         return instance;
     }
@@ -21,7 +26,7 @@ export default class ResourceFactory {
     protected getEntityCriteria(criteriaData: any[]): JSONObject[] {
         return criteriaData.map(criteria => {
             if (criteria instanceof ResourceEntity) {
-                return criteria.toJSON();
+                return criteria.getAttributes();
             }
             return criteria;
         });

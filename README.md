@@ -4,7 +4,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/UsefulWeb/AmoCRM)](https://github.com/UsefulWeb/AmoCRM/stargazers)
 [![GitHub license](https://img.shields.io/github/license/UsefulWeb/AmoCRM)](https://github.com/UsefulWeb/AmoCRM/blob/master/LICENSE)
 
-NodeJS библиотека для работы с AmoCRM
+NodeJS библиотека для работы с AmoCRM.
+
+__Не предназначена для Frontend приложений__
 
 Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4.
 

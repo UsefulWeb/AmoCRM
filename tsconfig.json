@@ -65,5 +65,12 @@
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "typedocOptions": {
+    "entryPoints": ["src/Client.ts"],
+    "out": "docs",
+    "exclude": [
+      "src/schema/*.ts"
+    ]
+  }
 }

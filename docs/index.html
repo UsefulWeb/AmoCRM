@@ -1,0 +1,355 @@
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>amocrm-js</title><meta name="description" content="Documentation for amocrm-js"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">amocrm-js</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> amocrm-js </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#amocrm" id="amocrm" style="color: inherit; text-decoration: none;">
+  <h1>AmoCRM</h1>
+</a>
+<p><a href="https://github.com/UsefulWeb/AmoCRM/stargazers"><img src="https://img.shields.io/npm/v/amocrm-js.svg?style=flat-square" alt="npm version"></a>
+<a href="https://github.com/UsefulWeb/AmoCRM/stargazers"><img src="https://img.shields.io/github/stars/UsefulWeb/AmoCRM" alt="GitHub stars"></a>
+<a href="https://github.com/UsefulWeb/AmoCRM/blob/master/LICENSE"><img src="https://img.shields.io/github/license/UsefulWeb/AmoCRM" alt="GitHub license"></a></p>
+<p>NodeJS библиотека для работы с AmoCRM.</p>
+<p><strong>Не предназначена для Frontend приложений</strong></p>
+<p>Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4.</p>
+<p>По вопросам сотрудничества и проектам <a href="https://t.me/neizerth">пишите в Telegram</a>.</p>
+
+<a href="#сообщество-и-вопросы" id="сообщество-и-вопросы" style="color: inherit; text-decoration: none;">
+  <h2>Сообщество и вопросы</h2>
+</a>
+<p>По всем вопросам работы библиотеки, заходите в <a href="https://t.me/+QKoG6INanhIyYTAy">чат проекта в Telegram</a>.
+Сделаем вместе пространство уютным :)</p>
+
+<a href="#изменения-в-3xx-по-сравнению-с-2xx" id="изменения-в-3xx-по-сравнению-с-2xx" style="color: inherit; text-decoration: none;">
+  <h2>Изменения в 3.x.x по сравнению с 2.x.x</h2>
+</a>
+<ol>
+<li>TypeScript исходная версия кода</li>
+<li>Подсветка синтаксиса на основе TS-интерфейсов</li>
+<li>Удобная передача GET-параметров</li>
+<li>Добавлен выброс ошибок приложения и API-запросов</li>
+<li>Добавлены новые события в компоненты приложения</li>
+</ol>
+
+<a href="#установка" id="установка" style="color: inherit; text-decoration: none;">
+  <h2>Установка</h2>
+</a>
+<p>npm</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">install</span><span class="hl-1"> </span><span class="hl-0">amocrm</span><span class="hl-1">-</span><span class="hl-0">js</span>
+</code></pre>
+<p>Yarn</p>
+<pre><code><span class="hl-0">yarn</span><span class="hl-1"> </span><span class="hl-0">add</span><span class="hl-1"> </span><span class="hl-0">amocrm</span><span class="hl-1">-</span><span class="hl-0">js</span>
+</code></pre>
+
+<a href="#использование" id="использование" style="color: inherit; text-decoration: none;">
+  <h2>Использование</h2>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">Client</span><span class="hl-1"> = </span><span class="hl-4">require</span><span class="hl-1">(</span><span class="hl-5">&#39;amocrm-js&#39;</span><span class="hl-1">);</span>
+</code></pre>
+<p>ES6:</p>
+<pre><code class="language-js"><span class="hl-6">import</span><span class="hl-1"> </span><span class="hl-0">Client</span><span class="hl-1"> </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-5">&#39;amocrm-js&#39;</span><span class="hl-1">;</span>
+</code></pre>
+
+<a href="#подключение-к-crm" id="подключение-к-crm" style="color: inherit; text-decoration: none;">
+  <h2>Подключение к CRM</h2>
+</a>
+<p>Подключение возможно:</p>
+<ol>
+<li>По заранее известному коду авторизации
+(например, с помощью <a href="https://www.amocrm.ru/developers/content/oauth/easy-auth">упрощённой авторизации</a>)</li>
+<li>С помощью встроенного OAuth-сервера (см. пример ниже)</li>
+</ol>
+
+<a href="#код-авторизации-известен" id="код-авторизации-известен" style="color: inherit; text-decoration: none;">
+  <h3>Код авторизации известен</h3>
+</a>
+<p>Его можно получить с помощью упрощенной авторизации или самостоятельно написанного обработчика
+адреса интеграции (redirectUri).</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">client</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Client</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-7">// логин пользователя в портале, где адрес портала domain.amocrm.ru</span><br/><span class="hl-1">    </span><span class="hl-0">domain:</span><span class="hl-1"> </span><span class="hl-5">&#39;domain&#39;</span><span class="hl-1">, </span><span class="hl-7">// может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com</span><br/><span class="hl-1">    </span><span class="hl-7">/* </span><br/><span class="hl-7">      Информация об интеграции (подробности подключения </span><br/><span class="hl-7">      описаны на https://www.amocrm.ru/developers/content/oauth/step-by-step)</span><br/><span class="hl-7">    */</span><br/><span class="hl-1">    </span><span class="hl-0">auth:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">client_id:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientId&#39;</span><span class="hl-1">, </span><span class="hl-7">// ID интеграции</span><br/><span class="hl-1">      </span><span class="hl-0">client_secret:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientSecret&#39;</span><span class="hl-1">, </span><span class="hl-7">// Секретный ключ</span><br/><span class="hl-1">      </span><span class="hl-0">redirect_uri:</span><span class="hl-1"> </span><span class="hl-5">&#39;redirectUri&#39;</span><span class="hl-1">, </span><span class="hl-7">// Ссылка для перенаправления</span><br/><span class="hl-1">      </span><span class="hl-0">code:</span><span class="hl-1"> </span><span class="hl-5">&#39;code&#39;</span><span class="hl-1">, </span><span class="hl-7">// Код для упрощённой авторизации, необязательный</span><br/><span class="hl-1">      </span><span class="hl-7">/*</span><br/><span class="hl-7">        Параметр состояния для проверки на корректность. Необязательный. Используется встроенным сервером авторизации</span><br/><span class="hl-7">        см. https://www.amocrm.ru/developers/content/oauth/step-by-step#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-Authorization-code</span><br/><span class="hl-7">      */</span><br/><span class="hl-1">      </span><span class="hl-0">state:</span><span class="hl-1"> </span><span class="hl-5">&#39;state&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">});</span>
+</code></pre>
+
+<a href="#встроенный-oauth-сервер" id="встроенный-oauth-сервер" style="color: inherit; text-decoration: none;">
+  <h3>Встроенный OAuth-сервер</h3>
+</a>
+<p>В AmoCRM API код авторизации можно использовать <strong>только один раз</strong> для получения
+токена. Последующие запросы на получение токена будут выдавать ошибку.</p>
+<p>Чтобы облегчить процесс получения токена, в данный пакет встроен OAuth-сервер,
+который может обрабатывать указанный адрес перенаправления. Сервер включает прослушивание по необходимости
+и закрывает соединение по получению кода авторизации.</p>
+<p>Пример настройки без параметра <em>code</em>:</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">client</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Client</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-7">// логин пользователя в портале, где адрес портала domain.amocrm.ru</span><br/><span class="hl-1">    </span><span class="hl-0">domain:</span><span class="hl-1"> </span><span class="hl-5">&#39;domain&#39;</span><span class="hl-1">, </span><span class="hl-7">// может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com</span><br/><span class="hl-1">    </span><span class="hl-7">/* </span><br/><span class="hl-7">      Информация об интеграции (подробности подключения </span><br/><span class="hl-7">      описаны на https://www.amocrm.ru/developers/content/oauth/step-by-step)</span><br/><span class="hl-7">    */</span><br/><span class="hl-1">    </span><span class="hl-0">auth:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">client_id:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientId&#39;</span><span class="hl-1">, </span><span class="hl-7">// ID интеграции</span><br/><span class="hl-1">      </span><span class="hl-0">client_secret:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientSecret&#39;</span><span class="hl-1">, </span><span class="hl-7">// Секретный ключ</span><br/><span class="hl-1">      </span><span class="hl-0">redirect_uri:</span><span class="hl-1"> </span><span class="hl-5">&#39;redirectUri&#39;</span><span class="hl-1">, </span><span class="hl-7">// Ссылка для перенаправления,</span><br/><span class="hl-1">      </span><span class="hl-0">server:</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-7">// порт, на котором запустится сервер авторизации</span><br/><span class="hl-1">        </span><span class="hl-0">port:</span><span class="hl-1"> </span><span class="hl-8">3000</span><br/><span class="hl-1">      }</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">});</span>
+</code></pre>
+
+<a href="#процесс-авторизации" id="процесс-авторизации" style="color: inherit; text-decoration: none;">
+  <h4>Процесс авторизации:</h4>
+</a>
+<ol>
+<li>Сервер ожидает перехода пользователя по адресу: <em>crm.auth.getUrl(mode)</em></li>
+<li>При успешном переходе пользователь перенаправляется на {redirectUri}, заданный в интеграции</li>
+<li>Сервер авторизации перехватывает запрос на {redirectUri}
+(как это сделать, описано ниже), извлекает код авторизации и
+с помощью <em>crm.connection.setCode(code)</em> автоматически получает токен для работы</li>
+</ol>
+
+<a href="#использование-в-целях-разработки" id="использование-в-целях-разработки" style="color: inherit; text-decoration: none;">
+  <h4>Использование в целях разработки</h4>
+</a>
+<p>Один из простых способ разработки интеграции: библиотека-сервис <a href="https://ngrok.com">ngrok</a>.
+Пакет перенаправляет трафик с вашего компьютера на заданный публичный IP, который можно задать в
+адресе интеграции.</p>
+<p><a href="./examples/javascript/01-get-development-token.js">Пример использования ngrok.</a></p>
+
+<a href="#разработка-на-production-сервере" id="разработка-на-production-сервере" style="color: inherit; text-decoration: none;">
+  <h4>Разработка на production-сервере</h4>
+</a>
+<p>Для работы сервера авторизации на «боевом» хостинге ему нужно выполнение условий:</p>
+<ol>
+<li>Публичный IP-адрес, на котором находится проект</li>
+<li>Порт сервера авторизации, указанный в настройках данной библиотеки (<em>auth.server.port</em>),
+открыт для внешних подключений или работает прокси-переадресация в настройках виртуального хоста.</li>
+</ol>
+<p>После остаётся только заменить адрес {redirectUri} на адрес
+вашего хоста в настройках библиотеки и интеграции.</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">client</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Client</span><span class="hl-1">({</span><br/><span class="hl-1"> </span><span class="hl-7">// ...</span><br/><span class="hl-1"> </span><span class="hl-0">auth:</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-7">// ...</span><br/><span class="hl-1">  </span><span class="hl-0">redirect_uri:</span><span class="hl-1"> </span><span class="hl-5">&#39;redirectUri&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">server:</span><span class="hl-1"> {</span><br/><span class="hl-1">   </span><span class="hl-0">port:</span><span class="hl-1"> </span><span class="hl-8">3001</span><br/><span class="hl-1">  }</span><br/><span class="hl-1"> },</span><br/><span class="hl-1">});</span>
+</code></pre>
+
+<a href="#запросы-к-порталу" id="запросы-к-порталу" style="color: inherit; text-decoration: none;">
+  <h2>Запросы к порталу</h2>
+</a>
+<p>С указанием метода:</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">result</span><span class="hl-1"> = </span><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">request</span><span class="hl-1">.</span><span class="hl-4">make</span><span class="hl-1">(</span><span class="hl-5">&#39;GET&#39;</span><span class="hl-1">, </span><span class="hl-5">&#39;/api/v4/account&#39;</span><span class="hl-1">);</span><br/><span class="hl-7">// возвращает тело ответа </span><br/><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-4">log</span><span class="hl-1">(</span><span class="hl-0">result</span><span class="hl-1">.</span><span class="hl-0">data</span><span class="hl-1">);</span><br/><span class="hl-7">/* </span><br/><span class="hl-7">  Возвращает расширенную информацию об ответе - </span><br/><span class="hl-7">  экземпляр http.IncomingMessage:</span><br/><span class="hl-7">  https://nodejs.org/api/http.html#class-httpincomingmessage</span><br/><span class="hl-7">*/</span><br/><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-4">log</span><span class="hl-1">(</span><span class="hl-0">result</span><span class="hl-1">.</span><span class="hl-0">response</span><span class="hl-1">);</span><br/><span class="hl-7">// к примеру, HTTP-статус ответа операции</span><br/><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-4">log</span><span class="hl-1">(</span><span class="hl-0">result</span><span class="hl-1">.</span><span class="hl-0">response</span><span class="hl-1">.</span><span class="hl-0">statusCode</span><span class="hl-1">);</span>
+</code></pre>
+
+<a href="#методы-clientrequest-get-post-patch" id="методы-clientrequest-get-post-patch" style="color: inherit; text-decoration: none;">
+  <h2>Методы <em>client.request</em>: get, post, patch</h2>
+</a>
+
+<a href="#get" id="get" style="color: inherit; text-decoration: none;">
+  <h3>GET</h3>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">response</span><span class="hl-1"> = </span><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">request</span><span class="hl-1">.</span><span class="hl-4">get</span><span class="hl-1">(</span><span class="hl-5">&#39;/api/v4/contacts&#39;</span><span class="hl-1">)</span>
+</code></pre>
+
+<a href="#передача-параметров" id="передача-параметров" style="color: inherit; text-decoration: none;">
+  <h4>Передача параметров</h4>
+</a>
+<p>С помощью querystring:</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">response</span><span class="hl-1"> = </span><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">request</span><span class="hl-1">.</span><span class="hl-4">get</span><span class="hl-1">(</span><span class="hl-5">&#39;/api/v4/contacts?with=version&#39;</span><span class="hl-1">);</span>
+</code></pre>
+<p>объектом:</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">response</span><span class="hl-1"> = </span><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">request</span><span class="hl-1">.</span><span class="hl-4">get</span><span class="hl-1">(</span><span class="hl-5">&#39;/api/v4/contacts&#39;</span><span class="hl-1">, {</span><br/><span class="hl-1"> </span><span class="hl-0">with:</span><span class="hl-1"> </span><span class="hl-5">&#39;version&#39;</span><br/><span class="hl-1">});</span>
+</code></pre>
+
+<a href="#post" id="post" style="color: inherit; text-decoration: none;">
+  <h3>POST</h3>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">response</span><span class="hl-1"> = </span><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">request</span><span class="hl-1">.</span><span class="hl-4">post</span><span class="hl-1">(</span><span class="hl-5">&#39;/api/v4/contacts&#39;</span><span class="hl-1">, [</span><br/><span class="hl-1">    {</span><br/><span class="hl-1">      </span><span class="hl-0">name:</span><span class="hl-1"> </span><span class="hl-5">&quot;Walter White&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">request_id:</span><span class="hl-1"> </span><span class="hl-8">143</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-7">// другие поля ...</span><br/><span class="hl-1">    }</span><br/><span class="hl-1">  ]</span><br/><span class="hl-1">);</span>
+</code></pre>
+
+<a href="#patch" id="patch" style="color: inherit; text-decoration: none;">
+  <h3>PATCH</h3>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">response</span><span class="hl-1"> = </span><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">request</span><span class="hl-1">.</span><span class="hl-4">patch</span><span class="hl-1">( </span><span class="hl-5">&#39;/api/v4/leads&#39;</span><span class="hl-1">, [</span><br/><span class="hl-1">     {</span><br/><span class="hl-1">       </span><span class="hl-5">&quot;id&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-8">54886</span><span class="hl-1">,</span><br/><span class="hl-1">       </span><span class="hl-5">&quot;pipeline_id&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-8">47521</span><span class="hl-1">,</span><br/><span class="hl-1">       </span><span class="hl-5">&quot;status_id&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-8">143</span><span class="hl-1">,</span><br/><span class="hl-1">       </span><span class="hl-5">&quot;date_close&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-8">1589297221</span><span class="hl-1">,</span><br/><span class="hl-1">       </span><span class="hl-5">&quot;loss_reason_id&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-8">7323</span><span class="hl-1">,</span><br/><span class="hl-1">       </span><span class="hl-5">&quot;updated_by&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-8">0</span><br/><span class="hl-1">     }</span><br/><span class="hl-1">   ]</span><br/><span class="hl-1"> )</span>
+</code></pre>
+
+<a href="#oauth" id="oauth" style="color: inherit; text-decoration: none;">
+  <h2>OAuth</h2>
+</a>
+<p>Клиент автоматически получает новый токен по истечению старого перед формированием запроса</p>
+
+<a href="#компоненты" id="компоненты" style="color: inherit; text-decoration: none;">
+  <h2>Компоненты</h2>
+</a>
+
+<a href="#clientenvironment" id="clientenvironment" style="color: inherit; text-decoration: none;">
+  <h3>client.environment</h3>
+</a>
+<p>В нём хранятся все переданные ранее настройки</p>
+
+<a href="#clientenvironmentgetpath" id="clientenvironmentgetpath" style="color: inherit; text-decoration: none;">
+  <h4>client.environment.get(path?)</h4>
+</a>
+<p>Получить настройки, переданные конструктору Client</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">Client</span><span class="hl-1"> = </span><span class="hl-4">require</span><span class="hl-1">(</span><span class="hl-5">&#39;amocrm-js&#39;</span><span class="hl-1">);</span><br/><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">client</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Client</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-7">// логин пользователя в портале, где адрес портала domain.amocrm.ru</span><br/><span class="hl-1">    </span><span class="hl-0">domain:</span><span class="hl-1"> </span><span class="hl-5">&#39;domain&#39;</span><span class="hl-1">, </span><span class="hl-7">// может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com</span><br/><span class="hl-1">    </span><span class="hl-7">/* </span><br/><span class="hl-7">      Информация об интеграции (подробности подключения </span><br/><span class="hl-7">      описаны на https://www.amocrm.ru/developers/content/oauth/step-by-step)</span><br/><span class="hl-7">    */</span><br/><span class="hl-1">    </span><span class="hl-0">auth:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">client_id:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientId&#39;</span><span class="hl-1">, </span><span class="hl-7">// ID интеграции</span><br/><span class="hl-1">      </span><span class="hl-0">client_secret:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientSecret&#39;</span><span class="hl-1">, </span><span class="hl-7">// Секретный ключ</span><br/><span class="hl-1">      </span><span class="hl-0">redirect_uri:</span><span class="hl-1"> </span><span class="hl-5">&#39;redirectUri&#39;</span><span class="hl-1">, </span><span class="hl-7">// Ссылка для перенаправления</span><br/><span class="hl-1">      </span><span class="hl-0">code:</span><span class="hl-1"> </span><span class="hl-5">&#39;code&#39;</span><span class="hl-1">, </span><span class="hl-7">// Код для упрощённой авторизации, необязательный</span><br/><span class="hl-1">      </span><span class="hl-7">/*</span><br/><span class="hl-7">        Параметр состояния для проверки на корректность. Необязательный. Используется встроенным сервером авторизации</span><br/><span class="hl-7">        см. https://www.amocrm.ru/developers/content/oauth/step-by-step#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-Authorization-code</span><br/><span class="hl-7">      */</span><br/><span class="hl-1">      </span><span class="hl-0">state:</span><span class="hl-1"> </span><span class="hl-5">&#39;state&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">environment</span><span class="hl-1">.</span><span class="hl-4">get</span><span class="hl-1">(); </span><span class="hl-7">// возвращает весь объект настроек</span><br/><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">environment</span><span class="hl-1">.</span><span class="hl-4">get</span><span class="hl-1">(</span><span class="hl-5">&#39;domain&#39;</span><span class="hl-1">); </span><span class="hl-7">// &#39;domain&#39;;</span><br/><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">environment</span><span class="hl-1">.</span><span class="hl-4">get</span><span class="hl-1">(</span><span class="hl-5">&#39;auth.redirect_uri&#39;</span><span class="hl-1">); </span><span class="hl-7">// &#39;redirectUri&#39;</span>
+</code></pre>
+
+<a href="#clientenvironmentsetpath-value" id="clientenvironmentsetpath-value" style="color: inherit; text-decoration: none;">
+  <h4>client.environment.set(path, value)</h4>
+</a>
+<p>Устанавливает новое значение в окружении</p>
+<pre><code class="language-js"><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">environment</span><span class="hl-1">.</span><span class="hl-4">set</span><span class="hl-1">(</span><span class="hl-5">&#39;auth.state&#39;</span><span class="hl-1">, </span><span class="hl-5">&#39;newsState&#39;</span><span class="hl-1">);</span>
+</code></pre>
+
+<a href="#clientconnection" id="clientconnection" style="color: inherit; text-decoration: none;">
+  <h3>client.connection</h3>
+</a>
+
+<a href="#clientconnectionconnect" id="clientconnectionconnect" style="color: inherit; text-decoration: none;">
+  <h4>client.connection.connect()</h4>
+</a>
+<p>Получает токен на основе (в зависимости от ситуации):</p>
+<ol>
+<li>Кода авторизации (config.auth.code)</li>
+<li>Старого токена, если он истёк (refresh_token)</li>
+<li>Кода авторизации, полученного с помощью перехода пользователя по ссылке. Использует встроенный сервер авторизации</li>
+</ol>
+
+<a href="#clientconnectionupdate" id="clientconnectionupdate" style="color: inherit; text-decoration: none;">
+  <h4>client.connection.update()</h4>
+</a>
+
+<a href="#события" id="события" style="color: inherit; text-decoration: none;">
+  <h4>События</h4>
+</a>
+<ul>
+<li>check. Проверка</li>
+<li>beforeConnect. Возникает перед началом соединения</li>
+<li>connected. Успешное соединение</li>
+<li>connectionError. Ошибка соединения</li>
+<li>authServer:code. Успешное получение кода авторизации</li>
+<li>authServer:listen. Начало работы сервера авторизации</li>
+<li>authServer:close. Сервер авторизации завершает прослушивать сооб</li>
+<li>authServer:serverError. Ошибка сервера авторизации</li>
+</ul>
+<pre><code class="language-js"><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">connection</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-5">&#39;connectionError&#39;</span><span class="hl-1">, () </span><span class="hl-2">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-4">error</span><span class="hl-1">(</span><span class="hl-5">&#39;Произошла ошибка соединения&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">})</span>
+</code></pre>
+
+<a href="#clientauth" id="clientauth" style="color: inherit; text-decoration: none;">
+  <h3>client.auth</h3>
+</a>
+
+<a href="#clientauthgeturlmode" id="clientauthgeturlmode" style="color: inherit; text-decoration: none;">
+  <h4>client.auth.getUrl(mode)</h4>
+</a>
+<p>Возвращает адрес ссылки на портал AmoCRM, по которой должен перейти пользователь для получения кода авторизации.</p>
+<p>Параметр mode отвечает за обработку запроса на Redirect URI.</p>
+<ol>
+<li><em>popup</em> – окно авторизации будет закрыто, а переход на Redirect URI будет выполнен в основном окне.</li>
+<li><em>post_message</em> – перенаправление произойдет в окне, которое было открыто,
+после обработки кода авторизации вам нужно закрыть окно</li>
+</ol>
+
+<a href="#clientauthsetcodecode" id="clientauthsetcodecode" style="color: inherit; text-decoration: none;">
+  <h4>client.auth.setCode(code)</h4>
+</a>
+<p>Устанавливает код авторизации и удаляет информацию о текущем токене. Желательно применять именно этот метод
+в сравнение с client.environment.set(&#39;auth.code&#39;);</p>
+
+<a href="#clienttoken" id="clienttoken" style="color: inherit; text-decoration: none;">
+  <h3>client.token</h3>
+</a>
+
+<a href="#clienttokensetvaluevalue" id="clienttokensetvaluevalue" style="color: inherit; text-decoration: none;">
+  <h4>client.token.setValue(value)</h4>
+</a>
+<p>Устанавливает новое значение токена.</p>
+
+<a href="#clienttokengetvalue" id="clienttokengetvalue" style="color: inherit; text-decoration: none;">
+  <h4>client.token.getValue()</h4>
+</a>
+<p>Возвращает текущее значение токена.</p>
+
+<a href="#clienttokenrefresh" id="clienttokenrefresh" style="color: inherit; text-decoration: none;">
+  <h4>client.token.refresh()</h4>
+</a>
+<p>Обновляет токен по значению refresh_token текущего. Явно вызывать нет необходимости, так как
+при каждом запросе идёт проверка токена на актуальность. Если время жизни токена истекло, этот метод
+будет вызван автоматически.</p>
+<p>После обновления, токен автоматически устанавливается в приложении.</p>
+
+<a href="#clienttokenfetch" id="clienttokenfetch" style="color: inherit; text-decoration: none;">
+  <h4>client.token.fetch()</h4>
+</a>
+<p>Получение токена по коду авторизации. После обновления, токен автоматически устанавливается в приложении.</p>
+
+<a href="#события-1" id="события-1" style="color: inherit; text-decoration: none;">
+  <h4>События</h4>
+</a>
+<ul>
+<li>beforeChange. Возникает после получения по API токена и до того как он будет установлен в приложении</li>
+<li>change. Возникает после установления нового значения в приложении</li>
+<li>expirationCheck. Возникает при проверке актуальности токена</li>
+<li>beforeFetch. Возникает перед попыткой получения токена по коду авторизации</li>
+<li>fetch. Возникает после получения токена по коду авторизации</li>
+<li>beforeRefresh. Возникает перед попыткой обновления токена по значению refresh_token текущего</li>
+<li>refresh. Возникает после получения нового токена по значению refresh_token старого</li>
+</ul>
+<pre><code class="language-js"><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">connection</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-5">&#39;change&#39;</span><span class="hl-1">, () </span><span class="hl-2">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-4">error</span><span class="hl-1">(</span><span class="hl-5">&#39;Токен обновлён&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">})</span>
+</code></pre>
+
+<a href="#работа-с-событиями" id="работа-с-событиями" style="color: inherit; text-decoration: none;">
+  <h2>Работа с событиями</h2>
+</a>
+<p>Все компоненты приложения (auth, token, connection) унаследованы от класса
+<a href="https://nodejs.org/api/events.html">EventEmitter</a>. То есть они все поддерживают
+методы подписки на события (on, off, removeAllListeners) и отписки от них, принятые в EventEmitter.</p>
+
+<a href="#ошибки" id="ошибки" style="color: inherit; text-decoration: none;">
+  <h2>Ошибки</h2>
+</a>
+<ul>
+<li>NO_JSON_RESPONSE. Пустой ответ</li>
+<li>INVALID_JSON_RESPONSE. Некорректный JSON вет</li>
+<li>API_RESPONSE_ERROR. Ошибка в ответе по API</li>
+<li>NO_TOKEN_AND_CODE. В настройках отсуствует код и не установлен токен</li>
+<li>CONNECTION_ERROR. Неудачное соединение</li>
+<li>NO_ENVIRONMENT_OPTIONS. Отсутствуют настройки</li>
+<li>PATH_IS_EMPTY. Попытка установить client.environment.set без переданного первого пути</li>
+<li>INVALID_PATH. Неверный</li>
+<li>NO_AUTH_OPTIONS. Отсутствуют настройки config.auth</li>
+</ul>
+
+<a href="#сохранение-авторизации-между-сессиями" id="сохранение-авторизации-между-сессиями" style="color: inherit; text-decoration: none;">
+  <h2>Сохранение авторизации между сессиями</h2>
+</a>
+<p>Может быть полезным сохранять авторизацию между запусками приложения. Для этого есть событие <code>change</code>
+компонента client.token, в которое приходит новый токен при каждом сохранении.</p>
+<p>Этот токен можно сохранять куда вам удобно (БД, файлы и тд). При инициализации соединения можно заранее установить токен для восстановления авторизации:
+<code>crm.token.setValue(currentToken)</code></p>
+<p>Ниже пример реализации через сохранение в файл token.json который лежит рядом со скриптом</p>
+<pre><code class="language-js"><span class="hl-1">  </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">connection</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-5">&#39;change&#39;</span><span class="hl-1">, () </span><span class="hl-2">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">token</span><span class="hl-1"> = </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">token</span><span class="hl-1">.</span><span class="hl-4">getValue</span><span class="hl-1">();</span><br/><span class="hl-1">      </span><span class="hl-0">fs</span><span class="hl-1">.</span><span class="hl-4">writeFileSync</span><span class="hl-1">(</span><span class="hl-5">&#39;./token.json&#39;</span><span class="hl-1">, </span><span class="hl-9">JSON</span><span class="hl-1">.</span><span class="hl-4">stringify</span><span class="hl-1">(</span><span class="hl-0">token</span><span class="hl-1">));</span><br/><span class="hl-1">  });</span><br/><span class="hl-1">  </span><span class="hl-6">try</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">currentToken</span><span class="hl-1"> = </span><span class="hl-4">require</span><span class="hl-1">(</span><span class="hl-5">&#39;./token.json&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">      </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">token</span><span class="hl-1">.</span><span class="hl-4">setValue</span><span class="hl-1">(</span><span class="hl-0">currentToken</span><span class="hl-1">);</span><br/><span class="hl-1">  } </span><span class="hl-6">catch</span><span class="hl-1"> (</span><span class="hl-0">e</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-7">// Файл не найден</span><br/><span class="hl-1">  }</span>
+</code></pre>
+
+<a href="#переход-с-версии-2xx" id="переход-с-версии-2xx" style="color: inherit; text-decoration: none;">
+  <h2>Переход с версии 2.x.x</h2>
+</a>
+
+<a href="#методы" id="методы" style="color: inherit; text-decoration: none;">
+  <h3>Методы</h3>
+</a>
+<ul>
+<li>client.connect -&gt; client.connection.connect</li>
+<li>client.request(method, path, params, options) -&gt; client.request.make(method, path, params, options)</li>
+<li>client.connection.getAuthUrl() -&gt; client.auth.getUrl()</li>
+<li>client.connection.setState(state) -&gt; client.environment.set(&#39;auth.state&#39;, state)</li>
+<li>client.connection.getState() -&gt; client.environment.get(&#39;auth.state&#39;)</li>
+<li>client.connection.getToken() -&gt; client.token.getValue()</li>
+<li>client.connection.setToken(token) -&gt; client.token.setValue(token)</li>
+<li>client.connection.refreshToken() -&gt; client.token.refresh()</li>
+</ul>
+
+<a href="#clientconnectionsetcodecode" id="clientconnectionsetcodecode" style="color: inherit; text-decoration: none;">
+  <h4>client.connection.setCode(code)</h4>
+</a>
+<p>Замена: client.auth.setCode(code)</p>
+<p>Вызов этого метода в версии 2.x.x приводит к обновлению токена по только что заданному коду.</p>
+<p>В текущей версии это происходит при последующем запросе к API. Старая версия эквивалентна:</p>
+<pre><code class="language-js"><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">auth</span><span class="hl-1">.</span><span class="hl-4">setCode</span><span class="hl-1">(</span><span class="hl-0">code</span><span class="hl-1">);</span><br/><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">connection</span><span class="hl-1">.</span><span class="hl-4">connect</span><span class="hl-1">();</span>
+</code></pre>
+
+<a href="#события-2" id="события-2" style="color: inherit; text-decoration: none;">
+  <h3>События</h3>
+</a>
+<ul>
+<li>client.on(&#39;connection:beforeConnect&#39;) -&gt; client.connection.on(&#39;beforeConnect&#39;)</li>
+<li>client.on(&#39;connection:beforeFetchToken&#39;) -&gt; client.token.on(&#39;beforeFetch&#39;)</li>
+<li>client.on(&#39;connection:beforeRefreshToken&#39;) -&gt; client.token.on(&#39;beforeRefresh&#39;)</li>
+<li>client.on(&#39;connection:checkToken&#39;) -&gt; client.token.on(&#39;expirationCheck&#39;)</li>
+<li>client.on(&#39;connection:authError&#39;) -&gt; client.connection.on(&#39;connectionError&#39;)</li>
+<li>client.on(&#39;connection:connected&#39;) -&gt; client.connection.on(&#39;connected&#39;)</li>
+<li>client.on(&#39;connection:error&#39;) -&gt; client.connection.on(&#39;connectionError&#39;)</li>
+<li>client.on(&#39;connection:newToken&#39;) -&gt; client.token.on(&#39;change&#39;)</li>
+</ul>
+
+<a href="#доска-почёта" id="доска-почёта" style="color: inherit; text-decoration: none;">
+  <h2>Доска почёта</h2>
+</a>
+<p>Спасибо @amorev, @maxism, @shuraman69 за вклад в разработку этого проекта</p>
+<p>Отдельная благодарность @dmitrytemlead за возможность протестировать библиотеку в стороннем проекте</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/Client.html">Client</a></li><li class=" tsd-kind-module"><a href="modules/api_ResourceEntity.html">api/<wbr/>Resource<wbr/>Entity</a></li><li class=" tsd-kind-module"><a href="modules/api_ResourceFactory.html">api/<wbr/>Resource<wbr/>Factory</a></li><li class=" tsd-kind-module"><a href="modules/api_ResourcePagination.html">api/<wbr/>Resource<wbr/>Pagination</a></li><li class=" tsd-kind-module"><a href="modules/api_activeRecords_Lead.html">api/active<wbr/>Records/<wbr/>Lead</a></li><li class=" tsd-kind-module"><a href="modules/api_activeRecords_decorators_fillable.html">api/active<wbr/>Records/decorators/fillable</a></li><li class=" tsd-kind-module"><a href="modules/api_factories_LeadFactory.html">api/factories/<wbr/>Lead<wbr/>Factory</a></li><li class=" tsd-kind-module"><a href="modules/api_factories_decorators_EnumerableResource.html">api/factories/decorators/<wbr/>Enumerable<wbr/>Resource</a></li><li class=" tsd-kind-module"><a href="modules/common_APIResponseError.html">common/APIResponse<wbr/>Error</a></li><li class=" tsd-kind-module"><a href="modules/common_Auth.html">common/<wbr/>Auth</a></li><li class=" tsd-kind-module"><a href="modules/common_AuthServer.html">common/<wbr/>Auth<wbr/>Server</a></li><li class=" tsd-kind-module"><a href="modules/common_ClientRequest.html">common/<wbr/>Client<wbr/>Request</a></li><li class=" tsd-kind-module"><a href="modules/common_Connection.html">common/<wbr/>Connection</a></li><li class=" tsd-kind-module"><a href="modules/common_DomainRequest.html">common/<wbr/>Domain<wbr/>Request</a></li><li class=" tsd-kind-module"><a href="modules/common_Environment.html">common/<wbr/>Environment</a></li><li class=" tsd-kind-module"><a href="modules/common_EventEmitter.html">common/<wbr/>Event<wbr/>Emitter</a></li><li class=" tsd-kind-module"><a href="modules/common_Token.html">common/<wbr/>Token</a></li><li class=" tsd-kind-module"><a href="modules/common_response_JSONResponseParser.html">common/response/JSONResponse<wbr/>Parser</a></li><li class=" tsd-kind-module"><a href="modules/common_response_RawResponseParser.html">common/response/<wbr/>Raw<wbr/>Response<wbr/>Parser</a></li><li class=" tsd-kind-module"><a href="modules/enums.html">enums</a></li><li class=" tsd-kind-module"><a href="modules/interfaces_api.html">interfaces/api</a></li><li class=" tsd-kind-module"><a href="modules/interfaces_common.html">interfaces/common</a></li><li class=" tsd-kind-module"><a href="modules/types.html">types</a></li><li class=" tsd-kind-module"><a href="modules/util.html">util</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li><li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li><li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li><li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>

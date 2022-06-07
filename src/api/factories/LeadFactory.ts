@@ -1,10 +1,10 @@
 import ResourceFactory from "../ResourceFactory";
 import Lead from "../activeRecords/Lead";
 import schema from '../../schema/v4';
-import { IResourceFactory } from "../../interfaces/api";
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
+import ResourceEntity from "../ResourceEntity";
 
 export interface LeadsGetCriteria {
     with?: string;
@@ -63,9 +63,11 @@ export interface LeadUpdateResult {
     updated_at: number
 }
 
+export default class LeadFactory extends ResourceFactory<Lead> {
 
-export default class LeadFactory extends ResourceFactory implements IResourceFactory<Lead> {
-    protected readonly entityClass = Lead;
+    createEntity() {
+        return new Lead(this);
+    }
 
     async get(criteria?: LeadsGetCriteria, options?: IRequestOptions) {
         const url = schema.entities.leads.path;
@@ -78,42 +80,52 @@ export default class LeadFactory extends ResourceFactory implements IResourceFac
         };
         const pagination = new ResourcePagination<Lead>(this.request, params);
         await pagination.fetch();
+
+        this.emit('get');
         return pagination;
     }
 
-    async getById(id: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions): Promise<Lead> {
+    async getById(identity: number | Lead, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions): Promise<Lead> {
+        const id = identity instanceof Lead ? identity.id : identity;
         const url = schema.entities.leads.path + '/' + id;
         const { data } = await this.request.get(url, criteria, options);
-        return this.from(data);
+        const lead = identity instanceof Lead ? identity : this.createEntity();
+
+        lead.setAttributes(data);
+        return lead;
     }
 
-    async create(criteria: (LeadsCreateCriteria | Lead)[]): Promise<Lead[]> {
+    async create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
         const url = schema.entities.leads.path;
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.post(url, requestCriteria);
+        const { data } = await this.request.post(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
-        return response.map((attributes: LeadCreateResult, index: number) => {
+        const result = response.map((attributes: LeadCreateResult, index: number) => {
             const entityCriteria = criteria[index];
-            const lead = entityCriteria instanceof Lead ?
+            const lead = entityCriteria instanceof ResourceEntity ?
                 entityCriteria :
                 this.from(entityCriteria);
             lead.id = attributes.id;
             return lead;
         });
+        return result;
     }
 
+    /**
+     * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
+     * */
     async complexCreate() {
 
     }
 
-    async update(criteria: (LeadsUpdateCriteria | Lead)[]): Promise<Lead[]> {
+    async update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
         const url = schema.entities.leads.path;
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.patch(url, requestCriteria);
+        const { data } = await this.request.patch(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
-        return response.map((attributes: LeadUpdateResult, index: number) => {
+        const result = response.map((attributes: LeadUpdateResult, index: number) => {
             const entityCriteria = criteria[index];
             const lead = entityCriteria instanceof Lead ?
                 entityCriteria :
@@ -122,5 +134,6 @@ export default class LeadFactory extends ResourceFactory implements IResourceFac
             lead.updated_at = attributes.updated_at;
             return lead;
         });
+        return result;
     }
 }

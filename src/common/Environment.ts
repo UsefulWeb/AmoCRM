@@ -1,10 +1,43 @@
 import { IClientOptions } from "../interfaces/common";
 
+/**
+ * Доступен как компонент client.environment.
+ * Хранит и меняет настройки:
+ * - переданные при создании экземпляра {@link Client}
+ * - изменённые в процессе работы с помощью {@link Environment.set}
+ * */
 class Environment {
     protected readonly options: IClientOptions;
     constructor(options: IClientOptions) {
         this.options = options;
     }
+
+    /**
+     * Возвращает настройки приложения
+     * @param path - путь к настройке(ам)
+     * @example
+     * ```ts
+     * client.environment.get()
+     * ```
+     * без значения метод вернёт объект текущих настроек
+     * @example
+     * ```ts
+     * client.environment.get('domain')
+     * ```
+     * вернёт имя домена портала
+     * @example
+     * ```ts
+     * client.environment.get('auth')
+     * ```
+     * вернёт объект настроек авторизации
+     * @example
+     * ```ts
+     * client.environment.get('auth.client_id')
+     * ```
+     * вернёт id OAuth-приложения AmoCRM
+     * @param defaultValue - значение, которое вернётся при отсутствии настройки
+     * @returns значение настройки. При отсутствии значения вернётся defaultValue
+     * */
     get<T>(path?: string, defaultValue?: any): T {
         if (!this.options) {
             return defaultValue;
@@ -26,7 +59,12 @@ class Environment {
         return value;
     }
 
-    set(path: string, value?: any) {
+    /**
+     * Устанавливает новое значение настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * @param value - новое значение
+     * */
+    set(path: string, value: any) {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
         }
@@ -47,8 +85,13 @@ class Environment {
             throw new Error('INVALID_PATH');
         }
         handler[lastKey] = value;
+        return this;
     }
 
+    /**
+     * Проверяет наличие настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * */
     exists(path: string): boolean {
         return this.get(path) !== undefined;
     }

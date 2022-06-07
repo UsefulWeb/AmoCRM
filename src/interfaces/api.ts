@@ -1,16 +1,19 @@
 import ClientRequest from "../common/ClientRequest";
 import { JSONObject } from "../types";
-import exp from "constants";
 import { IRequestOptions } from "./common";
 
 export interface IResourceFactory<T> {
-    from(attributes?: JSONObject): T
+    createEntity(): IResourceEntity;
+    from(attributes?: JSONObject): T;
 }
 
 export interface IResourceEntity {
-
+    setAttributes(attributes?: JSONObject): void;
 }
 
+export interface IResourceEntityConstructor<T> {
+    from(request: ClientRequest, attributes?: JSONObject): T;
+}
 
 export interface IResourcePagination<T> {
     fetch(): void;
@@ -47,3 +50,4 @@ export interface IPaginatedResponse {
 }
 
 export type IEntityConstructor<T> = (attributes?: JSONObject) => T;
+

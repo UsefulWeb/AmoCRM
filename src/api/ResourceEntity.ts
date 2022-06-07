@@ -1,14 +1,26 @@
 import { JSONObject } from "../types";
 import { IResourceEntity } from "../interfaces/api";
 import { getFillable, isFillable } from "./activeRecords/decorators/fillable";
-import ClientRequest from "../common/ClientRequest";
+import EventEmitter from "../common/EventEmitter";
 
-export default class ResourceEntity implements IResourceEntity {
+export default class ResourceEntity<T> extends EventEmitter implements IResourceEntity {
     [index: string]: any;
-    protected readonly request: ClientRequest;
+    protected readonly factory: T;
     public required: string[] = [];
-    constructor(request: ClientRequest) {
-        this.request = request;
+
+    constructor(factory: T) {
+        super();
+        this.factory = factory;
+    }
+
+    getAttributes(): JSONObject {
+        return getFillable(this)
+            .reduce((target: JSONObject, key) => {
+                if (key in this) {
+                    target[key] = this[key];
+                }
+                return target;
+            }, {});
     }
 
     setAttributes(attributes?: JSONObject) {
@@ -20,15 +32,5 @@ export default class ResourceEntity implements IResourceEntity {
                 this[attr] = attributes[attr];
             }
         }
-    }
-
-    toJSON(): JSONObject {
-        const attributes = getFillable(this);
-        return attributes.reduce((target: JSONObject, attribute) => {
-            if (attribute in this) {
-                target[attribute] = this[attribute];
-            }
-            return target;
-        }, {});
     }
 }

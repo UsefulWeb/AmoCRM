@@ -12,6 +12,9 @@ import Lead from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";
 import { IEntityConstructor, IResourceFactory } from "./interfaces/api";
 
+/**
+ * Основной класс библиотеки
+ * */
 export default class Client extends EventEmitter {
     public readonly token: Token;
     public readonly environment: Environment;
@@ -42,6 +45,11 @@ export default class Client extends EventEmitter {
         this.Lead = this.assignEntity(this.leads);
     }
 
+    /**
+     * Привязывает конструктор сущностей
+     * @param factory - фабрика сущностей
+     * @returns функция конструктор для вызова new client[Entity]
+     * */
     protected assignEntity<T>(factory: IResourceFactory<T>): IEntityConstructor<T> {
         return function (attributes?:JSONObject) {
             return factory.from(attributes);

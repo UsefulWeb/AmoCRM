@@ -1,8 +1,15 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
+import schema from '../../schema/v4';
 import { fillable } from "./decorators/fillable";
+import { IRequestOptions } from "../../interfaces/common";
+import LeadFactory, { LeadsGetByIdCriteria } from "../factories/LeadFactory";
 
-export default class Lead extends ResourceEntity {
+export default class Lead extends ResourceEntity<LeadFactory> {
+    /**
+     * Сделка
+     * @decorator `@fillable`
+     */
     @fillable()
     public id?: number;
     @fillable()
@@ -45,4 +52,34 @@ export default class Lead extends ResourceEntity {
     public is_price_modified_by_robot?: boolean;
     @fillable()
     public _embedded?: JSONObject;
+
+    isNew() {
+        return this.id !== undefined;
+    }
+
+    async create(options?: IRequestOptions) {
+        const criteria = [this];
+        const [lead] = await this.factory.create(criteria, options);
+
+        this.emit('create');
+        return lead;
+    }
+
+    async update(options?: IRequestOptions) {
+        const criteria = [this];
+        const [lead] = await this.factory.update(criteria, options);
+
+        this.emit('update');
+        return lead;
+    }
+
+    async fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions) {
+        if (this.isNew()) {
+            return false;
+        }
+        const lead = await this.factory.getById(this, criteria, options);
+
+        this.emit('fetch');
+        return lead;
+    }
 }

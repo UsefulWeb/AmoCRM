@@ -2,7 +2,7 @@ import ResourceEntity from "../../ResourceEntity";
 
 const metadataKey = Symbol('fillable');
 
-export function fillable() {
+export function fillable<T>() {
     return (target: any, propertyKey: string) => {
         const attributes = Reflect.getMetadata(metadataKey, target) || [];
         attributes.push(propertyKey);
@@ -12,10 +12,10 @@ export function fillable() {
     }
 }
 
-export function getFillable(target: ResourceEntity): string[] {
+export function getFillable<T>(target: ResourceEntity<T>): string[] {
     return Reflect.getMetadata(metadataKey, target) || [];
 }
 
-export function isFillable(target: ResourceEntity, propertyKey: string): boolean {
+export function isFillable<T>(target: ResourceEntity<T>, propertyKey: string): boolean {
     return Reflect.getMetadata(metadataKey, target, propertyKey) || false;
 }
