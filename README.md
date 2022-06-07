@@ -53,14 +53,25 @@ import Client from 'amocrm-js';
 ## Содержание
 
 1. [Подключение к CRM](#connection)
+2. [Запросы к порталу](#requests)
+3. [Основные методы](#request-methods)
+4. [Компоненты](#components)
+5. [Работа с событиями](#events)
+6. [Обработка ошибок](#errors)
+7. [Сохранение авторизации между сессиями](#session)
+8. [Переход с версии 2.x.x](#v2-migration)
 
-## Подключение к CRM <a id="connection"></a>
+<a id="connection"></a>
+## Подключение к CRM
 
 Подключение возможно:
 
 1. По заранее известному коду авторизации
    (например, с помощью [упрощённой авторизации](https://www.amocrm.ru/developers/content/oauth/easy-auth))
 2. С помощью встроенного OAuth-сервера (см. пример ниже)
+
+После успешного подключения клиент автоматически получает новый токен
+по истечению старого перед формированием запроса
 
 ### Код авторизации известен
 
@@ -160,6 +171,8 @@ const client = new Client({
 });
 ```
 
+<a id="requests"></a>
+
 ## Запросы к порталу
 
 С указанием метода:
@@ -178,6 +191,7 @@ console.log(result.response);
 console.log(result.response.statusCode);
 ```
 
+<a id="request-methods"></a>
 ## Методы *client.request*: GET, POST, PATCH
 
 ### GET
@@ -230,10 +244,7 @@ const response = await client.request.patch( '/api/v4/leads', [
  )
 ```
 
-## OAuth
-
-Клиент автоматически получает новый токен по истечению старого перед формированием запроса
-
+<a id="components"></a>
 ## Компоненты
 
 ### client.environment
@@ -362,13 +373,15 @@ client.connection.on('change', () => {
 })
 ```
 
-## Работа с событиями
+<a id="events"></a>
+## Работа с событиями 
 
-Все компоненты приложения (auth, token, connection) унаследованы от класса
+Компоненты Auth, Token, Connection унаследованы от класса
 [EventEmitter](https://nodejs.org/api/events.html). То есть они все поддерживают
 методы подписки на события (on, off, removeAllListeners) и отписки от них, принятые в EventEmitter.
 
-## Ошибки
+<a id="errors"></a>
+## Обработка ошибок 
 
 - NO_JSON_RESPONSE. Пустой ответ
 - INVALID_JSON_RESPONSE. Некорректный JSON вет
@@ -380,6 +393,7 @@ client.connection.on('change', () => {
 - INVALID_PATH. Неверный
 - NO_AUTH_OPTIONS. Отсутствуют настройки config.auth
 
+<a id="session"></a>
 ## Сохранение авторизации между сессиями
 
 Может быть полезным сохранять авторизацию между запусками приложения. Для этого есть событие `change`
@@ -403,6 +417,7 @@ client.connection.on('change', () => {
   }
 ```
 
+<a id="v2-migration"></a>
 ## Переход с версии 2.x.x
 
 ### Методы
