@@ -1,9 +1,17 @@
+/**
+ * Декоратор, помечающий свойство сущности как поле для синхронизации с AmoCRM
+ * Только свойства, помеченные как @fillable будут
+ * отправляться при вызове create, update, fetch методов экземпляра сущности
+ * */
 import ResourceEntity from "../../ResourceEntity";
 
 const metadataKey = Symbol('fillable');
 
+/**
+ * Помечает свойство сущности для синхронизации
+ * */
 export function fillable<T>() {
-    return (target: any, propertyKey: string) => {
+    return (target: ResourceEntity<any>, propertyKey: string) => {
         const attributes = Reflect.getMetadata(metadataKey, target) || [];
         attributes.push(propertyKey);
 
@@ -12,10 +20,16 @@ export function fillable<T>() {
     }
 }
 
+/**
+ * @returns массив полей сущности, которые синхронизируются с порталом
+ * */
 export function getFillable<T>(target: ResourceEntity<T>): string[] {
     return Reflect.getMetadata(metadataKey, target) || [];
 }
 
+/**
+ * @returns синхронизируется ли поле сущности c порталом
+ * */
 export function isFillable<T>(target: ResourceEntity<T>, propertyKey: string): boolean {
     return Reflect.getMetadata(metadataKey, target, propertyKey) || false;
 }

@@ -1,6 +1,8 @@
+/**
+ * Сделка (сущность)
+ */
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
-import schema from '../../schema/v4';
 import { fillable } from "./decorators/fillable";
 import { IRequestOptions } from "../../interfaces/common";
 import LeadFactory, { LeadsGetByIdCriteria } from "../factories/LeadFactory";
@@ -53,10 +55,30 @@ export default class Lead extends ResourceEntity<LeadFactory> {
     @fillable()
     public _embedded?: JSONObject;
 
+    /**
+     * @returns присутствует ли сущность на портале AmoCRM
+     * */
     isNew() {
         return this.id !== undefined;
     }
 
+    /**
+     * Добавляет сущность на портал AmoCRM
+     * @example
+     * ```ts
+     * const lead = new client.Lead({
+     *     name: "Walter White"
+     * });
+     * await lead.create();
+     * ```
+     * @example
+     * ```ts
+     * const lead = new client.Lead;
+     * lead.name = "Walter White";
+     * await lead.create();
+     * ```
+     * @returns ссылка на созданную сущность
+     * */
     async create(options?: IRequestOptions) {
         const criteria = [this];
         const [lead] = await this.factory.create(criteria, options);
@@ -65,6 +87,17 @@ export default class Lead extends ResourceEntity<LeadFactory> {
         return lead;
     }
 
+    /**
+     * Обновляет сущность на портале AmoCRM.
+     * @param options настройки запроса и обработки результата
+     * @example
+     * ```ts
+     * const lead = await client.leads.getById(123);
+     * lead.name = "Walter White";
+     * await lead.update();
+     * ```
+     * @returns ссылка на обновлённую сущность
+     * */
     async update(options?: IRequestOptions) {
         const criteria = [this];
         const [lead] = await this.factory.update(criteria, options);
@@ -73,11 +106,32 @@ export default class Lead extends ResourceEntity<LeadFactory> {
         return lead;
     }
 
+    /**
+     * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
+     * @param options настройки запроса и обработки результата
+     * */
+    save(options?: IRequestOptions) {
+        if (this.isNew()) {
+            return this.create(options);
+        }
+        return this.update(options);
+    }
+
+    /**
+     * Получает содержимое сущности на портале
+     * @param criteria фильтр для уточнения результатов запроса
+     * @param options настройки запроса и обработки результата
+     * @example
+     * ```ts
+     * const lead = new client.Lead({ id: 123 });
+     * await lead.fetch();
+     * ```
+     * */
     async fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions) {
         if (this.isNew()) {
             return false;
         }
-        const lead = await this.factory.getById(this, criteria, options);
+        const lead = await this.factory.getById(<number>this.id, criteria, options);
 
         this.emit('fetch');
         return lead;
