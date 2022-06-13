@@ -1,6 +1,7 @@
 import "./bootstrap";
 import config from "./config";
 import Client from "../src/Client";
+import ES6Client from '../dist/Client';
 
 describe('Client', () => {
     test('basic creation', () => {
@@ -43,5 +44,12 @@ describe('Client', () => {
         const env1 = client1.environment.get();
         const env2 = client2.environment.get();
         expect(env1).not.toStrictEqual(env2);
+    });
+    test.only('default ES6 import', async () => {
+        const instance = new ES6Client({
+            domain: 'test',
+            auth: config.auth
+        });
+        expect(instance).toBeDefined();
     });
 })
