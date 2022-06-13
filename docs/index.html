@@ -7,7 +7,7 @@
 <a href="https://github.com/UsefulWeb/AmoCRM/blob/master/LICENSE"><img src="https://img.shields.io/github/license/UsefulWeb/AmoCRM" alt="GitHub license"></a></p>
 <p>NodeJS библиотека для работы с AmoCRM.</p>
 <blockquote>
-<p>:warning: **Для возможности ES6 импорта **</p>
+<p>:warning: Изменился способ подключения основного класса библиотеки</p>
 </blockquote>
 <p>Было:</p>
 <pre><code class="language-js"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">Client</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;amocrm-js&#39;</span><span class="hl-1">);</span>
@@ -15,6 +15,9 @@
 <p>Стало</p>
 <pre><code class="language-js"><span class="hl-0">const</span><span class="hl-1"> { </span><span class="hl-2">Client</span><span class="hl-1"> } = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;amocrm-js&#39;</span><span class="hl-1">);</span>
 </code></pre>
+<blockquote>
+<p>:warning: В целях обратной совместимости старый способ работает. В будущих версиях он будет убран</p>
+</blockquote>
 <p>Документация: <a href="https://usefulweb.github.io/AmoCRM">https://usefulweb.github.io/AmoCRM</a></p>
 <p><strong>Не предназначена для Frontend приложений</strong></p>
 <p>Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4.</p>
