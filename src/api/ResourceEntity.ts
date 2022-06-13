@@ -3,6 +3,9 @@ import { IResourceEntity } from "../interfaces/api";
 import { getFillable, isFillable } from "./activeRecords/decorators/fillable";
 import EventEmitter from "../common/EventEmitter";
 
+/**
+ * Основной класс сущностей
+ * */
 export default class ResourceEntity<T> extends EventEmitter implements IResourceEntity {
     [index: string]: any;
     protected readonly factory: T;
@@ -13,6 +16,9 @@ export default class ResourceEntity<T> extends EventEmitter implements IResource
         this.factory = factory;
     }
 
+    /**
+     * Возвращает все атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
+     * */
     getAttributes(): JSONObject {
         return getFillable(this)
             .reduce((target: JSONObject, key) => {
@@ -23,7 +29,10 @@ export default class ResourceEntity<T> extends EventEmitter implements IResource
             }, {});
     }
 
-    setAttributes(attributes?: JSONObject) {
+    /**
+     * Устанавливает атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
+     * */
+    setAttributes(attributes?: JSONObject): void {
         if (!attributes) {
             return;
         }

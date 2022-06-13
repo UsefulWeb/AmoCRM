@@ -45,11 +45,6 @@ yarn add amocrm-js
 const Client = require('amocrm-js');
 ```
 
-ES6:
-```js
-import Client from 'amocrm-js';
-```
-
 ## Содержание
 
 1. [Подключение к CRM](#connection)
@@ -172,7 +167,6 @@ const client = new Client({
 ```
 
 <a id="requests"></a>
-
 ## Запросы к порталу
 
 С указанием метода:

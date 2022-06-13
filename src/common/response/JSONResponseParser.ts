@@ -4,6 +4,9 @@ import { IAPIResponse, IResponseParser } from "../../interfaces/common";
 import APIResponseError from "../APIResponseError";
 import { JSONObject } from "../../types";
 
+/**
+ * Преобразует ответ портала в JSON-объект
+ * */
 export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject | null> {
     parse(apiResponse: IAPIResponse<string>) {
         const { response } = apiResponse;

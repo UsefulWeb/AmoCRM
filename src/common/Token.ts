@@ -5,6 +5,10 @@ import Environment from "./Environment";
 import DomainRequest from "./DomainRequest";
 import { TStringValueObject } from "../types";
 
+/**
+ * Компонент управления текущим oAuth-токеном
+ * Доступен как client.token
+ * */
 export default class Token extends EventEmitter {
     protected value?: ITokenData;
     protected expiresAt?: Date;
@@ -16,6 +20,9 @@ export default class Token extends EventEmitter {
         this.environment = environment;
     }
 
+    /**
+     * Проверяет, истёк ли токен
+     * */
     isExpired(): boolean {
         this.emit('expirationCheck');
         const now = new Date;
@@ -25,15 +32,24 @@ export default class Token extends EventEmitter {
         return now > this.expiresAt;
     }
 
+    /**
+     * Стирает информацию о текущем токене
+     * */
     clear() {
         this.value = undefined;
         delete this.expiresAt;
     }
 
+    /**
+     * Проверяет, существует ли текущий токен
+     * */
     exists() {
         return this.value !== undefined;
     }
 
+    /**
+     * Устанавливает текущее значение токена
+     * */
     setValue(value: ITokenData) {
         this.emit('beforeChange');
         this.value = value;
@@ -48,11 +64,17 @@ export default class Token extends EventEmitter {
         this.emit('change');
     }
 
+    /**
+     * Возвращает текущее значение токена
+     * */
     getValue() {
         return this.value;
     }
 
-    getBaseClientOptions() {
+    /**
+     * Возвращает базовые настройки клиентского приложения AmoCRM: id, secret, redirect_uri
+     * */
+    protected getBaseClientOptions() {
         const auth = this.environment.get<IAuthOptions>('auth');
         if (!auth) {
             throw new Error('NO_AUTH_OPTIONS');
@@ -70,6 +92,9 @@ export default class Token extends EventEmitter {
         };
     }
 
+    /**
+     * Получает токен по коду авторизации
+     * */
     async fetch() {
         this.emit( 'beforeFetch');
         const baseClientOptions = this.getBaseClientOptions();
@@ -90,6 +115,9 @@ export default class Token extends EventEmitter {
         return tokenResponse;
     }
 
+    /**
+     * Обновляет токен по значению refresh_token
+     * */
     async refresh() {
         this.emit( 'beforeRefresh', this );
         const baseClientOptions = this.getBaseClientOptions();

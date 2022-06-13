@@ -3,6 +3,9 @@ import EventEmitter from "./EventEmitter";
 import { IAuthServerOptions } from "../interfaces/common";
 import { TStringValueObject } from "../types";
 
+/**
+ * Простой сервер авторизации для получения OAuth-токена
+ * */
 export default class AuthServer extends EventEmitter {
     protected readonly options: IAuthServerOptions;
     protected instance?: http.Server;
@@ -10,6 +13,11 @@ export default class AuthServer extends EventEmitter {
         super();
         this.options = options;
     }
+
+    /**
+     * Запускает сервер на заданном в {@link options} порту
+     * */
+
     run() {
         const { port } = this.options;
         const handler = this.handle.bind(this);
@@ -19,11 +27,17 @@ export default class AuthServer extends EventEmitter {
             .createServer(handler)
             .listen(port, onListenStart);
     }
+    /**
+     * Обработчик успешного запуска сервера
+     * */
     onListenStart() {
         const { port } = this.options;
         console.log(`auth server listening on port ${port}`);
         this.emit('listen');
     }
+    /**
+     * Останавливает сервер
+     * */
     stop(): Promise<void> {
         return new Promise((resolve, reject) => {
             if (this.instance === undefined) {
@@ -40,6 +54,9 @@ export default class AuthServer extends EventEmitter {
                 });
         });
     }
+    /**
+     * Обработчик запроса, поступающего на адрес запущенного сервера
+     * */
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
         const { url } = request;
         console.log('handled auth server callback');

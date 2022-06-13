@@ -1,7 +1,8 @@
 import { IClientOptions } from "../interfaces/common";
 
 /**
- * Доступен как компонент client.environment.
+ * Компонент настроек окружения.
+ * Доступен как client.environment
  * Хранит и меняет настройки:
  * - переданные при создании экземпляра {@link Client}
  * - изменённые в процессе работы с помощью {@link Environment.set}

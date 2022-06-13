@@ -1,5 +1,8 @@
 import * as http from "http";
 
+/**
+ * Класс ошибки API портала
+ * */
 export default class APIResponseError extends Error {
     public readonly apiResponse: object;
     public readonly response: http.IncomingMessage;

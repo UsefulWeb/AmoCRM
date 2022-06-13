@@ -6,6 +6,10 @@ import DomainRequest from "./DomainRequest";
 import AuthServer from "./AuthServer";
 import Auth from "./Auth";
 
+/**
+ * Компонент управления соединением с порталом
+ * Доступен как client.connection
+ * */
 export default class Connection extends EventEmitter {
     protected readonly token: Token;
     protected readonly environment: Environment;
@@ -21,6 +25,10 @@ export default class Connection extends EventEmitter {
         this.auth = auth;
     }
 
+    /**
+     * При отсуствии OAuth-токена пытается его получить
+     * При устаревшем OAuth-токене пытается его обновить
+     * */
     async update(): Promise<boolean> {
         if (!this.connected) {
             return await this.connect();
@@ -34,12 +42,20 @@ export default class Connection extends EventEmitter {
         return true;
     }
 
+    /**
+     * Проверяет, не истёк ли токен авторизации
+     * */
     public isTokenExpired(): boolean {
         const expired = this.token.isExpired();
         this.connected = !expired;
         return expired;
     }
 
+    /**
+     * Устанавливает соединение с порталом
+     * При наличии сервера авторизации, пытается через него получить код авторизации
+     * При наличии кода, пытается получить OAuth-токен
+     * */
     async connect(): Promise<boolean> {
         if (this.connected) {
             return true;
@@ -80,6 +96,10 @@ export default class Connection extends EventEmitter {
         }
     }
 
+    /**
+     * Запускает сервер авторизации и ожидает перехода пользователя
+     * по OAuth-адресу. Адрес можно получить с помощью {@link Auth.getUrl | client.auth.getUrl}
+     * */
     protected async waitForUserAction(): Promise<boolean> {
         if (this.authServer) {
             return false;
@@ -102,7 +122,7 @@ export default class Connection extends EventEmitter {
 
         await server.stop();
 
-        this.authServer.unsubsscribe(this);
+        this.authServer.unsubscribe(this);
         this.authServer = null;
 
         this.environment.set('auth.code', code);
@@ -110,6 +130,10 @@ export default class Connection extends EventEmitter {
         return this.connect();
     }
 
+    /**
+     * Формирует запрос к порталу. Предварительно проверяет наличие соединения
+     * При его отсутствии пытается его установить
+     * */
     async makeRequest(method: string, url: string, data?: object, options?: IRequestOptions) {
         await this.update();
         const token = this.token.getValue();

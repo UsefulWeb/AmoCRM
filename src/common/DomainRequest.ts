@@ -9,6 +9,9 @@ import {HttpMethod} from "../enums";
 import EventEmitter from "./EventEmitter";
 import JSONResponseParser from "./response/JSONResponseParser";
 
+/**
+ * Класс запросов к порталу AmoCRM
+ * */
 export default class DomainRequest extends EventEmitter {
     protected readonly hostname: string;
 
@@ -124,7 +127,6 @@ export default class DomainRequest extends EventEmitter {
             request.end();
         });
     }
-
 
     protected onResponse(callback: CallableFunction) {
         let buffer: Buffer[] = [];

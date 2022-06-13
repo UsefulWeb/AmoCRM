@@ -3,6 +3,10 @@ import { TStringValueObject } from "../types";
 import Connection from "./Connection";
 import EventEmitter from "./EventEmitter";
 
+/**
+ * Компонент запросов к серверу.
+ * Доступен как client.request
+ * */
 export default class ClientRequest extends EventEmitter {
     protected readonly connection: Connection;
     constructor(connection: Connection) {

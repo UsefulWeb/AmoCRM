@@ -131,7 +131,8 @@ export default class Lead extends ResourceEntity<LeadFactory> {
         if (this.isNew()) {
             return false;
         }
-        const lead = await this.factory.getById(<number>this.id, criteria, options);
+        const id = <number>this.id;
+        const lead = await this.factory.getById(id, criteria, options);
 
         this.emit('fetch');
         return lead;
