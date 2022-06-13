@@ -1,7 +1,7 @@
 import "./bootstrap";
 import config from "./config";
-import Client from "../src/Client";
-import ES6Client from '../dist/Client';
+import { Client } from "../src/Client";
+import { Client as ES6Client } from '../dist/Client';
 
 describe('Client', () => {
     test('basic creation', () => {

@@ -1,5 +1,5 @@
 import Connection from "../src/common/Connection";
-import Client from "../src/Client";
+import { Client } from "../src/Client";
 import config from "./config";
 
 let client: Client;

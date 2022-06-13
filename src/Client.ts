@@ -15,7 +15,7 @@ import { IEntityConstructor, IResourceFactory } from "./interfaces/api";
 /**
  * Основной класс библиотеки
  * */
-export default class Client extends EventEmitter {
+export class Client extends EventEmitter {
     public readonly token: Token;
     public readonly environment: Environment;
     public readonly request: ClientRequest;
@@ -56,5 +56,3 @@ export default class Client extends EventEmitter {
         }
     }
 }
-
-module.exports = Client;

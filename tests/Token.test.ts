@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import './bootstrap';
-import Client from "../src/Client";
+import { Client } from "../src/Client";
 import config, { CODE } from "./config";
 import { ITokenData } from "../src/interfaces/common";
 

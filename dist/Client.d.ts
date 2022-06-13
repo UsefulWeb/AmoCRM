@@ -12,7 +12,7 @@ import { IEntityConstructor, IResourceFactory } from "./interfaces/api";
 /**
  * Основной класс библиотеки
  * */
-export default class Client extends EventEmitter {
+export declare class Client extends EventEmitter {
     readonly token: Token;
     readonly environment: Environment;
     readonly request: ClientRequest;

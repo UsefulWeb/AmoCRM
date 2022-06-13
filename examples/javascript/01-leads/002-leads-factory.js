@@ -1,4 +1,4 @@
-const client = require('../client');
+const { Client } = require('../client');
 
 const run = async () => {
     /*

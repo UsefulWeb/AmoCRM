@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import Client from "../../../src/Client";
+import { Client } from "../../../src/Client";
 import config from "../../config";
 jest.setTimeout(60 * 1000);
 

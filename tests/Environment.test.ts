@@ -1,6 +1,6 @@
 import "./bootstrap";
 import config from "./config";
-import Client from "../src/Client";
+import { Client } from "../src/Client";
 
 describe('Environment', () => {
     test('set', () => {

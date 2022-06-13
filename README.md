@@ -6,6 +6,18 @@
 
 NodeJS библиотека для работы с AmoCRM.
 
+> :warning: **Для возможности ES6 импорта **
+
+Было:
+```js
+const Client = require('amocrm-js');
+```
+
+Стало
+```js
+const { Client } = require('amocrm-js');
+```
+
 Документация: https://usefulweb.github.io/AmoCRM
 
 __Не предназначена для Frontend приложений__
@@ -46,7 +58,14 @@ yarn add amocrm-js
 ## Использование
 
 ```js
-const Client = require('amocrm-js');
+const { Client } = require('amocrm-js');
+```
+
+
+ES6:
+
+```js
+import { Client } from 'amocrm-js'
 ```
 
 ## Содержание
@@ -300,7 +319,7 @@ const response = await client.request.patch( '/api/v4/leads', [
 Получить настройки, переданные конструктору Client
 
 ```js
-const Client = require('amocrm-js');
+const { Client } = require('amocrm-js');
 
 const client = new Client({
     // логин пользователя в портале, где адрес портала domain.amocrm.ru
