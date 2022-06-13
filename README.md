@@ -6,7 +6,7 @@
 
 NodeJS библиотека для работы с AmoCRM.
 
-> :warning: **Для возможности ES6 импорта **
+> :warning: Изменился способ подключения основного класса библиотеки
 
 Было:
 ```js
@@ -17,6 +17,8 @@ const Client = require('amocrm-js');
 ```js
 const { Client } = require('amocrm-js');
 ```
+
+> :warning: В целях обратной совместимости старый способ работает. В будущих версиях он будет убран
 
 Документация: https://usefulweb.github.io/AmoCRM
 
