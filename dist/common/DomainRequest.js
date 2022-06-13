@@ -1,31 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var qs = tslib_1.__importStar(require("qs"));
-var https = tslib_1.__importStar(require("https"));
-var enums_1 = require("../enums");
-var EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
-var JSONResponseParser_1 = tslib_1.__importDefault(require("./response/JSONResponseParser"));
-var DomainRequest = /** @class */ (function (_super) {
-    tslib_1.__extends(DomainRequest, _super);
-    function DomainRequest(config) {
-        var _this = _super.call(this) || this;
-        _this.config = config;
-        _this.hostname = _this.getHostname();
-        return _this;
+const tslib_1 = require("tslib");
+const qs = tslib_1.__importStar(require("qs"));
+const https = tslib_1.__importStar(require("https"));
+const enums_1 = require("../enums");
+const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const JSONResponseParser_1 = tslib_1.__importDefault(require("./response/JSONResponseParser"));
+/**
+ * Класс запросов к порталу AmoCRM
+ * */
+class DomainRequest extends EventEmitter_1.default {
+    constructor(config) {
+        super();
+        this.config = config;
+        this.hostname = this.getHostname();
     }
-    DomainRequest.prototype.isFormData = function () {
-        var options = this.config.options;
+    isFormData() {
+        const { options } = this.config;
         if (options === null || options === void 0 ? void 0 : options.useFormData) {
             return true;
         }
         return false;
-    };
-    DomainRequest.prototype.getHeaders = function () {
+    }
+    getHeaders() {
         var _a;
-        var baseHeaders = ((_a = this.config.options) === null || _a === void 0 ? void 0 : _a.headers) || {};
-        var _b = this.config, token = _b.token, method = _b.method;
-        var clientHeaders = {};
+        const baseHeaders = ((_a = this.config.options) === null || _a === void 0 ? void 0 : _a.headers) || {};
+        const { token, method } = this.config;
+        const clientHeaders = {};
         if (token) {
             clientHeaders['Authorization'] = 'Bearer ' + token.access_token;
         }
@@ -35,13 +36,13 @@ var DomainRequest = /** @class */ (function (_super) {
         else if (method !== enums_1.HttpMethod.GET) {
             clientHeaders['Content-Type'] = 'application/json';
         }
-        return tslib_1.__assign(tslib_1.__assign({}, baseHeaders), clientHeaders);
-    };
-    DomainRequest.prototype.getMethod = function () {
+        return Object.assign(Object.assign({}, baseHeaders), clientHeaders);
+    }
+    getMethod() {
         return this.config.method;
-    };
-    DomainRequest.prototype.getData = function () {
-        var _a = this.config, data = _a.data, method = _a.method;
+    }
+    getData() {
+        const { data, method } = this.config;
         if (method === enums_1.HttpMethod.GET) {
             return;
         }
@@ -49,100 +50,91 @@ var DomainRequest = /** @class */ (function (_super) {
             return qs.stringify(data);
         }
         return JSON.stringify(data);
-    };
-    DomainRequest.prototype.getLocation = function () {
-        var url = this.config.url;
-        var re = /^https?:\/\//i;
+    }
+    getLocation() {
+        const { url } = this.config;
+        const re = /^https?:\/\//i;
         if (!re.test(url)) {
-            var fullURL = "https://".concat(this.hostname).concat(url);
+            const fullURL = `https://${this.hostname}${url}`;
             return new URL(fullURL);
         }
         return new URL(url);
-    };
-    DomainRequest.prototype.getPath = function () {
-        var _a = this.config, method = _a.method, data = _a.data, url = _a.url;
+    }
+    getPath() {
+        const { method, data, url } = this.config;
         if (method !== enums_1.HttpMethod.GET) {
             return url;
         }
-        var location = this.getLocation();
-        var path = location.pathname;
-        var queryStringData = Object.fromEntries(location.searchParams);
-        var mergedData = tslib_1.__assign(tslib_1.__assign({}, data), queryStringData);
-        var queryString = qs.stringify(mergedData);
+        const location = this.getLocation();
+        const path = location.pathname;
+        const queryStringData = Object.fromEntries(location.searchParams);
+        const mergedData = Object.assign(Object.assign({}, data), queryStringData);
+        const queryString = qs.stringify(mergedData);
         if (!queryString) {
             return path;
         }
         return path + '?' + queryString;
-    };
-    DomainRequest.prototype.getHostname = function () {
-        var domain = this.config.domain;
+    }
+    getHostname() {
+        const { domain } = this.config;
         if (domain.includes('.')) {
             return domain;
         }
         return domain + '.amocrm.ru';
-    };
-    DomainRequest.prototype.process = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var apiResponse;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.makeRequest()];
-                    case 1:
-                        apiResponse = _a.sent();
-                        return [2 /*return*/, this.parseResponse(apiResponse)];
-                }
-            });
+    }
+    process() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const apiResponse = yield this.makeRequest();
+            return this.parseResponse(apiResponse);
         });
-    };
-    DomainRequest.prototype.parseResponse = function (apiResponse) {
-        var _a = this.config.options, options = _a === void 0 ? {} : _a;
-        var _b = options.parser, parser = _b === void 0 ? new JSONResponseParser_1.default : _b;
+    }
+    parseResponse(apiResponse) {
+        const { options = {} } = this.config;
+        const { parser = new JSONResponseParser_1.default } = options;
         return parser.parse(apiResponse);
-    };
-    DomainRequest.prototype.makeRequest = function () {
-        var _this = this;
-        var path = this.getPath();
-        var headers = this.getHeaders();
-        var data = this.getData();
-        var method = this.getMethod();
-        var hostname = this.hostname;
+    }
+    makeRequest() {
+        const path = this.getPath();
+        const headers = this.getHeaders();
+        const data = this.getData();
+        const method = this.getMethod();
+        const hostname = this.hostname;
         ;
-        var options = {
-            hostname: hostname,
-            path: path,
-            method: method,
-            headers: headers
+        const options = {
+            hostname,
+            path,
+            method,
+            headers
         };
-        var onResponse = this.onResponse.bind(this);
-        return new Promise(function (resolve, reject) {
-            var request = https.request(options, onResponse(resolve));
+        const onResponse = this.onResponse.bind(this);
+        return new Promise((resolve, reject) => {
+            const request = https.request(options, onResponse(resolve));
             if (method !== enums_1.HttpMethod.GET && data) {
                 request.write(data);
             }
-            request.on('error', _this.onError(reject));
+            request.on('error', this.onError(reject));
             request.end();
         });
-    };
-    DomainRequest.prototype.onResponse = function (callback) {
-        var buffer = [];
-        var onResponseData = function (chunk) { return buffer.push(chunk); };
-        var onResponseEnd = function (response) { return function () {
-            var data = buffer.join('');
-            var result = {
-                response: response,
-                data: data
+    }
+    onResponse(callback) {
+        let buffer = [];
+        const onResponseData = (chunk) => buffer.push(chunk);
+        const onResponseEnd = (response) => () => {
+            const data = buffer.join('');
+            const result = {
+                response,
+                data
             };
             return callback(result);
-        }; };
-        return function (response) {
+        };
+        return (response) => {
             response.on('data', onResponseData);
             response.on('end', onResponseEnd(response));
         };
-    };
-    DomainRequest.prototype.onError = function (callback) {
-        return function (error) { return callback(error); };
-    };
-    return DomainRequest;
-}(EventEmitter_1.default));
+    }
+    onError(callback) {
+        return (error) => callback(error);
+    }
+}
 exports.default = DomainRequest;
 //# sourceMappingURL=DomainRequest.js.map

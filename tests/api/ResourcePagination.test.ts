@@ -10,7 +10,7 @@ jest.setTimeout(60 * 1000);
 let client: Client;
 
 beforeEach(() => {
-    const file = path.resolve(__dirname, '../token.json');
+    const file = path.resolve(__dirname, '../token.js');
     const json = fs.readFileSync(file).toString();
     const data = JSON.parse(json);
     client = new Client(config);
@@ -19,7 +19,7 @@ beforeEach(() => {
     client.token.on('change', () => {
         const token = client.token.getValue();
         const data = JSON.stringify(token);
-        const file = path.resolve(__dirname, 'token.json');
+        const file = path.resolve(__dirname, 'token.js');
         fs.writeFileSync(file, data);
     });
 });

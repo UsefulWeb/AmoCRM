@@ -21,6 +21,7 @@ export interface IResourcePagination<T> {
 }
 
 export interface IPaginationLinks {
+    current?: string;
     next?: string;
     prev?: string;
     first?: string;

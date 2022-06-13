@@ -1,5 +1,5 @@
 const ngrok = require('ngrok');
-const Client = require('../../dist/Client'); // заменить на amocrm-js
+const Client = require('amocrm-js');
 
 const run = async () => {
     const port = 3000;

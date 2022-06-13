@@ -2,23 +2,51 @@ import EventEmitter from "./EventEmitter";
 import { IAPIResponse, ITokenData } from "../interfaces/common";
 import Environment from "./Environment";
 import { TStringValueObject } from "../types";
+/**
+ * Компонент управления текущим oAuth-токеном
+ * Доступен как client.token
+ * */
 export default class Token extends EventEmitter {
     protected value?: ITokenData;
     protected expiresAt?: Date;
     protected code?: string;
     protected readonly environment: Environment;
     constructor(environment: Environment);
+    /**
+     * Проверяет, истёк ли токен
+     * */
     isExpired(): boolean;
+    /**
+     * Стирает информацию о текущем токене
+     * */
     clear(): void;
+    /**
+     * Проверяет, существует ли текущий токен
+     * */
     exists(): boolean;
+    /**
+     * Устанавливает текущее значение токена
+     * */
     setValue(value: ITokenData): void;
+    /**
+     * Возвращает текущее значение токена
+     * */
     getValue(): ITokenData | undefined;
-    getBaseClientOptions(): {
+    /**
+     * Возвращает базовые настройки клиентского приложения AmoCRM: id, secret, redirect_uri
+     * */
+    protected getBaseClientOptions(): {
         client_id: string;
         client_secret: string;
         redirect_uri: string;
     };
+    /**
+     * Получает токен по коду авторизации
+     * */
     fetch(): Promise<ITokenData | undefined>;
+    /**
+     * Обновляет токен по значению refresh_token
+     * */
     refresh(): Promise<ITokenData | undefined>;
     handleResponse(apiResponse: IAPIResponse<ITokenData>): ITokenData | undefined;
     protected makeRequest(data: TStringValueObject): Promise<IAPIResponse<ITokenData>>;

@@ -1,23 +1,32 @@
+import ClientRequest from "../common/ClientRequest";
 import { JSONObject } from "../types";
+import { IRequestOptions } from "./common";
 export interface IResourceFactory<T> {
-    create(attributes?: JSONObject): T;
+    createEntity(): IResourceEntity;
+    from(attributes?: JSONObject): T;
 }
 export interface IResourceEntity {
+    setAttributes(attributes?: JSONObject): void;
+}
+export interface IResourceEntityConstructor<T> {
+    from(request: ClientRequest, attributes?: JSONObject): T;
 }
 export interface IResourcePagination<T> {
     fetch(): void;
     getData(): T[];
 }
 export interface IPaginationLinks {
+    current?: string;
     next?: string;
     prev?: string;
     first?: string;
 }
 export interface IResourcePaginationParams<T> {
     url: string;
-    criteria: object;
+    criteria?: object;
     factory: IResourceFactory<T>;
     embedded: string;
+    options?: IRequestOptions;
 }
 export interface ILinkResponse {
     href: string;

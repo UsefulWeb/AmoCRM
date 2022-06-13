@@ -1,9 +1,51 @@
 import { IClientOptions } from "../interfaces/common";
+/**
+ * Компонент настроек окружения.
+ * Доступен как client.environment
+ * Хранит и меняет настройки:
+ * - переданные при создании экземпляра {@link Client}
+ * - изменённые в процессе работы с помощью {@link Environment.set}
+ * */
 declare class Environment {
     protected readonly options: IClientOptions;
     constructor(options: IClientOptions);
+    /**
+     * Возвращает настройки приложения
+     * @param path - путь к настройке(ам)
+     * @example
+     * ```ts
+     * client.environment.get()
+     * ```
+     * без значения метод вернёт объект текущих настроек
+     * @example
+     * ```ts
+     * client.environment.get('domain')
+     * ```
+     * вернёт имя домена портала
+     * @example
+     * ```ts
+     * client.environment.get('auth')
+     * ```
+     * вернёт объект настроек авторизации
+     * @example
+     * ```ts
+     * client.environment.get('auth.client_id')
+     * ```
+     * вернёт id OAuth-приложения AmoCRM
+     * @param defaultValue - значение, которое вернётся при отсутствии настройки
+     * @returns значение настройки. При отсутствии значения вернётся defaultValue
+     * */
     get<T>(path?: string, defaultValue?: any): T;
-    set(path: string, value?: any): void;
+    /**
+     * Устанавливает новое значение настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * @param value - новое значение
+     * */
+    set(path: string, value: any): this;
+    /**
+     * Проверяет наличие настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * */
     exists(path: string): boolean;
 }
 export default Environment;

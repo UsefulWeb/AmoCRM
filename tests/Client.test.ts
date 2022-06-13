@@ -45,7 +45,7 @@ describe('Client', () => {
         const env2 = client2.environment.get();
         expect(env1).not.toStrictEqual(env2);
     });
-    test.only('default ES6 import', async () => {
+    test('default ES6 import', async () => {
         const instance = new ES6Client({
             domain: 'test',
             auth: config.auth

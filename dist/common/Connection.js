@@ -1,159 +1,141 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
-var DomainRequest_1 = tslib_1.__importDefault(require("./DomainRequest"));
-var AuthServer_1 = tslib_1.__importDefault(require("./AuthServer"));
-var Connection = /** @class */ (function (_super) {
-    tslib_1.__extends(Connection, _super);
-    function Connection(environment, token, auth) {
-        var _this = _super.call(this) || this;
-        _this.connected = false;
-        _this.authServer = null;
-        _this.token = token;
-        _this.environment = environment;
-        _this.auth = auth;
-        return _this;
+const tslib_1 = require("tslib");
+const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const DomainRequest_1 = tslib_1.__importDefault(require("./DomainRequest"));
+const AuthServer_1 = tslib_1.__importDefault(require("./AuthServer"));
+/**
+ * Компонент управления соединением с порталом
+ * Доступен как client.connection
+ * */
+class Connection extends EventEmitter_1.default {
+    constructor(environment, token, auth) {
+        super();
+        this.connected = false;
+        this.authServer = null;
+        this.token = token;
+        this.environment = environment;
+        this.auth = auth;
     }
-    Connection.prototype.update = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!!this.connected) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.connect()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        if (!(this.token.exists() && this.isTokenExpired())) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.token.refresh()];
-                    case 3:
-                        _a.sent();
-                        return [2 /*return*/, this.isTokenExpired()];
-                    case 4: return [2 /*return*/, true];
-                }
-            });
+    /**
+     * При отсуствии OAuth-токена пытается его получить
+     * При устаревшем OAuth-токене пытается его обновить
+     * */
+    update() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            if (!this.connected) {
+                return yield this.connect();
+            }
+            if (this.token.exists() && this.isTokenExpired()) {
+                yield this.token.refresh();
+                return this.isTokenExpired();
+            }
+            return true;
         });
-    };
-    Connection.prototype.isTokenExpired = function () {
-        var expired = this.token.isExpired();
+    }
+    /**
+     * Проверяет, не истёк ли токен авторизации
+     * */
+    isTokenExpired() {
+        const expired = this.token.isExpired();
         this.connected = !expired;
         return expired;
-    };
-    Connection.prototype.connect = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var code, hasCode, hasAuthServer, tokenExists, e_1;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (this.connected) {
-                            return [2 /*return*/, true];
-                        }
-                        this.emit('beforeConnect');
-                        code = this.environment.get('auth.code');
-                        hasCode = Boolean(code);
-                        hasAuthServer = this.environment.exists('auth.server');
-                        tokenExists = this.token.exists();
-                        if (!(!hasCode && hasAuthServer)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.waitForUserAction()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, true];
-                    case 2:
-                        if (!(tokenExists && this.isTokenExpired())) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.token.refresh()];
-                    case 3:
-                        _a.sent();
-                        this.connected = this.token.isExpired();
-                        return [2 /*return*/, this.connected];
-                    case 4:
-                        if (tokenExists) {
-                            this.connected = true;
-                            return [2 /*return*/, this.connected];
-                        }
-                        if (!hasCode && !tokenExists) {
-                            throw new Error('NO_TOKEN_AND_CODE');
-                        }
-                        _a.label = 5;
-                    case 5:
-                        _a.trys.push([5, 7, , 8]);
-                        return [4 /*yield*/, this.token.fetch()];
-                    case 6:
-                        _a.sent();
-                        this.emit('connected');
-                        this.connected = true;
-                        return [2 /*return*/, true];
-                    case 7:
-                        e_1 = _a.sent();
-                        this.emit('connectionError', e_1);
-                        throw e_1;
-                    case 8: return [2 /*return*/];
-                }
-            });
+    }
+    /**
+     * Устанавливает соединение с порталом
+     * При наличии сервера авторизации, пытается через него получить код авторизации
+     * При наличии кода, пытается получить OAuth-токен
+     * */
+    connect() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            if (this.connected) {
+                return true;
+            }
+            this.emit('beforeConnect');
+            const code = this.environment.get('auth.code');
+            const hasCode = Boolean(code);
+            const hasAuthServer = this.environment.exists('auth.server');
+            const tokenExists = this.token.exists();
+            if (!hasCode && hasAuthServer) {
+                yield this.waitForUserAction();
+                return true;
+            }
+            if (tokenExists && this.isTokenExpired()) {
+                yield this.token.refresh();
+                this.connected = this.token.isExpired();
+                return this.connected;
+            }
+            if (tokenExists) {
+                this.connected = true;
+                return this.connected;
+            }
+            if (!hasCode && !tokenExists) {
+                throw new Error('NO_TOKEN_AND_CODE');
+            }
+            try {
+                yield this.token.fetch();
+                this.emit('connected');
+                this.connected = true;
+                return true;
+            }
+            catch (e) {
+                this.emit('connectionError', e);
+                throw e;
+            }
         });
-    };
-    Connection.prototype.waitForUserAction = function () {
+    }
+    /**
+     * Запускает сервер авторизации и ожидает перехода пользователя
+     * по OAuth-адресу. Адрес можно получить с помощью {@link Auth.getUrl | client.auth.getUrl}
+     * */
+    waitForUserAction() {
         var _a;
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var authOptions, port, state, options, server, code;
-            return tslib_1.__generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (this.authServer) {
-                            return [2 /*return*/, false];
-                        }
-                        authOptions = this.environment.get('auth');
-                        port = 3000 || ((_a = authOptions.server) === null || _a === void 0 ? void 0 : _a.port);
-                        state = this.environment.get('auth.state');
-                        options = {
-                            state: state,
-                            port: port
-                        };
-                        server = new AuthServer_1.default(options);
-                        server.subscribe(this);
-                        this.authServer = server;
-                        return [4 /*yield*/, new Promise(function (resolve) {
-                                server.on('code', resolve);
-                                server.run();
-                            })];
-                    case 1:
-                        code = _b.sent();
-                        return [4 /*yield*/, server.stop()];
-                    case 2:
-                        _b.sent();
-                        this.authServer.unsubsscribe(this);
-                        this.authServer = null;
-                        this.environment.set('auth.code', code);
-                        return [2 /*return*/, this.connect()];
-                }
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            if (this.authServer) {
+                return false;
+            }
+            const authOptions = this.environment.get('auth');
+            const port = 3000 || ((_a = authOptions.server) === null || _a === void 0 ? void 0 : _a.port);
+            const state = this.environment.get('auth.state');
+            const options = {
+                state,
+                port
+            };
+            const server = new AuthServer_1.default(options);
+            server.subscribe(this);
+            this.authServer = server;
+            const code = yield new Promise(resolve => {
+                server.on('code', resolve);
+                server.run();
             });
+            yield server.stop();
+            this.authServer.unsubscribe(this);
+            this.authServer = null;
+            this.environment.set('auth.code', code);
+            return this.connect();
         });
-    };
-    Connection.prototype.makeRequest = function (method, url, data, options) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var token, domain, config, domainRequest;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.update()];
-                    case 1:
-                        _a.sent();
-                        token = this.token.getValue();
-                        domain = this.environment.get('domain');
-                        config = {
-                            domain: domain,
-                            method: method,
-                            url: url,
-                            data: data,
-                            options: options,
-                            token: token
-                        };
-                        domainRequest = new DomainRequest_1.default(config);
-                        return [4 /*yield*/, domainRequest.process()];
-                    case 2: return [2 /*return*/, _a.sent()];
-                }
-            });
+    }
+    /**
+     * Формирует запрос к порталу. Предварительно проверяет наличие соединения
+     * При его отсутствии пытается его установить
+     * */
+    makeRequest(method, url, data, options) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            yield this.update();
+            const token = this.token.getValue();
+            const domain = this.environment.get('domain');
+            const config = {
+                domain,
+                method,
+                url,
+                data,
+                options,
+                token
+            };
+            const domainRequest = new DomainRequest_1.default(config);
+            return yield domainRequest.process();
         });
-    };
-    return Connection;
-}(EventEmitter_1.default));
+    }
+}
 exports.default = Connection;
 //# sourceMappingURL=Connection.js.map

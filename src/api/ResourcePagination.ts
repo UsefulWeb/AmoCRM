@@ -29,6 +29,16 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
     }
 
     /**
+     * Обновляет данные на текущей странице
+     * */
+    async refresh() {
+        if (!this.links.current) {
+            return false;
+        }
+        return await this.fetchUrl(this.links.current)
+    }
+
+    /**
      * Делает запрос на получение данных по заданному адресу
      * @param url адрес запроса
      * */
@@ -39,7 +49,8 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
         this.page = data?._page || 1;
         this.parseData(data);
         this.parseLinks(data);
-        return this;
+        this.links.current = url;
+        return this.data;
     }
 
     /**

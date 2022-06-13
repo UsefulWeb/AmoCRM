@@ -7,5 +7,5 @@ export declare type JSONValue = string | number | boolean | {
     [x: string]: JSONValue;
 } | Array<JSONValue>;
 export declare type JSONObject = {
-    [x: string]: JSONValue;
+    [x: string]: any;
 };

@@ -1,20 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Environment = /** @class */ (function () {
-    function Environment(options) {
+/**
+ * Компонент настроек окружения.
+ * Доступен как client.environment
+ * Хранит и меняет настройки:
+ * - переданные при создании экземпляра {@link Client}
+ * - изменённые в процессе работы с помощью {@link Environment.set}
+ * */
+class Environment {
+    constructor(options) {
         this.options = options;
     }
-    Environment.prototype.get = function (path, defaultValue) {
+    /**
+     * Возвращает настройки приложения
+     * @param path - путь к настройке(ам)
+     * @example
+     * ```ts
+     * client.environment.get()
+     * ```
+     * без значения метод вернёт объект текущих настроек
+     * @example
+     * ```ts
+     * client.environment.get('domain')
+     * ```
+     * вернёт имя домена портала
+     * @example
+     * ```ts
+     * client.environment.get('auth')
+     * ```
+     * вернёт объект настроек авторизации
+     * @example
+     * ```ts
+     * client.environment.get('auth.client_id')
+     * ```
+     * вернёт id OAuth-приложения AmoCRM
+     * @param defaultValue - значение, которое вернётся при отсутствии настройки
+     * @returns значение настройки. При отсутствии значения вернётся defaultValue
+     * */
+    get(path, defaultValue) {
         if (!this.options) {
             return defaultValue;
         }
-        var value = this.options;
+        let value = this.options;
         if (!path) {
             return value;
         }
-        var parts = path.split('.');
-        for (var _i = 0, parts_1 = parts; _i < parts_1.length; _i++) {
-            var key = parts_1[_i];
+        const parts = path.split('.');
+        for (const key of parts) {
             if (!value) {
                 return defaultValue;
             }
@@ -24,33 +56,42 @@ var Environment = /** @class */ (function () {
             return defaultValue;
         }
         return value;
-    };
-    Environment.prototype.set = function (path, value) {
+    }
+    /**
+     * Устанавливает новое значение настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * @param value - новое значение
+     * */
+    set(path, value) {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
         }
-        var handler = this.options;
-        var parts = path.split('.');
+        let handler = this.options;
+        const parts = path.split('.');
         if (parts.length === 0) {
             throw new Error('PATH_IS_EMPTY');
         }
-        for (var i = 0; i < parts.length - 1; i++) {
-            var key = parts[i];
+        for (let i = 0; i < parts.length - 1; i++) {
+            const key = parts[i];
             if (!handler[key]) {
                 handler[key] = {};
             }
             handler = handler[key];
         }
-        var lastKey = parts.pop();
+        const lastKey = parts.pop();
         if (!lastKey) {
             throw new Error('INVALID_PATH');
         }
         handler[lastKey] = value;
-    };
-    Environment.prototype.exists = function (path) {
+        return this;
+    }
+    /**
+     * Проверяет наличие настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * */
+    exists(path) {
         return this.get(path) !== undefined;
-    };
-    return Environment;
-}());
+    }
+}
 exports.default = Environment;
 //# sourceMappingURL=Environment.js.map

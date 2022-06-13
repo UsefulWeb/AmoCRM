@@ -1,29 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var EventEmitter_1 = tslib_1.__importDefault(require("../EventEmitter"));
-var APIResponseError_1 = tslib_1.__importDefault(require("../APIResponseError"));
-var JSONResponseParser = /** @class */ (function (_super) {
-    tslib_1.__extends(JSONResponseParser, _super);
-    function JSONResponseParser() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    JSONResponseParser.prototype.parse = function (apiResponse) {
-        var response = apiResponse.response;
+const tslib_1 = require("tslib");
+const EventEmitter_1 = tslib_1.__importDefault(require("../EventEmitter"));
+const APIResponseError_1 = tslib_1.__importDefault(require("../APIResponseError"));
+/**
+ * Преобразует ответ портала в JSON-объект
+ * */
+class JSONResponseParser extends EventEmitter_1.default {
+    parse(apiResponse) {
+        const { response } = apiResponse;
         if (!apiResponse.data) {
             return {
-                response: response,
+                response,
                 data: null
             };
         }
-        var data = JSON.parse(apiResponse.data);
+        const data = JSON.parse(apiResponse.data);
         this.checkErrors(data, response);
         return {
-            response: response,
-            data: data
+            response,
+            data
         };
-    };
-    JSONResponseParser.prototype.checkErrors = function (data, response) {
+    }
+    checkErrors(data, response) {
         if (!data) {
             throw new Error('NO_JSON_RESPONSE');
         }
@@ -31,10 +30,10 @@ var JSONResponseParser = /** @class */ (function (_super) {
             throw new Error('INVALID_JSON_RESPONSE');
         }
         if ('status' in data) {
+            console.error(data);
             throw new APIResponseError_1.default('API_RESPONSE_ERROR', data, response);
         }
-    };
-    return JSONResponseParser;
-}(EventEmitter_1.default));
+    }
+}
 exports.default = JSONResponseParser;
 //# sourceMappingURL=JSONResponseParser.js.map

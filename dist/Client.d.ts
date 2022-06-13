@@ -9,6 +9,9 @@ import Token from "./common/Token";
 import LeadFactory from "./api/factories/LeadFactory";
 import Lead from "./api/activeRecords/Lead";
 import { IEntityConstructor, IResourceFactory } from "./interfaces/api";
+/**
+ * Основной класс библиотеки
+ * */
 export default class Client extends EventEmitter {
     readonly token: Token;
     readonly environment: Environment;
@@ -18,5 +21,10 @@ export default class Client extends EventEmitter {
     readonly Lead: IEntityConstructor<Lead>;
     readonly leads: LeadFactory;
     constructor(options: IClientOptions);
+    /**
+     * Привязывает конструктор сущностей
+     * @param factory - фабрика сущностей
+     * @returns функция конструктор для вызова new client[Entity]
+     * */
     protected assignEntity<T>(factory: IResourceFactory<T>): IEntityConstructor<T>;
 }

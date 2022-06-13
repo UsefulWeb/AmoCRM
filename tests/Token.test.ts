@@ -114,7 +114,7 @@ describe('Token', () => {
         await client.connection.connect();
         const token = client.token.getValue();
         const data = JSON.stringify(token);
-        const file = path.resolve(__dirname, 'token.json');
+        const file = path.resolve(__dirname, 'token.js');
         fs.writeFileSync(file, data);
         const json = fs.readFileSync(file);
         expect(json).toBeDefined();

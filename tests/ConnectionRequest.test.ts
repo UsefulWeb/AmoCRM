@@ -26,7 +26,7 @@ describe('ConnectionRequest', () => {
                 ...config.auth,
             }
         });
-        const file = path.resolve(__dirname, 'token.json');
+        const file = path.resolve(__dirname, 'token.js');
         const tokenData = fs.readFileSync(file).toString();
         const token = JSON.parse(tokenData);
         client.token.setValue(token);

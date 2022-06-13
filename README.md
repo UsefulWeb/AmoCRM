@@ -6,9 +6,13 @@
 
 NodeJS библиотека для работы с AmoCRM.
 
+Документация: https://usefulweb.github.io/AmoCRM
+
 __Не предназначена для Frontend приложений__
 
 Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4.
+
+Сделайте библиотеку самой популярной в Галактике - поставьте Star ★!
 
 По вопросам сотрудничества и проектам [пишите в Telegram](https://t.me/neizerth).
 
@@ -68,7 +72,19 @@ const Client = require('amocrm-js');
 После успешного подключения клиент автоматически получает новый токен
 по истечению старого перед формированием запроса
 
-### Код авторизации известен
+### Процесс OAuth авторизации
+
+1. Авторзоваться на сайте AmoCRM
+2. Получить код авторизации
+3. Получить OAuth-токен по коду авторизации
+
+### Получение кода авторизацию
+
+1. С помощью [упрощённой авторизации](https://www.amocrm.ru/developers/content/oauth/easy-auth)
+2. С помощью встроенного сервера авторизации данной библиотеки
+3. Вручную
+
+### Подключение по коду авторизации (упрощенная авторизация)
 
 Его можно получить с помощью упрощенной авторизации или самостоятельно написанного обработчика
 адреса интеграции (redirectUri).
@@ -86,16 +102,11 @@ const client = new Client({
       client_secret: 'clientSecret', // Секретный ключ
       redirect_uri: 'redirectUri', // Ссылка для перенаправления
       code: 'code', // Код для упрощённой авторизации, необязательный
-      /*
-        Параметр состояния для проверки на корректность. Необязательный. Используется встроенным сервером авторизации
-        см. https://www.amocrm.ru/developers/content/oauth/step-by-step#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-Authorization-code
-      */
-      state: 'state',
     },
 });
 ```
 
-### Встроенный OAuth-сервер
+### Подключение через OAuth-сервер
 
 В AmoCRM API код авторизации можно использовать __только один раз__ для получения
 токена. Последующие запросы на получение токена будут выдавать ошибку.
@@ -115,13 +126,19 @@ const client = new Client({
       описаны на https://www.amocrm.ru/developers/content/oauth/step-by-step)
     */
     auth: {
-      client_id: 'clientId', // ID интеграции
-      client_secret: 'clientSecret', // Секретный ключ
-      redirect_uri: 'redirectUri', // Ссылка для перенаправления,
-      server: {
-        // порт, на котором запустится сервер авторизации
-        port: 3000
-      }
+        client_id: 'clientId', // ID интеграции
+        client_secret: 'clientSecret', // Секретный ключ
+        redirect_uri: 'redirectUri', // Ссылка для перенаправления,
+        /*
+            Необязательный араметр состояния для проверки на корректность. 
+            Используется встроенным сервером авторизации.
+            см. https://www.amocrm.ru/developers/content/oauth/step-by-step#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-Authorization-code
+        */
+        state: 'state',
+        server: {
+            // порт, на котором запустится сервер авторизации
+            port: 3000
+        }
     },
 });
 ```
@@ -140,7 +157,7 @@ const client = new Client({
 Пакет перенаправляет трафик с вашего компьютера на заданный публичный IP, который можно задать в
 адресе интеграции.
 
-[Пример использования ngrok.](./examples/javascript/01-get-development-token.js)
+[Пример использования ngrok.](examples/javascript/00-oauth/001-get-token-with-server.js)
 
 #### Разработка на production-сервере
 
@@ -165,6 +182,39 @@ const client = new Client({
  },
 });
 ```
+
+<a id="factories"></a>
+## Фабрики
+
+Фабрики позволяют управлять порталом в ООП стиле.
+
+- Используйте готовые методы вместо API-адресов
+- Перебирайте сделки, контакты и пр. с помощью постраничной навигации
+
+```js
+const lead = new client.Lead;
+lead.name = 'Евгений Иванов';
+
+await lead.save();
+```
+
+```js
+const lead = client.leads.getById(123);
+lead.name = 'Walter Scott';
+await lead.save();
+```
+
+```js
+const pagination = await client.leads.get({
+   order: 'created_at',
+});
+const leads = pagination.getData();
+await pagination.next();
+```
+
+В настоящий момент библиотека поддерживает фабрики:
+
+- Сделки [[примеры работы]](./examples/javascript/01-leads)
 
 <a id="requests"></a>
 ## Запросы к порталу
@@ -401,10 +451,10 @@ client.connection.on('change', () => {
 ```js
   client.connection.on('change', () => {
       const token = client.token.getValue();
-      fs.writeFileSync('./token.json', JSON.stringify(token));
+      fs.writeFileSync('./token.js', JSON.stringify(token));
   });
   try {
-      const currentToken = require('./token.json');
+      const currentToken = require('./token.js');
       client.token.setValue(currentToken);
   } catch (e) {
     // Файл не найден
@@ -454,4 +504,3 @@ await client.connection.connect();
 Спасибо @amorev, @maxism, @shuraman69 за вклад в разработку этого проекта
 
 Отдельная благодарность @dmitrytemlead за возможность протестировать библиотеку в стороннем проекте
-

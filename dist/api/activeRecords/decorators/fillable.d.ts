@@ -1,6 +1,18 @@
+/**
+ * Декоратор, помечающий свойство сущности как поле для синхронизации с AmoCRM
+ * Только свойства, помеченные как @fillable будут
+ * отправляться при вызове create, update, fetch методов экземпляра сущности
+ * */
 import ResourceEntity from "../../ResourceEntity";
-export declare function fillable(): {
-    (target: Function): void;
-    (target: Object, propertyKey: string | symbol): void;
-};
-export declare function isFillable(target: ResourceEntity, propertyKey: string): any;
+/**
+ * Помечает свойство сущности для синхронизации
+ * */
+export declare function fillable<T>(): (target: ResourceEntity<any>, propertyKey: string) => void;
+/**
+ * @returns массив полей сущности, которые синхронизируются с порталом
+ * */
+export declare function getFillable<T>(target: ResourceEntity<T>): string[];
+/**
+ * @returns синхронизируется ли поле сущности c порталом
+ * */
+export declare function isFillable<T>(target: ResourceEntity<T>, propertyKey: string): boolean;
