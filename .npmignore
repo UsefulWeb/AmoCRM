@@ -1,6 +1,7 @@
-docs
-src
-examples
-tests
-babel.config.js
-tsconfig.json
+/docs
+/src
+/examples
+/tests
+/babel.config.js
+/tsconfig.json
+/.idea
