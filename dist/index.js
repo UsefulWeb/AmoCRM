@@ -7,7 +7,7 @@ exports.Client = Client_1.default;
 /**
  * Функция обратной совместимости
  * */
-const BackwardCompatibility = function BackwardCompatibility(options) {
+function BackwardCompatibility(options) {
     console.warn('\x1b[33m%s\x1b[0m', 'ВНИМАНИЕ');
     console.warn('Используйте');
     console.warn('\x1b[32m%s\x1b[0m', 'const { Client } = require("amocrm-js")');
@@ -15,7 +15,8 @@ const BackwardCompatibility = function BackwardCompatibility(options) {
     console.warn('\x1b[31m%s\x1b[0m', 'const Client = require("amocrm-js")');
     console.warn('\x1b[33m%s\x1b[0m', 'В будущих версиях библиотеки старый способ будет удалён');
     return new Client_1.default(options);
-};
+}
 BackwardCompatibility.Client = Client_1.default;
 exports.default = BackwardCompatibility;
+module.exports = BackwardCompatibility;
 //# sourceMappingURL=index.js.map

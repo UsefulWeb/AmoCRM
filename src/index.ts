@@ -4,7 +4,7 @@ import { IClientOptions } from "./interfaces/common";
 /**
  * Функция обратной совместимости
  * */
-const BackwardCompatibility = function BackwardCompatibility(options: IClientOptions) {
+function BackwardCompatibility(options: IClientOptions) {
     console.warn('\x1b[33m%s\x1b[0m', 'ВНИМАНИЕ');
     console.warn('Используйте');
     console.warn('\x1b[32m%s\x1b[0m', 'const { Client } = require("amocrm-js")');
@@ -18,3 +18,4 @@ BackwardCompatibility.Client = Client;
 
 export { Client };
 export default BackwardCompatibility;
+module.exports = BackwardCompatibility;
