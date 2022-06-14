@@ -110,7 +110,7 @@ export default class DomainRequest extends EventEmitter {
         const headers = this.getHeaders();
         const data = this.getData();
         const method = this.getMethod();
-        const hostname = this.hostname;;
+        const hostname = this.hostname;
         const options = {
             hostname,
             path,
@@ -129,7 +129,7 @@ export default class DomainRequest extends EventEmitter {
     }
 
     protected onResponse(callback: CallableFunction) {
-        let buffer: Buffer[] = [];
+        const buffer: Buffer[] = [];
         const onResponseData = (chunk: Buffer) => buffer.push(chunk);
         const onResponseEnd = (response: http.IncomingMessage) => () => {
             const data = buffer.join('');

@@ -7,7 +7,7 @@ import EventEmitter from "../common/EventEmitter";
  * Основной класс сущностей
  * */
 export default class ResourceEntity<T> extends EventEmitter implements IResourceEntity {
-    [index: string]: any;
+    [index: string]: JSONObject;
     protected readonly factory: T;
     public required: string[] = [];
 

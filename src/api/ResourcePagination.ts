@@ -5,6 +5,7 @@ import {
     IResourcePagination,
     IResourcePaginationParams
 } from "../interfaces/api";
+import { JSONObject } from "../types";
 
 /**
  * Постраничная навигация вывода сущностей
@@ -35,7 +36,7 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
         if (!this.links.current) {
             return false;
         }
-        return await this.fetchUrl(this.links.current)
+        return await this.fetchUrl(this.links.current);
     }
 
     /**
@@ -44,8 +45,8 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
      * */
     protected async fetchUrl(url: string) {
         const { criteria, options } = this.params;
-        const apiResponse = await this.request.get(url, criteria, options);
-        const data: IPaginatedResponse = apiResponse.data;
+        const apiResponse = await this.request.get<IPaginatedResponse>(url, criteria, options);
+        const data = apiResponse.data;
         this.page = data?._page || 1;
         this.parseData(data);
         this.parseLinks(data);
@@ -122,7 +123,7 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
      * */
     protected parseData(response?: IPaginatedResponse) {
         const { embedded, factory } = this.params;
-        const data: any = response?._embedded[embedded] || [];
+        const data: JSONObject[] | undefined = response?._embedded[embedded] || [];
         if (!Array.isArray(data)) {
             return;
         }

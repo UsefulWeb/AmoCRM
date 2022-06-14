@@ -14,7 +14,7 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
             return {
                 response,
                 data: null
-            }
+            };
         }
         const data: JSONObject = JSON.parse(apiResponse.data);
 

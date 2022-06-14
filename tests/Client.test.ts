@@ -1,7 +1,7 @@
 import "./bootstrap";
 import config from "./config";
-import { Client } from "../src/Client";
-import { Client as ES6Client } from '../dist/Client';
+import Client from "../src/Client";
+import ES6Client from '../dist/Client';
 
 describe('Client', () => {
     test('basic creation', () => {
@@ -14,6 +14,7 @@ describe('Client', () => {
     });
     test('empty config', async () => {
         expect(() => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             new Client;
         }).toThrowError(new Error('NO_OPTIONS'));
@@ -52,4 +53,4 @@ describe('Client', () => {
         });
         expect(instance).toBeDefined();
     });
-})
+});

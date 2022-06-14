@@ -3,9 +3,9 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "parser": ",@typescript-eslint/parser",
+  "parser": "@typescript-eslint/parser",
   "plugins": [
-    "jest:recommended",
+//    "jest",
     "@typescript-eslint"
   ],
   "parserOptions": {
@@ -13,7 +13,7 @@
     "sourceType": "module"
   },
   "env": {
-    "jasmine": true,
+    "jest": true,
     "node": true,
     "es6": true
   },

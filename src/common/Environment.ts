@@ -39,23 +39,23 @@ class Environment {
      * @param defaultValue - значение, которое вернётся при отсутствии настройки
      * @returns значение настройки. При отсутствии значения вернётся defaultValue
      * */
-    get<T>(path?: string, defaultValue?: any): T {
+    get<T>(path?: string, defaultValue?: T): T  {
         if (!this.options) {
-            return defaultValue;
+            return <T>defaultValue;
         }
         let value: any = this.options;
         if (!path) {
-            return value;
+            return <T>value;
         }
         const parts = path.split('.');
         for (const key of parts) {
             if (!value) {
-                return defaultValue;
+                return <T>defaultValue;
             }
             value = value[key];
         }
         if (value === undefined) {
-            return defaultValue;
+            return <T>defaultValue;
         }
         return value;
     }
@@ -65,7 +65,7 @@ class Environment {
      * @param path - путь к настройке. Аналогичен path в {@link get}
      * @param value - новое значение
      * */
-    set(path: string, value: any) {
+    set<T>(path: string, value: T) {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
         }

@@ -15,7 +15,7 @@ export default class Connection extends EventEmitter {
     protected readonly environment: Environment;
     protected readonly auth: Auth;
 
-    protected connected: boolean = false;
+    protected connected = false;
     protected authServer: AuthServer | null = null;
 
     constructor(environment: Environment, token: Token, auth: Auth) {
@@ -105,8 +105,8 @@ export default class Connection extends EventEmitter {
             return false;
         }
         const authOptions = this.environment.get<IAuthOptions>('auth');
-        const port = 3000 || authOptions.server?.port
-        const state = this.environment.get<string>('auth.state');
+        const port = 3000 || authOptions?.server?.port;
+        const state = <string>this.environment.get<string>('auth.state');
         const options: IAuthServerOptions = {
             state,
             port
@@ -134,10 +134,10 @@ export default class Connection extends EventEmitter {
      * Формирует запрос к порталу. Предварительно проверяет наличие соединения
      * При его отсутствии пытается его установить
      * */
-    async makeRequest(method: string, url: string, data?: object, options?: IRequestOptions) {
+    async makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions) {
         await this.update();
         const token = this.token.getValue();
-        const domain = this.environment.get<string>('domain');
+        const domain = <string>this.environment.get<string>('domain');
         const config = {
             domain,
             method,
@@ -147,6 +147,6 @@ export default class Connection extends EventEmitter {
             token
         };
         const domainRequest = new DomainRequest(config);
-        return await domainRequest.process<any>();
+        return await domainRequest.process<T>();
     }
 }

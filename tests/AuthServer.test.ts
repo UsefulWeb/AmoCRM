@@ -1,5 +1,5 @@
 import './bootstrap';
-import { Client } from "../src/Client";
+import Client from "../src/Client";
 import config from "./config";
 import { delay } from "../src/util";
 

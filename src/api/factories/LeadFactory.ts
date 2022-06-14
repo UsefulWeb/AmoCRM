@@ -133,7 +133,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * */
     async getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions): Promise<Lead|null> {
         const url = schema.entities.leads.path + '/' + identity;
-        const { data } = await this.request.get(url, criteria, options);
+        const { data } = await this.request.get<any>(url, criteria, options);
         if (!data) {
             return null;
         }
@@ -199,7 +199,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
     async create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
         const url = schema.entities.leads.path;
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.post(url, requestCriteria, options);
+        const { data } = await this.request.post<any>(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
         const result = response.map((attributes: LeadCreateResult, index: number) => {
@@ -217,7 +217,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
      * */
     async complexCreate() {
-
+        return false;
     }
 
     /**
@@ -231,7 +231,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
     async update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
         const url = schema.entities.leads.path;
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.patch(url, requestCriteria, options);
+        const { data } = await this.request.patch<any>(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
         const result = response.map((attributes: LeadUpdateResult, index: number) => {

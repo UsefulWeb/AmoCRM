@@ -4,26 +4,27 @@
  * отправляться при вызове create, update, fetch методов экземпляра сущности
  * */
 import ResourceEntity from "../../ResourceEntity";
+import ResourceFactory from "../../ResourceFactory";
 
 const metadataKey = Symbol('fillable');
 
 /**
  * Помечает свойство сущности для синхронизации
  * */
-export function fillable<T>() {
-    return (target: ResourceEntity<any>, propertyKey: string) => {
+export function fillable<T extends ResourceEntity<ResourceFactory<T>>>() {
+    return (target: T, propertyKey: string) => {
         const attributes = Reflect.getMetadata(metadataKey, target) || [];
         attributes.push(propertyKey);
 
         Reflect.defineMetadata(metadataKey, attributes, target);
         Reflect.defineMetadata(metadataKey, true, target, propertyKey);
-    }
+    };
 }
 
 /**
  * @returns массив полей сущности, которые синхронизируются с порталом
  * */
-export function getFillable<T>(target: ResourceEntity<T>): string[] {
+export function getFillable<T extends ResourceEntity<ResourceFactory<T>>>(target: T): string[] {
     return Reflect.getMetadata(metadataKey, target) || [];
 }
 

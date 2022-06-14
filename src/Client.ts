@@ -53,6 +53,6 @@ export default class Client extends EventEmitter {
     protected assignEntity<T>(factory: IResourceFactory<T>): IEntityConstructor<T> {
         return function (attributes?:JSONObject) {
             return factory.from(attributes);
-        }
+        };
     }
 }

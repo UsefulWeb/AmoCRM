@@ -67,7 +67,7 @@ const { Client } = require('amocrm-js');
 ES6:
 
 ```js
-import { Client } from 'amocrm-js'
+import Client from 'amocrm-js'
 ```
 
 ## Содержание
