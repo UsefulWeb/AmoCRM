@@ -60,6 +60,3 @@ export interface IAPIResponseErrorValue {
 export interface IResponseParser<T, R> {
     parse(result: IAPIResponse<T>): IAPIResponse<R>;
 }
-export interface Class<T> {
-    new (...args: any[]): T;
-}

@@ -1,4 +1,5 @@
 import { IClientOptions } from "../interfaces/common";
+import { JSONObject } from "../types";
 
 /**
  * Компонент настроек окружения.
@@ -8,7 +9,7 @@ import { IClientOptions } from "../interfaces/common";
  * - изменённые в процессе работы с помощью {@link Environment.set}
  * */
 class Environment {
-    protected readonly options: IClientOptions;
+    protected readonly options: JSONObject;
     constructor(options: IClientOptions) {
         this.options = options;
     }
@@ -39,17 +40,17 @@ class Environment {
      * @param defaultValue - значение, которое вернётся при отсутствии настройки
      * @returns значение настройки. При отсутствии значения вернётся defaultValue
      * */
-    get<T>(path?: string, defaultValue?: T): T  {
+    get<T>(path?: string, defaultValue?: T): T {
         if (!this.options) {
             return <T>defaultValue;
         }
-        let value: any = this.options;
         if (!path) {
-            return <T>value;
+            return <T><unknown>this.options;
         }
+        let value: any = this.options;
         const parts = path.split('.');
         for (const key of parts) {
-            if (!value) {
+            if (typeof value !== 'object') {
                 return <T>defaultValue;
             }
             value = value[key];
@@ -69,7 +70,7 @@ class Environment {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
         }
-        let handler: any = this.options;
+        let handler = this.options;
         const parts = path.split('.');
         if (parts.length === 0) {
             throw new Error('PATH_IS_EMPTY');

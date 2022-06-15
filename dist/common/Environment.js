@@ -41,13 +41,13 @@ class Environment {
         if (!this.options) {
             return defaultValue;
         }
-        let value = this.options;
         if (!path) {
-            return value;
+            return this.options;
         }
+        let value = this.options;
         const parts = path.split('.');
         for (const key of parts) {
-            if (!value) {
+            if (typeof value !== 'object') {
                 return defaultValue;
             }
             value = value[key];

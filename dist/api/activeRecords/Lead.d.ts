@@ -5,11 +5,7 @@ import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
 import LeadFactory, { LeadsGetByIdCriteria } from "../factories/LeadFactory";
-export default class Lead extends ResourceEntity<LeadFactory> {
-    /**
-     * Сделка
-     * @decorator `@fillable`
-     */
+export interface LeadAttributes {
     id?: number;
     name?: string;
     price?: number;
@@ -31,6 +27,34 @@ export default class Lead extends ResourceEntity<LeadFactory> {
     account_id?: number;
     is_price_modified_by_robot?: boolean;
     _embedded?: JSONObject;
+}
+/**
+ * Сделка
+ */
+export default class Lead extends ResourceEntity<LeadFactory> {
+    id?: number;
+    name?: string;
+    price?: number;
+    responsible_user_id?: number;
+    group_id?: number;
+    status_id?: number;
+    pipeline_id?: number;
+    loss_reason_id?: number;
+    source_id?: number;
+    created_by?: number;
+    updated_by?: number;
+    closed_at?: number;
+    created_at?: number;
+    updated_at?: number;
+    closed_task_at?: number;
+    is_deleted?: boolean;
+    custom_fields_values?: JSONObject[] | null;
+    score?: number | null;
+    account_id?: number;
+    is_price_modified_by_robot?: boolean;
+    _embedded?: JSONObject;
+    getAttributes(): LeadAttributes;
+    setAttributes(attributes: LeadAttributes): void;
     /**
      * @returns присутствует ли сущность на портале AmoCRM
      * */

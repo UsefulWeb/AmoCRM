@@ -99,7 +99,6 @@ class DomainRequest extends EventEmitter_1.default {
         const data = this.getData();
         const method = this.getMethod();
         const hostname = this.hostname;
-        ;
         const options = {
             hostname,
             path,
@@ -117,7 +116,7 @@ class DomainRequest extends EventEmitter_1.default {
         });
     }
     onResponse(callback) {
-        let buffer = [];
+        const buffer = [];
         const onResponseData = (chunk) => buffer.push(chunk);
         const onResponseEnd = (response) => () => {
             const data = buffer.join('');

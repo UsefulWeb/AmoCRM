@@ -56,10 +56,11 @@ export interface LeadUpdateResult {
     updated_at: number;
 }
 /**
- * Основной класс фабрики
+ * Фабрика управления сделками
  * */
 export default class LeadFactory extends ResourceFactory<Lead> {
     createEntity(): Lead;
+    getBaseUrl(): string;
     /**
      * @param criteria фильтр сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-list)
      * @example
@@ -159,7 +160,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
     /**
      * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
      * */
-    complexCreate(): Promise<void>;
+    complexCreate(): Promise<boolean>;
     /**
      * Обновляет существующие сделки. Принцип работы метода аналогичен {@link create}
      * @param criteria параметры обновления сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-edit)

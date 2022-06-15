@@ -13,6 +13,12 @@ class ResourceFactory extends EventEmitter_1.default {
         this.request = request;
     }
     /**
+     * Форматирует адрес на основе baseUrl фабрики
+     * */
+    getUrl(path = '') {
+        return this.getBaseUrl() + path;
+    }
+    /**
      * Создаёт сущность и заполняет её атрибутами, которые
      * будут синхронизироваться с порталом AmoCRM
      * */

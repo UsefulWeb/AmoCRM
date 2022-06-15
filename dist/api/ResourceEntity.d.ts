@@ -1,20 +1,20 @@
 import { JSONObject } from "../types";
 import { IResourceEntity } from "../interfaces/api";
 import EventEmitter from "../common/EventEmitter";
+import ResourceFactory from "./ResourceFactory";
 /**
  * Основной класс сущностей
  * */
-export default class ResourceEntity<T> extends EventEmitter implements IResourceEntity {
-    [index: string]: any;
+export default abstract class ResourceEntity<T extends ResourceFactory<ResourceEntity<T>>> extends EventEmitter implements IResourceEntity {
     protected readonly factory: T;
     required: string[];
     constructor(factory: T);
     /**
      * Возвращает все атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */
-    getAttributes(): JSONObject;
+    abstract getAttributes(): JSONObject;
     /**
      * Устанавливает атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */
-    setAttributes(attributes?: JSONObject): void;
+    abstract setAttributes(attributes?: JSONObject): void;
 }

@@ -24,7 +24,7 @@ export default class EventEmitter extends EventEmitterBase {
     /**
      * Формирует событие у целевого объекта и у подписчиков
      * */
-    emit(eventName: string | symbol, ...args: any[]): boolean {
+    emit(eventName: string | symbol, ...args: unknown[]): boolean {
         const result = super.emit(eventName, ...args);
         const context = args[0];
         if (context instanceof EventEmitter) {

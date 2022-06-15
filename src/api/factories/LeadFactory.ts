@@ -2,12 +2,13 @@
  * Фабрика для создания сделок {@link Lead}
  * */
 import ResourceFactory from "../ResourceFactory";
-import Lead from "../activeRecords/Lead";
+import Lead, { LeadAttributes } from "../activeRecords/Lead";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
 import ResourceEntity from "../ResourceEntity";
+import { CollectionResponse } from "../../interfaces/api";
 
 export interface LeadsGetCriteria {
     with?: string;
@@ -67,12 +68,15 @@ export interface LeadUpdateResult {
 }
 
 /**
- * Основной класс фабрики
+ * Фабрика управления сделками
  * */
 export default class LeadFactory extends ResourceFactory<Lead> {
-
     createEntity() {
         return new Lead(this);
+    }
+
+    getBaseUrl(): string {
+        return schema.entities.leads.path;
     }
 
     /**
@@ -103,7 +107,8 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      *
      * */
     async get(criteria?: LeadsGetCriteria, options?: IRequestOptions) {
-        const url = schema.entities.leads.path;
+        const url = this.getUrl();
+
         const params = {
             url,
             criteria,
@@ -132,8 +137,8 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * @returns экземпляр найденной сделки или null, если сделка не найдена.
      * */
     async getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions): Promise<Lead|null> {
-        const url = schema.entities.leads.path + '/' + identity;
-        const { data } = await this.request.get<any>(url, criteria, options);
+        const url = this.getUrl('/' + identity);
+        const { data } = await this.request.get<LeadAttributes>(url, criteria, options);
         if (!data) {
             return null;
         }
@@ -197,12 +202,12 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * ```
      * */
     async create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
-        const url = schema.entities.leads.path;
+        const url = this.getUrl();
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.post<any>(url, requestCriteria, options);
+        const { data } = await this.request.post<CollectionResponse<LeadCreateResult>>(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
-        const result = response.map((attributes: LeadCreateResult, index: number) => {
+        const result = response.map((attributes, index: number) => {
             const entityCriteria = criteria[index];
             const lead = entityCriteria instanceof ResourceEntity ?
                 entityCriteria :
@@ -229,12 +234,12 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * создания сделок в AmoCRM, у них обновится поле id
      * */
     async update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
-        const url = schema.entities.leads.path;
+        const url = this.getUrl();
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.patch<any>(url, requestCriteria, options);
+        const { data } = await this.request.patch<CollectionResponse<LeadUpdateResult>>(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
-        const result = response.map((attributes: LeadUpdateResult, index: number) => {
+        const result = response.map((attributes, index: number) => {
             const entityCriteria = criteria[index];
             const lead = entityCriteria instanceof Lead ?
                 entityCriteria :

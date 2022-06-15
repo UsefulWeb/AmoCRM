@@ -11,6 +11,14 @@ export interface IResourceEntity {
 export interface IResourceEntityConstructor<T> {
     from(request: ClientRequest, attributes?: JSONObject): T;
 }
+export interface CollectionResponse<T> {
+    _links: {
+        href: string;
+    };
+    _embedded: {
+        [index: string]: T[];
+    };
+}
 export interface IResourcePagination<T> {
     fetch(): void;
     getData(): T[];

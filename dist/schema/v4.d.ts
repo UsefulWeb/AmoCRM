@@ -6,6 +6,9 @@ declare const _default: {
         leads: {
             path: string;
         };
+        contacts: {
+            path: string;
+        };
     };
 };
 export default _default;

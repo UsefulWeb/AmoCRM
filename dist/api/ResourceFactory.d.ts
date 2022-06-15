@@ -10,6 +10,11 @@ import EventEmitter from "../common/EventEmitter";
 export default abstract class ResourceFactory<T extends ResourceEntity<ResourceFactory<T>>> extends EventEmitter implements IResourceFactory<T> {
     protected readonly request: ClientRequest;
     constructor(request: ClientRequest);
+    abstract getBaseUrl(): string;
+    /**
+     * Форматирует адрес на основе baseUrl фабрики
+     * */
+    getUrl(path?: string): string;
     /**
      * @returns новый экземпляр сущности. Например, {@link LeadFactory} вернёт {@link Lead}
      * */
@@ -25,5 +30,5 @@ export default abstract class ResourceFactory<T extends ResourceEntity<ResourceF
      * @param criteriaData массив plain JavaScript-объектов или сущностей
      * @returns массив plain JavaScript-объектов
      * */
-    protected getEntityCriteria(criteriaData: any[]): JSONObject[];
+    protected getEntityCriteria<T extends ResourceEntity<ResourceFactory<T>>>(criteriaData: (JSONObject | T)[]): JSONObject[];
 }

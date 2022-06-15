@@ -5,6 +5,9 @@ export default {
     entities: {
         leads: {
             path: '/api/v4/leads'
+        },
+        contacts: {
+            path: '/api/v4/contacts'
         }
     }
 };

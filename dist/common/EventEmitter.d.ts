@@ -17,5 +17,5 @@ export default class EventEmitter extends EventEmitterBase {
     /**
      * Формирует событие у целевого объекта и у подписчиков
      * */
-    emit(eventName: string | symbol, ...args: any[]): boolean;
+    emit(eventName: string | symbol, ...args: unknown[]): boolean;
 }

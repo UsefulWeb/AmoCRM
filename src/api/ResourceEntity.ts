@@ -1,13 +1,12 @@
 import { JSONObject } from "../types";
 import { IResourceEntity } from "../interfaces/api";
-import { getFillable, isFillable } from "./activeRecords/decorators/fillable";
 import EventEmitter from "../common/EventEmitter";
+import ResourceFactory from "./ResourceFactory";
 
 /**
  * Основной класс сущностей
  * */
-export default class ResourceEntity<T> extends EventEmitter implements IResourceEntity {
-    [index: string]: JSONObject;
+export default abstract class ResourceEntity<T extends ResourceFactory<ResourceEntity<T>>> extends EventEmitter implements IResourceEntity {
     protected readonly factory: T;
     public required: string[] = [];
 
@@ -19,27 +18,10 @@ export default class ResourceEntity<T> extends EventEmitter implements IResource
     /**
      * Возвращает все атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */
-    getAttributes(): JSONObject {
-        return getFillable(this)
-            .reduce((target: JSONObject, key) => {
-                if (key in this) {
-                    target[key] = this[key];
-                }
-                return target;
-            }, {});
-    }
+    abstract getAttributes(): JSONObject;
 
     /**
      * Устанавливает атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */
-    setAttributes(attributes?: JSONObject): void {
-        if (!attributes) {
-            return;
-        }
-        for (const attr in attributes) {
-            if (isFillable(this, attr)) {
-                this[attr] = attributes[attr];
-            }
-        }
-    }
+    abstract setAttributes(attributes?: JSONObject): void;
 }

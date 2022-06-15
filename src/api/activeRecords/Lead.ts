@@ -3,57 +3,102 @@
  */
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
-import { fillable } from "./decorators/fillable";
 import { IRequestOptions } from "../../interfaces/common";
 import LeadFactory, { LeadsGetByIdCriteria } from "../factories/LeadFactory";
 
+export interface LeadAttributes {
+    id?: number;
+    name?: string;
+    price?: number;
+    responsible_user_id?: number;
+    group_id?: number;
+    status_id?: number;
+    pipeline_id?: number;
+    loss_reason_id?: number;
+    source_id?: number;
+    created_by?: number;
+    updated_by?: number;
+    closed_at?: number;
+    created_at?: number;
+    updated_at?: number;
+    closed_task_at?: number;
+    is_deleted?: boolean;
+    custom_fields_values?: JSONObject[] | null;
+    score?: number | null;
+    account_id?: number;
+    is_price_modified_by_robot?: boolean;
+    _embedded?: JSONObject;
+}
+
+/**
+ * Сделка
+ */
 export default class Lead extends ResourceEntity<LeadFactory> {
-    /**
-     * Сделка
-     * @decorator `@fillable`
-     */
-    @fillable()
-    public id?: number;
-    @fillable()
-    public name?: string;
-    @fillable()
-    public price?: number;
-    @fillable()
-    public responsible_user_id?: number;
-    @fillable()
-    public group_id?: number;
-    @fillable()
-    public status_id?: number;
-    @fillable()
-    public pipeline_id?: number;
-    @fillable()
-    public loss_reason_id?: number;
-    @fillable()
-    public source_id?: number;
-    @fillable()
-    public created_by?: number;
-    @fillable()
-    public updated_by?: number;
-    @fillable()
-    public closed_at?: number;
-    @fillable()
-    public created_at?: number;
-    @fillable()
-    public updated_at?: number;
-    @fillable()
-    public closed_task_at?: number;
-    @fillable()
-    public is_deleted?: boolean;
-    @fillable()
-    public custom_fields_values?: JSONObject[] | null;
-    @fillable()
-    public score?: number | null;
-    @fillable()
-    public account_id?: number;
-    @fillable()
-    public is_price_modified_by_robot?: boolean;
-    @fillable()
-    public _embedded?: JSONObject;
+    id?: number;
+    name?: string;
+    price?: number;
+    responsible_user_id?: number;
+    group_id?: number;
+    status_id?: number;
+    pipeline_id?: number;
+    loss_reason_id?: number;
+    source_id?: number;
+    created_by?: number;
+    updated_by?: number;
+    closed_at?: number;
+    created_at?: number;
+    updated_at?: number;
+    closed_task_at?: number;
+    is_deleted?: boolean;
+    custom_fields_values?: JSONObject[] | null;
+    score?: number | null;
+    account_id?: number;
+    is_price_modified_by_robot?: boolean;
+    _embedded?: JSONObject;
+
+    public getAttributes(): LeadAttributes {
+        return {
+            id: this.id,
+            name: this.name,
+            price: this.price,
+            responsible_user_id: this.responsible_user_id,
+            group_id: this.group_id,
+            status_id: this.status_id,
+            pipeline_id: this.pipeline_id,
+            loss_reason_id: this.loss_reason_id,
+            source_id: this.source_id,
+            created_by: this.created_by,
+            updated_at: this.updated_at,
+            closed_task_at: this.closed_task_at,
+            is_deleted: this.is_deleted,
+            custom_fields_values: this.custom_fields_values,
+            score: this.score,
+            account_id: this.account_id,
+            is_price_modified_by_robot: this.is_price_modified_by_robot,
+            _embedded: this._embedded
+        };
+    }
+
+    public setAttributes(attributes: LeadAttributes) {
+        this.id = attributes.id;
+        this.name = attributes.name;
+        this.price = attributes.price;
+        this.responsible_user_id = attributes.responsible_user_id;
+        this.group_id = attributes.group_id;
+        this.status_id = attributes.status_id;
+        this.pipeline_id = attributes.pipeline_id;
+        this.loss_reason_id = attributes.loss_reason_id;
+        this.source_id = attributes.source_id;
+        this.created_by = attributes.created_by;
+        this.updated_by = attributes.updated_by;
+        this.closed_task_at = attributes.closed_task_at;
+        this.is_deleted = attributes.is_deleted;
+        this.custom_fields_values = attributes.custom_fields_values;
+        this.score = attributes.score;
+        this.account_id = attributes.account_id;
+        this.is_price_modified_by_robot = attributes.is_price_modified_by_robot;
+        this._embedded = attributes._embedded;
+    }
 
     /**
      * @returns присутствует ли сущность на портале AmoCRM

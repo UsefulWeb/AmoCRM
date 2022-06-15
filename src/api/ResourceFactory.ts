@@ -19,6 +19,15 @@ export default abstract class ResourceFactory<T extends ResourceEntity<ResourceF
         this.request = request;
     }
 
+    abstract getBaseUrl(): string;
+
+    /**
+     * Форматирует адрес на основе baseUrl фабрики
+     * */
+    getUrl(path= ''): string {
+        return this.getBaseUrl() + path;
+    }
+
     /**
      * @returns новый экземпляр сущности. Например, {@link LeadFactory} вернёт {@link Lead}
      * */

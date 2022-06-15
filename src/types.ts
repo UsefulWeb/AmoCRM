@@ -1,6 +1,6 @@
 import { IAPIResponseErrorValue } from "./interfaces/common";
 
-export type TStringValueObject = { [name: string]: string };
+export type TStringValueObject = { [index: string]: string };
 export type TAPIResponseValue = JSONValue | IAPIResponseErrorValue;
 
 export type JSONValue =

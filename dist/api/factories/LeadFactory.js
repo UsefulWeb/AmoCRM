@@ -10,11 +10,14 @@ const v4_1 = tslib_1.__importDefault(require("../../schema/v4"));
 const ResourcePagination_1 = tslib_1.__importDefault(require("../ResourcePagination"));
 const ResourceEntity_1 = tslib_1.__importDefault(require("../ResourceEntity"));
 /**
- * Основной класс фабрики
+ * Фабрика управления сделками
  * */
 class LeadFactory extends ResourceFactory_1.default {
     createEntity() {
         return new Lead_1.default(this);
+    }
+    getBaseUrl() {
+        return v4_1.default.entities.leads.path;
     }
     /**
      * @param criteria фильтр сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-list)
@@ -45,7 +48,7 @@ class LeadFactory extends ResourceFactory_1.default {
      * */
     get(criteria, options) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const url = v4_1.default.entities.leads.path;
+            const url = this.getUrl();
             const params = {
                 url,
                 criteria,
@@ -74,7 +77,7 @@ class LeadFactory extends ResourceFactory_1.default {
      * */
     getById(identity, criteria, options) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const url = v4_1.default.entities.leads.path + '/' + identity;
+            const url = this.getUrl('/' + identity);
             const { data } = yield this.request.get(url, criteria, options);
             if (!data) {
                 return null;
@@ -140,7 +143,7 @@ class LeadFactory extends ResourceFactory_1.default {
     create(criteria, options) {
         var _a;
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const url = v4_1.default.entities.leads.path;
+            const url = this.getUrl();
             const requestCriteria = this.getEntityCriteria(criteria);
             const { data } = yield this.request.post(url, requestCriteria, options);
             const response = ((_a = data === null || data === void 0 ? void 0 : data._embedded) === null || _a === void 0 ? void 0 : _a.leads) || [];
@@ -160,6 +163,7 @@ class LeadFactory extends ResourceFactory_1.default {
      * */
     complexCreate() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return false;
         });
     }
     /**
@@ -173,7 +177,7 @@ class LeadFactory extends ResourceFactory_1.default {
     update(criteria, options) {
         var _a;
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const url = v4_1.default.entities.leads.path;
+            const url = this.getUrl();
             const requestCriteria = this.getEntityCriteria(criteria);
             const { data } = yield this.request.patch(url, requestCriteria, options);
             const response = ((_a = data === null || data === void 0 ? void 0 : data._embedded) === null || _a === void 0 ? void 0 : _a.leads) || [];

@@ -95,7 +95,7 @@ class Connection extends EventEmitter_1.default {
                 return false;
             }
             const authOptions = this.environment.get('auth');
-            const port = 3000 || ((_a = authOptions.server) === null || _a === void 0 ? void 0 : _a.port);
+            const port = 3000 || ((_a = authOptions === null || authOptions === void 0 ? void 0 : authOptions.server) === null || _a === void 0 ? void 0 : _a.port);
             const state = this.environment.get('auth.state');
             const options = {
                 state,

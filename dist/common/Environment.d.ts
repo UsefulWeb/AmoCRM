@@ -1,4 +1,5 @@
 import { IClientOptions } from "../interfaces/common";
+import { JSONObject } from "../types";
 /**
  * Компонент настроек окружения.
  * Доступен как client.environment
@@ -7,7 +8,7 @@ import { IClientOptions } from "../interfaces/common";
  * - изменённые в процессе работы с помощью {@link Environment.set}
  * */
 declare class Environment {
-    protected readonly options: IClientOptions;
+    protected readonly options: JSONObject;
     constructor(options: IClientOptions);
     /**
      * Возвращает настройки приложения
@@ -35,13 +36,13 @@ declare class Environment {
      * @param defaultValue - значение, которое вернётся при отсутствии настройки
      * @returns значение настройки. При отсутствии значения вернётся defaultValue
      * */
-    get<T>(path?: string, defaultValue?: any): T;
+    get<T>(path?: string, defaultValue?: T): T;
     /**
      * Устанавливает новое значение настройки
      * @param path - путь к настройке. Аналогичен path в {@link get}
      * @param value - новое значение
      * */
-    set(path: string, value: any): this;
+    set<T>(path: string, value: T): this;
     /**
      * Проверяет наличие настройки
      * @param path - путь к настройке. Аналогичен path в {@link get}
