@@ -160,6 +160,7 @@ class LeadFactory extends ResourceFactory_1.default {
      * */
     complexCreate() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return false;
         });
     }
     /**

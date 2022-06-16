@@ -25,5 +25,5 @@ export default abstract class ResourceFactory<T extends ResourceEntity<ResourceF
      * @param criteriaData массив plain JavaScript-объектов или сущностей
      * @returns массив plain JavaScript-объектов
      * */
-    protected getEntityCriteria(criteriaData: any[]): JSONObject[];
+    protected getEntityCriteria<T extends ResourceEntity<ResourceFactory<T>>>(criteriaData: (JSONObject | T)[]): JSONObject[];
 }

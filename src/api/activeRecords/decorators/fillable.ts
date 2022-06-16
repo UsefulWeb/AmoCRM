@@ -24,7 +24,7 @@ export function fillable<T extends ResourceEntity<ResourceFactory<T>>>() {
 /**
  * @returns массив полей сущности, которые синхронизируются с порталом
  * */
-export function getFillable<T extends ResourceEntity<ResourceFactory<T>>>(target: T): string[] {
+export function getFillable<T>(target: ResourceEntity<T>): string[] {
     return Reflect.getMetadata(metadataKey, target) || [];
 }
 

@@ -159,7 +159,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
     /**
      * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
      * */
-    complexCreate(): Promise<void>;
+    complexCreate(): Promise<boolean>;
     /**
      * Обновляет существующие сделки. Принцип работы метода аналогичен {@link create}
      * @param criteria параметры обновления сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-edit)

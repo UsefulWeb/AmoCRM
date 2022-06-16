@@ -35,13 +35,13 @@ declare class Environment {
      * @param defaultValue - значение, которое вернётся при отсутствии настройки
      * @returns значение настройки. При отсутствии значения вернётся defaultValue
      * */
-    get<T>(path?: string, defaultValue?: any): T;
+    get<T>(path?: string, defaultValue?: T): T;
     /**
      * Устанавливает новое значение настройки
      * @param path - путь к настройке. Аналогичен path в {@link get}
      * @param value - новое значение
      * */
-    set(path: string, value: any): this;
+    set<T>(path: string, value: T): this;
     /**
      * Проверяет наличие настройки
      * @param path - путь к настройке. Аналогичен path в {@link get}

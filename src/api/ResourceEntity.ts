@@ -2,12 +2,13 @@ import { JSONObject } from "../types";
 import { IResourceEntity } from "../interfaces/api";
 import { getFillable, isFillable } from "./activeRecords/decorators/fillable";
 import EventEmitter from "../common/EventEmitter";
+import ResourceFactory from "./ResourceFactory";
 
 /**
  * Основной класс сущностей
  * */
 export default class ResourceEntity<T> extends EventEmitter implements IResourceEntity {
-    [index: string]: JSONObject;
+    [index: string]: any;
     protected readonly factory: T;
     public required: string[] = [];
 

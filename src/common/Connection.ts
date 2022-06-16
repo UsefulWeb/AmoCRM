@@ -105,7 +105,7 @@ export default class Connection extends EventEmitter {
             return false;
         }
         const authOptions = this.environment.get<IAuthOptions>('auth');
-        const port = 3000 || authOptions?.server?.port;
+        const port = authOptions?.server?.port || 3000;
         const state = <string>this.environment.get<string>('auth.state');
         const options: IAuthServerOptions = {
             state,
