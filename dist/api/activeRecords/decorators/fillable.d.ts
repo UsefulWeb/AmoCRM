@@ -4,10 +4,11 @@
  * отправляться при вызове create, update, fetch методов экземпляра сущности
  * */
 import ResourceEntity from "../../ResourceEntity";
+import ResourceFactory from "../../ResourceFactory";
 /**
  * Помечает свойство сущности для синхронизации
  * */
-export declare function fillable<T>(): (target: ResourceEntity<any>, propertyKey: string) => void;
+export declare function fillable<T extends ResourceEntity<ResourceFactory<T>>>(): (target: T, propertyKey: string) => void;
 /**
  * @returns массив полей сущности, которые синхронизируются с порталом
  * */

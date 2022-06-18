@@ -523,6 +523,6 @@ await client.connection.connect();
 
 ## Доска почёта
 
-Спасибо @amorev, @maxism, @shuraman69, @korovenko-tatyana за вклад в разработку этого проекта
+Спасибо @amorev, @maxism, @shuraman69, @korovenko-tatyana, @lotgyero за вклад в разработку этого проекта
 
 Отдельная благодарность @dmitrytemlead за возможность протестировать библиотеку в стороннем проекте
