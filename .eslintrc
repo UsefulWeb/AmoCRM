@@ -18,7 +18,6 @@
     "es6": true
   },
   "rules": {
-    "semi": ["error", "always"],
-//    "@typescript-eslint/no-explicit-any": "off"
+    "semi": ["error", "always"]
   }
 }

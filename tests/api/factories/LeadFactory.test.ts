@@ -44,6 +44,6 @@ describe('LeadFactory', () => {
         ]);
         const { id = -1 } = lead;
         const found = await client.leads.getById(id);
-        expect(lead.id).toEqual(found.id);
+        expect(lead.id).toEqual(found?.id);
     });
 });
