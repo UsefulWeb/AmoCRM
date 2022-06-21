@@ -8,7 +8,7 @@ import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
 import ResourceEntity from "../ResourceEntity";
-import { CollectionResponse } from "../../interfaces/api";
+import { CollectionResponse, IPaginatedResponse } from "../../interfaces/api";
 
 export interface LeadsGetCriteria {
     with?: string;
@@ -70,7 +70,7 @@ export interface LeadUpdateResult {
 /**
  * Фабрика управления сделками
  * */
-export default class LeadFactory extends ResourceFactory<Lead> {
+export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
     createEntity() {
         return new Lead(this);
     }
@@ -106,7 +106,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Lead}
      *
      * */
-    async get(criteria?: LeadsGetCriteria, options?: IRequestOptions) {
+    async get(criteria?: LeadsGetCriteria, options?: IRequestOptions<IPaginatedResponse<LeadAttributes>>) {
         const url = this.getUrl();
 
         const params = {
@@ -116,7 +116,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
             factory: this,
             embedded: 'leads'
         };
-        const pagination = new ResourcePagination<Lead>(this.request, params);
+        const pagination = new ResourcePagination<Lead, LeadAttributes>(this.request, params);
         await pagination.fetch();
 
         this.emit('get');
@@ -136,9 +136,9 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * @param options настройки запроса и обработки результата
      * @returns экземпляр найденной сделки или null, если сделка не найдена.
      * */
-    async getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions): Promise<Lead|null> {
+    async getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<LeadAttributes>): Promise<Lead|null> {
         const url = this.getUrl('/' + identity);
-        const { data } = await this.request.get<LeadAttributes>(url, criteria, options);
+        const { data } = await this.request.get(url, criteria, options);
         if (!data) {
             return null;
         }
@@ -201,10 +201,10 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * lead1.id; // 123
      * ```
      * */
-    async create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
+    async create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions<CollectionResponse<LeadCreateResult>>): Promise<Lead[]> {
         const url = this.getUrl();
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.post<CollectionResponse<LeadCreateResult>>(url, requestCriteria, options);
+        const { data } = await this.request.post(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
         const result = response.map((attributes, index: number) => {
@@ -233,10 +233,10 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * @returns массив объектов {@link Lead}. Если в параметр criteria передавались экземпляры {@link Lead}, после
      * создания сделок в AmoCRM, у них обновится поле id
      * */
-    async update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]> {
+    async update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions<CollectionResponse<LeadUpdateResult>>): Promise<Lead[]> {
         const url = this.getUrl();
         const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.patch<CollectionResponse<LeadUpdateResult>>(url, requestCriteria, options);
+        const { data } = await this.request.patch(url, requestCriteria, options);
         const response = data?._embedded?.leads || [];
 
         const result = response.map((attributes, index: number) => {

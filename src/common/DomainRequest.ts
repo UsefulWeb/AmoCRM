@@ -12,10 +12,10 @@ import JSONResponseParser from "./response/JSONResponseParser";
 /**
  * Класс запросов к порталу AmoCRM
  * */
-export default class DomainRequest extends EventEmitter {
+export default class DomainRequest<T> extends EventEmitter {
     protected readonly hostname: string;
 
-    constructor(protected readonly config: DomainRequestOptions) {
+    constructor(protected readonly config: DomainRequestOptions<T>) {
         super();
         this.hostname = this.getHostname();
     }
@@ -94,12 +94,12 @@ export default class DomainRequest extends EventEmitter {
         }
         return domain + '.amocrm.ru';
     }
-    async process<T>(): Promise<IAPIResponse<T>> {
+    async process(): Promise<IAPIResponse<T>> {
         const apiResponse = await this.makeRequest();
-        return this.parseResponse<T>(apiResponse);
+        return this.parseResponse(apiResponse);
     }
 
-    protected parseResponse<T>(apiResponse: IAPIResponse<string>): IAPIResponse<T> {
+    protected parseResponse(apiResponse: IAPIResponse<string>): IAPIResponse<T> {
         const { options = {}} = this.config;
         const { parser = new JSONResponseParser } = options;
         return parser.parse(apiResponse);

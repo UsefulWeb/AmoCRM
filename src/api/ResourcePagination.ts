@@ -1,23 +1,23 @@
 import ClientRequest from "../common/ClientRequest";
 import {
+    IEntityAttributes,
     IPaginatedResponse,
     IPaginationLinks,
     IResourcePagination,
     IResourcePaginationParams
 } from "../interfaces/api";
-import { JSONObject } from "../types";
 
 /**
  * Постраничная навигация вывода сущностей
  * */
-export default class ResourcePagination<T> implements IResourcePagination<T> {
+export default class ResourcePagination<T, R extends IEntityAttributes> implements IResourcePagination<T> {
     protected readonly request: ClientRequest;
-    protected readonly params: IResourcePaginationParams<T>;
+    protected readonly params: IResourcePaginationParams<T, R>;
     protected data: T[] = [];
     protected links: IPaginationLinks = {};
     protected page = 1;
 
-    constructor(request: ClientRequest, params: IResourcePaginationParams<T>) {
+    constructor(request: ClientRequest, params: IResourcePaginationParams<T, R>) {
         this.request = request;
         this.params = params;
     }
@@ -45,8 +45,8 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
      * */
     protected async fetchUrl(url: string) {
         const { criteria, options } = this.params;
-        const apiResponse = await this.request.get<IPaginatedResponse>(url, criteria, options);
-        const data = apiResponse.data;
+        const apiResponse = await this.request.get(url, criteria, options);
+        const { data } = apiResponse;
         this.page = data?._page || 1;
         this.parseData(data);
         this.parseLinks(data);
@@ -108,7 +108,7 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
     /**
      * Обрабатывает объект ссылок на первую, предыдущую и следущие страницы
      * */
-    protected parseLinks(response?: IPaginatedResponse) {
+    protected parseLinks(response?: IPaginatedResponse<R>) {
         const links = response?._links || {};
         this.links = {
             next: links.next?.href,
@@ -121,9 +121,9 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
     /**
      * Преобразовывает массив атрибутов сущностей в объекты-сущностей
      * */
-    protected parseData(response?: IPaginatedResponse) {
+    protected parseData(response?: IPaginatedResponse<R>) {
         const { embedded, factory } = this.params;
-        const data: JSONObject[] | undefined = response?._embedded[embedded] || [];
+        const data: R[] | undefined = <R[] | undefined>response?._embedded[embedded] || [];
         if (!Array.isArray(data)) {
             return;
         }

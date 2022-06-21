@@ -2,10 +2,11 @@
  * Фабрика для создания сделок {@link Lead}
  * */
 import ResourceFactory from "../ResourceFactory";
-import Lead from "../activeRecords/Lead";
+import Lead, { LeadAttributes } from "../activeRecords/Lead";
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
+import { CollectionResponse, IPaginatedResponse } from "../../interfaces/api";
 export interface LeadsGetCriteria {
     with?: string;
     page?: number;
@@ -58,7 +59,7 @@ export interface LeadUpdateResult {
 /**
  * Фабрика управления сделками
  * */
-export default class LeadFactory extends ResourceFactory<Lead> {
+export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
     createEntity(): Lead;
     getBaseUrl(): string;
     /**
@@ -88,7 +89,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Lead}
      *
      * */
-    get(criteria?: LeadsGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<Lead>>;
+    get(criteria?: LeadsGetCriteria, options?: IRequestOptions<IPaginatedResponse<LeadAttributes>>): Promise<ResourcePagination<Lead, LeadAttributes>>;
     /**
      * Находит сделку по её id
      * @param identity id сделки
@@ -102,7 +103,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * @param options настройки запроса и обработки результата
      * @returns экземпляр найденной сделки или null, если сделка не найдена.
      * */
-    getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions): Promise<Lead | null>;
+    getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<LeadAttributes>): Promise<Lead | null>;
     /**
      * Создаёт новые сделки
      * @param criteria параметры создания сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-add)
@@ -156,7 +157,7 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * lead1.id; // 123
      * ```
      * */
-    create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]>;
+    create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions<CollectionResponse<LeadCreateResult>>): Promise<Lead[]>;
     /**
      * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
      * */
@@ -169,5 +170,5 @@ export default class LeadFactory extends ResourceFactory<Lead> {
      * @returns массив объектов {@link Lead}. Если в параметр criteria передавались экземпляры {@link Lead}, после
      * создания сделок в AmoCRM, у них обновится поле id
      * */
-    update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions): Promise<Lead[]>;
+    update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions<CollectionResponse<LeadUpdateResult>>): Promise<Lead[]>;
 }

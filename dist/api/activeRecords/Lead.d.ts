@@ -4,8 +4,9 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
-import LeadFactory, { LeadsGetByIdCriteria } from "../factories/LeadFactory";
-export interface LeadAttributes {
+import LeadFactory, { LeadCreateResult, LeadsGetByIdCriteria, LeadUpdateResult } from "../factories/LeadFactory";
+import { CollectionResponse, IEntityAttributes } from "../../interfaces/api";
+export interface LeadAttributes extends IEntityAttributes {
     id?: number;
     name?: string;
     price?: number;
@@ -31,7 +32,7 @@ export interface LeadAttributes {
 /**
  * Сделка
  */
-export default class Lead extends ResourceEntity<LeadFactory> {
+export default class Lead extends ResourceEntity<LeadFactory, LeadAttributes> {
     id?: number;
     name?: string;
     price?: number;
@@ -76,7 +77,7 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * ```
      * @returns ссылка на созданную сущность
      * */
-    create(options?: IRequestOptions): Promise<Lead>;
+    create(options?: IRequestOptions<CollectionResponse<LeadCreateResult>>): Promise<Lead>;
     /**
      * Обновляет сущность на портале AmoCRM.
      * @param options настройки запроса и обработки результата
@@ -88,12 +89,12 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * ```
      * @returns ссылка на обновлённую сущность
      * */
-    update(options?: IRequestOptions): Promise<Lead>;
+    update(options?: IRequestOptions<CollectionResponse<LeadUpdateResult>>): Promise<Lead>;
     /**
      * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
      * @param options настройки запроса и обработки результата
      * */
-    save(options?: IRequestOptions): Promise<Lead>;
+    save(options?: IRequestOptions<never>): Promise<Lead>;
     /**
      * Получает содержимое сущности на портале
      * @param criteria фильтр для уточнения результатов запроса
@@ -104,5 +105,5 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * await lead.fetch();
      * ```
      * */
-    fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions): Promise<false | Lead | null>;
+    fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<Lead>): Promise<false | Lead | null>;
 }

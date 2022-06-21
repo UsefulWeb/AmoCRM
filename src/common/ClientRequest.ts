@@ -12,16 +12,16 @@ export default class ClientRequest extends EventEmitter {
         super();
         this.connection = connection;
     }
-    make<T>(method: string, url: string, data?: object, options?: IRequestOptions) {
+    make<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>) {
         return this.connection.makeRequest<T>(method, url, data, options);
     }
-    get<T>(url: string, data?: object, options?: IRequestOptions) {
+    get<T>(url: string, data?: object, options?: IRequestOptions<T>) {
         return this.connection.makeRequest<T>('GET', url, data, options);
     }
-    post<T>(url: string, data?: object, options?: IRequestOptions) {
+    post<T>(url: string, data?: object, options?: IRequestOptions<T>) {
         return this.connection.makeRequest<T>('POST', url, data, options);
     }
-    patch<T>(url: string, data?: object, options?: IRequestOptions) {
+    patch<T>(url: string, data?: object, options?: IRequestOptions<T>) {
         return this.connection.makeRequest<T>('PATCH', url, data, options);
     }
 }

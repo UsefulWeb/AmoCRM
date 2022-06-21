@@ -50,7 +50,12 @@ class Environment {
             if (typeof value !== 'object') {
                 return defaultValue;
             }
-            value = value[key];
+            if (Array.isArray(value)) {
+                value = value[+key];
+            }
+            else {
+                value = [key];
+            }
         }
         if (value === undefined) {
             return defaultValue;
@@ -73,16 +78,39 @@ class Environment {
         }
         for (let i = 0; i < parts.length - 1; i++) {
             const key = parts[i];
-            if (!handler[key]) {
-                handler[key] = {};
+            const numericIndex = +key;
+            if (typeof handler === 'object') {
+                if (Array.isArray(handler) && !(numericIndex in handler)) {
+                    handler[numericIndex] = {};
+                }
+                if (!Array.isArray(handler) && !(key in handler)) {
+                    handler[key] = {};
+                }
             }
-            handler = handler[key];
+            else {
+                throw new Error('INVALID_PATH');
+            }
+            if (Array.isArray(handler)) {
+                handler = handler[numericIndex];
+            }
+            else {
+                handler = handler[key];
+            }
         }
         const lastKey = parts.pop();
         if (!lastKey) {
             throw new Error('INVALID_PATH');
         }
-        handler[lastKey] = value;
+        if (typeof handler !== 'object') {
+            throw new Error('INVALID_PATH');
+        }
+        const lastNumericIndex = +lastKey;
+        if (Array.isArray(handler)) {
+            handler[lastNumericIndex] = value;
+        }
+        else {
+            handler[lastKey] = value;
+        }
         return this;
     }
     /**

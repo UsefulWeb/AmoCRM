@@ -39,5 +39,5 @@ export default class Connection extends EventEmitter {
      * Формирует запрос к порталу. Предварительно проверяет наличие соединения
      * При его отсутствии пытается его установить
      * */
-    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions): Promise<import("../interfaces/common").IAPIResponse<T>>;
+    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<import("../interfaces/common").IAPIResponse<T>>;
 }

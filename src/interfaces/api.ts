@@ -4,11 +4,11 @@ import { IRequestOptions } from "./common";
 
 export interface IResourceFactory<T> {
     createEntity(): IResourceEntity;
-    from(attributes?: JSONObject): T;
+    from(attributes?: IEntityAttributes): T;
 }
 
 export interface IResourceEntity {
-    setAttributes(attributes?: JSONObject): void;
+    setAttributes(attributes?: IEntityAttributes): void;
 }
 
 export interface IResourceEntityConstructor<T> {
@@ -36,19 +36,19 @@ export interface IPaginationLinks {
     first?: string;
 }
 
-export interface IResourcePaginationParams<T> {
+export interface IResourcePaginationParams<T, R> {
     url: string;
     criteria?: object;
     factory: IResourceFactory<T>;
     embedded: string;
-    options?: IRequestOptions;
+    options?: IRequestOptions<IPaginatedResponse<R>>;
 }
 
 export interface ILinkResponse {
     href: string
 }
 
-export interface IPaginatedResponse {
+export interface IPaginatedResponse<T> {
     _page: number;
     _links: {
         self?: ILinkResponse;
@@ -56,7 +56,13 @@ export interface IPaginatedResponse {
         first?: ILinkResponse;
         prev?: ILinkResponse;
     }
-    _embedded: JSONObject;
+    _embedded: {
+        [index: string]: T[]
+    };
+}
+
+export interface IEntityAttributes {
+    id?: number;
 }
 
 export type IEntityConstructor<T> = (attributes?: JSONObject) => T;

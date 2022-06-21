@@ -37,7 +37,7 @@ class ResourcePagination {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const { criteria, options } = this.params;
             const apiResponse = yield this.request.get(url, criteria, options);
-            const data = apiResponse.data;
+            const { data } = apiResponse;
             this.page = (data === null || data === void 0 ? void 0 : data._page) || 1;
             this.parseData(data);
             this.parseLinks(data);

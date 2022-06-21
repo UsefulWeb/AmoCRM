@@ -4,9 +4,10 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
-import LeadFactory, { LeadsGetByIdCriteria } from "../factories/LeadFactory";
+import LeadFactory, { LeadCreateResult, LeadsGetByIdCriteria, LeadUpdateResult } from "../factories/LeadFactory";
+import { CollectionResponse, IEntityAttributes } from "../../interfaces/api";
 
-export interface LeadAttributes {
+export interface LeadAttributes extends IEntityAttributes {
     id?: number;
     name?: string;
     price?: number;
@@ -33,7 +34,7 @@ export interface LeadAttributes {
 /**
  * Сделка
  */
-export default class Lead extends ResourceEntity<LeadFactory> {
+export default class Lead extends ResourceEntity<LeadFactory, LeadAttributes> {
     id?: number;
     name?: string;
     price?: number;
@@ -124,7 +125,7 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * ```
      * @returns ссылка на созданную сущность
      * */
-    async create(options?: IRequestOptions) {
+    async create(options?: IRequestOptions<CollectionResponse<LeadCreateResult>>) {
         const criteria = [this];
         const [lead] = await this.factory.create(criteria, options);
 
@@ -143,7 +144,7 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * ```
      * @returns ссылка на обновлённую сущность
      * */
-    async update(options?: IRequestOptions) {
+    async update(options?: IRequestOptions<CollectionResponse<LeadUpdateResult>>) {
         const criteria = [this];
         const [lead] = await this.factory.update(criteria, options);
 
@@ -155,7 +156,7 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
      * @param options настройки запроса и обработки результата
      * */
-    save(options?: IRequestOptions) {
+    save(options?: IRequestOptions<never>) {
         if (this.isNew()) {
             return this.create(options);
         }
@@ -172,7 +173,7 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * await lead.fetch();
      * ```
      * */
-    async fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions) {
+    async fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<Lead>) {
         if (this.isNew()) {
             return false;
         }

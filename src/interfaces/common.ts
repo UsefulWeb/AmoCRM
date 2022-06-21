@@ -16,6 +16,7 @@ export interface IAuthOptions extends ITokenOptions {
 }
 
 export interface IClientOptions {
+    [index: string]: string | object;
     domain: string;
     auth: IAuthOptions;
 }
@@ -28,18 +29,18 @@ export interface ITokenData {
     expires_at?: number
 }
 
-export interface IRequestOptions {
+export interface IRequestOptions<T> {
     headers?: TStringValueObject;
     useFormData?: boolean;
-    parser?: IResponseParser<string, any>;
+    parser?: IResponseParser<string, T>;
 }
 
-export interface DomainRequestOptions {
+export interface DomainRequestOptions<T> {
     domain: string,
     method: string;
     url: string;
     data?: object;
-    options?: IRequestOptions;
+    options?: IRequestOptions<T>;
     token?: ITokenData;
 }
 

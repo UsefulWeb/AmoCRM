@@ -134,7 +134,7 @@ export default class Connection extends EventEmitter {
      * Формирует запрос к порталу. Предварительно проверяет наличие соединения
      * При его отсутствии пытается его установить
      * */
-    async makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions) {
+    async makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>) {
         await this.update();
         const token = this.token.getValue();
         const domain = <string>this.environment.get<string>('domain');
@@ -147,6 +147,6 @@ export default class Connection extends EventEmitter {
             token
         };
         const domainRequest = new DomainRequest(config);
-        return await domainRequest.process<T>();
+        return await domainRequest.process();
     }
 }

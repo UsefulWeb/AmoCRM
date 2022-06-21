@@ -2,21 +2,22 @@ import * as http from 'http';
 import EventEmitter from "../EventEmitter";
 import { IAPIResponse, IResponseParser } from "../../interfaces/common";
 import APIResponseError from "../APIResponseError";
-import { JSONObject } from "../../types";
+import { JSONValue } from "../../types";
 
 /**
  * Преобразует ответ портала в JSON-объект
  * */
-export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONObject | null> {
-    parse(apiResponse: IAPIResponse<string>) {
+export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONValue | null> {
+    parse<T>(apiResponse: IAPIResponse<string>): IAPIResponse<T> {
         const { response } = apiResponse;
         if (!apiResponse.data) {
+            const data = <T>{};
             return {
                 response,
-                data: null
+                data
             };
         }
-        const data: JSONObject = JSON.parse(apiResponse.data);
+        const data: T = JSON.parse(apiResponse.data);
 
         this.checkErrors(data, response);
         return {
@@ -24,7 +25,7 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
             data
         };
     }
-    checkErrors(data: object, response: http.IncomingMessage) {
+    checkErrors<T>(data: T, response: http.IncomingMessage) {
         if (!data) {
             throw new Error('NO_JSON_RESPONSE');
         }
@@ -33,7 +34,7 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
         }
         if ('status' in data) {
             console.error(data);
-            throw new APIResponseError('API_RESPONSE_ERROR', data, response);
+            throw new APIResponseError<T>('API_RESPONSE_ERROR', data, response);
         }
     }
 }

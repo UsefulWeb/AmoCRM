@@ -4,8 +4,9 @@
 import ResourceEntity from "../ResourceEntity";
 import ContactFactory from "../factories/ContactFactory";
 import { JSONObject } from "../../types";
+import { IEntityAttributes } from "../../interfaces/api";
 
-export interface ContactAttributes {
+export interface ContactAttributes extends IEntityAttributes {
     id?: number;
     name?: string;
     first_name?: string;
@@ -23,7 +24,7 @@ export interface ContactAttributes {
     _embedded?: JSONObject[];
 }
 
-export default class Contact extends ResourceEntity<ContactFactory> {
+export default class Contact extends ResourceEntity<ContactFactory, ContactAttributes> {
     id?: number;
     name?: string;
     first_name?: string;

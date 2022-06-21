@@ -1,6 +1,5 @@
-import { IResourceFactory } from "../interfaces/api";
+import { IEntityAttributes, IResourceFactory } from "../interfaces/api";
 import ClientRequest from "../common/ClientRequest";
-import { JSONObject } from "../types";
 import ResourceEntity from "./ResourceEntity";
 import EventEmitter from "../common/EventEmitter";
 
@@ -8,7 +7,7 @@ import EventEmitter from "../common/EventEmitter";
  * Основной класс фабрики сущностей. Класс-фабрика служит для создания
  * новых сущностей. Например, {@link LeadFactory} отвечает за {@link Lead}
  * */
-export default abstract class ResourceFactory<T extends ResourceEntity<ResourceFactory<T>>>
+export default abstract class ResourceFactory<T extends ResourceEntity<ResourceFactory<T, A>, A>, A>
     extends EventEmitter
     implements IResourceFactory<T>
 {
@@ -37,7 +36,7 @@ export default abstract class ResourceFactory<T extends ResourceEntity<ResourceF
      * Создаёт сущность и заполняет её атрибутами, которые
      * будут синхронизироваться с порталом AmoCRM
      * */
-    from(attributes?: JSONObject): T {
+    from(attributes?: A): T {
         const instance = this.createEntity();
         instance.setAttributes(attributes);
         return instance;
@@ -49,7 +48,7 @@ export default abstract class ResourceFactory<T extends ResourceEntity<ResourceF
      * @param criteriaData массив plain JavaScript-объектов или сущностей
      * @returns массив plain JavaScript-объектов
      * */
-    protected getEntityCriteria<T extends ResourceEntity<ResourceFactory<T>>>(criteriaData: (JSONObject | T)[]): JSONObject[] {
+    protected getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[] {
         return criteriaData.map(criteria => {
             if (criteria instanceof ResourceEntity) {
                 return criteria.getAttributes();

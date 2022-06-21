@@ -10,9 +10,10 @@ class JSONResponseParser extends EventEmitter_1.default {
     parse(apiResponse) {
         const { response } = apiResponse;
         if (!apiResponse.data) {
+            const data = {};
             return {
                 response,
-                data: null
+                data
             };
         }
         const data = JSON.parse(apiResponse.data);

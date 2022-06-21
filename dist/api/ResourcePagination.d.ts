@@ -1,15 +1,15 @@
 import ClientRequest from "../common/ClientRequest";
-import { IPaginatedResponse, IPaginationLinks, IResourcePagination, IResourcePaginationParams } from "../interfaces/api";
+import { IEntityAttributes, IPaginatedResponse, IPaginationLinks, IResourcePagination, IResourcePaginationParams } from "../interfaces/api";
 /**
  * Постраничная навигация вывода сущностей
  * */
-export default class ResourcePagination<T> implements IResourcePagination<T> {
+export default class ResourcePagination<T, R extends IEntityAttributes> implements IResourcePagination<T> {
     protected readonly request: ClientRequest;
-    protected readonly params: IResourcePaginationParams<T>;
+    protected readonly params: IResourcePaginationParams<T, R>;
     protected data: T[];
     protected links: IPaginationLinks;
     protected page: number;
-    constructor(request: ClientRequest, params: IResourcePaginationParams<T>);
+    constructor(request: ClientRequest, params: IResourcePaginationParams<T, R>);
     /**
      * Загружает данные первой страницы
      * */
@@ -50,11 +50,11 @@ export default class ResourcePagination<T> implements IResourcePagination<T> {
     /**
      * Обрабатывает объект ссылок на первую, предыдущую и следущие страницы
      * */
-    protected parseLinks(response?: IPaginatedResponse): this;
+    protected parseLinks(response?: IPaginatedResponse<R>): this;
     /**
      * Преобразовывает массив атрибутов сущностей в объекты-сущностей
      * */
-    protected parseData(response?: IPaginatedResponse): this | undefined;
+    protected parseData(response?: IPaginatedResponse<R>): this | undefined;
     /**
      * Возвращает номер текущей страницы
      * */

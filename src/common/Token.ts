@@ -1,5 +1,5 @@
 import EventEmitter from "./EventEmitter";
-import { IAPIResponse, IAuthOptions, ITokenData } from "../interfaces/common";
+import { DomainRequestOptions, IAPIResponse, IAuthOptions, ITokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import Environment from "./Environment";
 import DomainRequest from "./DomainRequest";
@@ -159,13 +159,13 @@ export default class Token extends EventEmitter {
         const domain = this.environment.get<string>('domain');
         const method = 'POST';
         const url = schema.auth.token;
-        const config = {
+        const config: DomainRequestOptions<ITokenData> = {
             domain,
             method,
             data,
             url
         };
         const request = new DomainRequest(config);
-        return request.process<ITokenData>();
+        return request.process();
     }
 }

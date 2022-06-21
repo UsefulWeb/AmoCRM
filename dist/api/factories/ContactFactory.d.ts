@@ -1,7 +1,8 @@
 import ResourceFactory from "../ResourceFactory";
-import Contact from "../activeRecords/Contact";
+import Contact, { ContactAttributes } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
+import { IPaginatedResponse } from "../../interfaces/api";
 export interface ContactsGetCriteria {
     with?: string;
     page?: number;
@@ -13,7 +14,7 @@ export interface ContactsGetCriteria {
 /**
  * Фабрика управления контактами
  * */
-export default class ContactFactory extends ResourceFactory<Contact> {
+export default class ContactFactory extends ResourceFactory<Contact, ContactAttributes> {
     createEntity(): Contact;
     getBaseUrl(): string;
     /**
@@ -42,5 +43,5 @@ export default class ContactFactory extends ResourceFactory<Contact> {
      *
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Contact}
      * */
-    get(criteria?: ContactsGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<Contact>>;
+    get(criteria?: ContactsGetCriteria, options?: IRequestOptions<IPaginatedResponse<ContactAttributes>>): Promise<ResourcePagination<Contact, ContactAttributes>>;
 }

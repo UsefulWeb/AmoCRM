@@ -8,8 +8,8 @@ import EventEmitter from "./EventEmitter";
 export default class ClientRequest extends EventEmitter {
     protected readonly connection: Connection;
     constructor(connection: Connection);
-    make<T>(method: string, url: string, data?: object, options?: IRequestOptions): Promise<import("../interfaces/common").IAPIResponse<T>>;
-    get<T>(url: string, data?: object, options?: IRequestOptions): Promise<import("../interfaces/common").IAPIResponse<T>>;
-    post<T>(url: string, data?: object, options?: IRequestOptions): Promise<import("../interfaces/common").IAPIResponse<T>>;
-    patch<T>(url: string, data?: object, options?: IRequestOptions): Promise<import("../interfaces/common").IAPIResponse<T>>;
+    make<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<import("../interfaces/common").IAPIResponse<T>>;
+    get<T>(url: string, data?: object, options?: IRequestOptions<T>): Promise<import("../interfaces/common").IAPIResponse<T>>;
+    post<T>(url: string, data?: object, options?: IRequestOptions<T>): Promise<import("../interfaces/common").IAPIResponse<T>>;
+    patch<T>(url: string, data?: object, options?: IRequestOptions<T>): Promise<import("../interfaces/common").IAPIResponse<T>>;
 }

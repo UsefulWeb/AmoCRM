@@ -1,5 +1,5 @@
 import { IClientOptions } from "../interfaces/common";
-import { JSONObject } from "../types";
+import { JSONObject, JSONValue } from "../types";
 
 /**
  * Компонент настроек окружения.
@@ -9,7 +9,7 @@ import { JSONObject } from "../types";
  * - изменённые в процессе работы с помощью {@link Environment.set}
  * */
 class Environment {
-    protected readonly options: JSONObject;
+    protected readonly options: IClientOptions;
     constructor(options: IClientOptions) {
         this.options = options;
     }
@@ -47,18 +47,23 @@ class Environment {
         if (!path) {
             return <T><unknown>this.options;
         }
-        let value: any = this.options;
+        let value: JSONValue = <JSONObject>this.options;
         const parts = path.split('.');
         for (const key of parts) {
             if (typeof value !== 'object') {
                 return <T>defaultValue;
             }
-            value = value[key];
+            if (Array.isArray(value)) {
+                value = value[+key];
+            }
+            else {
+                value = [key];
+            }
         }
         if (value === undefined) {
             return <T>defaultValue;
         }
-        return value;
+        return <T><unknown>value;
     }
 
     /**
@@ -66,27 +71,51 @@ class Environment {
      * @param path - путь к настройке. Аналогичен path в {@link get}
      * @param value - новое значение
      * */
-    set<T>(path: string, value: T) {
+    set(path: string, value: JSONValue) {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
         }
-        let handler = this.options;
+        let handler: JSONValue = <JSONObject> this.options;
         const parts = path.split('.');
         if (parts.length === 0) {
             throw new Error('PATH_IS_EMPTY');
         }
         for (let i = 0; i < parts.length - 1; i++) {
             const key = parts[i];
-            if (!handler[key]) {
-                handler[key] = {};
+            const numericIndex = +key;
+            if (typeof handler === 'object') {
+                if (Array.isArray(handler) && !(numericIndex in handler)) {
+                    handler[numericIndex] = {};
+                }
+                if (!Array.isArray(handler) && !(key in handler)){
+                    handler[key] = {};
+                }
             }
-            handler = handler[key];
+            else {
+                throw new Error('INVALID_PATH');
+            }
+
+            if (Array.isArray(handler)) {
+                handler = handler[numericIndex];
+            }
+            else {
+                handler = handler[key];
+            }
         }
         const lastKey = parts.pop();
         if (!lastKey) {
             throw new Error('INVALID_PATH');
         }
-        handler[lastKey] = value;
+        if (typeof handler !== 'object') {
+            throw new Error('INVALID_PATH');
+        }
+        const lastNumericIndex = +lastKey;
+        if (Array.isArray(handler)) {
+            handler[lastNumericIndex] = value;
+        }
+        else {
+            handler[lastKey] = value;
+        }
         return this;
     }
 
