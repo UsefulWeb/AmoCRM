@@ -43,7 +43,7 @@ export default class AuthServer extends EventEmitter {
             if (this.instance === undefined) {
                 return resolve();
             }
-            this.instance.close()
+            this.instance
                 .on('close', () => {
                     this.emit('close');
                     resolve();
@@ -52,6 +52,7 @@ export default class AuthServer extends EventEmitter {
                     this.emit('serverError', e);
                     reject();
                 });
+            this.instance.close();
         });
     }
     /**
