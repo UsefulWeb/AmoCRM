@@ -2,12 +2,14 @@ import { IEntityAttributes, IResourceFactory } from "../interfaces/api";
 import ClientRequest from "../common/ClientRequest";
 import ResourceEntity from "./ResourceEntity";
 import EventEmitter from "../common/EventEmitter";
+import ResourcePagination from "./ResourcePagination";
+import { JSONObject } from "../types";
 
 /**
  * Основной класс фабрики сущностей. Класс-фабрика служит для создания
  * новых сущностей. Например, {@link LeadFactory} отвечает за {@link Lead}
  * */
-export default abstract class ResourceFactory<T extends ResourceEntity<ResourceFactory<T, A>, A>, A>
+export default abstract class ResourceFactory<T extends ResourceEntity<ResourceFactory<T>>>
     extends EventEmitter
     implements IResourceFactory<T>
 {
@@ -36,7 +38,7 @@ export default abstract class ResourceFactory<T extends ResourceEntity<ResourceF
      * Создаёт сущность и заполняет её атрибутами, которые
      * будут синхронизироваться с порталом AmoCRM
      * */
-    from(attributes?: A): T {
+    from(attributes?: JSONObject): T {
         const instance = this.createEntity();
         instance.setAttributes(attributes);
         return instance;

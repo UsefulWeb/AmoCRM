@@ -3,7 +3,9 @@ import Contact, { ContactAttributes } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
 import schema from "../../schema/v4";
-import { IPaginatedResponse } from "../../interfaces/api";
+import { CollectionResponse, IPaginatedResponse } from "../../interfaces/api";
+import ResourceEntity from "../ResourceEntity";
+import { JSONObject } from "../../types";
 
 
 export interface ContactsGetCriteria {
@@ -13,6 +15,40 @@ export interface ContactsGetCriteria {
     query?: string | number;
     filter?: string;
     order?: string;
+}
+
+export interface ContactsGetByIdCriteria {
+    with?: string;
+}
+
+export interface ContactsCreateCriteria {
+    name?: string;
+    first_name?: string;
+    last_name?: string;
+    responsible_user_id?: number;
+    created_by?: number;
+    updated_by?: number;
+    created_at?: number;
+    updated_at?: number;
+    custom_fields_values?: JSONObject[] | null;
+    _embedded?: JSONObject;
+
+    request_id?: string;
+}
+
+export interface ContactCreateResult {
+    id: number;
+    request_id: string;
+}
+
+export interface ContactsUpdateCriteria extends ContactsCreateCriteria {
+    id: number;
+}
+
+export interface ContactUpdateResult {
+    id: number;
+    request_id: string;
+    updated_at: number;
 }
 
 /**
@@ -69,5 +105,52 @@ export default class ContactFactory extends ResourceFactory<Contact, ContactAttr
 
         this.emit('get');
         return pagination;
+    }
+
+    async getById(identity: number, criteria?: ContactsGetByIdCriteria, options?: IRequestOptions<ContactAttributes>): Promise<Contact|null> {
+        const url = this.getUrl('/' + identity);
+        const { data } = await this.request.get(url, criteria, options);
+        if (!data) {
+            return null;
+        }
+        const contact = this.createEntity();
+
+        contact.setAttributes(data);
+        return contact;
+    }
+
+    async create(criteria: (ContactsCreateCriteria | Contact)[], options?: IRequestOptions<CollectionResponse<ContactCreateResult>>): Promise<Contact[]> {
+        const url = this.getUrl();
+        const requestCriteria = this.getEntityCriteria(criteria);
+        const { data } = await this.request.post(url, requestCriteria, options);
+        const response = data?._embedded?.contacts || [];
+
+        const result = response.map((attributes, index: number) => {
+            const entityCriteria = criteria[index];
+            const contact = entityCriteria instanceof ResourceEntity ?
+                entityCriteria :
+                this.from(entityCriteria);
+            contact.id = attributes.id;
+            return contact;
+        });
+        return result;
+    }
+
+    async update(criteria: (ContactsUpdateCriteria | Contact)[], options?: IRequestOptions<CollectionResponse<ContactUpdateResult>>): Promise<Contact[]> {
+        const url = this.getUrl();
+        const requestCriteria = this.getEntityCriteria(criteria);
+        const { data } = await this.request.patch(url, requestCriteria, options);
+        const response = data?._embedded?.contacts || [];
+
+        const result = response.map((attributes, index: number) => {
+            const entityCriteria = criteria[index];
+            const contact = entityCriteria instanceof Contact ?
+                entityCriteria :
+                this.from(entityCriteria);
+            contact.id = attributes.id;
+            contact.updated_at = attributes.updated_at;
+            return contact;
+        });
+        return result;
     }
 }

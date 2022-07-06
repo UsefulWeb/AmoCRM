@@ -44,27 +44,14 @@ export interface LeadCreateResult {
     request_id: string;
 }
 
-export interface LeadsUpdateCriteria {
+export interface LeadsUpdateCriteria extends LeadsCreateCriteria {
     id: number;
-    name?: string;
-    price?: number;
-    status_id?: number;
-    pipeline_id?: number;
-    created_by?: number;
-    closed_at?: number;
-    created_at?: number;
-    updated_at?: number;
-    loss_reason_id?: number;
-    responsible_user_id?: number;
-    custom_fields_values?: JSONObject[];
-
-    request_id?: string;
 }
 
 export interface LeadUpdateResult {
     id: number;
     request_id: string;
-    updated_at: number
+    updated_at: number;
 }
 
 /**
@@ -107,20 +94,7 @@ export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
      *
      * */
     async get(criteria?: LeadsGetCriteria, options?: IRequestOptions<IPaginatedResponse<LeadAttributes>>) {
-        const url = this.getUrl();
-
-        const params = {
-            url,
-            criteria,
-            options,
-            factory: this,
-            embedded: 'leads'
-        };
-        const pagination = new ResourcePagination<Lead, LeadAttributes>(this.request, params);
-        await pagination.fetch();
-
-        this.emit('get');
-        return pagination;
+        return parent.get(criteria, options);
     }
 
     /**

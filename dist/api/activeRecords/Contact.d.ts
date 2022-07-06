@@ -20,7 +20,7 @@ export interface ContactAttributes extends IEntityAttributes {
     closed_task_at?: number;
     custom_fields_values?: JSONObject[] | null;
     account_id?: number;
-    _embedded?: JSONObject[];
+    _embedded?: JSONObject;
 }
 export default class Contact extends ResourceEntity<ContactFactory, ContactAttributes> {
     id?: number;
@@ -37,7 +37,7 @@ export default class Contact extends ResourceEntity<ContactFactory, ContactAttri
     closed_task_at?: number;
     custom_fields_values?: JSONObject[] | null;
     account_id?: number;
-    _embedded?: JSONObject[];
+    _embedded?: JSONObject;
     getAttributes(): ContactAttributes;
     setAttributes(attributes?: ContactAttributes): void;
 }

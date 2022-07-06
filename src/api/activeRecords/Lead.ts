@@ -34,7 +34,7 @@ export interface LeadAttributes extends IEntityAttributes {
 /**
  * Сделка
  */
-export default class Lead extends ResourceEntity<LeadFactory, LeadAttributes> {
+export default class Lead extends ResourceEntity<LeadFactory> {
     id?: number;
     name?: string;
     price?: number;
