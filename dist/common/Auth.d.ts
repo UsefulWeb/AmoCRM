@@ -1,14 +1,7 @@
 import EventEmitter from "./EventEmitter";
-import Environment from "./Environment";
-import Token from "./Token";
-/**
- * Компонент авторизации.
- * Доступен как client.auth
- * */
-export default class Auth extends EventEmitter {
-    protected readonly environment: Environment;
-    protected readonly token: Token;
-    constructor(environment: Environment, token: Token);
+import { IEnvironment } from "./Environment";
+import { IToken } from "./Token";
+export interface IAuth {
     /**
      * Устанавливает код авторизации и убирает информацию о текущем токене
      * */
@@ -19,5 +12,16 @@ export default class Auth extends EventEmitter {
      *
      * @param mode popup или post_messageю
      * */
+    getUrl(mode: string): string;
+}
+/**
+ * Компонент авторизации.
+ * Доступен как client.auth
+ * */
+export default class Auth extends EventEmitter implements IAuth {
+    protected readonly environment: IEnvironment;
+    protected readonly token: IToken;
+    constructor(environment: IEnvironment, token: IToken);
+    setCode(code: string): void;
     getUrl(mode?: string): string;
 }

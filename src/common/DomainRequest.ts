@@ -3,7 +3,7 @@ import * as https from 'https';
 import * as http from 'http';
 import * as Buffer from "buffer";
 
-import { IAPIResponse, DomainRequestOptions } from "../interfaces/common";
+import { IAPIResponse, IDomainRequestOptions } from "../interfaces/common";
 import { TStringValueObject } from "../types";
 import {HttpMethod} from "../enums";
 import EventEmitter from "./EventEmitter";
@@ -15,7 +15,7 @@ import JSONResponseParser from "./response/JSONResponseParser";
 export default class DomainRequest<T> extends EventEmitter {
     protected readonly hostname: string;
 
-    constructor(protected readonly config: DomainRequestOptions<T>) {
+    constructor(protected readonly config: IDomainRequestOptions<T>) {
         super();
         this.hostname = this.getHostname();
     }

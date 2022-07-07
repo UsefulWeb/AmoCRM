@@ -1,20 +1,26 @@
 import EventEmitter from "./EventEmitter";
-import { IRequestOptions } from "../interfaces/common";
-import Token from "./Token";
-import Environment from "./Environment";
+import { IAPIResponse, IRequestOptions } from "../interfaces/common";
+import { IToken } from "./Token";
+import { IEnvironment } from "./Environment";
 import AuthServer from "./AuthServer";
-import Auth from "./Auth";
+import { IAuth } from "./Auth";
+export interface IConnection {
+    update(): Promise<boolean>;
+    isTokenExpired(): boolean;
+    connect(): Promise<boolean>;
+    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<IAPIResponse<T>>;
+}
 /**
  * Компонент управления соединением с порталом
  * Доступен как client.connection
  * */
-export default class Connection extends EventEmitter {
-    protected readonly token: Token;
-    protected readonly environment: Environment;
-    protected readonly auth: Auth;
+export default class Connection extends EventEmitter implements IConnection {
+    protected readonly token: IToken;
+    protected readonly environment: IEnvironment;
+    protected readonly auth: IAuth;
     protected connected: boolean;
     protected authServer: AuthServer | null;
-    constructor(environment: Environment, token: Token, auth: Auth);
+    constructor(environment: IEnvironment, token: IToken, auth: IAuth);
     /**
      * При отсуствии OAuth-токена пытается его получить
      * При устаревшем OAuth-токене пытается его обновить
@@ -39,5 +45,5 @@ export default class Connection extends EventEmitter {
      * Формирует запрос к порталу. Предварительно проверяет наличие соединения
      * При его отсутствии пытается его установить
      * */
-    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<import("../interfaces/common").IAPIResponse<T>>;
+    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<IAPIResponse<T>>;
 }

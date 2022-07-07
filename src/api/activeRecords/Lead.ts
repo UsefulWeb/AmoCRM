@@ -4,8 +4,13 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
-import LeadFactory, { LeadCreateResult, LeadsGetByIdCriteria, LeadUpdateResult } from "../factories/LeadFactory";
-import { CollectionResponse, IEntityAttributes } from "../../interfaces/api";
+import {
+    ILeadFactory,
+    LeadCreateResult,
+    LeadsGetByIdCriteria,
+    LeadUpdateResult
+} from "../factories/LeadFactory";
+import { ICollectionResponse, IEntityAttributes } from "../../interfaces/api";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -34,8 +39,7 @@ export interface LeadAttributes extends IEntityAttributes {
 /**
  * Сделка
  */
-export default class Lead extends ResourceEntity<LeadFactory> {
-    id?: number;
+export default class Lead extends ResourceEntity<ILeadFactory> {
     name?: string;
     price?: number;
     responsible_user_id?: number;
@@ -48,7 +52,6 @@ export default class Lead extends ResourceEntity<LeadFactory> {
     updated_by?: number;
     closed_at?: number;
     created_at?: number;
-    updated_at?: number;
     closed_task_at?: number;
     is_deleted?: boolean;
     custom_fields_values?: JSONObject[] | null;
@@ -125,7 +128,7 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * ```
      * @returns ссылка на созданную сущность
      * */
-    async create(options?: IRequestOptions<CollectionResponse<LeadCreateResult>>) {
+    async create(options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>) {
         const criteria = [this];
         const [lead] = await this.factory.create(criteria, options);
 
@@ -144,7 +147,7 @@ export default class Lead extends ResourceEntity<LeadFactory> {
      * ```
      * @returns ссылка на обновлённую сущность
      * */
-    async update(options?: IRequestOptions<CollectionResponse<LeadUpdateResult>>) {
+    async update(options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>) {
         const criteria = [this];
         const [lead] = await this.factory.update(criteria, options);
 

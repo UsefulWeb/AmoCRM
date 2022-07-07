@@ -15,12 +15,14 @@ class EventEmitter extends events_1.EventEmitter {
      * */
     subscribe(subscriber) {
         this.subscribers.push(subscriber);
+        return this;
     }
     /**
      * Отписка от событий
      * */
     unsubscribe(subscriber) {
         this.subscribers = this.subscribers.filter(s => s !== subscriber);
+        return this;
     }
     /**
      * Формирует событие у целевого объекта и у подписчиков

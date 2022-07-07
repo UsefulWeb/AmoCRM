@@ -1,9 +1,41 @@
 import EventEmitter from "./EventEmitter";
-import { DomainRequestOptions, IAPIResponse, IAuthOptions, ITokenData } from "../interfaces/common";
+import { IDomainRequestOptions, IAPIResponse, IAuthOptions, ITokenData } from "../interfaces/common";
 import schema from "../schema/v4";
-import Environment from "./Environment";
+import { IEnvironment } from "./Environment";
 import DomainRequest from "./DomainRequest";
 import { TStringValueObject } from "../types";
+
+export interface IToken {
+    /**
+     * Проверяет, истёк ли токен
+     * */
+    isExpired(): boolean;
+    /**
+     * Стирает информацию о текущем токене
+     * */
+    clear(): void;
+    /**
+     * Проверяет, существует ли текущий токен
+     * */
+    exists(): boolean;
+    /**
+     * Устанавливает текущее значение токена
+     * */
+    setValue(value: ITokenData): void;
+    /**
+     * Возвращает текущее значение токена
+     * */
+    getValue(): ITokenData | undefined;
+    /**
+     * Получает токен по коду авторизации
+     * */
+    fetch(): Promise<ITokenData | undefined>;
+    /**
+     * Обновляет токен по значению refresh_token
+     * */
+    refresh(): Promise<ITokenData | undefined>;
+}
+
 
 /**
  * Компонент управления текущим oAuth-токеном
@@ -14,15 +46,12 @@ export default class Token extends EventEmitter {
     protected expiresAt?: Date;
     protected code?: string;
 
-    protected readonly environment: Environment;
-    constructor(environment: Environment) {
+    protected readonly environment: IEnvironment;
+    constructor(environment: IEnvironment) {
         super();
         this.environment = environment;
     }
 
-    /**
-     * Проверяет, истёк ли токен
-     * */
     isExpired(): boolean {
         this.emit('expirationCheck');
         const now = new Date;
@@ -32,24 +61,15 @@ export default class Token extends EventEmitter {
         return now > this.expiresAt;
     }
 
-    /**
-     * Стирает информацию о текущем токене
-     * */
     clear() {
         this.value = undefined;
         delete this.expiresAt;
     }
 
-    /**
-     * Проверяет, существует ли текущий токен
-     * */
     exists() {
         return this.value !== undefined;
     }
 
-    /**
-     * Устанавливает текущее значение токена
-     * */
     setValue(value: ITokenData) {
         this.emit('beforeChange');
         this.value = value;
@@ -64,9 +84,6 @@ export default class Token extends EventEmitter {
         this.emit('change');
     }
 
-    /**
-     * Возвращает текущее значение токена
-     * */
     getValue() {
         return this.value;
     }
@@ -92,9 +109,6 @@ export default class Token extends EventEmitter {
         };
     }
 
-    /**
-     * Получает токен по коду авторизации
-     * */
     async fetch() {
         this.emit( 'beforeFetch');
         const baseClientOptions = this.getBaseClientOptions();
@@ -115,9 +129,6 @@ export default class Token extends EventEmitter {
         return tokenResponse;
     }
 
-    /**
-     * Обновляет токен по значению refresh_token
-     * */
     async refresh() {
         this.emit( 'beforeRefresh', this );
         const baseClientOptions = this.getBaseClientOptions();
@@ -138,7 +149,7 @@ export default class Token extends EventEmitter {
         return tokenResponse;
     }
 
-    handleResponse(apiResponse: IAPIResponse<ITokenData>) {
+    protected handleResponse(apiResponse: IAPIResponse<ITokenData>) {
         const token: ITokenData = apiResponse.data;
         if (!token.token_type) {
             return;
@@ -159,7 +170,7 @@ export default class Token extends EventEmitter {
         const domain = this.environment.get<string>('domain');
         const method = 'POST';
         const url = schema.auth.token;
-        const config: DomainRequestOptions<ITokenData> = {
+        const config: IDomainRequestOptions<ITokenData> = {
             domain,
             method,
             data,

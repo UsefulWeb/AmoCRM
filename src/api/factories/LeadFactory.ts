@@ -7,8 +7,11 @@ import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
-import ResourceEntity from "../ResourceEntity";
-import { CollectionResponse, IPaginatedResponse } from "../../interfaces/api";
+import { ICollectionResponse, IPaginatedResponse, IResourceFactory } from "../../interfaces/api";
+import { canGetByCriteria } from "./mixins/canGetByCriteria";
+import { canGetById } from "./mixins/canGetById";
+import { canCreate } from "./mixins/canCreate";
+import { canUpdate } from "./mixins/canUpdate";
 
 export interface LeadsGetCriteria {
     with?: string;
@@ -54,18 +57,7 @@ export interface LeadUpdateResult {
     updated_at: number;
 }
 
-/**
- * Фабрика управления сделками
- * */
-export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
-    createEntity() {
-        return new Lead(this);
-    }
-
-    getBaseUrl(): string {
-        return schema.entities.leads.path;
-    }
-
+export interface ILeadFactory extends IResourceFactory<Lead> {
     /**
      * @param criteria фильтр сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-list)
      * @example
@@ -93,10 +85,7 @@ export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Lead}
      *
      * */
-    async get(criteria?: LeadsGetCriteria, options?: IRequestOptions<IPaginatedResponse<LeadAttributes>>) {
-        return parent.get(criteria, options);
-    }
-
+    get(criteria?: LeadsGetCriteria, options?: IRequestOptions<IPaginatedResponse>): Promise<ResourcePagination<Lead>>;
     /**
      * Находит сделку по её id
      * @param identity id сделки
@@ -110,18 +99,7 @@ export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
      * @param options настройки запроса и обработки результата
      * @returns экземпляр найденной сделки или null, если сделка не найдена.
      * */
-    async getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<LeadAttributes>): Promise<Lead|null> {
-        const url = this.getUrl('/' + identity);
-        const { data } = await this.request.get(url, criteria, options);
-        if (!data) {
-            return null;
-        }
-        const lead = this.createEntity();
-
-        lead.setAttributes(data);
-        return lead;
-    }
-
+    getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<LeadAttributes>): Promise<Lead|null>;
     /**
      * Создаёт новые сделки
      * @param criteria параметры создания сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-add)
@@ -175,30 +153,7 @@ export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
      * lead1.id; // 123
      * ```
      * */
-    async create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions<CollectionResponse<LeadCreateResult>>): Promise<Lead[]> {
-        const url = this.getUrl();
-        const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.post(url, requestCriteria, options);
-        const response = data?._embedded?.leads || [];
-
-        const result = response.map((attributes, index: number) => {
-            const entityCriteria = criteria[index];
-            const lead = entityCriteria instanceof ResourceEntity ?
-                entityCriteria :
-                this.from(entityCriteria);
-            lead.id = attributes.id;
-            return lead;
-        });
-        return result;
-    }
-
-    /**
-     * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
-     * */
-    async complexCreate() {
-        return false;
-    }
-
+    create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>): Promise<Lead[]>;
     /**
      * Обновляет существующие сделки. Принцип работы метода аналогичен {@link create}
      * @param criteria параметры обновления сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-edit)
@@ -207,21 +162,31 @@ export default class LeadFactory extends ResourceFactory<Lead, LeadAttributes> {
      * @returns массив объектов {@link Lead}. Если в параметр criteria передавались экземпляры {@link Lead}, после
      * создания сделок в AmoCRM, у них обновится поле id
      * */
-    async update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions<CollectionResponse<LeadUpdateResult>>): Promise<Lead[]> {
-        const url = this.getUrl();
-        const requestCriteria = this.getEntityCriteria(criteria);
-        const { data } = await this.request.patch(url, requestCriteria, options);
-        const response = data?._embedded?.leads || [];
+    update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>): Promise<Lead[]>;
+}
 
-        const result = response.map((attributes, index: number) => {
-            const entityCriteria = criteria[index];
-            const lead = entityCriteria instanceof Lead ?
-                entityCriteria :
-                this.from(entityCriteria);
-            lead.id = attributes.id;
-            lead.updated_at = attributes.updated_at;
-            return lead;
-        });
-        return result;
+/**
+ * Фабрика управления сделками
+ * */
+export class BaseLeadFactory extends ResourceFactory<Lead> {
+    createEntity() {
+        return new Lead(this);
+    }
+
+    getBaseUrl(): string {
+        return schema.entities.leads.path;
+    }
+
+    getEmbedded(): string {
+        return 'leads';
+    }
+
+    /**
+     * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
+     * */
+    async complexCreate() {
+        return false;
     }
 }
+
+export default LeadFactory;

@@ -3,7 +3,7 @@ import Contact, { ContactAttributes } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
 import schema from "../../schema/v4";
-import { CollectionResponse, IPaginatedResponse } from "../../interfaces/api";
+import { ICollectionResponse, IPaginatedResponse } from "../../interfaces/api";
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 
@@ -54,7 +54,7 @@ export interface ContactUpdateResult {
 /**
  * Фабрика управления контактами
  * */
-export default class ContactFactory extends ResourceFactory<Contact, ContactAttributes> {
+export default class ContactFactory extends ResourceFactory<Contact> {
 
     createEntity(): Contact {
         return new Contact(this);
@@ -119,7 +119,7 @@ export default class ContactFactory extends ResourceFactory<Contact, ContactAttr
         return contact;
     }
 
-    async create(criteria: (ContactsCreateCriteria | Contact)[], options?: IRequestOptions<CollectionResponse<ContactCreateResult>>): Promise<Contact[]> {
+    async create(criteria: (ContactsCreateCriteria | Contact)[], options?: IRequestOptions<ICollectionResponse<ContactCreateResult>>): Promise<Contact[]> {
         const url = this.getUrl();
         const requestCriteria = this.getEntityCriteria(criteria);
         const { data } = await this.request.post(url, requestCriteria, options);
@@ -136,7 +136,7 @@ export default class ContactFactory extends ResourceFactory<Contact, ContactAttr
         return result;
     }
 
-    async update(criteria: (ContactsUpdateCriteria | Contact)[], options?: IRequestOptions<CollectionResponse<ContactUpdateResult>>): Promise<Contact[]> {
+    async update(criteria: (ContactsUpdateCriteria | Contact)[], options?: IRequestOptions<ICollectionResponse<ContactUpdateResult>>): Promise<Contact[]> {
         const url = this.getUrl();
         const requestCriteria = this.getEntityCriteria(criteria);
         const { data } = await this.request.patch(url, requestCriteria, options);

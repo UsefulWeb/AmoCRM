@@ -11,32 +11,6 @@ class Environment {
     constructor(options) {
         this.options = options;
     }
-    /**
-     * Возвращает настройки приложения
-     * @param path - путь к настройке(ам)
-     * @example
-     * ```ts
-     * client.environment.get()
-     * ```
-     * без значения метод вернёт объект текущих настроек
-     * @example
-     * ```ts
-     * client.environment.get('domain')
-     * ```
-     * вернёт имя домена портала
-     * @example
-     * ```ts
-     * client.environment.get('auth')
-     * ```
-     * вернёт объект настроек авторизации
-     * @example
-     * ```ts
-     * client.environment.get('auth.client_id')
-     * ```
-     * вернёт id OAuth-приложения AmoCRM
-     * @param defaultValue - значение, которое вернётся при отсутствии настройки
-     * @returns значение настройки. При отсутствии значения вернётся defaultValue
-     * */
     get(path, defaultValue) {
         if (!this.options) {
             return defaultValue;
@@ -62,11 +36,6 @@ class Environment {
         }
         return value;
     }
-    /**
-     * Устанавливает новое значение настройки
-     * @param path - путь к настройке. Аналогичен path в {@link get}
-     * @param value - новое значение
-     * */
     set(path, value) {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
@@ -113,10 +82,6 @@ class Environment {
         }
         return this;
     }
-    /**
-     * Проверяет наличие настройки
-     * @param path - путь к настройке. Аналогичен path в {@link get}
-     * */
     exists(path) {
         return this.get(path) !== undefined;
     }

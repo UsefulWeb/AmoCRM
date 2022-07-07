@@ -1,14 +1,14 @@
 import * as http from 'http';
-import { IAPIResponse, DomainRequestOptions } from "../interfaces/common";
+import { IAPIResponse, IDomainRequestOptions } from "../interfaces/common";
 import { TStringValueObject } from "../types";
 import EventEmitter from "./EventEmitter";
 /**
  * Класс запросов к порталу AmoCRM
  * */
 export default class DomainRequest<T> extends EventEmitter {
-    protected readonly config: DomainRequestOptions<T>;
+    protected readonly config: IDomainRequestOptions<T>;
     protected readonly hostname: string;
-    constructor(config: DomainRequestOptions<T>);
+    constructor(config: IDomainRequestOptions<T>);
     protected isFormData(): boolean;
     protected getHeaders(): TStringValueObject;
     protected getMethod(): string;

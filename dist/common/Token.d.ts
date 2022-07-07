@@ -1,17 +1,8 @@
 import EventEmitter from "./EventEmitter";
 import { IAPIResponse, ITokenData } from "../interfaces/common";
-import Environment from "./Environment";
+import { IEnvironment } from "./Environment";
 import { TStringValueObject } from "../types";
-/**
- * Компонент управления текущим oAuth-токеном
- * Доступен как client.token
- * */
-export default class Token extends EventEmitter {
-    protected value?: ITokenData;
-    protected expiresAt?: Date;
-    protected code?: string;
-    protected readonly environment: Environment;
-    constructor(environment: Environment);
+export interface IToken {
     /**
      * Проверяет, истёк ли токен
      * */
@@ -33,14 +24,6 @@ export default class Token extends EventEmitter {
      * */
     getValue(): ITokenData | undefined;
     /**
-     * Возвращает базовые настройки клиентского приложения AmoCRM: id, secret, redirect_uri
-     * */
-    protected getBaseClientOptions(): {
-        client_id: string;
-        client_secret: string;
-        redirect_uri: string;
-    };
-    /**
      * Получает токен по коду авторизации
      * */
     fetch(): Promise<ITokenData | undefined>;
@@ -48,6 +31,32 @@ export default class Token extends EventEmitter {
      * Обновляет токен по значению refresh_token
      * */
     refresh(): Promise<ITokenData | undefined>;
-    handleResponse(apiResponse: IAPIResponse<ITokenData>): ITokenData | undefined;
+}
+/**
+ * Компонент управления текущим oAuth-токеном
+ * Доступен как client.token
+ * */
+export default class Token extends EventEmitter {
+    protected value?: ITokenData;
+    protected expiresAt?: Date;
+    protected code?: string;
+    protected readonly environment: IEnvironment;
+    constructor(environment: IEnvironment);
+    isExpired(): boolean;
+    clear(): void;
+    exists(): boolean;
+    setValue(value: ITokenData): void;
+    getValue(): ITokenData | undefined;
+    /**
+     * Возвращает базовые настройки клиентского приложения AmoCRM: id, secret, redirect_uri
+     * */
+    protected getBaseClientOptions(): {
+        client_id: string;
+        client_secret: string;
+        redirect_uri: string;
+    };
+    fetch(): Promise<ITokenData | undefined>;
+    refresh(): Promise<ITokenData | undefined>;
+    protected handleResponse(apiResponse: IAPIResponse<ITokenData>): ITokenData | undefined;
     protected makeRequest(data: TStringValueObject): Promise<IAPIResponse<ITokenData>>;
 }

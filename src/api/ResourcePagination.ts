@@ -1,8 +1,8 @@
-import ClientRequest from "../common/ClientRequest";
+import { IClientRequest } from "../common/ClientRequest";
 import {
     IEntityAttributes,
     IPaginatedResponse,
-    IPaginationLinks,
+    IPaginationLinks, IResourceEntity,
     IResourcePagination,
     IResourcePaginationParams
 } from "../interfaces/api";
@@ -10,14 +10,14 @@ import {
 /**
  * Постраничная навигация вывода сущностей
  * */
-export default class ResourcePagination<T, R extends IEntityAttributes> implements IResourcePagination<T> {
-    protected readonly request: ClientRequest;
-    protected readonly params: IResourcePaginationParams<T, R>;
+export default class ResourcePagination<T extends IResourceEntity> implements IResourcePagination<T> {
+    protected readonly request: IClientRequest;
+    protected readonly params: IResourcePaginationParams<T>;
     protected data: T[] = [];
     protected links: IPaginationLinks = {};
     protected page = 1;
 
-    constructor(request: ClientRequest, params: IResourcePaginationParams<T, R>) {
+    constructor(request: IClientRequest, params: IResourcePaginationParams<T>) {
         this.request = request;
         this.params = params;
     }
@@ -108,7 +108,7 @@ export default class ResourcePagination<T, R extends IEntityAttributes> implemen
     /**
      * Обрабатывает объект ссылок на первую, предыдущую и следущие страницы
      * */
-    protected parseLinks(response?: IPaginatedResponse<R>) {
+    protected parseLinks(response?: IPaginatedResponse) {
         const links = response?._links || {};
         this.links = {
             next: links.next?.href,
@@ -121,9 +121,9 @@ export default class ResourcePagination<T, R extends IEntityAttributes> implemen
     /**
      * Преобразовывает массив атрибутов сущностей в объекты-сущностей
      * */
-    protected parseData(response?: IPaginatedResponse<R>) {
+    protected parseData(response?: IPaginatedResponse) {
         const { embedded, factory } = this.params;
-        const data: R[] | undefined = <R[] | undefined>response?._embedded[embedded] || [];
+        const data: IEntityAttributes[] | undefined = <IEntityAttributes[] | undefined>response?._embedded[embedded] || [];
         if (!Array.isArray(data)) {
             return;
         }

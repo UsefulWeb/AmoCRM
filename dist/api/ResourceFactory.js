@@ -13,6 +13,12 @@ class ResourceFactory extends EventEmitter_1.default {
         this.request = request;
     }
     /**
+     * Возвращает ссылку на объект запроса
+     * */
+    getRequest() {
+        return this.request;
+    }
+    /**
      * Форматирует адрес на основе baseUrl фабрики
      * */
     getUrl(path = '') {

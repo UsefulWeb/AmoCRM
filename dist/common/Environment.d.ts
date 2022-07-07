@@ -1,15 +1,6 @@
 import { IClientOptions } from "../interfaces/common";
 import { JSONValue } from "../types";
-/**
- * Компонент настроек окружения.
- * Доступен как client.environment
- * Хранит и меняет настройки:
- * - переданные при создании экземпляра {@link Client}
- * - изменённые в процессе работы с помощью {@link Environment.set}
- * */
-declare class Environment {
-    protected readonly options: IClientOptions;
-    constructor(options: IClientOptions);
+export interface IEnvironment {
     /**
      * Возвращает настройки приложения
      * @param path - путь к настройке(ам)
@@ -42,11 +33,25 @@ declare class Environment {
      * @param path - путь к настройке. Аналогичен path в {@link get}
      * @param value - новое значение
      * */
-    set(path: string, value: JSONValue): this;
+    set(path: string, value: JSONValue): void;
     /**
      * Проверяет наличие настройки
      * @param path - путь к настройке. Аналогичен path в {@link get}
      * */
+    exists(path: string): boolean;
+}
+/**
+ * Компонент настроек окружения.
+ * Доступен как client.environment
+ * Хранит и меняет настройки:
+ * - переданные при создании экземпляра {@link Client}
+ * - изменённые в процессе работы с помощью {@link Environment.set}
+ * */
+declare class Environment implements IEnvironment {
+    protected readonly options: IClientOptions;
+    constructor(options: IClientOptions);
+    get<T>(path?: string, defaultValue?: T): T;
+    set(path: string, value: JSONValue): this;
     exists(path: string): boolean;
 }
 export default Environment;

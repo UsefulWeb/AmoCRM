@@ -1,10 +1,15 @@
 import { EventEmitter as EventEmitterBase } from "events";
 
+export interface IEventEmitter extends EventEmitterBase.EventEmitter {
+    subscribe(subscriber: IEventEmitter): IEventEmitter;
+    unsubscribe(subscriber: IEventEmitter): IEventEmitter;
+}
+
 /**
  * Расширяет функционал работы с событиями в NodeJS.
  * Добавляет возможность подписки на собыития объекта
  * */
-export default class EventEmitter extends EventEmitterBase {
+export default class EventEmitter extends EventEmitterBase implements IEventEmitter {
     protected subscribers: EventEmitter[] = [];
 
     /**
@@ -12,6 +17,7 @@ export default class EventEmitter extends EventEmitterBase {
      * */
     subscribe(subscriber: EventEmitter) {
         this.subscribers.push(subscriber);
+        return this;
     }
 
     /**
@@ -19,6 +25,7 @@ export default class EventEmitter extends EventEmitterBase {
      * */
     unsubscribe(subscriber: EventEmitter) {
         this.subscribers = this.subscribers.filter(s => s !== subscriber);
+        return this;
     }
 
     /**

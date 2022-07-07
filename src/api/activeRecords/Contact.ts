@@ -24,8 +24,7 @@ export interface ContactAttributes extends IEntityAttributes {
     _embedded?: JSONObject;
 }
 
-export default class Contact extends ResourceEntity<ContactFactory, ContactAttributes> {
-    id?: number;
+export default class Contact extends ResourceEntity<ContactFactory> {
     name?: string;
     first_name?: string;
     last_name?: string;

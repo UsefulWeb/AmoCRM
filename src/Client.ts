@@ -1,30 +1,30 @@
 import "reflect-metadata";
 import { IClientOptions } from "./interfaces/common";
 import EventEmitter from "./common/EventEmitter";
-import Connection from './common/Connection';
-import Environment from "./common/Environment";
-import ClientRequest from "./common/ClientRequest";
-import Auth from "./common/Auth";
-import Token from "./common/Token";
+import Connection, { IConnection } from './common/Connection';
+import Environment, { IEnvironment } from "./common/Environment";
+import ClientRequest, { IClientRequest } from "./common/ClientRequest";
+import Auth, { IAuth } from "./common/Auth";
+import Token, { IToken } from "./common/Token";
 
-import LeadFactory from "./api/factories/LeadFactory";
+import LeadFactory, { ILeadFactory } from "./api/factories/LeadFactory";
 import Lead from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";
-import { IEntityConstructor, IResourceFactory } from "./interfaces/api";
+import { IEntityConstructor, IResourceEntity, IResourceFactory } from "./interfaces/api";
 
 /**
  * Основной класс библиотеки
  * */
 export default class Client extends EventEmitter {
-    public readonly token: Token;
-    public readonly environment: Environment;
-    public readonly request: ClientRequest;
-    public readonly connection: Connection;
-    public readonly auth: Auth;
+    public readonly token: IToken;
+    public readonly environment: IEnvironment;
+    public readonly request: IClientRequest;
+    public readonly connection: IConnection;
+    public readonly auth: IAuth;
 
     public readonly Lead: IEntityConstructor<Lead>;
 
-    public readonly leads: LeadFactory;
+    public readonly leads: ILeadFactory;
 
     constructor(options: IClientOptions) {
         super();
@@ -50,7 +50,7 @@ export default class Client extends EventEmitter {
      * @param factory - фабрика сущностей
      * @returns функция конструктор для вызова new client[Entity]
      * */
-    protected assignEntity<T>(factory: IResourceFactory<T>): IEntityConstructor<T> {
+    protected assignEntity<T extends IResourceEntity>(factory: IResourceFactory<T>): IEntityConstructor<T> {
         return function (attributes?:JSONObject) {
             return factory.from(attributes);
         };

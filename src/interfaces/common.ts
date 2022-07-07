@@ -35,7 +35,7 @@ export interface IRequestOptions<T> {
     parser?: IResponseParser<string, T>;
 }
 
-export interface DomainRequestOptions<T> {
+export interface IDomainRequestOptions<T> {
     domain: string,
     method: string;
     url: string;

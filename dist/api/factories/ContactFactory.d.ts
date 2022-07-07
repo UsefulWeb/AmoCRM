@@ -2,7 +2,7 @@ import ResourceFactory from "../ResourceFactory";
 import Contact, { ContactAttributes } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
-import { CollectionResponse, IPaginatedResponse } from "../../interfaces/api";
+import { ICollectionResponse, IPaginatedResponse } from "../../interfaces/api";
 import { JSONObject } from "../../types";
 export interface ContactsGetCriteria {
     with?: string;
@@ -43,7 +43,7 @@ export interface ContactUpdateResult {
 /**
  * Фабрика управления контактами
  * */
-export default class ContactFactory extends ResourceFactory<Contact, ContactAttributes> {
+export default class ContactFactory extends ResourceFactory<Contact> {
     createEntity(): Contact;
     getBaseUrl(): string;
     /**
@@ -72,8 +72,8 @@ export default class ContactFactory extends ResourceFactory<Contact, ContactAttr
      *
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Contact}
      * */
-    get(criteria?: ContactsGetCriteria, options?: IRequestOptions<IPaginatedResponse<ContactAttributes>>): Promise<ResourcePagination<Contact, ContactAttributes>>;
+    get(criteria?: ContactsGetCriteria, options?: IRequestOptions<IPaginatedResponse<ContactAttributes>>): Promise<ResourcePagination<Contact>>;
     getById(identity: number, criteria?: ContactsGetByIdCriteria, options?: IRequestOptions<ContactAttributes>): Promise<Contact | null>;
-    create(criteria: (ContactsCreateCriteria | Contact)[], options?: IRequestOptions<CollectionResponse<ContactCreateResult>>): Promise<Contact[]>;
-    update(criteria: (ContactsUpdateCriteria | Contact)[], options?: IRequestOptions<CollectionResponse<ContactUpdateResult>>): Promise<Contact[]>;
+    create(criteria: (ContactsCreateCriteria | Contact)[], options?: IRequestOptions<ICollectionResponse<ContactCreateResult>>): Promise<Contact[]>;
+    update(criteria: (ContactsUpdateCriteria | Contact)[], options?: IRequestOptions<ICollectionResponse<ContactUpdateResult>>): Promise<Contact[]>;
 }

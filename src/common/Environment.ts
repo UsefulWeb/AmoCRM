@@ -1,19 +1,7 @@
 import { IClientOptions } from "../interfaces/common";
 import { JSONObject, JSONValue } from "../types";
 
-/**
- * Компонент настроек окружения.
- * Доступен как client.environment
- * Хранит и меняет настройки:
- * - переданные при создании экземпляра {@link Client}
- * - изменённые в процессе работы с помощью {@link Environment.set}
- * */
-class Environment {
-    protected readonly options: IClientOptions;
-    constructor(options: IClientOptions) {
-        this.options = options;
-    }
-
+export interface IEnvironment {
     /**
      * Возвращает настройки приложения
      * @param path - путь к настройке(ам)
@@ -40,6 +28,31 @@ class Environment {
      * @param defaultValue - значение, которое вернётся при отсутствии настройки
      * @returns значение настройки. При отсутствии значения вернётся defaultValue
      * */
+    get<T>(path?: string, defaultValue?: T): T;
+    /**
+     * Устанавливает новое значение настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * @param value - новое значение
+     * */
+    set(path: string, value: JSONValue): void;
+    /**
+     * Проверяет наличие настройки
+     * @param path - путь к настройке. Аналогичен path в {@link get}
+     * */
+    exists(path: string): boolean;
+}
+/**
+ * Компонент настроек окружения.
+ * Доступен как client.environment
+ * Хранит и меняет настройки:
+ * - переданные при создании экземпляра {@link Client}
+ * - изменённые в процессе работы с помощью {@link Environment.set}
+ * */
+class Environment implements IEnvironment {
+    protected readonly options: IClientOptions;
+    constructor(options: IClientOptions) {
+        this.options = options;
+    }
     get<T>(path?: string, defaultValue?: T): T {
         if (!this.options) {
             return <T>defaultValue;
@@ -66,11 +79,6 @@ class Environment {
         return <T><unknown>value;
     }
 
-    /**
-     * Устанавливает новое значение настройки
-     * @param path - путь к настройке. Аналогичен path в {@link get}
-     * @param value - новое значение
-     * */
     set(path: string, value: JSONValue) {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
@@ -119,10 +127,6 @@ class Environment {
         return this;
     }
 
-    /**
-     * Проверяет наличие настройки
-     * @param path - путь к настройке. Аналогичен path в {@link get}
-     * */
     exists(path: string): boolean {
         return this.get(path) !== undefined;
     }

@@ -1,17 +1,24 @@
-import ClientRequest from "../common/ClientRequest";
+import { IClientRequest } from "../common/ClientRequest";
 import { JSONObject } from "../types";
 import { IRequestOptions } from "./common";
-export interface IResourceFactory<T> {
+import { IEventEmitter } from "../common/EventEmitter";
+export interface IResourceFactory<T extends IResourceEntity> extends IEventEmitter {
     createEntity(): IResourceEntity;
     from(attributes?: IEntityAttributes): T;
+    getRequest(): IClientRequest;
+    getEmbedded(): string;
+    getUrl(path?: string): string;
+    getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
 }
 export interface IResourceEntity {
+    id?: number;
+    updated_at?: number;
     setAttributes(attributes?: IEntityAttributes): void;
 }
 export interface IResourceEntityConstructor<T> {
-    from(request: ClientRequest, attributes?: JSONObject): T;
+    from(request: IClientRequest, attributes?: JSONObject): T;
 }
-export interface CollectionResponse<T> {
+export interface ICollectionResponse<T> {
     _links: {
         href: string;
     };
@@ -29,17 +36,17 @@ export interface IPaginationLinks {
     prev?: string;
     first?: string;
 }
-export interface IResourcePaginationParams<T, R> {
+export interface IResourcePaginationParams<T extends IResourceEntity> {
     url: string;
     criteria?: object;
     factory: IResourceFactory<T>;
     embedded: string;
-    options?: IRequestOptions<IPaginatedResponse<R>>;
+    options?: IRequestOptions<IPaginatedResponse>;
 }
 export interface ILinkResponse {
     href: string;
 }
-export interface IPaginatedResponse<T> {
+export interface IPaginatedResponse {
     _page: number;
     _links: {
         self?: ILinkResponse;
@@ -48,7 +55,7 @@ export interface IPaginatedResponse<T> {
         prev?: ILinkResponse;
     };
     _embedded: {
-        [index: string]: T[];
+        [index: string]: IEntityAttributes[];
     };
 }
 export interface IEntityAttributes {

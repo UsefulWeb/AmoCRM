@@ -4,8 +4,8 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
-import LeadFactory, { LeadCreateResult, LeadsGetByIdCriteria, LeadUpdateResult } from "../factories/LeadFactory";
-import { CollectionResponse, IEntityAttributes } from "../../interfaces/api";
+import { ILeadFactory, LeadCreateResult, LeadsGetByIdCriteria, LeadUpdateResult } from "../factories/LeadFactory";
+import { ICollectionResponse, IEntityAttributes } from "../../interfaces/api";
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
     name?: string;
@@ -32,8 +32,7 @@ export interface LeadAttributes extends IEntityAttributes {
 /**
  * Сделка
  */
-export default class Lead extends ResourceEntity<LeadFactory, LeadAttributes> {
-    id?: number;
+export default class Lead extends ResourceEntity<ILeadFactory> {
     name?: string;
     price?: number;
     responsible_user_id?: number;
@@ -46,7 +45,6 @@ export default class Lead extends ResourceEntity<LeadFactory, LeadAttributes> {
     updated_by?: number;
     closed_at?: number;
     created_at?: number;
-    updated_at?: number;
     closed_task_at?: number;
     is_deleted?: boolean;
     custom_fields_values?: JSONObject[] | null;
@@ -77,7 +75,7 @@ export default class Lead extends ResourceEntity<LeadFactory, LeadAttributes> {
      * ```
      * @returns ссылка на созданную сущность
      * */
-    create(options?: IRequestOptions<CollectionResponse<LeadCreateResult>>): Promise<Lead>;
+    create(options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>): Promise<Lead>;
     /**
      * Обновляет сущность на портале AmoCRM.
      * @param options настройки запроса и обработки результата
@@ -89,7 +87,7 @@ export default class Lead extends ResourceEntity<LeadFactory, LeadAttributes> {
      * ```
      * @returns ссылка на обновлённую сущность
      * */
-    update(options?: IRequestOptions<CollectionResponse<LeadUpdateResult>>): Promise<Lead>;
+    update(options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>): Promise<Lead>;
     /**
      * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
      * @param options настройки запроса и обработки результата

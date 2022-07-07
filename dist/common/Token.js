@@ -13,9 +13,6 @@ class Token extends EventEmitter_1.default {
         super();
         this.environment = environment;
     }
-    /**
-     * Проверяет, истёк ли токен
-     * */
     isExpired() {
         this.emit('expirationCheck');
         const now = new Date;
@@ -24,22 +21,13 @@ class Token extends EventEmitter_1.default {
         }
         return now > this.expiresAt;
     }
-    /**
-     * Стирает информацию о текущем токене
-     * */
     clear() {
         this.value = undefined;
         delete this.expiresAt;
     }
-    /**
-     * Проверяет, существует ли текущий токен
-     * */
     exists() {
         return this.value !== undefined;
     }
-    /**
-     * Устанавливает текущее значение токена
-     * */
     setValue(value) {
         this.emit('beforeChange');
         this.value = value;
@@ -51,9 +39,6 @@ class Token extends EventEmitter_1.default {
         this.expiresAt = new Date(expiresAt);
         this.emit('change');
     }
-    /**
-     * Возвращает текущее значение токена
-     * */
     getValue() {
         return this.value;
     }
@@ -72,9 +57,6 @@ class Token extends EventEmitter_1.default {
             redirect_uri
         };
     }
-    /**
-     * Получает токен по коду авторизации
-     * */
     fetch() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             this.emit('beforeFetch');
@@ -90,9 +72,6 @@ class Token extends EventEmitter_1.default {
             return tokenResponse;
         });
     }
-    /**
-     * Обновляет токен по значению refresh_token
-     * */
     refresh() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             this.emit('beforeRefresh', this);
