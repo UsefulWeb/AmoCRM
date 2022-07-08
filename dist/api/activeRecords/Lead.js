@@ -1,14 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseLead = void 0;
 const tslib_1 = require("tslib");
 /**
  * Сделка (сущность)
  */
 const ResourceEntity_1 = tslib_1.__importDefault(require("../ResourceEntity"));
+const util_1 = require("../../util");
 /**
  * Сделка
  */
-class Lead extends ResourceEntity_1.default {
+class BaseLead extends ResourceEntity_1.default {
     getAttributes() {
         return {
             id: this.id,
@@ -51,29 +53,6 @@ class Lead extends ResourceEntity_1.default {
         this.is_price_modified_by_robot = attributes.is_price_modified_by_robot;
         this._embedded = attributes._embedded;
     }
-    /**
-     * @returns присутствует ли сущность на портале AmoCRM
-     * */
-    isNew() {
-        return this.id !== undefined;
-    }
-    /**
-     * Добавляет сущность на портал AmoCRM
-     * @example
-     * ```ts
-     * const lead = new client.Lead({
-     *     name: "Walter White"
-     * });
-     * await lead.create();
-     * ```
-     * @example
-     * ```ts
-     * const lead = new client.Lead;
-     * lead.name = "Walter White";
-     * await lead.create();
-     * ```
-     * @returns ссылка на созданную сущность
-     * */
     create(options) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const criteria = [this];
@@ -82,17 +61,6 @@ class Lead extends ResourceEntity_1.default {
             return lead;
         });
     }
-    /**
-     * Обновляет сущность на портале AmoCRM.
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const lead = await client.leads.getById(123);
-     * lead.name = "Walter White";
-     * await lead.update();
-     * ```
-     * @returns ссылка на обновлённую сущность
-     * */
     update(options) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const criteria = [this];
@@ -101,26 +69,12 @@ class Lead extends ResourceEntity_1.default {
             return lead;
         });
     }
-    /**
-     * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
-     * @param options настройки запроса и обработки результата
-     * */
     save(options) {
         if (this.isNew()) {
             return this.create(options);
         }
         return this.update(options);
     }
-    /**
-     * Получает содержимое сущности на портале
-     * @param criteria фильтр для уточнения результатов запроса
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const lead = new client.Lead({ id: 123 });
-     * await lead.fetch();
-     * ```
-     * */
     fetch(criteria, options) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             if (this.isNew()) {
@@ -133,5 +87,10 @@ class Lead extends ResourceEntity_1.default {
         });
     }
 }
+exports.BaseLead = BaseLead;
+const Lead = (0, util_1.applyMixins)(BaseLead, [
+    canSave,
+    canFetch
+]);
 exports.default = Lead;
 //# sourceMappingURL=Lead.js.map

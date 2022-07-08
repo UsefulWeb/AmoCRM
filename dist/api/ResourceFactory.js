@@ -12,6 +12,18 @@ class ResourceFactory extends EventEmitter_1.default {
         super();
         this.request = request;
     }
+    getEmbedded(data) {
+        const key = this.getEmbeddedKey();
+        const { _embedded = {} } = data;
+        return _embedded[key] || [];
+    }
+    /**
+     * @returns новый экземпляр сущности. Например, {@link LeadFactory} вернёт {@link Lead}
+     * */
+    createEntity() {
+        const className = this.getEntityClass();
+        return new className(this);
+    }
     /**
      * Возвращает ссылку на объект запроса
      * */

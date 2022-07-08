@@ -8,10 +8,12 @@ import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
 import { ICollectionResponse, IPaginatedResponse, IResourceFactory } from "../../interfaces/api";
+
 import { canGetByCriteria } from "./mixins/canGetByCriteria";
 import { canGetById } from "./mixins/canGetById";
 import { canCreate } from "./mixins/canCreate";
 import { canUpdate } from "./mixins/canUpdate";
+import { applyMixins } from "../../util";
 
 export interface LeadsGetCriteria {
     with?: string;
@@ -57,7 +59,7 @@ export interface LeadUpdateResult {
     updated_at: number;
 }
 
-export interface ILeadFactory extends IResourceFactory<Lead> {
+export interface ILeadFactory extends IResourceFactory<typeof Lead> {
     /**
      * @param criteria фильтр сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-list)
      * @example
@@ -168,16 +170,17 @@ export interface ILeadFactory extends IResourceFactory<Lead> {
 /**
  * Фабрика управления сделками
  * */
-export class BaseLeadFactory extends ResourceFactory<Lead> {
-    createEntity() {
-        return new Lead(this);
+export class BaseLeadFactory extends ResourceFactory<typeof Lead> {
+
+    getEntityClass() {
+        return Lead;
     }
 
     getBaseUrl(): string {
         return schema.entities.leads.path;
     }
 
-    getEmbedded(): string {
+    getEmbeddedKey(): string {
         return 'leads';
     }
 
@@ -188,5 +191,12 @@ export class BaseLeadFactory extends ResourceFactory<Lead> {
         return false;
     }
 }
+
+const LeadFactory = applyMixins(BaseLeadFactory, [
+    canGetByCriteria,
+    canGetById,
+    canCreate,
+    canUpdate
+]);
 
 export default LeadFactory;

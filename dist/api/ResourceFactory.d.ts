@@ -1,19 +1,22 @@
-import { IEntityAttributes, IResourceEntity, IResourceFactory } from "../interfaces/api";
+import { ICollectionResponse, IEntityAttributes, IResourceEntity, IResourceFactory } from "../interfaces/api";
 import { IClientRequest } from "../common/ClientRequest";
 import EventEmitter from "../common/EventEmitter";
+import { TConstructor } from "../types";
 /**
  * Основной класс фабрики сущностей. Класс-фабрика служит для создания
  * новых сущностей. Например, {@link LeadFactory} отвечает за {@link Lead}
  * */
-export default abstract class ResourceFactory<T extends IResourceEntity> extends EventEmitter implements IResourceFactory<T> {
+export default abstract class ResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends EventEmitter implements IResourceFactory<T> {
     protected readonly request: IClientRequest;
     constructor(request: IClientRequest);
     abstract getBaseUrl(): string;
-    abstract getEmbedded(): string;
+    abstract getEmbeddedKey(): string;
+    getEmbedded<A extends IEntityAttributes>(data: ICollectionResponse<A>): A[];
     /**
      * @returns новый экземпляр сущности. Например, {@link LeadFactory} вернёт {@link Lead}
      * */
-    abstract createEntity(): T;
+    createEntity(): T;
+    abstract getEntityClass(): TConstructor<T>;
     /**
      * Возвращает ссылку на объект запроса
      * */

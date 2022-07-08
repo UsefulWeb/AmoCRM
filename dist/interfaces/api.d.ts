@@ -1,18 +1,21 @@
 import { IClientRequest } from "../common/ClientRequest";
-import { JSONObject } from "../types";
+import { JSONObject, TConstructor } from "../types";
 import { IRequestOptions } from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
 export interface IResourceFactory<T extends IResourceEntity> extends IEventEmitter {
-    createEntity(): IResourceEntity;
+    getEntityClass(): TConstructor<T>;
+    createEntity(): T;
     from(attributes?: IEntityAttributes): T;
     getRequest(): IClientRequest;
-    getEmbedded(): string;
+    getEmbeddedKey(): string;
+    getEmbedded<A extends IEntityAttributes>(data: ICollectionResponse<A>): A[];
     getUrl(path?: string): string;
     getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
 }
-export interface IResourceEntity {
+export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> {
     id?: number;
     updated_at?: number;
+    getFactory(): T;
     setAttributes(attributes?: IEntityAttributes): void;
 }
 export interface IResourceEntityConstructor<T> {

@@ -23,6 +23,17 @@ export default abstract class ResourceEntity
         this.factory = factory;
     }
 
+    getFactory() {
+        return this.factory;
+    }
+
+    /**
+     * @returns присутствует ли сущность на портале AmoCRM
+     * */
+    isNew() {
+        return this.id !== undefined;
+    }
+
     /**
      * Возвращает все атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */

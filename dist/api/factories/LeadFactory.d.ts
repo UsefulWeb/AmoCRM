@@ -154,14 +154,14 @@ export interface ILeadFactory extends IResourceFactory<Lead> {
 /**
  * Фабрика управления сделками
  * */
-export declare class BaseLeadFactory extends ResourceFactory {
-    createEntity(): Lead;
+export declare class BaseLeadFactory extends ResourceFactory<Lead> {
+    getEntityClass(): typeof Lead;
     getBaseUrl(): string;
-    getEmbedded(): string;
+    getEmbeddedKey(): string;
     /**
      * @todo https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-complex-add
      * */
     complexCreate(): Promise<boolean>;
 }
-declare let LeadFactory: import("../../types").TFactoryConstructor<import("../../interfaces/api").IResourceEntity>;
+declare const LeadFactory: any;
 export default LeadFactory;

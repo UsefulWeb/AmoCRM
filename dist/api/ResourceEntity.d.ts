@@ -9,6 +9,11 @@ export default abstract class ResourceEntity<T extends IResourceFactory<IResourc
     protected readonly factory: T;
     required: string[];
     constructor(factory: T);
+    getFactory(): T;
+    /**
+     * @returns присутствует ли сущность на портале AmoCRM
+     * */
+    isNew(): boolean;
     /**
      * Возвращает все атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */

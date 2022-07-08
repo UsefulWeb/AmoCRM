@@ -5,7 +5,7 @@ import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
 import { ILeadFactory, LeadCreateResult, LeadsGetByIdCriteria, LeadUpdateResult } from "../factories/LeadFactory";
-import { ICollectionResponse, IEntityAttributes } from "../../interfaces/api";
+import { ICollectionResponse, IEntityAttributes, IResourceEntity } from "../../interfaces/api";
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
     name?: string;
@@ -29,10 +29,12 @@ export interface LeadAttributes extends IEntityAttributes {
     is_price_modified_by_robot?: boolean;
     _embedded?: JSONObject;
 }
+export interface ILead extends IResourceEntity, LeadAttributes {
+}
 /**
  * Сделка
  */
-export default class Lead extends ResourceEntity<ILeadFactory> {
+export default class Lead extends ResourceEntity<ILeadFactory> implements ILead {
     name?: string;
     price?: number;
     responsible_user_id?: number;
@@ -54,10 +56,6 @@ export default class Lead extends ResourceEntity<ILeadFactory> {
     _embedded?: JSONObject;
     getAttributes(): LeadAttributes;
     setAttributes(attributes: LeadAttributes): void;
-    /**
-     * @returns присутствует ли сущность на портале AmoCRM
-     * */
-    isNew(): boolean;
     /**
      * Добавляет сущность на портал AmoCRM
      * @example

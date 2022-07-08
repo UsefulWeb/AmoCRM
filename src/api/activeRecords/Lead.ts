@@ -10,7 +10,9 @@ import {
     LeadsGetByIdCriteria,
     LeadUpdateResult
 } from "../factories/LeadFactory";
-import { ICollectionResponse, IEntityAttributes } from "../../interfaces/api";
+import { ICollectionResponse, IEntityAttributes, IResourceEntity } from "../../interfaces/api";
+import { applyMixins } from "../../util";
+import exp from "constants";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -36,10 +38,59 @@ export interface LeadAttributes extends IEntityAttributes {
     _embedded?: JSONObject;
 }
 
+export interface ILead extends IResourceEntity, LeadAttributes {
+    /**
+     * Добавляет сущность на портал AmoCRM
+     * @example
+     * ```ts
+     * const lead = new client.Lead({
+     *     name: "Walter White"
+     * });
+     * await lead.create();
+     * ```
+     * @example
+     * ```ts
+     * const lead = new client.Lead;
+     * lead.name = "Walter White";
+     * await lead.create();
+     * ```
+     * @returns ссылка на созданную сущность
+     * */
+    create(options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>): Promise<ILead>;
+    /**
+     * Обновляет сущность на портале AmoCRM.
+     * @param options настройки запроса и обработки результата
+     * @example
+     * ```ts
+     * const lead = await client.leads.getById(123);
+     * lead.name = "Walter White";
+     * await lead.update();
+     * ```
+     * @returns ссылка на обновлённую сущность
+     * */
+    update(options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>): Promise<ILead>;
+    /**
+     * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
+     * @param options настройки запроса и обработки результата
+     * */
+    save(options?: IRequestOptions<LeadAttributes>): Promise<ILead>;
+    /**
+     * Получает содержимое сущности на портале
+     * @param criteria фильтр для уточнения результатов запроса
+     * @param options настройки запроса и обработки результата
+     * @example
+     * ```ts
+     * const lead = new client.Lead({ id: 123 });
+     * await lead.fetch();
+     * ```
+     * */
+    fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<Lead>): Promise<Lead>;
+}
+
 /**
  * Сделка
  */
-export default class Lead extends ResourceEntity<ILeadFactory> {
+export class BaseLead extends ResourceEntity<ILeadFactory> implements ILead {
     name?: string;
     price?: number;
     responsible_user_id?: number;
@@ -104,30 +155,6 @@ export default class Lead extends ResourceEntity<ILeadFactory> {
         this._embedded = attributes._embedded;
     }
 
-    /**
-     * @returns присутствует ли сущность на портале AmoCRM
-     * */
-    isNew() {
-        return this.id !== undefined;
-    }
-
-    /**
-     * Добавляет сущность на портал AmoCRM
-     * @example
-     * ```ts
-     * const lead = new client.Lead({
-     *     name: "Walter White"
-     * });
-     * await lead.create();
-     * ```
-     * @example
-     * ```ts
-     * const lead = new client.Lead;
-     * lead.name = "Walter White";
-     * await lead.create();
-     * ```
-     * @returns ссылка на созданную сущность
-     * */
     async create(options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>) {
         const criteria = [this];
         const [lead] = await this.factory.create(criteria, options);
@@ -136,17 +163,6 @@ export default class Lead extends ResourceEntity<ILeadFactory> {
         return lead;
     }
 
-    /**
-     * Обновляет сущность на портале AmoCRM.
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const lead = await client.leads.getById(123);
-     * lead.name = "Walter White";
-     * await lead.update();
-     * ```
-     * @returns ссылка на обновлённую сущность
-     * */
     async update(options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>) {
         const criteria = [this];
         const [lead] = await this.factory.update(criteria, options);
@@ -155,10 +171,6 @@ export default class Lead extends ResourceEntity<ILeadFactory> {
         return lead;
     }
 
-    /**
-     * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
-     * @param options настройки запроса и обработки результата
-     * */
     save(options?: IRequestOptions<never>) {
         if (this.isNew()) {
             return this.create(options);
@@ -166,16 +178,6 @@ export default class Lead extends ResourceEntity<ILeadFactory> {
         return this.update(options);
     }
 
-    /**
-     * Получает содержимое сущности на портале
-     * @param criteria фильтр для уточнения результатов запроса
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const lead = new client.Lead({ id: 123 });
-     * await lead.fetch();
-     * ```
-     * */
     async fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<Lead>) {
         if (this.isNew()) {
             return false;
@@ -187,3 +189,12 @@ export default class Lead extends ResourceEntity<ILeadFactory> {
         return lead;
     }
 }
+
+const Lead = applyMixins(BaseLead, [
+    canSave,
+    canFetch
+]);
+
+export TLead = typeof Lead;
+
+export default Lead;

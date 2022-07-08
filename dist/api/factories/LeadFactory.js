@@ -12,17 +12,18 @@ const canGetByCriteria_1 = require("./mixins/canGetByCriteria");
 const canGetById_1 = require("./mixins/canGetById");
 const canCreate_1 = require("./mixins/canCreate");
 const canUpdate_1 = require("./mixins/canUpdate");
+const util_1 = require("../../util");
 /**
  * Фабрика управления сделками
  * */
 class BaseLeadFactory extends ResourceFactory_1.default {
-    createEntity() {
-        return new Lead_1.default(this);
+    getEntityClass() {
+        return Lead_1.default;
     }
     getBaseUrl() {
         return v4_1.default.entities.leads.path;
     }
-    getEmbedded() {
+    getEmbeddedKey() {
         return 'leads';
     }
     /**
@@ -35,9 +36,11 @@ class BaseLeadFactory extends ResourceFactory_1.default {
     }
 }
 exports.BaseLeadFactory = BaseLeadFactory;
-let LeadFactory = (0, canGetByCriteria_1.canGetByCriteria)(BaseLeadFactory);
-LeadFactory = (0, canGetById_1.canGetById)(LeadFactory);
-LeadFactory = (0, canCreate_1.canCreate)(LeadFactory);
-LeadFactory = (0, canUpdate_1.canUpdate)(LeadFactory);
+const LeadFactory = (0, util_1.applyMixins)(BaseLeadFactory, [
+    canGetByCriteria_1.canGetByCriteria,
+    canGetById_1.canGetById,
+    canCreate_1.canCreate,
+    canUpdate_1.canUpdate
+]);
 exports.default = LeadFactory;
 //# sourceMappingURL=LeadFactory.js.map

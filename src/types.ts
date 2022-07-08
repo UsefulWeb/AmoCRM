@@ -15,5 +15,6 @@ export interface JSONObject {
 }
 
 export type TConstructor<T> = new (...args: any[]) => T;
-export type TFactoryConstructor<T extends IResourceEntity> = TConstructor<IResourceFactory<T>>;
+export type TFactoryConstructor<T extends IResourceEntity<IResourceFactory<T>>> = TConstructor<IResourceFactory<T>>;
+export type TEntityConstructor<T extends IResourceEntity<IResourceFactory<T>>> = TConstructor<T>;
 // export type TFactoryConstructor = new <T extends IResourceEntity, F extends IResourceFactory<T>>(...args: any[]) => F;

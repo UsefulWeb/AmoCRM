@@ -11,6 +11,15 @@ class ResourceEntity extends EventEmitter_1.default {
         this.required = [];
         this.factory = factory;
     }
+    getFactory() {
+        return this.factory;
+    }
+    /**
+     * @returns присутствует ли сущность на портале AmoCRM
+     * */
+    isNew() {
+        return this.id !== undefined;
+    }
 }
 exports.default = ResourceEntity;
 //# sourceMappingURL=ResourceEntity.js.map
