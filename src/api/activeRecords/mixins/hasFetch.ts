@@ -1,15 +1,15 @@
 import { IResourceEntity } from "../../../interfaces/api";
 import { TEntityConstructor } from "../../../types";
 import { IRequestOptions } from "../../../interfaces/common";
-import { ICanGetByIdFactory, IGetByIdCriteria } from "../../factories/mixins/canGetById";
+import { ICanGetByIdFactory, IHasGetByIdCriteria } from "../../factories/mixins/hasGetById";
 
 export interface IHasFetchEntity <T extends ICanGetByIdFactory<IResourceEntity<T>>> {
-    fetch(criteria?: IGetByIdCriteria, options?: IRequestOptions): Promise<IHasFetchEntity<T>|false|null>;
+    fetch(criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<IHasFetchEntity<T>|false|null>;
 }
 
 export function hasFetch<T extends ICanGetByIdFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TEntityConstructor<T> {
     return class HasFetch extends Base {
-        async fetch(criteria?: IGetByIdCriteria, options?: IRequestOptions) {
+        async fetch(criteria?: IHasGetByIdCriteria, options?: IRequestOptions) {
             if (this.isNew()) {
                 return false;
             }

@@ -6,9 +6,9 @@ import EventEmitter from "./EventEmitter";
  * Класс запросов к порталу AmoCRM
  * */
 export default class DomainRequest<T> extends EventEmitter {
-    protected readonly config: IDomainRequestOptions<T>;
+    protected readonly config: IDomainRequestOptions;
     protected readonly hostname: string;
-    constructor(config: IDomainRequestOptions<T>);
+    constructor(config: IDomainRequestOptions);
     protected isFormData(): boolean;
     protected getHeaders(): TStringValueObject;
     protected getMethod(): string;

@@ -1,13 +1,12 @@
 import * as http from 'http';
-import EventEmitter from "../EventEmitter";
-import { IAPIResponse, IResponseParser } from "../../interfaces/common";
-import APIResponseError from "../APIResponseError";
-import { JSONValue } from "../../types";
+import EventEmitter from "./EventEmitter";
+import { IAPIResponse, IResponseParser } from "../interfaces/common";
+import APIResponseError from "./APIResponseError";
 
 /**
  * Преобразует ответ портала в JSON-объект
  * */
-export default class JSONResponseParser extends EventEmitter implements IResponseParser<string, JSONValue | null> {
+export default class JSONResponseParser extends EventEmitter implements IResponseParser<string> {
     parse<T>(apiResponse: IAPIResponse<string>): IAPIResponse<T> {
         const { response } = apiResponse;
         if (!apiResponse.data) {
@@ -17,7 +16,7 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
                 data
             };
         }
-        const data: T = JSON.parse(apiResponse.data);
+        const data: T = <T>JSON.parse(apiResponse.data);
 
         this.checkErrors(data, response);
         return {

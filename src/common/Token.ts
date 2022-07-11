@@ -170,13 +170,13 @@ export default class Token extends EventEmitter {
         const domain = this.environment.get<string>('domain');
         const method = 'POST';
         const url = schema.auth.token;
-        const config: IDomainRequestOptions<ITokenData> = {
+        const config: IDomainRequestOptions = {
             domain,
             method,
             data,
             url
         };
-        const request = new DomainRequest(config);
+        const request = new DomainRequest<ITokenData>(config);
         return request.process();
     }
 }

@@ -1,13 +1,13 @@
 import { IResourceEntity, IResourceFactory } from "../../../interfaces/api";
 import { TEntityConstructor } from "../../../types";
 import { IRequestOptions } from "../../../interfaces/common";
-import { ICanUpdateFactory } from "../../factories/mixins/canUpdate";
+import { IHasUpdateFactory } from "../../factories/mixins/hasUpdate";
 
 export interface IHasUpdateEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
     update(options?: IRequestOptions): Promise<T>;
 }
 
-export function hasUpdate<T extends ICanUpdateFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TEntityConstructor<T> {
+export function hasUpdate<T extends IHasUpdateFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TEntityConstructor<T> {
     return class HasUpdate extends Base {
         async update(options?: IRequestOptions) {
             const criteria = [this];

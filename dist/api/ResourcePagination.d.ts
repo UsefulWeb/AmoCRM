@@ -1,9 +1,9 @@
 import { IClientRequest } from "../common/ClientRequest";
-import { IPaginatedResponse, IPaginationLinks, IResourceEntity, IResourcePagination, IResourcePaginationParams } from "../interfaces/api";
+import { IPaginatedResponse, IPaginationLinks, IResourceEntity, IResourceFactory, IResourcePagination, IResourcePaginationParams } from "../interfaces/api";
 /**
  * Постраничная навигация вывода сущностей
  * */
-export default class ResourcePagination<T extends IResourceEntity> implements IResourcePagination<T> {
+export default class ResourcePagination<T extends IResourceEntity<IResourceFactory<T>>> implements IResourcePagination<T> {
     protected readonly request: IClientRequest;
     protected readonly params: IResourcePaginationParams<T>;
     protected data: T[];

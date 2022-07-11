@@ -7,6 +7,10 @@ const tslib_1 = require("tslib");
  */
 const ResourceEntity_1 = tslib_1.__importDefault(require("../ResourceEntity"));
 const util_1 = require("../../util");
+const hasSave_1 = require("./mixins/hasSave");
+const hasFetch_1 = require("./mixins/hasFetch");
+const hasCreate_1 = require("./mixins/hasCreate");
+const hasUpdate_1 = require("./mixins/hasUpdate");
 /**
  * Сделка
  */
@@ -53,45 +57,13 @@ class BaseLead extends ResourceEntity_1.default {
         this.is_price_modified_by_robot = attributes.is_price_modified_by_robot;
         this._embedded = attributes._embedded;
     }
-    create(options) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const criteria = [this];
-            const [lead] = yield this.factory.create(criteria, options);
-            this.emit('create');
-            return lead;
-        });
-    }
-    update(options) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const criteria = [this];
-            const [lead] = yield this.factory.update(criteria, options);
-            this.emit('update');
-            return lead;
-        });
-    }
-    save(options) {
-        if (this.isNew()) {
-            return this.create(options);
-        }
-        return this.update(options);
-    }
-    fetch(criteria, options) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            if (this.isNew()) {
-                return false;
-            }
-            const id = this.id;
-            const lead = yield this.factory.getById(id, criteria, options);
-            this.emit('fetch');
-            return lead;
-        });
-    }
 }
 exports.BaseLead = BaseLead;
 const Lead = (0, util_1.applyMixins)(BaseLead, [
-    canSave,
-    canFetch
+    hasCreate_1.hasCreate,
+    hasUpdate_1.hasUpdate,
+    hasSave_1.hasSave,
+    hasFetch_1.hasFetch
 ]);
-TLead = typeof Lead;
 exports.default = Lead;
 //# sourceMappingURL=Lead.js.map

@@ -1,11 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseContact = void 0;
 const tslib_1 = require("tslib");
 /**
  * Сделка (сущность)
  */
 const ResourceEntity_1 = tslib_1.__importDefault(require("../ResourceEntity"));
-class Contact extends ResourceEntity_1.default {
+const util_1 = require("../../util");
+const hasCreate_1 = require("./mixins/hasCreate");
+const hasUpdate_1 = require("./mixins/hasUpdate");
+const hasSave_1 = require("./mixins/hasSave");
+const hasFetch_1 = require("./mixins/hasFetch");
+class BaseContact extends ResourceEntity_1.default {
     getAttributes() {
         return {
             id: this.id,
@@ -39,5 +45,12 @@ class Contact extends ResourceEntity_1.default {
         this._embedded = attributes._embedded;
     }
 }
+exports.BaseContact = BaseContact;
+const Contact = (0, util_1.applyMixins)(BaseContact, [
+    hasCreate_1.hasCreate,
+    hasUpdate_1.hasUpdate,
+    hasSave_1.hasSave,
+    hasFetch_1.hasFetch
+]);
 exports.default = Contact;
 //# sourceMappingURL=Contact.js.map

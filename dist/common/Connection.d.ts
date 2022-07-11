@@ -8,7 +8,7 @@ export interface IConnection {
     update(): Promise<boolean>;
     isTokenExpired(): boolean;
     connect(): Promise<boolean>;
-    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<IAPIResponse<T>>;
+    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
 }
 /**
  * Компонент управления соединением с порталом
@@ -45,5 +45,5 @@ export default class Connection extends EventEmitter implements IConnection {
      * Формирует запрос к порталу. Предварительно проверяет наличие соединения
      * При его отсутствии пытается его установить
      * */
-    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<IAPIResponse<T>>;
+    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
 }

@@ -6,7 +6,6 @@ import Environment, { IEnvironment } from "./common/Environment";
 import ClientRequest, { IClientRequest } from "./common/ClientRequest";
 import Auth, { IAuth } from "./common/Auth";
 import Token, { IToken } from "./common/Token";
-
 import LeadFactory, { ILeadFactory } from "./api/factories/LeadFactory";
 import { ILead } from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";

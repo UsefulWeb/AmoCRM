@@ -10,7 +10,7 @@ import { JSONObject } from "../../types";
 import { IResourceFactory } from "../../interfaces/api";
 
 import { hasGetByCriteria, IGetCriteria } from "./mixins/hasGetByCriteria";
-import { hasGetById, IGetByIdCriteria } from "./mixins/hasGetById";
+import { hasGetById, IHasGetByIdCriteria } from "./mixins/hasGetById";
 import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
@@ -31,19 +31,9 @@ export interface LeadsCreateCriteria {
     request_id?: string;
 }
 
-export interface LeadCreateResult {
-    id: number;
-    request_id: string;
-}
 
 export interface LeadsUpdateCriteria extends LeadsCreateCriteria {
     id: number;
-}
-
-export interface LeadUpdateResult {
-    id: number;
-    request_id: string;
-    updated_at: number;
 }
 
 export interface ILeadFactory extends IResourceFactory<ILead> {
@@ -88,7 +78,7 @@ export interface ILeadFactory extends IResourceFactory<ILead> {
      * @param options настройки запроса и обработки результата
      * @returns экземпляр найденной сделки или null, если сделка не найдена.
      * */
-    getById(identity: number, criteria?: IGetByIdCriteria, options?: IRequestOptions): Promise<ILead|null>;
+    getById(identity: number, criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<ILead|null>;
     /**
      * Создаёт новые сделки
      * @param criteria параметры создания сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-add)

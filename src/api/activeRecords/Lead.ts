@@ -11,7 +11,7 @@ import { hasSave } from "./mixins/hasSave";
 import { hasFetch } from "./mixins/hasFetch";
 import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
-import { IGetByIdCriteria } from "../factories/mixins/hasGetById";
+import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -83,7 +83,7 @@ export interface ILead extends IResourceEntity<ILeadFactory>, LeadAttributes {
      * await lead.fetch();
      * ```
      * */
-    fetch(criteria?: IGetByIdCriteria, options?: IRequestOptions): Promise<ILead>;
+    fetch(criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<ILead>;
 }
 
 /**

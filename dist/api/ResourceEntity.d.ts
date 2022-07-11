@@ -3,7 +3,7 @@ import EventEmitter from "../common/EventEmitter";
 /**
  * Основной класс сущностей
  * */
-export default abstract class ResourceEntity<T extends IResourceFactory<IResourceEntity>> extends EventEmitter implements IResourceEntity {
+export default abstract class ResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends EventEmitter implements IResourceEntity<T> {
     id?: number;
     updated_at?: number;
     protected readonly factory: T;

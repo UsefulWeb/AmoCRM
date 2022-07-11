@@ -1,20 +1,12 @@
 import ResourceFactory from "../ResourceFactory";
-import Contact, { ContactAttributes } from "../activeRecords/Contact";
+import { IContact } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
-import { ICollectionResponse, IPaginatedResponse } from "../../interfaces/api";
+import { IResourceFactory } from "../../interfaces/api";
 import { JSONObject } from "../../types";
-export interface ContactsGetCriteria {
-    with?: string;
-    page?: number;
-    limit?: number;
-    query?: string | number;
-    filter?: string;
-    order?: string;
-}
-export interface ContactsGetByIdCriteria {
-    with?: string;
-}
+import { IGetCriteria } from "./mixins/hasGetByCriteria";
+import { ILead } from "../activeRecords/Lead";
+import { IHasGetByIdCriteria } from "./mixins/hasGetById";
 export interface ContactsCreateCriteria {
     name?: string;
     first_name?: string;
@@ -40,12 +32,7 @@ export interface ContactUpdateResult {
     request_id: string;
     updated_at: number;
 }
-/**
- * Фабрика управления контактами
- * */
-export default class ContactFactory extends ResourceFactory<Contact> {
-    createEntity(): Contact;
-    getBaseUrl(): string;
+export interface IContactFactory extends IResourceFactory<IContact> {
     /**
      * @param criteria фильтр контактов (https://www.amocrm.ru/developers/content/crm_platform/contacts-api#contacts-list)
      * @example
@@ -72,8 +59,18 @@ export default class ContactFactory extends ResourceFactory<Contact> {
      *
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Contact}
      * */
-    get(criteria?: ContactsGetCriteria, options?: IRequestOptions<IPaginatedResponse<ContactAttributes>>): Promise<ResourcePagination<Contact>>;
-    getById(identity: number, criteria?: ContactsGetByIdCriteria, options?: IRequestOptions<ContactAttributes>): Promise<Contact | null>;
-    create(criteria: (ContactsCreateCriteria | Contact)[], options?: IRequestOptions<ICollectionResponse<ContactCreateResult>>): Promise<Contact[]>;
-    update(criteria: (ContactsUpdateCriteria | Contact)[], options?: IRequestOptions<ICollectionResponse<ContactUpdateResult>>): Promise<Contact[]>;
+    get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<IContact>>;
+    getById(identity: number, criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<IContact | null>;
+    create(criteria: (ContactsCreateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
+    update(criteria: (ContactsUpdateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
 }
+/**
+ * Фабрика управления контактами
+ * */
+export declare class BaseContactFactory extends ResourceFactory<IContact> {
+    getEntityClass(): any;
+    getBaseUrl(): string;
+    getEmbeddedKey(): string;
+}
+declare const ContactFactory: any;
+export default ContactFactory;

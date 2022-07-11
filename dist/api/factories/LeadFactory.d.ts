@@ -2,22 +2,13 @@
  * Фабрика для создания сделок {@link Lead}
  * */
 import ResourceFactory from "../ResourceFactory";
-import Lead, { LeadAttributes } from "../activeRecords/Lead";
+import { ILead } from "../activeRecords/Lead";
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
-import { ICollectionResponse, IPaginatedResponse, IResourceFactory } from "../../interfaces/api";
-export interface LeadsGetCriteria {
-    with?: string;
-    page?: number;
-    limit?: number;
-    query?: string | number;
-    filter?: string;
-    order?: string;
-}
-export interface LeadsGetByIdCriteria {
-    with?: string;
-}
+import { IResourceFactory } from "../../interfaces/api";
+import { IGetCriteria } from "./mixins/hasGetByCriteria";
+import { IHasGetByIdCriteria } from "./mixins/hasGetById";
 export interface LeadsCreateCriteria {
     name?: string;
     price?: number;
@@ -32,19 +23,10 @@ export interface LeadsCreateCriteria {
     _embedded?: JSONObject;
     request_id?: string;
 }
-export interface LeadCreateResult {
-    id: number;
-    request_id: string;
-}
 export interface LeadsUpdateCriteria extends LeadsCreateCriteria {
     id: number;
 }
-export interface LeadUpdateResult {
-    id: number;
-    request_id: string;
-    updated_at: number;
-}
-export interface ILeadFactory extends IResourceFactory<Lead> {
+export interface ILeadFactory extends IResourceFactory<ILead> {
     /**
      * @param criteria фильтр сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-list)
      * @example
@@ -72,7 +54,7 @@ export interface ILeadFactory extends IResourceFactory<Lead> {
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Lead}
      *
      * */
-    get(criteria?: LeadsGetCriteria, options?: IRequestOptions<IPaginatedResponse>): Promise<ResourcePagination<Lead>>;
+    get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<ILead>>;
     /**
      * Находит сделку по её id
      * @param identity id сделки
@@ -86,7 +68,7 @@ export interface ILeadFactory extends IResourceFactory<Lead> {
      * @param options настройки запроса и обработки результата
      * @returns экземпляр найденной сделки или null, если сделка не найдена.
      * */
-    getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<LeadAttributes>): Promise<Lead | null>;
+    getById(identity: number, criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<ILead | null>;
     /**
      * Создаёт новые сделки
      * @param criteria параметры создания сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-add)
@@ -140,7 +122,7 @@ export interface ILeadFactory extends IResourceFactory<Lead> {
      * lead1.id; // 123
      * ```
      * */
-    create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>): Promise<Lead[]>;
+    create(criteria: (LeadsCreateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
     /**
      * Обновляет существующие сделки. Принцип работы метода аналогичен {@link create}
      * @param criteria параметры обновления сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-edit)
@@ -149,13 +131,13 @@ export interface ILeadFactory extends IResourceFactory<Lead> {
      * @returns массив объектов {@link Lead}. Если в параметр criteria передавались экземпляры {@link Lead}, после
      * создания сделок в AmoCRM, у них обновится поле id
      * */
-    update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>): Promise<Lead[]>;
+    update(criteria: (LeadsUpdateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
 }
 /**
  * Фабрика управления сделками
  * */
-export declare class BaseLeadFactory extends ResourceFactory<Lead> {
-    getEntityClass(): typeof Lead;
+export declare class BaseLeadFactory extends ResourceFactory<ILead> {
+    getEntityClass(): any;
     getBaseUrl(): string;
     getEmbeddedKey(): string;
     /**

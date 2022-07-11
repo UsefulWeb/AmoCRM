@@ -7,7 +7,7 @@ import { IAPIResponse, IDomainRequestOptions } from "../interfaces/common";
 import { TStringValueObject } from "../types";
 import {HttpMethod} from "../enums";
 import EventEmitter from "./EventEmitter";
-import JSONResponseParser from "./response/JSONResponseParser";
+import JSONResponseParser from "./JSONResponseParser";
 
 /**
  * Класс запросов к порталу AmoCRM
@@ -94,15 +94,15 @@ export default class DomainRequest<T> extends EventEmitter {
         }
         return domain + '.amocrm.ru';
     }
-    async process(): Promise<IAPIResponse<T|object>> {
+    async process(): Promise<IAPIResponse<T>> {
         const apiResponse = await this.makeRequest();
         return this.parseResponse(apiResponse);
     }
 
-    protected parseResponse(apiResponse: IAPIResponse<string>): IAPIResponse<T|object> {
+    protected parseResponse(apiResponse: IAPIResponse<string>): IAPIResponse<T> {
         const { options = {}} = this.config;
         const { parser = new JSONResponseParser } = options;
-        return parser.parse(apiResponse);
+        return parser.parse<T>(apiResponse);
     }
 
     protected makeRequest(): Promise<IAPIResponse<string>> {

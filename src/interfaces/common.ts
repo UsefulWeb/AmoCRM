@@ -32,7 +32,7 @@ export interface ITokenData {
 export interface IRequestOptions {
     headers?: TStringValueObject;
     useFormData?: boolean;
-    parser?: IResponseParser<string, object>;
+    parser?: IResponseParser<string>;
 }
 
 export interface IDomainRequestOptions {
@@ -68,6 +68,6 @@ export interface IAPIResponseErrorValue {
     detail: string;
 }
 
-export interface IResponseParser<T, R> {
-    parse(result: IAPIResponse<T>): IAPIResponse<R>;
+export interface IResponseParser<T> {
+    parse<R>(result: IAPIResponse<T>): IAPIResponse<R>;
 }

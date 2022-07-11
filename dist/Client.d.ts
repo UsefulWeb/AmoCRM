@@ -7,7 +7,7 @@ import { IClientRequest } from "./common/ClientRequest";
 import { IAuth } from "./common/Auth";
 import { IToken } from "./common/Token";
 import { ILeadFactory } from "./api/factories/LeadFactory";
-import Lead from "./api/activeRecords/Lead";
+import { ILead } from "./api/activeRecords/Lead";
 import { IEntityConstructor, IResourceEntity, IResourceFactory } from "./interfaces/api";
 /**
  * Основной класс библиотеки
@@ -18,7 +18,7 @@ export default class Client extends EventEmitter {
     readonly request: IClientRequest;
     readonly connection: IConnection;
     readonly auth: IAuth;
-    readonly Lead: IEntityConstructor<Lead>;
+    readonly Lead: IEntityConstructor<ILead>;
     readonly leads: ILeadFactory;
     constructor(options: IClientOptions);
     /**
@@ -26,5 +26,5 @@ export default class Client extends EventEmitter {
      * @param factory - фабрика сущностей
      * @returns функция конструктор для вызова new client[Entity]
      * */
-    protected assignEntity<T extends IResourceEntity>(factory: IResourceFactory<T>): IEntityConstructor<T>;
+    protected assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IEntityConstructor<T>;
 }

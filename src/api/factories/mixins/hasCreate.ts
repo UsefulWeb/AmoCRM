@@ -11,7 +11,7 @@ export interface ICreateResult {
     request_id: string;
 }
 
-export interface ICanCreateFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
+export interface IHasCreateFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
     create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions): Promise<T[]>;
 }
 

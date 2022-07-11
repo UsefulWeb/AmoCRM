@@ -8,10 +8,10 @@ const tslib_1 = require("tslib");
 const ResourceFactory_1 = tslib_1.__importDefault(require("../ResourceFactory"));
 const Lead_1 = tslib_1.__importDefault(require("../activeRecords/Lead"));
 const v4_1 = tslib_1.__importDefault(require("../../schema/v4"));
-const canGetByCriteria_1 = require("./mixins/canGetByCriteria");
-const canGetById_1 = require("./mixins/canGetById");
-const canCreate_1 = require("./mixins/canCreate");
-const canUpdate_1 = require("./mixins/canUpdate");
+const hasGetByCriteria_1 = require("./mixins/hasGetByCriteria");
+const hasGetById_1 = require("./mixins/hasGetById");
+const hasCreate_1 = require("./mixins/hasCreate");
+const hasUpdate_1 = require("./mixins/hasUpdate");
 const util_1 = require("../../util");
 /**
  * Фабрика управления сделками
@@ -37,10 +37,10 @@ class BaseLeadFactory extends ResourceFactory_1.default {
 }
 exports.BaseLeadFactory = BaseLeadFactory;
 const LeadFactory = (0, util_1.applyMixins)(BaseLeadFactory, [
-    canGetByCriteria_1.canGetByCriteria,
-    canGetById_1.canGetById,
-    canCreate_1.canCreate,
-    canUpdate_1.canUpdate
+    hasGetByCriteria_1.hasGetByCriteria,
+    hasGetById_1.hasGetById,
+    hasCreate_1.hasCreate,
+    hasUpdate_1.hasUpdate
 ]);
 exports.default = LeadFactory;
 //# sourceMappingURL=LeadFactory.js.map

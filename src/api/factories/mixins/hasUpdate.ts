@@ -16,12 +16,12 @@ export interface IEntityUpdateAttributes extends IEntityAttributes {
     updated_at?: number;
 }
 
-export interface ICanUpdateFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
+export interface IHasUpdateFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
     update<A extends IEntityUpdateAttributes>(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]>
 }
 
 export function hasUpdate<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
-    return class CanUpdate extends Base implements IResourceFactory<T> {
+    return class HasUpdate extends Base implements IResourceFactory<T> {
         async update<A extends IEntityUpdateAttributes>(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]> {
             const url = this.getUrl();
             const requestCriteria = this.getEntityCriteria(criteria);

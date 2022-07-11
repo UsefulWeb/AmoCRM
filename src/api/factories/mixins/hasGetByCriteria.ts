@@ -13,12 +13,12 @@ export interface IGetCriteria {
     order?: string;
 }
 
-export interface ICanGetWithCriteria<T> {
+export interface IHasGetWithCriteria<T> {
     get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<IResourcePagination<T>>;
 }
 
 export function hasGetByCriteria<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
-    return class HasGetWithCriteria extends Base implements ICanGetWithCriteria<T>, IResourceFactory<T> {
+    return class HasGwetWithCriteria extends Base implements IHasGetWithCriteria<T>, IResourceFactory<T> {
         async get(criteria?: IGetCriteria, options?: IRequestOptions) {
             const url = this.getUrl();
 
