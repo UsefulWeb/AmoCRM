@@ -3,19 +3,11 @@ import Contact, { ContactAttributes } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
 import schema from "../../schema/v4";
-import { ICollectionResponse, IPaginatedResponse } from "../../interfaces/api";
+import { ICollectionResponse } from "../../interfaces/api";
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
+import { IGetCriteria } from "./mixins/hasGetByCriteria";
 
-
-export interface ContactsGetCriteria {
-    with?: string;
-    page?: number;
-    limit?: number;
-    query?: string | number;
-    filter?: string;
-    order?: string;
-}
 
 export interface ContactsGetByIdCriteria {
     with?: string;
@@ -90,7 +82,7 @@ export default class ContactFactory extends ResourceFactory<Contact> {
      *
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Contact}
      * */
-    async get(criteria?: ContactsGetCriteria, options?: IRequestOptions<IPaginatedResponse<ContactAttributes>>) {
+    async get(criteria?: IGetCriteria, options?: IRequestOptions) {
         const url = this.getUrl();
 
         const params = {
@@ -107,7 +99,7 @@ export default class ContactFactory extends ResourceFactory<Contact> {
         return pagination;
     }
 
-    async getById(identity: number, criteria?: ContactsGetByIdCriteria, options?: IRequestOptions<ContactAttributes>): Promise<Contact|null> {
+    async getById(identity: number, criteria?: ContactsGetByIdCriteria, options?: IRequestOptions): Promise<Contact|null> {
         const url = this.getUrl('/' + identity);
         const { data } = await this.request.get(url, criteria, options);
         if (!data) {

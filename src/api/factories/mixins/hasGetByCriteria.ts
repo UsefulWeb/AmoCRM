@@ -14,12 +14,12 @@ export interface IGetCriteria {
 }
 
 export interface ICanGetWithCriteria<T> {
-    get(criteria?: IGetCriteria, options?: IRequestOptions<IPaginatedResponse>): Promise<IResourcePagination<T>>;
+    get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<IResourcePagination<T>>;
 }
 
-export function canGetByCriteria<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
-    return class CanGetWithCriteria extends Base implements ICanGetWithCriteria<T>, IResourceFactory<T> {
-        async get(criteria?: IGetCriteria, options?: IRequestOptions<IPaginatedResponse>) {
+export function hasGetByCriteria<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
+    return class HasGetWithCriteria extends Base implements ICanGetWithCriteria<T>, IResourceFactory<T> {
+        async get(criteria?: IGetCriteria, options?: IRequestOptions) {
             const url = this.getUrl();
 
             const params = {

@@ -15,7 +15,7 @@ import JSONResponseParser from "./response/JSONResponseParser";
 export default class DomainRequest<T> extends EventEmitter {
     protected readonly hostname: string;
 
-    constructor(protected readonly config: IDomainRequestOptions<T>) {
+    constructor(protected readonly config: IDomainRequestOptions) {
         super();
         this.hostname = this.getHostname();
     }
@@ -94,12 +94,12 @@ export default class DomainRequest<T> extends EventEmitter {
         }
         return domain + '.amocrm.ru';
     }
-    async process(): Promise<IAPIResponse<T>> {
+    async process(): Promise<IAPIResponse<T|object>> {
         const apiResponse = await this.makeRequest();
         return this.parseResponse(apiResponse);
     }
 
-    protected parseResponse(apiResponse: IAPIResponse<string>): IAPIResponse<T> {
+    protected parseResponse(apiResponse: IAPIResponse<string>): IAPIResponse<T|object> {
         const { options = {}} = this.config;
         const { parser = new JSONResponseParser } = options;
         return parser.parse(apiResponse);

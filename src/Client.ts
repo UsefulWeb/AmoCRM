@@ -8,7 +8,7 @@ import Auth, { IAuth } from "./common/Auth";
 import Token, { IToken } from "./common/Token";
 
 import LeadFactory, { ILeadFactory } from "./api/factories/LeadFactory";
-import Lead from "./api/activeRecords/Lead";
+import { ILead } from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";
 import { IEntityConstructor, IResourceEntity, IResourceFactory } from "./interfaces/api";
 
@@ -22,7 +22,7 @@ export default class Client extends EventEmitter {
     public readonly connection: IConnection;
     public readonly auth: IAuth;
 
-    public readonly Lead: IEntityConstructor<Lead>;
+    public readonly Lead: IEntityConstructor<ILead>;
 
     public readonly leads: ILeadFactory;
 
@@ -50,7 +50,7 @@ export default class Client extends EventEmitter {
      * @param factory - фабрика сущностей
      * @returns функция конструктор для вызова new client[Entity]
      * */
-    protected assignEntity<T extends IResourceEntity>(factory: IResourceFactory<T>): IEntityConstructor<T> {
+    protected assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IEntityConstructor<T> {
         return function (attributes?:JSONObject) {
             return factory.from(attributes);
         };

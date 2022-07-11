@@ -2,31 +2,18 @@
  * Фабрика для создания сделок {@link Lead}
  * */
 import ResourceFactory from "../ResourceFactory";
-import Lead, { LeadAttributes } from "../activeRecords/Lead";
+import Lead, { ILead } from "../activeRecords/Lead";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
 import { JSONObject } from "../../types";
-import { ICollectionResponse, IPaginatedResponse, IResourceFactory } from "../../interfaces/api";
+import { IResourceFactory } from "../../interfaces/api";
 
-import { canGetByCriteria } from "./mixins/canGetByCriteria";
-import { canGetById } from "./mixins/canGetById";
-import { canCreate } from "./mixins/canCreate";
-import { canUpdate } from "./mixins/canUpdate";
+import { hasGetByCriteria, IGetCriteria } from "./mixins/hasGetByCriteria";
+import { hasGetById, IGetByIdCriteria } from "./mixins/hasGetById";
+import { hasCreate } from "./mixins/hasCreate";
+import { hasUpdate } from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
-
-export interface LeadsGetCriteria {
-    with?: string;
-    page?: number;
-    limit?: number;
-    query?: string | number;
-    filter?: string;
-    order?: string;
-}
-
-export interface LeadsGetByIdCriteria {
-    with?: string;
-}
 
 export interface LeadsCreateCriteria {
     name?: string;
@@ -59,7 +46,7 @@ export interface LeadUpdateResult {
     updated_at: number;
 }
 
-export interface ILeadFactory extends IResourceFactory<typeof Lead> {
+export interface ILeadFactory extends IResourceFactory<ILead> {
     /**
      * @param criteria фильтр сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-list)
      * @example
@@ -87,7 +74,7 @@ export interface ILeadFactory extends IResourceFactory<typeof Lead> {
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Lead}
      *
      * */
-    get(criteria?: LeadsGetCriteria, options?: IRequestOptions<IPaginatedResponse>): Promise<ResourcePagination<Lead>>;
+    get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<ILead>>;
     /**
      * Находит сделку по её id
      * @param identity id сделки
@@ -101,7 +88,7 @@ export interface ILeadFactory extends IResourceFactory<typeof Lead> {
      * @param options настройки запроса и обработки результата
      * @returns экземпляр найденной сделки или null, если сделка не найдена.
      * */
-    getById(identity: number, criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<LeadAttributes>): Promise<Lead|null>;
+    getById(identity: number, criteria?: IGetByIdCriteria, options?: IRequestOptions): Promise<ILead|null>;
     /**
      * Создаёт новые сделки
      * @param criteria параметры создания сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-add)
@@ -155,7 +142,7 @@ export interface ILeadFactory extends IResourceFactory<typeof Lead> {
      * lead1.id; // 123
      * ```
      * */
-    create(criteria: (LeadsCreateCriteria | Lead)[], options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>): Promise<Lead[]>;
+    create(criteria: (LeadsCreateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
     /**
      * Обновляет существующие сделки. Принцип работы метода аналогичен {@link create}
      * @param criteria параметры обновления сделок (https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-edit)
@@ -164,13 +151,13 @@ export interface ILeadFactory extends IResourceFactory<typeof Lead> {
      * @returns массив объектов {@link Lead}. Если в параметр criteria передавались экземпляры {@link Lead}, после
      * создания сделок в AmoCRM, у них обновится поле id
      * */
-    update(criteria: (LeadsUpdateCriteria | Lead)[], options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>): Promise<Lead[]>;
+    update(criteria: (LeadsUpdateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
 }
 
 /**
  * Фабрика управления сделками
  * */
-export class BaseLeadFactory extends ResourceFactory<typeof Lead> {
+export class BaseLeadFactory extends ResourceFactory<ILead> {
 
     getEntityClass() {
         return Lead;
@@ -193,10 +180,10 @@ export class BaseLeadFactory extends ResourceFactory<typeof Lead> {
 }
 
 const LeadFactory = applyMixins(BaseLeadFactory, [
-    canGetByCriteria,
-    canGetById,
-    canCreate,
-    canUpdate
+    hasGetByCriteria,
+    hasGetById,
+    hasCreate,
+    hasUpdate
 ]);
 
 export default LeadFactory;

@@ -12,9 +12,10 @@ export interface IResourceFactory<T extends IResourceEntity> extends IEventEmitt
     getUrl(path?: string): string;
     getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
 }
-export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> {
+export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
     id?: number;
     updated_at?: number;
+    isNew(): boolean;
     getFactory(): T;
     setAttributes(attributes?: IEntityAttributes): void;
 }

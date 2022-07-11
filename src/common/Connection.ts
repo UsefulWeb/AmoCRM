@@ -10,7 +10,7 @@ export interface IConnection {
     update(): Promise<boolean>;
     isTokenExpired(): boolean;
     connect(): Promise<boolean>;
-    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>): Promise<IAPIResponse<T>>;
+    makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
 }
 
 /**
@@ -141,7 +141,7 @@ export default class Connection extends EventEmitter implements IConnection {
      * Формирует запрос к порталу. Предварительно проверяет наличие соединения
      * При его отсутствии пытается его установить
      * */
-    async makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions<T>) {
+    async makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions) {
         await this.update();
         const token = this.token.getValue();
         const domain = <string>this.environment.get<string>('domain');
@@ -153,7 +153,7 @@ export default class Connection extends EventEmitter implements IConnection {
             options,
             token
         };
-        const domainRequest = new DomainRequest(config);
+        const domainRequest = new DomainRequest<T>(config);
         return await domainRequest.process();
     }
 }

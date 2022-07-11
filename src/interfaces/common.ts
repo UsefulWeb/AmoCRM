@@ -29,18 +29,18 @@ export interface ITokenData {
     expires_at?: number
 }
 
-export interface IRequestOptions<T> {
+export interface IRequestOptions {
     headers?: TStringValueObject;
     useFormData?: boolean;
-    parser?: IResponseParser<string, T>;
+    parser?: IResponseParser<string, object>;
 }
 
-export interface IDomainRequestOptions<T> {
+export interface IDomainRequestOptions {
     domain: string,
     method: string;
     url: string;
     data?: object;
-    options?: IRequestOptions<T>;
+    options?: IRequestOptions;
     token?: ITokenData;
 }
 

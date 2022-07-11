@@ -7,11 +7,11 @@ import { JSONObject } from "../types";
  * Основной класс сущностей
  * */
 export default abstract class ResourceEntity
-    <T extends IResourceFactory<IResourceEntity>>
+    <T extends IResourceFactory<IResourceEntity<T>>>
     extends
         EventEmitter
     implements
-        IResourceEntity
+        IResourceEntity<T>
 {
     public id?: number;
     public updated_at?: number;

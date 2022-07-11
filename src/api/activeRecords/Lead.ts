@@ -4,15 +4,14 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
-import {
-    ILeadFactory,
-    LeadCreateResult,
-    LeadsGetByIdCriteria,
-    LeadUpdateResult
-} from "../factories/LeadFactory";
-import { ICollectionResponse, IEntityAttributes, IResourceEntity } from "../../interfaces/api";
+import { ILeadFactory } from "../factories/LeadFactory";
+import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
 import { applyMixins } from "../../util";
-import exp from "constants";
+import { hasSave } from "./mixins/hasSave";
+import { hasFetch } from "./mixins/hasFetch";
+import { hasCreate } from "./mixins/hasCreate";
+import { hasUpdate } from "./mixins/hasUpdate";
+import { IGetByIdCriteria } from "../factories/mixins/hasGetById";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -38,7 +37,7 @@ export interface LeadAttributes extends IEntityAttributes {
     _embedded?: JSONObject;
 }
 
-export interface ILead extends IResourceEntity, LeadAttributes {
+export interface ILead extends IResourceEntity<ILeadFactory>, LeadAttributes {
     /**
      * Добавляет сущность на портал AmoCRM
      * @example
@@ -56,7 +55,7 @@ export interface ILead extends IResourceEntity, LeadAttributes {
      * ```
      * @returns ссылка на созданную сущность
      * */
-    create(options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>): Promise<ILead>;
+    create(options?: IRequestOptions): Promise<ILead>;
     /**
      * Обновляет сущность на портале AmoCRM.
      * @param options настройки запроса и обработки результата
@@ -68,12 +67,12 @@ export interface ILead extends IResourceEntity, LeadAttributes {
      * ```
      * @returns ссылка на обновлённую сущность
      * */
-    update(options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>): Promise<ILead>;
+    update(options?: IRequestOptions): Promise<ILead>;
     /**
      * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
      * @param options настройки запроса и обработки результата
      * */
-    save(options?: IRequestOptions<LeadAttributes>): Promise<ILead>;
+    save(options?: IRequestOptions): Promise<ILead>;
     /**
      * Получает содержимое сущности на портале
      * @param criteria фильтр для уточнения результатов запроса
@@ -84,13 +83,13 @@ export interface ILead extends IResourceEntity, LeadAttributes {
      * await lead.fetch();
      * ```
      * */
-    fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<Lead>): Promise<Lead>;
+    fetch(criteria?: IGetByIdCriteria, options?: IRequestOptions): Promise<ILead>;
 }
 
 /**
  * Сделка
  */
-export class BaseLead extends ResourceEntity<ILeadFactory> implements ILead {
+export class BaseLead extends ResourceEntity<ILeadFactory> {
     name?: string;
     price?: number;
     responsible_user_id?: number;
@@ -154,47 +153,13 @@ export class BaseLead extends ResourceEntity<ILeadFactory> implements ILead {
         this.is_price_modified_by_robot = attributes.is_price_modified_by_robot;
         this._embedded = attributes._embedded;
     }
-
-    async create(options?: IRequestOptions<ICollectionResponse<LeadCreateResult>>) {
-        const criteria = [this];
-        const [lead] = await this.factory.create(criteria, options);
-
-        this.emit('create');
-        return lead;
-    }
-
-    async update(options?: IRequestOptions<ICollectionResponse<LeadUpdateResult>>) {
-        const criteria = [this];
-        const [lead] = await this.factory.update(criteria, options);
-
-        this.emit('update');
-        return lead;
-    }
-
-    save(options?: IRequestOptions<never>) {
-        if (this.isNew()) {
-            return this.create(options);
-        }
-        return this.update(options);
-    }
-
-    async fetch(criteria?: LeadsGetByIdCriteria, options?: IRequestOptions<Lead>) {
-        if (this.isNew()) {
-            return false;
-        }
-        const id = <number>this.id;
-        const lead = await this.factory.getById(id, criteria, options);
-
-        this.emit('fetch');
-        return lead;
-    }
 }
 
 const Lead = applyMixins(BaseLead, [
-    canSave,
-    canFetch
+    hasCreate,
+    hasUpdate,
+    hasSave,
+    hasFetch
 ]);
-
-export TLead = typeof Lead;
 
 export default Lead;

@@ -7,14 +7,15 @@ export interface IGetByIdCriteria {
 }
 
 export interface ICanGetByIdFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
-    getById(identity: number, criteria?: IGetByIdCriteria, options?: IRequestOptions<IEntityAttributes>): Promise<T|null>;
+    getById(identity: number, criteria?: IGetByIdCriteria, options?: IRequestOptions): Promise<T|null>;
 }
 
-export function canGetById<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
+export function hasGetById<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
     return class CanGetById extends Base implements ICanGetByIdFactory<T> {
-        async getById(identity: number, criteria?: IGetByIdCriteria, options?: IRequestOptions<IEntityAttributes>) {
+        async getById(identity: number, criteria?: IGetByIdCriteria, options?: IRequestOptions) {
             const url = this.getUrl('/' + identity);
-            const { data } = await this.getRequest().get(url, criteria, options);
+            const request = this.getRequest();
+            const { data } = await request.get<IEntityAttributes>(url, criteria, options);
             if (!data) {
                 return null;
             }

@@ -92,5 +92,6 @@ const Lead = (0, util_1.applyMixins)(BaseLead, [
     canSave,
     canFetch
 ]);
+TLead = typeof Lead;
 exports.default = Lead;
 //# sourceMappingURL=Lead.js.map

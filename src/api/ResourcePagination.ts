@@ -2,7 +2,7 @@ import { IClientRequest } from "../common/ClientRequest";
 import {
     IEntityAttributes,
     IPaginatedResponse,
-    IPaginationLinks, IResourceEntity,
+    IPaginationLinks, IResourceEntity, IResourceFactory,
     IResourcePagination,
     IResourcePaginationParams
 } from "../interfaces/api";
@@ -10,7 +10,7 @@ import {
 /**
  * Постраничная навигация вывода сущностей
  * */
-export default class ResourcePagination<T extends IResourceEntity> implements IResourcePagination<T> {
+export default class ResourcePagination<T extends IResourceEntity<IResourceFactory<T>>> implements IResourcePagination<T> {
     protected readonly request: IClientRequest;
     protected readonly params: IResourcePaginationParams<T>;
     protected data: T[] = [];
@@ -45,7 +45,7 @@ export default class ResourcePagination<T extends IResourceEntity> implements IR
      * */
     protected async fetchUrl(url: string) {
         const { criteria, options } = this.params;
-        const apiResponse = await this.request.get(url, criteria, options);
+        const apiResponse = await this.request.get<IPaginatedResponse>(url, criteria, options);
         const { data } = apiResponse;
         this.page = data?._page || 1;
         this.parseData(data);

@@ -3,7 +3,7 @@ import { JSONObject, TConstructor } from "../types";
 import { IRequestOptions } from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
 
-export interface IResourceFactory<T extends IResourceEntity> extends IEventEmitter {
+export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IEventEmitter {
     getEntityClass(): TConstructor<T>;
     createEntity(): T;
     from(attributes?: IEntityAttributes): T;
@@ -19,6 +19,7 @@ export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>>
     updated_at?: number;
     isNew(): boolean;
     getFactory(): T;
+    getAttributes(): IEntityAttributes;
     setAttributes(attributes?: IEntityAttributes): void;
 }
 
@@ -47,12 +48,12 @@ export interface IPaginationLinks {
     first?: string;
 }
 
-export interface IResourcePaginationParams<T extends IResourceEntity> {
+export interface IResourcePaginationParams<T extends IResourceEntity<IResourceFactory<T>>> {
     url: string;
     criteria?: object;
     factory: IResourceFactory<T>;
     embedded: string;
-    options?: IRequestOptions<IPaginatedResponse>;
+    options?: IRequestOptions;
 }
 
 export interface ILinkResponse {

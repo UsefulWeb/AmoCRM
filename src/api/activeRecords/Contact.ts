@@ -5,6 +5,11 @@ import ResourceEntity from "../ResourceEntity";
 import ContactFactory from "../factories/ContactFactory";
 import { JSONObject } from "../../types";
 import { IEntityAttributes } from "../../interfaces/api";
+import { applyMixins } from "../../util";
+import { hasCreate } from "./mixins/hasCreate";
+import { hasUpdate } from "./mixins/hasUpdate";
+import { hasSave } from "./mixins/hasSave";
+import { hasFetch } from "./mixins/hasFetch";
 
 export interface ContactAttributes extends IEntityAttributes {
     id?: number;
@@ -24,7 +29,7 @@ export interface ContactAttributes extends IEntityAttributes {
     _embedded?: JSONObject;
 }
 
-export default class Contact extends ResourceEntity<ContactFactory> {
+export class BaseContact extends ResourceEntity<ContactFactory> {
     name?: string;
     first_name?: string;
     last_name?: string;
@@ -73,5 +78,13 @@ export default class Contact extends ResourceEntity<ContactFactory> {
         this.account_id = attributes.account_id;
         this._embedded = attributes._embedded;
     }
-
 }
+
+const Contact = applyMixins(BaseContact, [
+    hasCreate,
+    hasUpdate,
+    hasSave,
+    hasFetch
+]);
+
+export default Contact;

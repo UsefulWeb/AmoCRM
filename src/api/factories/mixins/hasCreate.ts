@@ -6,17 +6,22 @@ import {
 } from "../../../interfaces/api";
 import { IRequestOptions } from "../../../interfaces/common";
 
-export interface CreateResult {
+export interface ICreateResult {
     id: number;
     request_id: string;
 }
 
-export function canCreate<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
+export interface ICanCreateFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
+    create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions): Promise<T[]>;
+}
+
+export function hasCreate<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
     return class CanCreate extends Base {
-        async create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions<ICollectionResponse<CreateResult>>) {
+        async create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions) {
             const url = this.getUrl();
             const requestCriteria = this.getEntityCriteria(criteria);
-            const { data } = await this.getRequest().post(url, requestCriteria, options);
+            const request = this.getRequest();
+            const { data } = await request.post<ICollectionResponse<ICreateResult>>(url, requestCriteria, options);
             const response = this.getEmbedded(data);
 
             const result = response.map((attributes, index: number) => {
