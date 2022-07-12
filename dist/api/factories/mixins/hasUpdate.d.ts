@@ -10,6 +10,6 @@ export interface IEntityUpdateAttributes extends IEntityAttributes {
     updated_at?: number;
 }
 export interface IHasUpdateFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
-    update<A extends IEntityUpdateAttributes>(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]>;
+    update(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]>;
 }
 export declare function hasUpdate<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T>;

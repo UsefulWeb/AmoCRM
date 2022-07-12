@@ -4,7 +4,7 @@ exports.hasGetByCriteria = void 0;
 const tslib_1 = require("tslib");
 const ResourcePagination_1 = tslib_1.__importDefault(require("../../ResourcePagination"));
 function hasGetByCriteria(Base) {
-    return class HasGwetWithCriteria extends Base {
+    return class HasGetWithCriteria extends Base {
         get(criteria, options) {
             return tslib_1.__awaiter(this, void 0, void 0, function* () {
                 const url = this.getUrl();

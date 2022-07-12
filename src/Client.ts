@@ -9,7 +9,13 @@ import Token, { IToken } from "./common/Token";
 import LeadFactory, { ILeadFactory } from "./api/factories/LeadFactory";
 import { ILead } from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";
-import { IEntityConstructor, IResourceEntity, IResourceFactory } from "./interfaces/api";
+import { IResourceEntity, IResourceFactory } from "./interfaces/api";
+import { IContact } from "./api/activeRecords/Contact";
+import ContactFactory, { IContactFactory } from "./api/factories/ContactFactory";
+
+
+export type IClientEntity<T> = (attributes?: JSONObject) => T;
+
 
 /**
  * Основной класс библиотеки
@@ -21,9 +27,11 @@ export default class Client extends EventEmitter {
     public readonly connection: IConnection;
     public readonly auth: IAuth;
 
-    public readonly Lead: IEntityConstructor<ILead>;
+    public readonly Lead: IClientEntity<ILead>;
+    public readonly Contact: IClientEntity<IContact>;
 
     public readonly leads: ILeadFactory;
+    public readonly contacts: IContactFactory;
 
     constructor(options: IClientOptions) {
         super();
@@ -42,6 +50,9 @@ export default class Client extends EventEmitter {
 
         this.leads = new LeadFactory(this.request);
         this.Lead = this.assignEntity(this.leads);
+
+        this.contacts = new ContactFactory(this.request);
+        this.Contact = this.assignEntity(this.contacts);
     }
 
     /**
@@ -49,7 +60,7 @@ export default class Client extends EventEmitter {
      * @param factory - фабрика сущностей
      * @returns функция конструктор для вызова new client[Entity]
      * */
-    protected assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IEntityConstructor<T> {
+    protected assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IClientEntity<T> {
         return function (attributes?:JSONObject) {
             return factory.from(attributes);
         };

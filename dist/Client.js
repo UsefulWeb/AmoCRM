@@ -9,6 +9,7 @@ const ClientRequest_1 = tslib_1.__importDefault(require("./common/ClientRequest"
 const Auth_1 = tslib_1.__importDefault(require("./common/Auth"));
 const Token_1 = tslib_1.__importDefault(require("./common/Token"));
 const LeadFactory_1 = tslib_1.__importDefault(require("./api/factories/LeadFactory"));
+const ContactFactory_1 = tslib_1.__importDefault(require("./api/factories/ContactFactory"));
 /**
  * Основной класс библиотеки
  * */
@@ -25,6 +26,8 @@ class Client extends EventEmitter_1.default {
         this.request = new ClientRequest_1.default(this.connection);
         this.leads = new LeadFactory_1.default(this.request);
         this.Lead = this.assignEntity(this.leads);
+        this.contacts = new ContactFactory_1.default(this.request);
+        this.Contact = this.assignEntity(this.contacts);
     }
     /**
      * Привязывает конструктор сущностей

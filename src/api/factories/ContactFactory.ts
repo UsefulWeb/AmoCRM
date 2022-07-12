@@ -1,10 +1,9 @@
 import ResourceFactory from "../ResourceFactory";
-import Contact, { ContactAttributes, IContact } from "../activeRecords/Contact";
+import Contact, { IContact } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
 import schema from "../../schema/v4";
-import { ICollectionResponse, IResourceFactory } from "../../interfaces/api";
-import ResourceEntity from "../ResourceEntity";
+import { IResourceFactory } from "../../interfaces/api";
 import { JSONObject } from "../../types";
 import { hasGetByCriteria, IGetCriteria } from "./mixins/hasGetByCriteria";
 import { ILead } from "../activeRecords/Lead";

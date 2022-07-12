@@ -2,9 +2,9 @@
  * Сделка (сущность)
  */
 import ResourceEntity from "../ResourceEntity";
-import ContactFactory, { IContactFactory } from "../factories/ContactFactory";
+import { IContactFactory } from "../factories/ContactFactory";
 import { JSONObject } from "../../types";
-import { IEntityAttributes, IResourceEntity, IResourceFactory } from "../../interfaces/api";
+import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
 import { applyMixins } from "../../util";
 import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";

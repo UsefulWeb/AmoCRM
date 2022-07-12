@@ -66,4 +66,3 @@ export interface IPaginatedResponse {
 export interface IEntityAttributes {
     id?: number;
 }
-export declare type IEntityConstructor<T> = (attributes?: JSONObject) => T;

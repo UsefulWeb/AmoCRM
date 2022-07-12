@@ -8,7 +8,11 @@ import { IAuth } from "./common/Auth";
 import { IToken } from "./common/Token";
 import { ILeadFactory } from "./api/factories/LeadFactory";
 import { ILead } from "./api/activeRecords/Lead";
-import { IEntityConstructor, IResourceEntity, IResourceFactory } from "./interfaces/api";
+import { JSONObject } from "./types";
+import { IResourceEntity, IResourceFactory } from "./interfaces/api";
+import { IContact } from "./api/activeRecords/Contact";
+import { IContactFactory } from "./api/factories/ContactFactory";
+export declare type IClientEntity<T> = (attributes?: JSONObject) => T;
 /**
  * Основной класс библиотеки
  * */
@@ -18,13 +22,15 @@ export default class Client extends EventEmitter {
     readonly request: IClientRequest;
     readonly connection: IConnection;
     readonly auth: IAuth;
-    readonly Lead: IEntityConstructor<ILead>;
+    readonly Lead: IClientEntity<ILead>;
+    readonly Contact: IClientEntity<IContact>;
     readonly leads: ILeadFactory;
+    readonly contacts: IContactFactory;
     constructor(options: IClientOptions);
     /**
      * Привязывает конструктор сущностей
      * @param factory - фабрика сущностей
      * @returns функция конструктор для вызова new client[Entity]
      * */
-    protected assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IEntityConstructor<T>;
+    protected assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IClientEntity<T>;
 }

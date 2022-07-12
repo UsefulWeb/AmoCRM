@@ -1,7 +1,5 @@
 import { IEntityAttributes, IResourceEntity, IResourceFactory } from "../interfaces/api";
 import EventEmitter from "../common/EventEmitter";
-import ResourceFactory from "./ResourceFactory";
-import { JSONObject } from "../types";
 
 /**
  * Основной класс сущностей

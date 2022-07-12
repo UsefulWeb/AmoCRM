@@ -12,6 +12,10 @@ import { hasFetch } from "./mixins/hasFetch";
 import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
 import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
+import { HasCreate } from "./decorators/HasCreate";
+import { HasUpdate } from "./decorators/HasUpdate";
+import { HasSave } from "./decorators/HasSave";
+import { HasFetch } from "./decorators/HasFetch";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -89,6 +93,11 @@ export interface ILead extends IResourceEntity<ILeadFactory>, LeadAttributes {
 /**
  * Сделка
  */
+
+@HasCreate
+@HasUpdate
+@HasFetch
+@HasSave
 export class BaseLead extends ResourceEntity<ILeadFactory> {
     name?: string;
     price?: number;

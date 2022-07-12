@@ -11,10 +11,11 @@ const hasSave_1 = require("./mixins/hasSave");
 const hasFetch_1 = require("./mixins/hasFetch");
 const hasCreate_1 = require("./mixins/hasCreate");
 const hasUpdate_1 = require("./mixins/hasUpdate");
+const HasCreate_1 = require("./decorators/HasCreate");
 /**
  * Сделка
  */
-class BaseLead extends ResourceEntity_1.default {
+let BaseLead = class BaseLead extends ResourceEntity_1.default {
     getAttributes() {
         return {
             id: this.id,
@@ -57,7 +58,10 @@ class BaseLead extends ResourceEntity_1.default {
         this.is_price_modified_by_robot = attributes.is_price_modified_by_robot;
         this._embedded = attributes._embedded;
     }
-}
+};
+BaseLead = tslib_1.__decorate([
+    HasCreate_1.HasCreate
+], BaseLead);
 exports.BaseLead = BaseLead;
 const Lead = (0, util_1.applyMixins)(BaseLead, [
     hasCreate_1.hasCreate,
