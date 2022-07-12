@@ -1,7 +1,9 @@
+/// <reference types="node" />
 import { IClientRequest } from "../common/ClientRequest";
 import { JSONObject, TConstructor } from "../types";
 import { IRequestOptions } from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
+import EventEmitter from "events";
 export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IEventEmitter {
     getEntityClass(): TConstructor<T>;
     createEntity(): T;
@@ -12,7 +14,7 @@ export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>
     getUrl(path?: string): string;
     getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
 }
-export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
+export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends EventEmitter.EventEmitter, IEventEmitter {
     id?: number;
     updated_at?: number;
     isNew(): boolean;

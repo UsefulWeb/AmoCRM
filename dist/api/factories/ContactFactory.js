@@ -15,7 +15,7 @@ const hasUpdate_1 = require("./mixins/hasUpdate");
  * */
 class BaseContactFactory extends ResourceFactory_1.default {
     getEntityClass() {
-        return new Contact_1.default(this);
+        return Contact_1.default;
     }
     getBaseUrl() {
         return v4_1.default.entities.contacts.path;
