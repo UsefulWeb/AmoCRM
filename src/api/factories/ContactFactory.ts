@@ -81,7 +81,7 @@ export interface IContactFactory extends IResourceFactory<IContact> {
 export class BaseContactFactory extends ResourceFactory<IContact> {
 
     getEntityClass() {
-        return new Contact(this);
+        return Contact;
     }
 
     getBaseUrl(): string {
