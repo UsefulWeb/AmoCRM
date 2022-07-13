@@ -2,7 +2,7 @@
  * Сделка (сущность)
  */
 import ResourceEntity from "../ResourceEntity";
-import { JSONObject } from "../../types";
+import { JSONObject, TConstructor } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
 import { ILeadFactory } from "../factories/LeadFactory";
 import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
@@ -104,5 +104,5 @@ export declare class BaseLead extends ResourceEntity<ILeadFactory> {
     getAttributes(): LeadAttributes;
     setAttributes(attributes: LeadAttributes): void;
 }
-declare const Lead: any;
+declare const Lead: TConstructor<ILead>;
 export default Lead;

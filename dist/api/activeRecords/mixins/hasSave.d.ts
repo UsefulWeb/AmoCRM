@@ -10,4 +10,4 @@ export declare type IHasCreateAndUpdateEntity<T extends IResourceFactory<IResour
 export interface IHasSaveEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T>, IHasCreateAndUpdateEntity<T> {
     save(options?: IRequestOptions): Promise<T | false>;
 }
-export declare function hasSave<T extends IHasCreateAndUpdateFactory<IHasCreateAndUpdateEntity<T>>>(Base: TConstructor<IHasCreateAndUpdateEntity<T>>): TConstructor<IHasCreateAndUpdateEntity<T>>;
+export declare function hasSave<T extends IHasCreateAndUpdateFactory<IHasCreateAndUpdateEntity<T>>>(Base: TConstructor<IHasCreateAndUpdateEntity<T>>): TConstructor<IResourceEntity<T>>;

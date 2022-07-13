@@ -1,3 +1,4 @@
+
 # AmoCRM
 
 [![npm version](https://img.shields.io/npm/v/amocrm-js.svg?style=flat-square)](https://github.com/UsefulWeb/AmoCRM/stargazers)
@@ -5,20 +6,6 @@
 [![GitHub license](https://img.shields.io/github/license/UsefulWeb/AmoCRM)](https://github.com/UsefulWeb/AmoCRM/blob/master/LICENSE)
 
 NodeJS библиотека для работы с AmoCRM.
-
-> :warning: Изменился способ подключения основного класса библиотеки
-
-Было:
-```js
-const Client = require('amocrm-js');
-```
-
-Стало
-```js
-const { Client } = require('amocrm-js');
-```
-
-> :warning: В целях обратной совместимости старый способ работает. В будущих версиях он будет убран
 
 Документация: https://usefulweb.github.io/AmoCRM
 
@@ -237,6 +224,7 @@ await pagination.next();
 В настоящий момент библиотека поддерживает фабрики:
 
 - Сделки [[примеры работы]](./examples/javascript/01-leads)
+- Контакты [[примеры работы]](./examples/javascript/02-contacts)
 
 <a id="requests"></a>
 ## Запросы к порталу
@@ -297,7 +285,7 @@ const response = await client.request.post('/api/v4/contacts', [
 ### PATCH
 
 ```js
-const response = await client.request.patch( '/api/v4/leads', [
+const response = await client.request.patch('/api/v4/leads', [
      {
        "id": 54886,
        "pipeline_id": 47521,
@@ -468,20 +456,7 @@ client.connection.on('change', () => {
 Этот токен можно сохранять куда вам удобно (БД, файлы и тд). При инициализации соединения можно заранее установить токен для восстановления авторизации:
 `crm.token.setValue(currentToken)`
 
-Ниже пример реализации через сохранение в файл token.json который лежит рядом со скриптом
-
-```js
-  client.connection.on('change', () => {
-      const token = client.token.getValue();
-      fs.writeFileSync('./token.js', JSON.stringify(token));
-  });
-  try {
-      const currentToken = require('./token.js');
-      client.token.setValue(currentToken);
-  } catch (e) {
-    // Файл не найден
-  }
-```
+[Пример реализации через сохранение в файл](./examples/javascript/00-common/01-session.js)
 
 <a id="v2-migration"></a>
 ## Переход с версии 2.x.x
@@ -520,6 +495,16 @@ await client.connection.connect();
 - client.on('connection:connected') -> client.connection.on('connected')
 - client.on('connection:error') -> client.connection.on('connectionError')
 - client.on('connection:newToken') -> client.token.on('change')
+
+## Примеры
+
+Общее:
+- [Сохранение сессии](./examples/javascript/00-common/01-session.js)
+- [Работа с сервером авторизации](./examples/javascript/00-oauth/001-get-token-with-server.js)
+
+Работа с фабриками:
+- Сделки [[примеры работы]](./examples/javascript/01-leads)
+- Контакты [[примеры работы]](./examples/javascript/02-contacts)
 
 ## Доска почёта
 

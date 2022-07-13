@@ -5,7 +5,7 @@ import { IEnvironment } from "./Environment";
 import DomainRequest from "./DomainRequest";
 import { TStringValueObject } from "../types";
 
-export interface IToken {
+export interface IToken extends EventEmitter {
     /**
      * Проверяет, истёк ли токен
      * */

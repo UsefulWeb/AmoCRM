@@ -1,9 +1,10 @@
-const { Client } = require('../client');
+// экземпляр Client
+const { client } = require('../client');
 
 const run = async () => {
     /*
-      базовые методы работы с объектом Lead описаны
-      на сайте библиотеки https://usefulweb.github.io/AmoCRM/classes/api_activeRecords_Lead.Lead.html
+      базовые методы работы с объектом Lead описаны в интерфейсе ILead
+      на сайте библиотеки https://usefulweb.github.io/AmoCRM/interfaces/api_activeRecords_Lead.ILead.html
    */
     const lead = await client.leads.getById(123);
     lead.name = 'Ivan';
@@ -34,7 +35,6 @@ const run = async () => {
     // ... спустя какое-то время сделка может обновиться на сервере
     // fetch обновит параметры текущей сделки
     await newLead2.fetch();
-
 };
 
 run();

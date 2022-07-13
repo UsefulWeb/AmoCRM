@@ -137,7 +137,7 @@ export interface ILeadFactory extends IResourceFactory<ILead> {
  * Фабрика управления сделками
  * */
 export declare class BaseLeadFactory extends ResourceFactory<ILead> {
-    getEntityClass(): any;
+    getEntityClass(): import("../../types").TConstructor<ILead>;
     getBaseUrl(): string;
     getEmbeddedKey(): string;
     /**

@@ -28,7 +28,7 @@ class Environment {
                 value = value[+key];
             }
             else {
-                value = [key];
+                value = value[key];
             }
         }
         if (value === undefined) {

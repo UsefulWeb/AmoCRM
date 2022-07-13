@@ -5,8 +5,9 @@ import ResourcePagination from "../ResourcePagination";
 import { IResourceFactory } from "../../interfaces/api";
 import { JSONObject } from "../../types";
 import { IGetCriteria } from "./mixins/hasGetByCriteria";
-import { ILead } from "../activeRecords/Lead";
 import { IHasGetByIdCriteria } from "./mixins/hasGetById";
+import { ILead } from "../activeRecords/Lead";
+import { LeadsUpdateCriteria } from "./LeadFactory";
 export interface ContactsCreateCriteria {
     name?: string;
     first_name?: string;
@@ -62,13 +63,14 @@ export interface IContactFactory extends IResourceFactory<IContact> {
     get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<IContact>>;
     getById(identity: number, criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<IContact | null>;
     create(criteria: (ContactsCreateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
-    update(criteria: (ContactsUpdateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
+    update(criteria: (ContactsUpdateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
+    save(criteria: (LeadsUpdateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
 }
 /**
  * Фабрика управления контактами
  * */
 export declare class BaseContactFactory extends ResourceFactory<IContact> {
-    getEntityClass(): any;
+    getEntityClass(): import("../../types").TConstructor<IContact>;
     getBaseUrl(): string;
     getEmbeddedKey(): string;
 }

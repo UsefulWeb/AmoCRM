@@ -3,7 +3,7 @@
  */
 import ResourceEntity from "../ResourceEntity";
 import { IContactFactory } from "../factories/ContactFactory";
-import { JSONObject } from "../../types";
+import { JSONObject, TConstructor } from "../../types";
 import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
 import { IRequestOptions } from "../../interfaces/common";
 import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
@@ -29,16 +29,16 @@ export interface IContact extends IResourceEntity<IContactFactory>, ContactAttri
      * Добавляет сущность на портал AmoCRM
      * @example
      * ```ts
-     * const lead = new client.Lead({
+     * const contact = new client.Contact({
      *     name: "Walter White"
      * });
-     * await lead.create();
+     * await contact.create();
      * ```
      * @example
      * ```ts
-     * const lead = new client.Lead;
-     * lead.name = "Walter White";
-     * await lead.create();
+     * const contact = new client.Contact;
+     * contact.name = "Walter White";
+     * await contact.create();
      * ```
      * @returns ссылка на созданную сущность
      * */
@@ -48,9 +48,9 @@ export interface IContact extends IResourceEntity<IContactFactory>, ContactAttri
      * @param options настройки запроса и обработки результата
      * @example
      * ```ts
-     * const lead = await client.leads.getById(123);
-     * lead.name = "Walter White";
-     * await lead.update();
+     * const contact = await client.contacts.getById(123);
+     * contact.name = "Walter White";
+     * await contact.update();
      * ```
      * @returns ссылка на обновлённую сущность
      * */
@@ -66,8 +66,8 @@ export interface IContact extends IResourceEntity<IContactFactory>, ContactAttri
      * @param options настройки запроса и обработки результата
      * @example
      * ```ts
-     * const lead = new client.Lead({ id: 123 });
-     * await lead.fetch();
+     * const contact = new client.Contact({ id: 123 });
+     * await contact.fetch();
      * ```
      * */
     fetch(criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<IContact>;
@@ -90,5 +90,5 @@ export declare class BaseContact extends ResourceEntity<IContactFactory> {
     getAttributes(): ContactAttributes;
     setAttributes(attributes?: ContactAttributes): void;
 }
-declare const Contact: any;
+declare const Contact: TConstructor<IContact>;
 export default Contact;

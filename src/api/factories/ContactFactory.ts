@@ -6,11 +6,12 @@ import schema from "../../schema/v4";
 import { IResourceFactory } from "../../interfaces/api";
 import { JSONObject } from "../../types";
 import { hasGetByCriteria, IGetCriteria } from "./mixins/hasGetByCriteria";
-import { ILead } from "../activeRecords/Lead";
 import { hasGetById, IHasGetByIdCriteria } from "./mixins/hasGetById";
 import { applyMixins } from "../../util";
 import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
+import { ILead } from "../activeRecords/Lead";
+import { LeadsUpdateCriteria } from "./LeadFactory";
 
 export interface ContactsCreateCriteria {
     name?: string;
@@ -72,7 +73,8 @@ export interface IContactFactory extends IResourceFactory<IContact> {
     get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<IContact>>;
     getById(identity: number, criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<IContact|null>;
     create(criteria: (ContactsCreateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
-    update(criteria: (ContactsUpdateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
+    update(criteria: (ContactsUpdateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
+    save(criteria: (LeadsUpdateCriteria | ILead)[], options?: IRequestOptions): Promise<ILead[]>;
 }
 
 /**

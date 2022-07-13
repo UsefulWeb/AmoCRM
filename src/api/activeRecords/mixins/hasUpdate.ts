@@ -1,5 +1,5 @@
 import { IResourceEntity, IResourceFactory } from "../../../interfaces/api";
-import { TEntityConstructor } from "../../../types";
+import { TConstructor, TEntityConstructor } from "../../../types";
 import { IRequestOptions } from "../../../interfaces/common";
 import { IHasUpdateFactory } from "../../factories/mixins/hasUpdate";
 
@@ -7,7 +7,7 @@ export interface IHasUpdateEntity<T extends IResourceFactory<IResourceEntity<T>>
     update(options?: IRequestOptions): Promise<T>;
 }
 
-export function hasUpdate<T extends IHasUpdateFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TEntityConstructor<T> {
+export function hasUpdate<T extends IHasUpdateFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TConstructor<IResourceEntity<T>> {
     return class HasUpdate extends Base {
         async update(options?: IRequestOptions) {
             const criteria = [this];

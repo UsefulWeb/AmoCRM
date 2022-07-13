@@ -2,7 +2,7 @@
  * Сделка (сущность)
  */
 import ResourceEntity from "../ResourceEntity";
-import { JSONObject } from "../../types";
+import { JSONObject, TConstructor } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
 import { ILeadFactory } from "../factories/LeadFactory";
 import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
@@ -155,7 +155,7 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
     }
 }
 
-const Lead = applyMixins(BaseLead, [
+const Lead: TConstructor<ILead> = applyMixins(BaseLead, [
     hasCreate,
     hasUpdate,
     hasSave,

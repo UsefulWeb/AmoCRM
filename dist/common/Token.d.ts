@@ -2,7 +2,7 @@ import EventEmitter from "./EventEmitter";
 import { IAPIResponse, ITokenData } from "../interfaces/common";
 import { IEnvironment } from "./Environment";
 import { TStringValueObject } from "../types";
-export interface IToken {
+export interface IToken extends EventEmitter {
     /**
      * Проверяет, истёк ли токен
      * */

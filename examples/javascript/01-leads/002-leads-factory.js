@@ -1,4 +1,5 @@
-const { Client } = require('../client');
+// экземпляр Client
+const { client } = require('../client');
 
 const run = async () => {
     /*
@@ -10,14 +11,14 @@ const run = async () => {
 
     /* Поиск сделок по id */
     // получить объект lead по id
-    const lead = client.leads.getById(123);
+    const lead = await client.leads.getById(123);
     lead.name = 'Walter Scott';
     await lead.save();
     /*
         базовые методы работы с объектом Lead описаны
         - в README
         - в примере 003-lead-entity.js
-        - на сайте библиотеки https://usefulweb.github.io/AmoCRM/classes/api_activeRecords_Lead.Lead.html
+        - в интерфейсе ILead на сайте библиотеки https://usefulweb.github.io/AmoCRM/interfaces/api_activeRecords_Lead.ILead.html
      */
 
     /* Создание сделок */

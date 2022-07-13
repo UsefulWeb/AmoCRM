@@ -1,6 +1,8 @@
-const { Client } = require('../client');
+// экземпляр Client
+const { client } = require('../client');
 
 const run = async () => {
+
     // постраничная навигация сделок
     const pagination = await client.leads.get();
 

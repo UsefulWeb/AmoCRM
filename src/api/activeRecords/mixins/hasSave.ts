@@ -15,7 +15,7 @@ export interface IHasSaveEntity<T extends IResourceFactory<IResourceEntity<T>>> 
 }
 
 export function hasSave<T extends IHasCreateAndUpdateFactory<IHasCreateAndUpdateEntity<T>>>
-    (Base: TConstructor<IHasCreateAndUpdateEntity<T>>): TConstructor<IHasCreateAndUpdateEntity<T>>
+    (Base: TConstructor<IHasCreateAndUpdateEntity<T>>): TConstructor<IResourceEntity<T>>
 {
     return class HasSave extends Base {
         save(options?: IRequestOptions) {

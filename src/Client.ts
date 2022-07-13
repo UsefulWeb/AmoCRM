@@ -13,9 +13,7 @@ import { IResourceEntity, IResourceFactory } from "./interfaces/api";
 import { IContact } from "./api/activeRecords/Contact";
 import ContactFactory, { IContactFactory } from "./api/factories/ContactFactory";
 
-
 export type IClientEntity<T> = (attributes?: JSONObject) => T;
-
 
 /**
  * Основной класс библиотеки
