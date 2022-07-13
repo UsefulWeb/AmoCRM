@@ -137,8 +137,15 @@ export interface IContactFactory extends IResourceFactory<IContact> {
      * ```
      * */
     create(criteria: (ContactsCreateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
+    /**
+     * Обновляет существующие сделки. Принцип работы метода аналогичен {@link create}
+     * @param criteria параметры обновления сделок (https://www.amocrm.ru/developers/content/crm_platform/contacts-api#contacts-edit)
+     * и/или массив объектов {@link Contact}
+     * @param options настройки запроса и обработки результата
+     * @returns массив объектов {@link Contact}. Если в параметр criteria передавались экземпляры {@link Contact}, после
+     * создания сделок в AmoCRM, у них обновится поле id
+     * */
     update(criteria: (ContactsUpdateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
-    save(criteria: (ContactsUpdateCriteria | IContact)[], options?: IRequestOptions): Promise<IContact[]>;
 }
 
 /**
