@@ -1,5 +1,5 @@
 import ResourceFactory from "../ResourceFactory";
-import Contact, { IContact } from "../activeRecords/Contact";
+import { Contact, IContact } from "../activeRecords/Contact";
 import { IRequestOptions } from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
 import schema from "../../schema/v4";
@@ -166,11 +166,9 @@ export class BaseContactFactory extends ResourceFactory<IContact> {
     }
 }
 
-const ContactFactory = applyMixins(BaseContactFactory, [
+export const ContactFactory = applyMixins(BaseContactFactory, [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
     hasUpdate
 ]);
-
-export default ContactFactory;

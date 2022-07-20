@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { IAPIResponse, IDomainRequestOptions } from "../interfaces/common";
 import { TStringValueObject } from "../types";
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 /**
  * Класс запросов к порталу AmoCRM
  * */

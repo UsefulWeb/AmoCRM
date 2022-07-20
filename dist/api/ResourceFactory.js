@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const ResourceEntity_1 = tslib_1.__importDefault(require("./ResourceEntity"));
-const EventEmitter_1 = tslib_1.__importDefault(require("../common/EventEmitter"));
+const EventEmitter_1 = require("../common/EventEmitter");
 /**
  * Основной класс фабрики сущностей. Класс-фабрика служит для создания
  * новых сущностей. Например, {@link LeadFactory} отвечает за {@link Lead}
  * */
-class ResourceFactory extends EventEmitter_1.default {
+class ResourceFactory extends EventEmitter_1.EventEmitter {
     constructor(request) {
         super();
         this.request = request;

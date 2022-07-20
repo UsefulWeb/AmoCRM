@@ -1,17 +1,19 @@
 import "reflect-metadata";
 import { IClientOptions } from "./interfaces/common";
-import EventEmitter from "./common/EventEmitter";
-import Connection, { IConnection } from './common/Connection';
-import Environment, { IEnvironment } from "./common/Environment";
-import ClientRequest, { IClientRequest } from "./common/ClientRequest";
-import Auth, { IAuth } from "./common/Auth";
-import Token, { IToken } from "./common/Token";
-import LeadFactory, { ILeadFactory } from "./api/factories/LeadFactory";
+import { EventEmitter } from "./common/EventEmitter";
+import { Connection, IConnection } from './common/Connection';
+import { Environment, IEnvironment } from "./common/Environment";
+import { ClientRequest, IClientRequest } from "./common/ClientRequest";
+import { Auth, IAuth } from "./common/Auth";
+import { Token, IToken } from "./common/Token";
+import { LeadFactory, ILeadFactory } from "./api/factories/LeadFactory";
 import { ILead } from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";
 import { IResourceEntity, IResourceFactory } from "./interfaces/api";
 import { IContact } from "./api/activeRecords/Contact";
-import ContactFactory, { IContactFactory } from "./api/factories/ContactFactory";
+import { ContactFactory, IContactFactory } from "./api/factories/ContactFactory";
+import CompanyFactory, { ICompanyFactory } from "./api/factories/CompanyFactory";
+import { ICompany } from "./api/activeRecords/Company";
 
 export type IClientEntity<T> = (attributes?: JSONObject) => T;
 
@@ -27,9 +29,11 @@ export default class Client extends EventEmitter {
 
     public readonly Lead: IClientEntity<ILead>;
     public readonly Contact: IClientEntity<IContact>;
+    public readonly Company: IClientEntity<ICompany>;
 
     public readonly leads: ILeadFactory;
     public readonly contacts: IContactFactory;
+    public readonly companies: ICompanyFactory;
 
     constructor(options: IClientOptions) {
         super();
@@ -51,6 +55,9 @@ export default class Client extends EventEmitter {
 
         this.contacts = new ContactFactory(this.request);
         this.Contact = this.assignEntity(this.contacts);
+
+        this.companies = new CompanyFactory(this.request);
+        this.Company = this.assignEntity(this.companies);
     }
 
     /**

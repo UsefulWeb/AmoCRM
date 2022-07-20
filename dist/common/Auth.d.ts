@@ -1,4 +1,4 @@
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import { IEnvironment } from "./Environment";
 import { IToken } from "./Token";
 export interface IAuth {
@@ -18,7 +18,7 @@ export interface IAuth {
  * Компонент авторизации.
  * Доступен как client.auth
  * */
-export default class Auth extends EventEmitter implements IAuth {
+export declare class Auth extends EventEmitter implements IAuth {
     protected readonly environment: IEnvironment;
     protected readonly token: IToken;
     constructor(environment: IEnvironment, token: IToken);

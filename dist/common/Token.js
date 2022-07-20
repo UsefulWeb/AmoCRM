@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Token = void 0;
 const tslib_1 = require("tslib");
-const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const EventEmitter_1 = require("./EventEmitter");
 const v4_1 = tslib_1.__importDefault(require("../schema/v4"));
 const DomainRequest_1 = tslib_1.__importDefault(require("./DomainRequest"));
 /**
  * Компонент управления текущим oAuth-токеном
  * Доступен как client.token
  * */
-class Token extends EventEmitter_1.default {
+class Token extends EventEmitter_1.EventEmitter {
     constructor(environment) {
         super();
         this.environment = environment;
@@ -116,5 +117,5 @@ class Token extends EventEmitter_1.default {
         return request.process();
     }
 }
-exports.default = Token;
+exports.Token = Token;
 //# sourceMappingURL=Token.js.map

@@ -1,38 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthServer = void 0;
 const tslib_1 = require("tslib");
 const http = tslib_1.__importStar(require("http"));
-const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const EventEmitter_1 = require("./EventEmitter");
 /**
  * Простой сервер авторизации для получения OAuth-токена
  * */
-class AuthServer extends EventEmitter_1.default {
+class AuthServer extends EventEmitter_1.EventEmitter {
     constructor(options) {
         super();
         this.options = options;
     }
-    /**
-     * Запускает сервер на заданном в {@link options} порту
-     * */
     run() {
         const { port } = this.options;
         const handler = this.handle.bind(this);
-        const onListenStart = this.onListenStart.bind(this);
+        const afterStart = this.afterStart.bind(this);
         this.instance = http
             .createServer(handler)
-            .listen(port, onListenStart);
+            .listen(port, afterStart);
     }
-    /**
-     * Обработчик успешного запуска сервера
-     * */
-    onListenStart() {
+    afterStart() {
         const { port } = this.options;
         console.log(`auth server listening on port ${port}`);
         this.emit('listen');
     }
-    /**
-     * Останавливает сервер
-     * */
     stop() {
         return new Promise((resolve, reject) => {
             if (this.instance === undefined) {
@@ -50,9 +42,6 @@ class AuthServer extends EventEmitter_1.default {
             this.instance.close();
         });
     }
-    /**
-     * Обработчик запроса, поступающего на адрес запущенного сервера
-     * */
     handle(request, response) {
         const { url } = request;
         console.log('handled auth server callback');
@@ -78,5 +67,5 @@ class AuthServer extends EventEmitter_1.default {
         response.end('VALID_CODE');
     }
 }
-exports.default = AuthServer;
+exports.AuthServer = AuthServer;
 //# sourceMappingURL=AuthServer.js.map

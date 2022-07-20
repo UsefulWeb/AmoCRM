@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseContact = void 0;
+exports.Contact = exports.BaseContact = void 0;
 const tslib_1 = require("tslib");
 /**
  * Сделка (сущность)
@@ -46,11 +46,10 @@ class BaseContact extends ResourceEntity_1.default {
     }
 }
 exports.BaseContact = BaseContact;
-const Contact = (0, util_1.applyMixins)(BaseContact, [
+exports.Contact = (0, util_1.applyMixins)(BaseContact, [
     hasCreate_1.hasCreate,
     hasUpdate_1.hasUpdate,
     hasSave_1.hasSave,
     hasFetch_1.hasFetch
 ]);
-exports.default = Contact;
 //# sourceMappingURL=Contact.js.map

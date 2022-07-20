@@ -225,6 +225,7 @@ await pagination.next();
 
 - Сделки [[примеры работы]](./examples/javascript/01-leads)
 - Контакты [[примеры работы]](./examples/javascript/02-contacts)
+- Компании [[примеры работы]](./examples/javascript/03-companies)
 
 <a id="requests"></a>
 ## Запросы к порталу
@@ -505,6 +506,7 @@ await client.connection.connect();
 Работа с фабриками:
 - Сделки [[примеры работы]](./examples/javascript/01-leads)
 - Контакты [[примеры работы]](./examples/javascript/02-contacts)
+- Компании [[примеры работы]](./examples/javascript/03-companies)
 
 ## Доска почёта
 

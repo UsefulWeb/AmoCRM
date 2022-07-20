@@ -48,7 +48,7 @@ export interface IEnvironment {
  * - переданные при создании экземпляра {@link Client}
  * - изменённые в процессе работы с помощью {@link Environment.set}
  * */
-class Environment implements IEnvironment {
+export class Environment implements IEnvironment {
     protected readonly options: IClientOptions;
     constructor(options: IClientOptions) {
         this.options = options;
@@ -131,5 +131,3 @@ class Environment implements IEnvironment {
         return this.get(path) !== undefined;
     }
 }
-
-export default Environment;

@@ -131,11 +131,9 @@ export class BaseContact extends ResourceEntity<IContactFactory> {
     }
 }
 
-const Contact: TConstructor<IContact> = applyMixins(BaseContact, [
+export const Contact: TConstructor<IContact> = applyMixins(BaseContact, [
     hasCreate,
     hasUpdate,
     hasSave,
     hasFetch
 ]);
-
-export default Contact;

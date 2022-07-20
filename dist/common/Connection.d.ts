@@ -1,8 +1,8 @@
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import { IAPIResponse, IRequestOptions } from "../interfaces/common";
 import { IToken } from "./Token";
 import { IEnvironment } from "./Environment";
-import AuthServer from "./AuthServer";
+import { IAuthServer } from "./AuthServer";
 import { IAuth } from "./Auth";
 export interface IConnection {
     update(): Promise<boolean>;
@@ -14,12 +14,12 @@ export interface IConnection {
  * Компонент управления соединением с порталом
  * Доступен как client.connection
  * */
-export default class Connection extends EventEmitter implements IConnection {
+export declare class Connection extends EventEmitter implements IConnection {
     protected readonly token: IToken;
     protected readonly environment: IEnvironment;
     protected readonly auth: IAuth;
     protected connected: boolean;
-    protected authServer: AuthServer | null;
+    protected authServer: IAuthServer | null;
     constructor(environment: IEnvironment, token: IToken, auth: IAuth);
     /**
      * При отсуствии OAuth-токена пытается его получить

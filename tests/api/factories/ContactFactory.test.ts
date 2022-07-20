@@ -44,6 +44,6 @@ describe('ContactFactory', () => {
         ]);
         const { id = -1 } = contact;
         const found = await client.contacts.getById(id);
-        expect(found.name).toEqual('Walter Scott');
+        expect(found?.name).toEqual('Walter Scott');
     });
 });

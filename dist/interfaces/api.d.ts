@@ -3,7 +3,7 @@ import { IClientRequest } from "../common/ClientRequest";
 import { JSONObject, TConstructor } from "../types";
 import { IRequestOptions } from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
-import EventEmitter from "events";
+import { EventEmitter } from "events";
 export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IEventEmitter {
     getEntityClass(): TConstructor<T>;
     createEntity(): T;

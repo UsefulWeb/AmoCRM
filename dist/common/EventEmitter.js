@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.EventEmitter = void 0;
 const events_1 = require("events");
 /**
  * Расширяет функционал работы с событиями в NodeJS.
@@ -40,5 +41,5 @@ class EventEmitter extends events_1.EventEmitter {
         return result;
     }
 }
-exports.default = EventEmitter;
+exports.EventEmitter = EventEmitter;
 //# sourceMappingURL=EventEmitter.js.map

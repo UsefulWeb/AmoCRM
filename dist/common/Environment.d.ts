@@ -47,11 +47,10 @@ export interface IEnvironment {
  * - переданные при создании экземпляра {@link Client}
  * - изменённые в процессе работы с помощью {@link Environment.set}
  * */
-declare class Environment implements IEnvironment {
+export declare class Environment implements IEnvironment {
     protected readonly options: IClientOptions;
     constructor(options: IClientOptions);
     get<T>(path?: string, defaultValue?: T): T;
     set(path: string, value: JSONValue): this;
     exists(path: string): boolean;
 }
-export default Environment;

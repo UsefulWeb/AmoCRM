@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
-const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const EventEmitter_1 = require("./EventEmitter");
 const APIResponseError_1 = tslib_1.__importDefault(require("./APIResponseError"));
 /**
  * Преобразует ответ портала в JSON-объект
  * */
-class JSONResponseParser extends EventEmitter_1.default {
+class JSONResponseParser extends EventEmitter_1.EventEmitter {
     parse(apiResponse) {
         const { response } = apiResponse;
         if (!apiResponse.data) {

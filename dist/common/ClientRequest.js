@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+exports.ClientRequest = void 0;
+const EventEmitter_1 = require("./EventEmitter");
 /**
  * Компонент запросов к серверу.
  * Доступен как client.request
  * */
-class ClientRequest extends EventEmitter_1.default {
+class ClientRequest extends EventEmitter_1.EventEmitter {
     constructor(connection) {
         super();
         this.connection = connection;
@@ -24,5 +24,5 @@ class ClientRequest extends EventEmitter_1.default {
         return this.connection.makeRequest('PATCH', url, data, options);
     }
 }
-exports.default = ClientRequest;
+exports.ClientRequest = ClientRequest;
 //# sourceMappingURL=ClientRequest.js.map

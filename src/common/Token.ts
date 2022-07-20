@@ -1,4 +1,4 @@
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import { IDomainRequestOptions, IAPIResponse, IAuthOptions, ITokenData } from "../interfaces/common";
 import schema from "../schema/v4";
 import { IEnvironment } from "./Environment";
@@ -41,7 +41,7 @@ export interface IToken extends EventEmitter {
  * Компонент управления текущим oAuth-токеном
  * Доступен как client.token
  * */
-export default class Token extends EventEmitter {
+export class Token extends EventEmitter {
     protected value?: ITokenData;
     protected expiresAt?: Date;
     protected code?: string;

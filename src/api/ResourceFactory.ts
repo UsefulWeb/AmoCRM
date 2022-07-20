@@ -1,7 +1,7 @@
 import { ICollectionResponse, IEntityAttributes, IResourceEntity, IResourceFactory } from "../interfaces/api";
 import { IClientRequest } from "../common/ClientRequest";
 import ResourceEntity from "./ResourceEntity";
-import EventEmitter from "../common/EventEmitter";
+import { EventEmitter } from "../common/EventEmitter";
 import { TConstructor } from "../types";
 
 /**

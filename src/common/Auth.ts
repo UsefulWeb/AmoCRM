@@ -1,5 +1,5 @@
 import * as qs from "qs";
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import { IEnvironment } from "./Environment";
 
 import { IAuthUrlParams, IClientOptions } from "../interfaces/common";
@@ -22,7 +22,7 @@ export interface IAuth {
  * Компонент авторизации.
  * Доступен как client.auth
  * */
-export default class Auth extends EventEmitter implements IAuth {
+export class Auth extends EventEmitter implements IAuth {
     protected readonly environment: IEnvironment;
     protected readonly token: IToken;
     constructor(environment: IEnvironment, token: IToken) {

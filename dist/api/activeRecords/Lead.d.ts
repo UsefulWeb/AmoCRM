@@ -104,5 +104,4 @@ export declare class BaseLead extends ResourceEntity<ILeadFactory> {
     getAttributes(): LeadAttributes;
     setAttributes(attributes: LeadAttributes): void;
 }
-declare const Lead: TConstructor<ILead>;
-export default Lead;
+export declare const Lead: TConstructor<ILead>;

@@ -90,5 +90,4 @@ export declare class BaseContact extends ResourceEntity<IContactFactory> {
     getAttributes(): ContactAttributes;
     setAttributes(attributes?: ContactAttributes): void;
 }
-declare const Contact: TConstructor<IContact>;
-export default Contact;
+export declare const Contact: TConstructor<IContact>;

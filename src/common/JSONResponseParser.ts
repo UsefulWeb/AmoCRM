@@ -1,5 +1,5 @@
 import * as http from 'http';
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import { IAPIResponse, IResponseParser } from "../interfaces/common";
 import APIResponseError from "./APIResponseError";
 

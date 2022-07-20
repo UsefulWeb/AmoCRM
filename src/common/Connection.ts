@@ -1,9 +1,9 @@
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import { IAPIResponse, IAuthOptions, IAuthServerOptions, IRequestOptions } from "../interfaces/common";
 import { IToken } from "./Token";
 import { IEnvironment } from "./Environment";
 import DomainRequest from "./DomainRequest";
-import AuthServer from "./AuthServer";
+import { AuthServer, IAuthServer } from "./AuthServer";
 import { IAuth } from "./Auth";
 
 export interface IConnection {
@@ -17,13 +17,13 @@ export interface IConnection {
  * Компонент управления соединением с порталом
  * Доступен как client.connection
  * */
-export default class Connection extends EventEmitter implements IConnection {
+export class Connection extends EventEmitter implements IConnection {
     protected readonly token: IToken;
     protected readonly environment: IEnvironment;
     protected readonly auth: IAuth;
 
     protected connected = false;
-    protected authServer: AuthServer | null = null;
+    protected authServer: IAuthServer | null = null;
 
     constructor(environment: IEnvironment, token: IToken, auth: IAuth) {
         super();

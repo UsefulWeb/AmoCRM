@@ -2,7 +2,7 @@
  * Фабрика для создания сделок {@link Lead}
  * */
 import ResourceFactory from "../ResourceFactory";
-import Lead, { ILead } from "../activeRecords/Lead";
+import { Lead, ILead } from "../activeRecords/Lead";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
@@ -169,11 +169,9 @@ export class BaseLeadFactory extends ResourceFactory<ILead> {
     }
 }
 
-const LeadFactory = applyMixins(BaseLeadFactory, [
+export const LeadFactory = applyMixins(BaseLeadFactory, [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
     hasUpdate
 ]);
-
-export default LeadFactory;

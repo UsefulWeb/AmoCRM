@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Auth = void 0;
 const tslib_1 = require("tslib");
 const qs = tslib_1.__importStar(require("qs"));
-const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const EventEmitter_1 = require("./EventEmitter");
 /**
  * Компонент авторизации.
  * Доступен как client.auth
  * */
-class Auth extends EventEmitter_1.default {
+class Auth extends EventEmitter_1.EventEmitter {
     constructor(environment, token) {
         super();
         this.environment = environment;
@@ -33,5 +34,5 @@ class Auth extends EventEmitter_1.default {
         return `${baseUrl}?${paramsStr}`;
     }
 }
-exports.default = Auth;
+exports.Auth = Auth;
 //# sourceMappingURL=Auth.js.map
