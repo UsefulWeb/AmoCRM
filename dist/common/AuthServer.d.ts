@@ -1,14 +1,8 @@
 /// <reference types="node" />
 import * as http from "http";
-import EventEmitter from "./EventEmitter";
+import { EventEmitter, IEventEmitter } from "./EventEmitter";
 import { IAuthServerOptions } from "../interfaces/common";
-/**
- * Простой сервер авторизации для получения OAuth-токена
- * */
-export default class AuthServer extends EventEmitter {
-    protected readonly options: IAuthServerOptions;
-    protected instance?: http.Server;
-    constructor(options: IAuthServerOptions);
+export interface IAuthServer extends IEventEmitter {
     /**
      * Запускает сервер на заданном в {@link options} порту
      * */
@@ -16,13 +10,25 @@ export default class AuthServer extends EventEmitter {
     /**
      * Обработчик успешного запуска сервера
      * */
-    onListenStart(): void;
+    afterStart(): void;
     /**
      * Останавливает сервер
      * */
-    stop(): Promise<void>;
+    stop(): void;
     /**
      * Обработчик запроса, поступающего на адрес запущенного сервера
      * */
+    handle(request: http.IncomingMessage, response: http.ServerResponse): void;
+}
+/**
+ * Простой сервер авторизации для получения OAuth-токена
+ * */
+export declare class AuthServer extends EventEmitter {
+    protected readonly options: IAuthServerOptions;
+    protected instance?: http.Server;
+    constructor(options: IAuthServerOptions);
+    run(): void;
+    afterStart(): void;
+    stop(): Promise<void>;
     handle(request: http.IncomingMessage, response: http.ServerResponse): void;
 }

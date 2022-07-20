@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const EventEmitter_1 = tslib_1.__importDefault(require("../common/EventEmitter"));
+const EventEmitter_1 = require("../common/EventEmitter");
 /**
  * Основной класс сущностей
  * */
-class ResourceEntity extends EventEmitter_1.default {
+class ResourceEntity extends EventEmitter_1.EventEmitter {
     constructor(factory) {
         super();
         this.required = [];

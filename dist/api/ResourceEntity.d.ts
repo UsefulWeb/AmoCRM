@@ -1,5 +1,5 @@
 import { IEntityAttributes, IResourceEntity, IResourceFactory } from "../interfaces/api";
-import EventEmitter from "../common/EventEmitter";
+import { EventEmitter } from "../common/EventEmitter";
 /**
  * Основной класс сущностей
  * */

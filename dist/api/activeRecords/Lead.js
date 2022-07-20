@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseLead = void 0;
+exports.Lead = exports.BaseLead = void 0;
 const tslib_1 = require("tslib");
 /**
  * Сделка (сущность)
@@ -59,11 +59,10 @@ class BaseLead extends ResourceEntity_1.default {
     }
 }
 exports.BaseLead = BaseLead;
-const Lead = (0, util_1.applyMixins)(BaseLead, [
+exports.Lead = (0, util_1.applyMixins)(BaseLead, [
     hasCreate_1.hasCreate,
     hasUpdate_1.hasUpdate,
     hasSave_1.hasSave,
     hasFetch_1.hasFetch
 ]);
-exports.default = Lead;
 //# sourceMappingURL=Lead.js.map

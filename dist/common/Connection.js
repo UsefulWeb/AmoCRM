@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Connection = void 0;
 const tslib_1 = require("tslib");
-const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const EventEmitter_1 = require("./EventEmitter");
 const DomainRequest_1 = tslib_1.__importDefault(require("./DomainRequest"));
-const AuthServer_1 = tslib_1.__importDefault(require("./AuthServer"));
+const AuthServer_1 = require("./AuthServer");
 /**
  * Компонент управления соединением с порталом
  * Доступен как client.connection
  * */
-class Connection extends EventEmitter_1.default {
+class Connection extends EventEmitter_1.EventEmitter {
     constructor(environment, token, auth) {
         super();
         this.connected = false;
@@ -101,7 +102,7 @@ class Connection extends EventEmitter_1.default {
                 state,
                 port
             };
-            const server = new AuthServer_1.default(options);
+            const server = new AuthServer_1.AuthServer(options);
             server.subscribe(this);
             this.authServer = server;
             const code = yield new Promise(resolve => {
@@ -137,5 +138,5 @@ class Connection extends EventEmitter_1.default {
         });
     }
 }
-exports.default = Connection;
+exports.Connection = Connection;
 //# sourceMappingURL=Connection.js.map

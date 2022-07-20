@@ -9,6 +9,9 @@ declare const _default: {
         contacts: {
             path: string;
         };
+        companies: {
+            path: string;
+        };
     };
 };
 export default _default;

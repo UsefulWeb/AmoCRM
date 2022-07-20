@@ -145,5 +145,4 @@ export declare class BaseLeadFactory extends ResourceFactory<ILead> {
      * */
     complexCreate(): Promise<boolean>;
 }
-declare const LeadFactory: any;
-export default LeadFactory;
+export declare const LeadFactory: any;

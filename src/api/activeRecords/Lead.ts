@@ -155,11 +155,9 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
     }
 }
 
-const Lead: TConstructor<ILead> = applyMixins(BaseLead, [
+export const Lead: TConstructor<ILead> = applyMixins(BaseLead, [
     hasCreate,
     hasUpdate,
     hasSave,
     hasFetch
 ]);
-
-export default Lead;

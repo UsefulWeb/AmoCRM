@@ -1,6 +1,6 @@
 import { IAPIResponse, IRequestOptions } from "../interfaces/common";
 import { IConnection } from "./Connection";
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 
 export interface IClientRequest {
     make<T>(method: string, url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
@@ -13,7 +13,7 @@ export interface IClientRequest {
  * Компонент запросов к серверу.
  * Доступен как client.request
  * */
-export default class ClientRequest extends EventEmitter implements IClientRequest {
+export class ClientRequest extends EventEmitter implements IClientRequest {
     protected readonly connection: IConnection;
     constructor(connection: IConnection) {
         super();

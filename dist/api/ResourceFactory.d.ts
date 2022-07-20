@@ -1,6 +1,6 @@
 import { ICollectionResponse, IEntityAttributes, IResourceEntity, IResourceFactory } from "../interfaces/api";
 import { IClientRequest } from "../common/ClientRequest";
-import EventEmitter from "../common/EventEmitter";
+import { EventEmitter } from "../common/EventEmitter";
 import { TConstructor } from "../types";
 /**
  * Основной класс фабрики сущностей. Класс-фабрика служит для создания

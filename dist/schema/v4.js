@@ -10,6 +10,9 @@ exports.default = {
         },
         contacts: {
             path: '/api/v4/contacts'
+        },
+        companies: {
+            path: '/api/v4/companies'
         }
     }
 };

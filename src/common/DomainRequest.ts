@@ -6,7 +6,7 @@ import * as Buffer from "buffer";
 import { IAPIResponse, IDomainRequestOptions } from "../interfaces/common";
 import { TStringValueObject } from "../types";
 import {HttpMethod} from "../enums";
-import EventEmitter from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import JSONResponseParser from "./JSONResponseParser";
 
 /**

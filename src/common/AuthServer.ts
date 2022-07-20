@@ -1,12 +1,30 @@
 import * as http from "http";
-import EventEmitter from "./EventEmitter";
+import { EventEmitter, IEventEmitter } from "./EventEmitter";
 import { IAuthServerOptions } from "../interfaces/common";
 import { TStringValueObject } from "../types";
 
+export interface IAuthServer extends IEventEmitter {
+    /**
+     * Запускает сервер на заданном в {@link options} порту
+     * */
+    run(): void;
+    /**
+     * Обработчик успешного запуска сервера
+     * */
+    afterStart(): void;
+    /**
+     * Останавливает сервер
+     * */
+    stop(): void;
+    /**
+     * Обработчик запроса, поступающего на адрес запущенного сервера
+     * */
+    handle(request: http.IncomingMessage, response: http.ServerResponse): void;
+}
 /**
  * Простой сервер авторизации для получения OAuth-токена
  * */
-export default class AuthServer extends EventEmitter {
+export class AuthServer extends EventEmitter {
     protected readonly options: IAuthServerOptions;
     protected instance?: http.Server;
     constructor(options: IAuthServerOptions) {
@@ -14,30 +32,24 @@ export default class AuthServer extends EventEmitter {
         this.options = options;
     }
 
-    /**
-     * Запускает сервер на заданном в {@link options} порту
-     * */
+
 
     run() {
         const { port } = this.options;
         const handler = this.handle.bind(this);
-        const onListenStart = this.onListenStart.bind(this);
+        const afterStart = this.afterStart.bind(this);
 
         this.instance = http
             .createServer(handler)
-            .listen(port, onListenStart);
+            .listen(port, afterStart);
     }
-    /**
-     * Обработчик успешного запуска сервера
-     * */
-    onListenStart() {
+
+    afterStart() {
         const { port } = this.options;
         console.log(`auth server listening on port ${port}`);
         this.emit('listen');
     }
-    /**
-     * Останавливает сервер
-     * */
+
     stop(): Promise<void> {
         return new Promise((resolve, reject) => {
             if (this.instance === undefined) {
@@ -55,9 +67,7 @@ export default class AuthServer extends EventEmitter {
             this.instance.close();
         });
     }
-    /**
-     * Обработчик запроса, поступающего на адрес запущенного сервера
-     * */
+
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
         const { url } = request;
         console.log('handled auth server callback');

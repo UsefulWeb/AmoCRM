@@ -4,12 +4,12 @@ const tslib_1 = require("tslib");
 const qs = tslib_1.__importStar(require("qs"));
 const https = tslib_1.__importStar(require("https"));
 const enums_1 = require("../enums");
-const EventEmitter_1 = tslib_1.__importDefault(require("./EventEmitter"));
+const EventEmitter_1 = require("./EventEmitter");
 const JSONResponseParser_1 = tslib_1.__importDefault(require("./JSONResponseParser"));
 /**
  * Класс запросов к порталу AmoCRM
  * */
-class DomainRequest extends EventEmitter_1.default {
+class DomainRequest extends EventEmitter_1.EventEmitter {
     constructor(config) {
         super();
         this.config = config;

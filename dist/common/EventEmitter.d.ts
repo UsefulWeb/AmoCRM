@@ -8,7 +8,7 @@ export interface IEventEmitter extends EventEmitterBase.EventEmitter {
  * Расширяет функционал работы с событиями в NodeJS.
  * Добавляет возможность подписки на собыития объекта
  * */
-export default class EventEmitter extends EventEmitterBase implements IEventEmitter {
+export declare class EventEmitter extends EventEmitterBase implements IEventEmitter {
     protected subscribers: EventEmitter[];
     /**
      * Подписывает на все события сторонний объект

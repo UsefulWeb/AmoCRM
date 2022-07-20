@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseLeadFactory = void 0;
+exports.LeadFactory = exports.BaseLeadFactory = void 0;
 const tslib_1 = require("tslib");
 /**
  * Фабрика для создания сделок {@link Lead}
  * */
 const ResourceFactory_1 = tslib_1.__importDefault(require("../ResourceFactory"));
-const Lead_1 = tslib_1.__importDefault(require("../activeRecords/Lead"));
+const Lead_1 = require("../activeRecords/Lead");
 const v4_1 = tslib_1.__importDefault(require("../../schema/v4"));
 const hasGetByCriteria_1 = require("./mixins/hasGetByCriteria");
 const hasGetById_1 = require("./mixins/hasGetById");
@@ -18,7 +18,7 @@ const util_1 = require("../../util");
  * */
 class BaseLeadFactory extends ResourceFactory_1.default {
     getEntityClass() {
-        return Lead_1.default;
+        return Lead_1.Lead;
     }
     getBaseUrl() {
         return v4_1.default.entities.leads.path;
@@ -36,11 +36,10 @@ class BaseLeadFactory extends ResourceFactory_1.default {
     }
 }
 exports.BaseLeadFactory = BaseLeadFactory;
-const LeadFactory = (0, util_1.applyMixins)(BaseLeadFactory, [
+exports.LeadFactory = (0, util_1.applyMixins)(BaseLeadFactory, [
     hasGetByCriteria_1.hasGetByCriteria,
     hasGetById_1.hasGetById,
     hasCreate_1.hasCreate,
     hasUpdate_1.hasUpdate
 ]);
-exports.default = LeadFactory;
 //# sourceMappingURL=LeadFactory.js.map

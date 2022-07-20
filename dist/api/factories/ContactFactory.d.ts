@@ -145,5 +145,4 @@ export declare class BaseContactFactory extends ResourceFactory<IContact> {
     getBaseUrl(): string;
     getEmbeddedKey(): string;
 }
-declare const ContactFactory: any;
-export default ContactFactory;
+export declare const ContactFactory: any;

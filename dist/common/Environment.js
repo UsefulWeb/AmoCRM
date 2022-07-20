@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Environment = void 0;
 /**
  * Компонент настроек окружения.
  * Доступен как client.environment
@@ -86,5 +87,5 @@ class Environment {
         return this.get(path) !== undefined;
     }
 }
-exports.default = Environment;
+exports.Environment = Environment;
 //# sourceMappingURL=Environment.js.map
