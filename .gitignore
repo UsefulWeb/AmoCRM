@@ -40,3 +40,5 @@ jspm_packages
 
 tests/config.ts
 tests/token.json
+
+/dist
