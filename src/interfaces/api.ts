@@ -1,10 +1,31 @@
 import { IClientRequest } from "../common/ClientRequest";
-import { JSONObject, TConstructor } from "../types";
+import { JSONObject, TConstructor, TFactoryPlugin } from "../types";
 import { IRequestOptions } from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
 import { EventEmitter } from "events";
+import { IClient } from "../Client";
+
+export interface IClientPlugins {
+    entities?: IEntityPlugins;
+    factories?: IFactoryPlugins;
+}
+
+export interface IFactoryPlugins {
+    leads?: TFactoryPlugin[];
+    contacts?: TFactoryPlugin[];
+    companies?: TFactoryPlugin[];
+    tags?: TFactoryPlugin[];
+}
+
+export interface IEntityPlugins {
+    leads?: TFactoryPlugin[];
+    contacts?: TFactoryPlugin[];
+    companies?: TFactoryPlugin[];
+    tags?: TFactoryPlugin[];
+}
 
 export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IEventEmitter {
+    getClient(): IClient;
     getEntityClass(): TConstructor<T>;
     createEntity(): T;
     from(attributes?: IEntityAttributes): T;
@@ -26,6 +47,14 @@ export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>>
 
 export interface IResourceEntityConstructor<T> {
     from(request: IClientRequest, attributes?: JSONObject): T;
+}
+
+export interface ISelfResponse {
+    id: number;
+    updated_at: number;
+    _links: {
+        href: string
+    }
 }
 
 export interface ICollectionResponse<T> {

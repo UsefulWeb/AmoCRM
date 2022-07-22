@@ -15,6 +15,10 @@ import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 
+export interface CompaniesGetCriteria extends IGetCriteria {
+    filter?: string;
+}
+
 export interface CompaniesCreateCriteria {
     name?: string;
     price?: number;
@@ -38,7 +42,7 @@ export interface CompaniesUpdateCriteria extends CompaniesCreateCriteria {
 
 export interface ICompanyFactory extends IResourceFactory<ICompany> {
     /**
-     * @param criteria фильтр сделок (https://www.amocrm.ru/developers/content/crm_platform/companies-api#companies-list)
+     * @param criteria фильтр компаний (https://www.amocrm.ru/developers/content/crm_platform/companies-api#companies-list)
      * @example
      * ```ts
      * const pagination = await client.companies.get({
@@ -64,11 +68,11 @@ export interface ICompanyFactory extends IResourceFactory<ICompany> {
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Company}
      *
      * */
-    get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<ICompany>>;
+    get(criteria?: CompaniesGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<ICompany>>;
     /**
-     * Находит сделку по её id
-     * @param identity id сделки
-     * @param criteria параметры получения сделки (https://www.amocrm.ru/developers/content/crm_platform/companies-api#company-detail)
+     * Находит компанию по её id
+     * @param identity id компании
+     * @param criteria параметры получения компании (https://www.amocrm.ru/developers/content/crm_platform/companies-api#company-detail)
      * @example
      * ```ts
      * const company = client.companies.getById(123, {
@@ -76,12 +80,12 @@ export interface ICompanyFactory extends IResourceFactory<ICompany> {
      * })
      * ```
      * @param options настройки запроса и обработки результата
-     * @returns экземпляр найденной сделки или null, если сделка не найдена.
+     * @returns экземпляр найденной компании или null, если компания не найдена.
      * */
     getById(identity: number, criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<ICompany|null>;
     /**
-     * Создаёт новые сделки
-     * @param criteria параметры создания сделок (https://www.amocrm.ru/developers/content/crm_platform/companies-api#companies-add)
+     * Создаёт новые компании
+     * @param criteria параметры создания компаний (https://www.amocrm.ru/developers/content/crm_platform/companies-api#companies-add)
      * и/или массив объектов {@link Company}
      * @example
      * ```ts
@@ -119,7 +123,7 @@ export interface ICompanyFactory extends IResourceFactory<ICompany> {
      *
      * @param options настройки запроса и обработки результата
      * @returns массив объектов {@link Company}. Если в параметр criteria передавались экземпляры {@link Company}, после
-     * создания сделок в AmoCRM, у них обновится поле id
+     * создания компаний в AmoCRM, у них обновится поле id
      *
      * @example
      * ```ts
@@ -134,18 +138,18 @@ export interface ICompanyFactory extends IResourceFactory<ICompany> {
      * */
     create(criteria: (CompaniesCreateCriteria | ICompany)[], options?: IRequestOptions): Promise<ICompany[]>;
     /**
-     * Обновляет существующие сделки. Принцип работы метода аналогичен {@link create}
-     * @param criteria параметры обновления сделок (https://www.amocrm.ru/developers/content/crm_platform/companies-api#companies-edit)
+     * Обновляет существующие компании. Принцип работы метода аналогичен {@link create}
+     * @param criteria параметры обновления компаний (https://www.amocrm.ru/developers/content/crm_platform/companies-api#companies-edit)
      * и/или массив объектов {@link Company}
      * @param options настройки запроса и обработки результата
      * @returns массив объектов {@link Company}. Если в параметр criteria передавались экземпляры {@link Company}, после
-     * создания сделок в AmoCRM, у них обновится поле id
+     * создания компаний в AmoCRM, у них обновится поле id
      * */
     update(criteria: (CompaniesUpdateCriteria | ICompany)[], options?: IRequestOptions): Promise<ICompany[]>;
 }
 
 /**
- * Фабрика управления сделками
+ * Фабрика управления компаниями
  * */
 export class BaseCompanyFactory extends ResourceFactory<ICompany> {
 
@@ -162,11 +166,9 @@ export class BaseCompanyFactory extends ResourceFactory<ICompany> {
     }
 }
 
-const CompanyFactory = applyMixins(BaseCompanyFactory, [
+export const CompanyFactory = applyMixins(BaseCompanyFactory, [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
     hasUpdate
 ]);
-
-export default CompanyFactory;

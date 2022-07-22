@@ -8,7 +8,6 @@ export interface IGetCriteria {
     page?: number;
     limit?: number;
     query?: string | number;
-    filter?: string;
     order?: string;
 }
 

@@ -6,21 +6,30 @@ import { Environment, IEnvironment } from "./common/Environment";
 import { ClientRequest, IClientRequest } from "./common/ClientRequest";
 import { Auth, IAuth } from "./common/Auth";
 import { Token, IToken } from "./common/Token";
-import { LeadFactory, ILeadFactory } from "./api/factories/LeadFactory";
+import { ILeadFactory } from "./api/factories/LeadFactory";
 import { ILead } from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";
 import { IResourceEntity, IResourceFactory } from "./interfaces/api";
 import { IContact } from "./api/activeRecords/Contact";
-import { ContactFactory, IContactFactory } from "./api/factories/ContactFactory";
-import CompanyFactory, { ICompanyFactory } from "./api/factories/CompanyFactory";
+import { IContactFactory } from "./api/factories/ContactFactory";
+import { ICompanyFactory } from "./api/factories/CompanyFactory";
 import { ICompany } from "./api/activeRecords/Company";
+import { IFactoryConstructors } from "./api/factories";
+import { ConstructorBuilder } from "./common/ConstructorBuilder";
+import { IEntityConstructors } from "./api/activeRecords";
 
 export type IClientEntity<T> = (attributes?: JSONObject) => T;
 
+
+export interface IClient {
+    getRequest(): IClientRequest;
+    getFactoryConstructors(): IFactoryConstructors;
+    getEntityConstructors(): IEntityConstructors;
+}
 /**
  * Основной класс библиотеки
  * */
-export default class Client extends EventEmitter {
+export default class Client extends EventEmitter implements IClient {
     public readonly token: IToken;
     public readonly environment: IEnvironment;
     public readonly request: IClientRequest;
@@ -34,6 +43,9 @@ export default class Client extends EventEmitter {
     public readonly leads: ILeadFactory;
     public readonly contacts: IContactFactory;
     public readonly companies: ICompanyFactory;
+
+    protected _factoryConstructors: IFactoryConstructors;
+    protected _entityConstructors: IEntityConstructors;
 
     constructor(options: IClientOptions) {
         super();
@@ -50,14 +62,32 @@ export default class Client extends EventEmitter {
         );
         this.request = new ClientRequest(this.connection);
 
-        this.leads = new LeadFactory(this.request);
+        const factories = ConstructorBuilder.buildFactories(options.plugins?.factories);
+        const entities = ConstructorBuilder.buildEntities(options.plugins?.entities);
+        this._factoryConstructors = factories;
+        this._entityConstructors = entities;
+
+        this.leads = new factories.leads(this);
         this.Lead = this.assignEntity(this.leads);
 
-        this.contacts = new ContactFactory(this.request);
+        this.contacts = new factories.contacts(this);
         this.Contact = this.assignEntity(this.contacts);
 
-        this.companies = new CompanyFactory(this.request);
+        this.companies = new factories.companies(this);
         this.Company = this.assignEntity(this.companies);
+
+    }
+
+    getRequest() {
+        return this.request;
+    }
+
+    getFactoryConstructors() {
+        return this._factoryConstructors;
+    }
+
+    getEntityConstructors() {
+        return this._entityConstructors;
     }
 
     /**

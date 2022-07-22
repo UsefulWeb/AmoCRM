@@ -15,6 +15,10 @@ import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 
+export interface LeadsGetCriteria extends IGetCriteria {
+    filter?: string;
+}
+
 export interface LeadsCreateCriteria {
     name?: string;
     price?: number;
@@ -64,7 +68,7 @@ export interface ILeadFactory extends IResourceFactory<ILead> {
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Lead}
      *
      * */
-    get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<ILead>>;
+    get(criteria?: LeadsGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<ILead>>;
     /**
      * Находит сделку по её id
      * @param identity id сделки
@@ -150,7 +154,7 @@ export interface ILeadFactory extends IResourceFactory<ILead> {
 export class BaseLeadFactory extends ResourceFactory<ILead> {
 
     getEntityClass() {
-        return Lead;
+        return this.getClient().getEntityConstructors().Lead;
     }
 
     getBaseUrl(): string {

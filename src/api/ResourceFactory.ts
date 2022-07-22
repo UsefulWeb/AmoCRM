@@ -3,6 +3,7 @@ import { IClientRequest } from "../common/ClientRequest";
 import ResourceEntity from "./ResourceEntity";
 import { EventEmitter } from "../common/EventEmitter";
 import { TConstructor } from "../types";
+import { IClient } from "../Client";
 
 /**
  * Основной класс фабрики сущностей. Класс-фабрика служит для создания
@@ -13,14 +14,20 @@ export default abstract class ResourceFactory<T extends IResourceEntity<IResourc
     implements IResourceFactory<T>
 {
     protected readonly request: IClientRequest;
+    protected readonly client: IClient;
 
-    constructor(request: IClientRequest) {
+    constructor(client: IClient) {
         super();
-        this.request = request;
+        this.client = client;
+        this.request = client.getRequest();
     }
 
     abstract getBaseUrl(): string;
     abstract getEmbeddedKey(): string;
+
+    getClient() {
+        return this.client;
+    }
 
     getEmbedded<A extends IEntityAttributes>(data: ICollectionResponse<A>): A[] {
         const key = this.getEmbeddedKey();

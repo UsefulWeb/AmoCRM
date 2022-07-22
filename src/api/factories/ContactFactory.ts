@@ -11,6 +11,10 @@ import { applyMixins } from "../../util";
 import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
 
+export interface ContactsGetCriteria extends IGetCriteria {
+    filter?: string;
+}
+
 export interface ContactsCreateCriteria {
     name?: string;
     first_name?: string;
@@ -68,7 +72,7 @@ export interface IContactFactory extends IResourceFactory<IContact> {
      *
      * Метод {@link ResourcePagination.getData | getData()} навигации вернёт массив объектов {@link Contact}
      * */
-    get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<IContact>>;
+    get(criteria?: ContactsGetCriteria, options?: IRequestOptions): Promise<ResourcePagination<IContact>>;
     /**
      * Находит контакт по её id
      * @param identity id контакта

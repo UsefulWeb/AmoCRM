@@ -14,6 +14,8 @@ export interface JSONObject {
     [x: string]: JSONValue;
 }
 
+export type TFactoryPlugin = <T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>) => TFactoryConstructor<T>
+
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export type TConstructor<T> = new (...args: any[]) => T;
 export type TFactoryConstructor<T extends IResourceEntity<IResourceFactory<T>>> = TConstructor<IResourceFactory<T>>;

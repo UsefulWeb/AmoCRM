@@ -1,4 +1,5 @@
 export default {
+    apiUrl: '/api/v4/',
     auth: {
         token: '/oauth2/access_token'
     },
