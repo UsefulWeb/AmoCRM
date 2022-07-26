@@ -1,27 +1,15 @@
 import { IClientRequest } from "../common/ClientRequest";
-import { JSONObject, TConstructor, TFactoryPlugin } from "../types";
+import { JSONObject, TConstructor } from "../types";
 import { IRequestOptions } from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
 import { EventEmitter } from "events";
 import { IClient } from "../Client";
+import { IEntityConstructors } from "../api/activeRecords";
+import { IFactoryConstructors } from "../api/factories";
 
-export interface IClientPlugins {
-    entities?: IEntityPlugins;
-    factories?: IFactoryPlugins;
-}
-
-export interface IFactoryPlugins {
-    leads?: TFactoryPlugin[];
-    contacts?: TFactoryPlugin[];
-    companies?: TFactoryPlugin[];
-    tags?: TFactoryPlugin[];
-}
-
-export interface IEntityPlugins {
-    leads?: TFactoryPlugin[];
-    contacts?: TFactoryPlugin[];
-    companies?: TFactoryPlugin[];
-    tags?: TFactoryPlugin[];
+export interface IClientConstructors {
+    entities: IEntityConstructors;
+    factories: IFactoryConstructors
 }
 
 export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IEventEmitter {

@@ -1,53 +1,63 @@
 import { IEntityAttributes, IResourceEntity, IResourceFactory, ISelfResponse } from "../../interfaces/api";
-import { TConstructor, TEntityConstructor } from "../../types";
-import { IHasTagsFactory, ITagsManager } from "../../api/factories/mixins/hasTags";
+import { TConstructor } from "../../types";
+import { IHasTagsFactory, IFactoryTagList } from "../../api/factories/mixins/hasTags";
 import { IHasUpdateFactory } from "../../api/factories/mixins/hasUpdate";
 import { IRequestOptions } from "../../interfaces/common";
 import { ITag, TagAttributes } from "../../api/activeRecords/Tag";
+import { hasUpdatableTags as entityHasUpdatableTags } from '../entities/hasUpdatableTags';
+import { applyMixins } from "../../util";
 
 export type THasUpdateAndTagsFactory<T extends IResourceEntity<IHasTagsFactory<T>>> = IHasTagsFactory<T> & IHasUpdateFactory<T>;
 
-export interface IHasUpdatableTagsManager<T extends IResourceEntity<IHasTagsFactory<T>>> extends ITagsManager {
-    updateFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]> ;
-    removeFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]> ;
-    remove(options?: IRequestOptions): Promise<ISelfResponse>;
-    update(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
+export interface IFactoryHasUpdatableTagList<T extends IResourceEntity<IHasTagsFactory<T>>> extends IFactoryTagList {
+    setFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]> ;
+    clearFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]> ;
+    clear(options?: IRequestOptions): Promise<ISelfResponse>;
+    set(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
 }
 
 export interface IHasUpdatableTagsFactory<T extends IResourceEntity<IHasTagsFactory<T>>> extends IHasTagsFactory<T> {
-    get tags(): IHasUpdatableTagsManager<T>;
-    updateTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
-    removeTags(options?: IRequestOptions): Promise<ISelfResponse>;
-    updateTagsFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]>
-    removeTagsFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]>
+    get tagList(): IFactoryHasUpdatableTagList<T>;
+    setTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
+    removeAllTags(options?: IRequestOptions): Promise<ISelfResponse>;
+    setTagsFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]>
+    clearTagsFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]>
 }
 
 export interface IHasUpdatableTagsEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
-    updateTagsFor(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<IHasUpdatableTagsEntity<T>[]>;
+    setTagsFor(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<IHasUpdatableTagsEntity<T>[]>;
     removeTagsFor(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<IHasUpdatableTagsEntity<T>[]>
 }
 
 export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(Base: TConstructor<THasUpdateAndTagsFactory<T>>) {
 
     return class HasUpdatableTags extends Base {
-        _updatableTags?: IHasUpdatableTagsManager<T>;
+        _updatableTags?: IFactoryHasUpdatableTagList<T>;
 
-        get tags() {
+        getEntityClass() {
+            return applyMixins(
+                super.getEntityClass(),
+                [entityHasUpdatableTags]
+            );
+        }
+
+        get tagList() {
             if (this._updatableTags !== undefined) {
                 return this._updatableTags;
             }
-            const tags = {
-                ...super.tags,
-                updateFor: this.updateTagsFor.bind(this),
-                removeFor: this.removeTagsFor.bind(this),
-                remove: this.removeTags.bind(this),
-                update: this.updateTags.bind(this)
+            const tagList = {
+                ...super.tagList,
+                setFor: this.setTagsFor.bind(this),
+                clearFor: this.clearTagsFor.bind(this),
+
+                clear: this.clearTags.bind(this),
+                set: this.setTags.bind(this)
             };
-            this._updatableTags = tags;
-            return tags;
+            this._updatableTags = tagList;
+            return tagList;
         }
 
-        updateTagsFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions) {
+        setTagsFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions) {
             const tags = tagsCriteria && this.getEntityCriteria(tagsCriteria);
             const tagsRequestCriteria = this.getEntityCriteria(criteria)
                 .map((attributes: IEntityAttributes) => {
@@ -61,11 +71,11 @@ export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(
             return this.update(tagsRequestCriteria, options);
         }
 
-        removeTagsFor(criteria: (object | T)[], options?: IRequestOptions) {
-            return this.updateTagsFor(criteria, null, options);
+        clearTagsFor(criteria: (object | T)[], options?: IRequestOptions) {
+            return this.setTagsFor(criteria, null, options);
         }
 
-        async updateTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions) {
+        async setTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions) {
             const url = this.getUrl();
             const tags = criteria && this.getEntityCriteria(criteria);
             const request = this.getRequest();
@@ -78,8 +88,8 @@ export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(
             return data;
         }
 
-        removeTags(options?: IRequestOptions) {
-            return this.updateTags(null, options);
+        clearTags(options?: IRequestOptions) {
+            return this.setTags(null, options);
         }
     };
 }

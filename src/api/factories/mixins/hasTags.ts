@@ -13,13 +13,13 @@ export interface IGetTagsCriteria extends IGetCriteria {
     }
 }
 
-export interface ITagsManager {
+export interface IFactoryTagList {
     get(criteria?: IGetTagsCriteria, options?: IRequestOptions): Promise<ResourcePagination<ITag>>;
-    create(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions): Promise<ITag[]>;
+    add(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions): Promise<ITag[]>;
 }
 
 export interface IHasTagsFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
-    get tags(): ITagsManager;
+    get tagList(): IFactoryTagList;
     getTags(criteria?: IGetTagsCriteria, options?: IRequestOptions): Promise<ResourcePagination<ITag>>;
     createTags(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions): Promise<ITag[]>;
 }
@@ -29,13 +29,13 @@ export function hasTags<T extends IResourceEntity<IResourceFactory<T>>>(Base: TF
         private _tags?: object;
         private _tagsFactory?: ITagFactory;
 
-        get tags() {
+        get tagList() {
             if (this._tags) {
                 return this._tags;
             }
             this._tags = {
                 get: this.getTags.bind(this),
-                create: this.createTags.bind(this),
+                add: this.createTags.bind(this),
             };
             return this._tags;
         }

@@ -1,5 +1,4 @@
-import { IResourceEntity, IResourceFactory } from "./interfaces/api";
-import { IEventEmitter } from "./common/EventEmitter";
+import { IClientConstructors, IResourceEntity, IResourceFactory } from "./interfaces/api";
 
 export type TStringValueObject = { [index: string]: string };
 
@@ -14,7 +13,7 @@ export interface JSONObject {
     [x: string]: JSONValue;
 }
 
-export type TFactoryPlugin = <T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>) => TFactoryConstructor<T>
+export type TClientPlugin = (constructors: IClientConstructors) => IClientConstructors;
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export type TConstructor<T> = new (...args: any[]) => T;

@@ -9,7 +9,7 @@ import { Token, IToken } from "./common/Token";
 import { ILeadFactory } from "./api/factories/LeadFactory";
 import { ILead } from "./api/activeRecords/Lead";
 import { JSONObject } from "./types";
-import { IResourceEntity, IResourceFactory } from "./interfaces/api";
+import { IClientConstructors, IResourceEntity, IResourceFactory } from "./interfaces/api";
 import { IContact } from "./api/activeRecords/Contact";
 import { IContactFactory } from "./api/factories/ContactFactory";
 import { ICompanyFactory } from "./api/factories/CompanyFactory";
@@ -44,8 +44,7 @@ export default class Client extends EventEmitter implements IClient {
     public readonly contacts: IContactFactory;
     public readonly companies: ICompanyFactory;
 
-    protected _factoryConstructors: IFactoryConstructors;
-    protected _entityConstructors: IEntityConstructors;
+    protected _constructors: IClientConstructors;
 
     constructor(options: IClientOptions) {
         super();
@@ -62,10 +61,9 @@ export default class Client extends EventEmitter implements IClient {
         );
         this.request = new ClientRequest(this.connection);
 
-        const factories = ConstructorBuilder.buildFactories(options.plugins?.factories);
-        const entities = ConstructorBuilder.buildEntities(options.plugins?.entities);
-        this._factoryConstructors = factories;
-        this._entityConstructors = entities;
+        const constructors = ConstructorBuilder.applyPlugins(options.plugins);
+        const { factories } = constructors;
+        this._constructors = constructors;
 
         this.leads = new factories.leads(this);
         this.Lead = this.assignEntity(this.leads);
@@ -83,11 +81,11 @@ export default class Client extends EventEmitter implements IClient {
     }
 
     getFactoryConstructors() {
-        return this._factoryConstructors;
+        return this._constructors.factories;
     }
 
     getEntityConstructors() {
-        return this._entityConstructors;
+        return this._constructors.entities;
     }
 
     /**

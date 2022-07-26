@@ -1,6 +1,5 @@
 import * as http from 'http';
-import { TStringValueObject } from "../types";
-import { IClientPlugins, IFactoryPlugins } from "./api";
+import { TClientPlugin, TStringValueObject } from "../types";
 
 export interface ITokenOptions {
     client_id: string;
@@ -19,7 +18,7 @@ export interface IAuthOptions extends ITokenOptions {
 export interface IClientOptions {
     domain: string;
     auth: IAuthOptions;
-    plugins?: IClientPlugins;
+    plugins?: TClientPlugin[];
 }
 
 export interface ITokenData {

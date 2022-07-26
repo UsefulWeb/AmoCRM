@@ -15,6 +15,7 @@ import { applyMixins } from "../../util";
 import { IClientRequest } from "../../common/ClientRequest";
 import { ITag, Tag } from "../activeRecords/Tag";
 import { IGetTagsCriteria } from "./mixins/hasTags";
+import { IClient } from "../../Client";
 
 export interface TagCreateCriteria {
     name: string;
@@ -61,8 +62,8 @@ export interface ITagFactory extends IResourceFactory<ITag> {
 export class BaseTagFactory extends ResourceFactory<ITag> {
     protected entityType: string;
 
-    constructor(request: IClientRequest, entityType: string) {
-        super(request);
+    constructor(client: IClient, entityType: string) {
+        super(client);
         this.entityType = entityType;
     }
 
