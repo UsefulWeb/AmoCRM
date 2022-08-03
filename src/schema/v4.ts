@@ -12,6 +12,9 @@ export default {
         },
         companies: {
             path: '/api/v4/companies'
+        },
+        customers: {
+            path: '/api/v4/customers'
         }
     }
 };
