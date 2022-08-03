@@ -423,7 +423,7 @@ client.connection.on('connectionError', () => {
 - refresh. Возникает после получения нового токена по значению refresh_token старого
 
 ```js
-client.connection.on('change', () => {
+client.token.on('change', () => {
     console.error('Токен обновлён');
 })
 ```
