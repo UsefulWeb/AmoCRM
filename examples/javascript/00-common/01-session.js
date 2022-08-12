@@ -6,7 +6,7 @@ const { client } = require('../client');
 const run = async () => {
     const filePath = path.resolve(__dirname, '../token.json');
 
-    client.connection.on('change', () => {
+    client.token.on('change', () => {
         const token = client.token.getValue();
         fs.writeFileSync(filePath, JSON.stringify(token));
     });
