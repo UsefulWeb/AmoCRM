@@ -1,4 +1,3 @@
-import * as http from "http";
 import { IAPIResponse } from "../interfaces/common";
 
 /**
@@ -6,10 +5,10 @@ import { IAPIResponse } from "../interfaces/common";
  * */
 export default class APIResponseError<T> extends Error {
     public readonly data: T|null;
-    public readonly response: IAPIResponse<string>;
-    constructor(message: string, data: T|null, response: IAPIResponse<string>) {
+    public readonly apiResponse: IAPIResponse<string>;
+    constructor(message: string, data: T|null, apiResponse: IAPIResponse<string>) {
         super(message);
         this.data = data;
-        this.response = response;
+        this.apiResponse = apiResponse;
     }
 }

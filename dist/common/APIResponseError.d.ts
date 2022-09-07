@@ -4,6 +4,6 @@ import { IAPIResponse } from "../interfaces/common";
  * */
 export default class APIResponseError<T> extends Error {
     readonly data: T | null;
-    readonly response: IAPIResponse<string>;
-    constructor(message: string, data: T | null, response: IAPIResponse<string>);
+    readonly apiResponse: IAPIResponse<string>;
+    constructor(message: string, data: T | null, apiResponse: IAPIResponse<string>);
 }

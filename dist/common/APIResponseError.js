@@ -4,10 +4,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Класс ошибки API портала
  * */
 class APIResponseError extends Error {
-    constructor(message, data, response) {
+    constructor(message, data, apiResponse) {
         super(message);
         this.data = data;
-        this.response = response;
+        this.apiResponse = apiResponse;
     }
 }
 exports.default = APIResponseError;
