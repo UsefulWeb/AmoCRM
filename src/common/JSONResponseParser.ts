@@ -16,7 +16,14 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
                 data
             };
         }
-        const data: T = <T>JSON.parse(apiResponse.data);
+        let data: T;
+
+        try {
+            data = <T>JSON.parse(apiResponse.data);
+        }
+        catch (e) {
+            throw new APIResponseError<T>('JSON_PARSE_ERROR', null, apiResponse);
+        }
 
         this.checkErrors(data, apiResponse);
         return {

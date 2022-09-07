@@ -16,7 +16,13 @@ class JSONResponseParser extends EventEmitter_1.EventEmitter {
                 data
             };
         }
-        const data = JSON.parse(apiResponse.data);
+        let data;
+        try {
+            data = JSON.parse(apiResponse.data);
+        }
+        catch (e) {
+            throw new APIResponseError_1.default('JSON_PARSE_ERROR', null, apiResponse);
+        }
         this.checkErrors(data, apiResponse);
         return {
             response,

@@ -447,6 +447,7 @@ client.token.on('change', () => {
 - PATH_IS_EMPTY. Попытка установить client.environment.set без переданного первого пути
 - INVALID_PATH. Неверный
 - NO_AUTH_OPTIONS. Отсутствуют настройки config.auth
+- JSON_PARSE_ERROR. Ответ AmoCRM сформирован в неверном JSON формате
 
 <a id="session"></a>
 ## Сохранение авторизации между сессиями
