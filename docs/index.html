@@ -330,7 +330,7 @@
 <li>beforeRefresh. Возникает перед попыткой обновления токена по значению refresh_token текущего</li>
 <li>refresh. Возникает после получения нового токена по значению refresh_token старого</li>
 </ul>
-<pre><code class="language-js"><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">connection</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-5">&#39;change&#39;</span><span class="hl-1">, () </span><span class="hl-2">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-4">error</span><span class="hl-1">(</span><span class="hl-5">&#39;Токен обновлён&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">})</span>
+<pre><code class="language-js"><span class="hl-0">client</span><span class="hl-1">.</span><span class="hl-0">token</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-5">&#39;change&#39;</span><span class="hl-1">, () </span><span class="hl-2">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-4">error</span><span class="hl-1">(</span><span class="hl-5">&#39;Токен обновлён&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">})</span>
 </code></pre>
 <p><a id="events"></a></p>
 

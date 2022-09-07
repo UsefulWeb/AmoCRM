@@ -1,14 +1,15 @@
 import * as http from "http";
+import { IAPIResponse } from "../interfaces/common";
 
 /**
  * Класс ошибки API портала
  * */
 export default class APIResponseError<T> extends Error {
-    public readonly apiResponse: T;
-    public readonly response: http.IncomingMessage;
-    constructor(message: string, apiResponse: T, response: http.IncomingMessage) {
+    public readonly data: T;
+    public readonly response: IAPIResponse<string>;
+    constructor(message: string, data: T, response: IAPIResponse<string>) {
         super(message);
-        this.apiResponse = apiResponse;
+        this.data = data;
         this.response = response;
     }
 }

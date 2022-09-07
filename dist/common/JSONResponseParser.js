@@ -17,13 +17,13 @@ class JSONResponseParser extends EventEmitter_1.EventEmitter {
             };
         }
         const data = JSON.parse(apiResponse.data);
-        this.checkErrors(data, response);
+        this.checkErrors(data, apiResponse);
         return {
             response,
             data
         };
     }
-    checkErrors(data, response) {
+    checkErrors(data, apiResponse) {
         if (!data) {
             throw new Error('NO_JSON_RESPONSE');
         }
@@ -32,7 +32,7 @@ class JSONResponseParser extends EventEmitter_1.EventEmitter {
         }
         if ('status' in data) {
             console.error(data);
-            throw new APIResponseError_1.default('API_RESPONSE_ERROR', data, response);
+            throw new APIResponseError_1.default('API_RESPONSE_ERROR', data, apiResponse);
         }
     }
 }

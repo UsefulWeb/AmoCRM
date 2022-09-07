@@ -1,5 +1,3 @@
-/// <reference types="node" />
-import * as http from 'http';
 import { EventEmitter } from "./EventEmitter";
 import { IAPIResponse, IResponseParser } from "../interfaces/common";
 /**
@@ -7,5 +5,5 @@ import { IAPIResponse, IResponseParser } from "../interfaces/common";
  * */
 export default class JSONResponseParser extends EventEmitter implements IResponseParser<string> {
     parse<T>(apiResponse: IAPIResponse<string>): IAPIResponse<T>;
-    checkErrors<T>(data: T, response: http.IncomingMessage): void;
+    checkErrors<T>(data: T, apiResponse: IAPIResponse<string>): void;
 }

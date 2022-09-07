@@ -18,13 +18,13 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
         }
         const data: T = <T>JSON.parse(apiResponse.data);
 
-        this.checkErrors(data, response);
+        this.checkErrors(data, apiResponse);
         return {
             response,
             data
         };
     }
-    checkErrors<T>(data: T, response: http.IncomingMessage) {
+    checkErrors<T>(data: T, apiResponse: IAPIResponse<string>) {
         if (!data) {
             throw new Error('NO_JSON_RESPONSE');
         }
@@ -33,7 +33,7 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
         }
         if ('status' in data) {
             console.error(data);
-            throw new APIResponseError<T>('API_RESPONSE_ERROR', data, response);
+            throw new APIResponseError<T>('API_RESPONSE_ERROR', data, apiResponse);
         }
     }
 }
