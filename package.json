@@ -1,8 +1,8 @@
 {
   "name": "amocrm-js",
-  "version": "3.3.3",
+  "version": "3.3.4",
   "description": "JS Library for AmoCRM",
-  "main": "./dist/index.js",
+  "main": "./dist/Client.js",
   "directories": {
     "test": "test"
   },

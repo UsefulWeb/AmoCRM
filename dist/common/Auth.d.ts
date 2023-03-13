@@ -12,7 +12,7 @@ export interface IAuth {
      *
      * @param mode popup или post_messageю
      * */
-    getUrl(mode: string): string;
+    getUrl(mode?: string): string;
 }
 /**
  * Компонент авторизации.
