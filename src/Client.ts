@@ -29,7 +29,7 @@ export interface IClient {
 /**
  * Основной класс библиотеки
  * */
-export default class Client extends EventEmitter implements IClient {
+export class Client extends EventEmitter implements IClient {
     public readonly token: IToken;
     public readonly environment: IEnvironment;
     public readonly request: IClientRequest;

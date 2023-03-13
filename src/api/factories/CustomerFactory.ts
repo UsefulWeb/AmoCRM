@@ -24,7 +24,6 @@ export interface CustomersCreateCriteria {
     updated_at?: number;
     custom_fields_values?: JSONObject[] | null;
     _embedded?: JSONObject;
-
     request_id?: string;
 }
 

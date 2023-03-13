@@ -60,7 +60,7 @@ export class Environment implements IEnvironment {
         if (!path) {
             return <T><unknown>this.options;
         }
-        let value: JSONValue = <JSONObject>this.options;
+        let value: any = this.options;
         const parts = path.split('.');
         for (const key of parts) {
             if (typeof value !== 'object') {
@@ -83,7 +83,7 @@ export class Environment implements IEnvironment {
         if (!this.options) {
             throw new Error('NO_ENVIRONMENT_OPTIONS');
         }
-        let handler: JSONValue = <JSONObject> this.options;
+        let handler: any = this.options;
         const parts = path.split('.');
         if (parts.length === 0) {
             throw new Error('PATH_IS_EMPTY');

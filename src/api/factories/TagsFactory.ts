@@ -14,13 +14,12 @@ import { hasUpdate } from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 import { IClientRequest } from "../../common/ClientRequest";
 import { ITag, Tag } from "../activeRecords/Tag";
-import { IGetTagsCriteria } from "./mixins/hasTags";
+import { IGetTagsCriteria} from "./mixins/hasTags";
 import { IClient } from "../../Client";
 
 export interface TagCreateCriteria {
     name: string;
     color: string|null;
-
     request_id?: string;
 }
 

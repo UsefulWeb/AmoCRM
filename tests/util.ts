@@ -1,4 +1,4 @@
-import { Client } from "../dist";
+import { Client } from "../dist/Client";
 import path from "path";
 import fs from "fs";
 import { IClientOptions } from "../dist/interfaces/common";
