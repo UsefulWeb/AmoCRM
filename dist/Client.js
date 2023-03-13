@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Client = void 0;
 const tslib_1 = require("tslib");
 require("reflect-metadata");
 const EventEmitter_1 = require("./common/EventEmitter");
@@ -43,5 +44,5 @@ class Client extends EventEmitter_1.EventEmitter {
         };
     }
 }
-exports.default = Client;
+exports.Client = Client;
 //# sourceMappingURL=Client.js.map

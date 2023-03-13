@@ -20,7 +20,7 @@ export type IClientEntity<T> = (attributes?: JSONObject) => T;
 /**
  * Основной класс библиотеки
  * */
-export default class Client extends EventEmitter {
+export class Client extends EventEmitter {
     public readonly token: IToken;
     public readonly environment: IEnvironment;
     public readonly request: IClientRequest;
