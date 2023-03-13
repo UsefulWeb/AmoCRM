@@ -12,6 +12,12 @@ class EventEmitter extends events_1.EventEmitter {
         this.subscribers = [];
     }
     /**
+     * Дожидается возникновения необходимого события
+     * */
+    until(eventName) {
+        return new Promise(resolve => this.on(eventName, resolve));
+    }
+    /**
      * Подписывает на все события сторонний объект
      * */
     subscribe(subscriber) {
