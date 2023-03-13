@@ -24,7 +24,7 @@ export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>
     getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
 }
 
-export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends EventEmitter.EventEmitter, IEventEmitter {
+export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
     id?: number;
     updated_at?: number;
     isNew(): boolean;

@@ -1,8 +1,10 @@
 import { EventEmitter as EventEmitterBase } from "events";
 
 export interface IEventEmitter extends EventEmitterBase.EventEmitter {
+    until(eventName: string | symbol): Promise<IEventEmitter>;
     subscribe(subscriber: IEventEmitter): IEventEmitter;
     unsubscribe(subscriber: IEventEmitter): IEventEmitter;
+    emit(eventName: string | symbol, ...args: unknown[]): boolean;
 }
 
 /**
@@ -10,7 +12,14 @@ export interface IEventEmitter extends EventEmitterBase.EventEmitter {
  * Добавляет возможность подписки на собыития объекта
  * */
 export class EventEmitter extends EventEmitterBase implements IEventEmitter {
-    protected subscribers: EventEmitter[] = [];
+    protected subscribers: IEventEmitter[] = [];
+
+    /**
+     * Дожидается возникновения необходимого события
+     * */
+    until(eventName: string | symbol): Promise<IEventEmitter> {
+        return new Promise(resolve => this.on(eventName, resolve));
+    }
 
     /**
      * Подписывает на все события сторонний объект
