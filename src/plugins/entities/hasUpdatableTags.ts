@@ -5,13 +5,13 @@ import { IRequestOptions } from "../../interfaces/common";
 import { IHasUpdatableTagsFactory } from "../factories/hasUpdatableTags";
 
 export interface IEntityHasUpdatableTagList<T extends IHasUpdatableTagsFactory<IResourceEntity<T>>> {
-    set(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<IResourceEntity<T>[]>;
+    update(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<IResourceEntity<T>[]>;
     clear(options?: IRequestOptions): Promise<IResourceEntity<T>[]>;
 }
 
 export interface IEntityHasUpdatableTags<T extends IHasUpdatableTagsFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
     get tagsList(): IEntityHasUpdatableTagList<T>;
-    setTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<IResourceEntity<T>[]>;
+    updateTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<IResourceEntity<T>[]>;
     clearTags(options?: IRequestOptions): Promise<IResourceEntity<T>[]>;
 }
 
@@ -19,14 +19,17 @@ export function hasUpdatableTags<T extends IHasUpdatableTagsFactory<IResourceEnt
     return class HasUpdatableTags extends constructor {
         _tagList?: IEntityHasUpdatableTagList<T>;
         get tagList() {
+            if (this._tagList) {
+                return this._tagList;
+            }
             const tagList = {
-                set: this.setTags.bind(this),
+                update: this.updateTags.bind(this),
                 clear: this.clearTags.bind(this)
             };
             this._tagList = tagList;
             return tagList;
         }
-        setTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions) {
+        updateTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions) {
             const factory = this.getFactory();
             return factory.setTagsFor([this], criteria, options);
         }

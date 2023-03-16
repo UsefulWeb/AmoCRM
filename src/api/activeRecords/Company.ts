@@ -29,6 +29,13 @@ export interface CompanyAttributes extends IEntityAttributes {
     _embedded?: JSONObject;
 }
 
+export interface IEmbeddedCompany {
+    id: number;
+}
+
+export interface IHasEmbeddedCompanies {
+    companies?: IEmbeddedCompany[];
+}
 export interface ICompany extends IResourceEntity<ICompanyFactory>, CompanyAttributes {
     /**
      * Добавляет сущность на портал AmoCRM

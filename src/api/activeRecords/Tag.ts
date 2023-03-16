@@ -8,14 +8,22 @@ import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
 import { applyMixins } from "../../util";
 import { hasCreate } from "./mixins/hasCreate";
 import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
-import { ITagFactory } from "../factories/TagsFactory";
+import { ITagFactory } from "../factories/TagFactory";
 
 export interface TagAttributes extends IEntityAttributes {
     id?: number;
     name?: string;
     color?: string;
 }
+export interface IEmbeddedTag {
+    id?: number;
+    name?: string;
+    color?: string;
+}
 
+export interface IHasEmbeddedTags {
+    tags?: IEmbeddedTag[];
+}
 export interface ITag extends IResourceEntity<ITagFactory>, TagAttributes {
     /**
      * Добавляет сущность на портал AmoCRM

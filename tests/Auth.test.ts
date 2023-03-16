@@ -1,8 +1,8 @@
 import ngrok from 'ngrok';
 import "./bootstrap";
 import config from "./config";
-import Client from "../src/Client";
-import Connection from "../src/common/Connection";
+import { Client } from "../src/Client";
+import { Connection } from "../src/common/Connection";
 
 let client: Client;
 

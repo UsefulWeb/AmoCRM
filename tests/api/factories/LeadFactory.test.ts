@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import Client from "../../../src/Client";
+import { Client } from "../../../src/Client";
 import config, { CODE } from "../../config";
 import { connect } from "../../util";
 jest.setTimeout(60 * 1000);
@@ -9,15 +9,16 @@ jest.setTimeout(60 * 1000);
 let client: Client;
 
 beforeEach(() => {
-    client = connect({
-        ...config,
-        auth: {
-            ...config.auth,
-            // code: CODE
-        }
-    });
+    client = connect(
+        new Client({
+            ...config,
+            auth: {
+                ...config.auth,
+                // code: CODE
+            }
+        })
+    );
 });
-
 describe('LeadFactory', () => {
     test('create with no params', async () => {
         const [lead] = await client.leads.create([

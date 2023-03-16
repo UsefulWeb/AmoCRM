@@ -1,10 +1,10 @@
 import { IResourceEntity, IResourceFactory } from "../../../interfaces/api";
 import { TFactoryConstructor } from "../../../types";
 import { IRequestOptions } from "../../../interfaces/common";
-import { ITagFactory, TagCreateCriteria } from "../TagsFactory";
+import { ITagFactory, TagCreateCriteria } from "../TagFactory";
 import { IGetCriteria } from "./hasGetByCriteria";
 import { ITag } from "../../activeRecords/Tag";
-import ResourcePagination from "../../ResourcePagination";
+import { IResourcePagination } from "../../ResourcePagination";
 
 export interface IGetTagsCriteria extends IGetCriteria {
     filter?: {
@@ -14,13 +14,13 @@ export interface IGetTagsCriteria extends IGetCriteria {
 }
 
 export interface IFactoryTagList {
-    get(criteria?: IGetTagsCriteria, options?: IRequestOptions): Promise<ResourcePagination<ITag>>;
+    get(criteria?: IGetTagsCriteria, options?: IRequestOptions): Promise<IResourcePagination<ITag>>;
     add(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions): Promise<ITag[]>;
 }
 
 export interface IHasTagsFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
     get tagList(): IFactoryTagList;
-    getTags(criteria?: IGetTagsCriteria, options?: IRequestOptions): Promise<ResourcePagination<ITag>>;
+    getTags(criteria?: IGetTagsCriteria, options?: IRequestOptions): Promise<IResourcePagination<ITag>>;
     createTags(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions): Promise<ITag[]>;
 }
 

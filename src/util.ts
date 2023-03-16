@@ -5,7 +5,5 @@ export const delay =
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export function applyMixins(baseClass: any, mixins: any[]) {
-    return mixins.reduce((target, mixin) => {
-        return mixin(target);
-    }, baseClass);
+    return mixins.reduce((target, mixin) => mixin(target), baseClass);
 }

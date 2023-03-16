@@ -12,14 +12,12 @@ export type THasUpdateAndTagsFactory<T extends IResourceEntity<IHasTagsFactory<T
 export interface IFactoryHasUpdatableTagList<T extends IResourceEntity<IHasTagsFactory<T>>> extends IFactoryTagList {
     setFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]> ;
     clearFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]> ;
-    clear(options?: IRequestOptions): Promise<ISelfResponse>;
     set(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
 }
 
 export interface IHasUpdatableTagsFactory<T extends IResourceEntity<IHasTagsFactory<T>>> extends IHasTagsFactory<T> {
     get tagList(): IFactoryHasUpdatableTagList<T>;
     setTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
-    removeAllTags(options?: IRequestOptions): Promise<ISelfResponse>;
     setTagsFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]>
     clearTagsFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]>
 }
@@ -42,15 +40,13 @@ export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(
         }
 
         get tagList() {
-            if (this._updatableTags !== undefined) {
+            if (this._updatableTags) {
                 return this._updatableTags;
             }
             const tagList = {
                 ...super.tagList,
                 setFor: this.setTagsFor.bind(this),
                 clearFor: this.clearTagsFor.bind(this),
-
-                clear: this.clearTags.bind(this),
                 set: this.setTags.bind(this)
             };
             this._updatableTags = tagList;
@@ -84,12 +80,12 @@ export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(
                     tags
                 }
             };
+            console.log({
+                url,
+                requestCriteria
+            });
             const { data } = await request.patch<ISelfResponse>(url, requestCriteria, options);
             return data;
-        }
-
-        clearTags(options?: IRequestOptions) {
-            return this.setTags(null, options);
         }
     };
 }

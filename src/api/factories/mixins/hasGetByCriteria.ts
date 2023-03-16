@@ -1,6 +1,6 @@
 import { IRequestOptions } from "../../../interfaces/common";
-import { IResourceEntity, IResourceFactory, IResourcePagination } from "../../../interfaces/api";
-import ResourcePagination from "../../ResourcePagination";
+import { IResourceEntity, IResourceFactory } from "../../../interfaces/api";
+import ResourcePagination, {IResourcePagination} from "../../ResourcePagination";
 import { TFactoryConstructor } from "../../../types";
 
 export interface IGetCriteria {

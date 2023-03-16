@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import Client from "../../../src/Client";
+import { Client } from "../../../src/Client";
 import config, { CODE } from "../../config";
 import { connect } from "../../util";
 jest.setTimeout(60 * 1000);
@@ -9,13 +9,7 @@ jest.setTimeout(60 * 1000);
 let client: Client;
 
 beforeEach(() => {
-    client = connect({
-        ...config,
-        auth: {
-            ...config.auth,
-            // code: CODE
-        }
-    });
+    client = connect(new Client(config));
 });
 
 describe('ContactFactory', () => {

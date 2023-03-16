@@ -41,14 +41,13 @@ export interface LeadsUpdateCriteria extends LeadsCreateCriteria {
     id: number;
 }
 
-export interface ILeadFactory extends
-    IHasGetFactory<ILead>,
-    IHasGetByIdFactory<ILead>,
-    IHasCreateFactory<ILead>,
-    IHasUpdateFactory<ILead>,
-    IResourceFactory<ILead>,
-    IHasTagsFactory<ILead> {
-}
+export type ILeadFactory =
+    IHasGetFactory<ILead> &
+    IHasGetByIdFactory<ILead> &
+    IHasCreateFactory<ILead> &
+    IHasUpdateFactory<ILead> &
+    IResourceFactory<ILead> &
+    IHasTagsFactory<ILead>;
 
 /**
  * Фабрика управления сделками

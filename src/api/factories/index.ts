@@ -1,7 +1,7 @@
 import { LeadFactory, ILeadFactory } from "./LeadFactory";
 import { ContactFactory, IContactFactory } from "./ContactFactory";
 import { CompanyFactory, ICompanyFactory } from "./CompanyFactory";
-import { TagFactory, ITagFactory } from "./TagsFactory";
+import { TagFactory, ITagFactory } from "./TagFactory";
 import { CustomerFactory, ICustomerFactory } from "./CustomerFactory";
 import { TConstructor } from "../../types";
 

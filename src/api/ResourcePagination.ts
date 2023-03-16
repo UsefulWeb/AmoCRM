@@ -3,9 +3,17 @@ import {
     IEntityAttributes,
     IPaginatedResponse,
     IPaginationLinks, IResourceEntity, IResourceFactory,
-    IResourcePagination,
     IResourcePaginationParams
 } from "../interfaces/api";
+
+export interface IResourcePagination<T> {
+    fetch(): void;
+    getData(): T[];
+    getPage(): number;
+    next(): Promise<boolean|T[]>;
+    prev(): Promise<boolean|T[]>;
+    [Symbol.iterator](): Iterator<T>;
+}
 
 /**
  * Постраничная навигация вывода сущностей
@@ -20,6 +28,10 @@ export default class ResourcePagination<T extends IResourceEntity<IResourceFacto
     constructor(request: IClientRequest, params: IResourcePaginationParams<T>) {
         this.request = request;
         this.params = params;
+    }
+
+    [Symbol.iterator]() {
+        return this.data[Symbol.iterator]();
     }
 
     /**

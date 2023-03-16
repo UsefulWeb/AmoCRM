@@ -1,13 +1,13 @@
-import { Client } from "../dist/Client";
+import {Client, IClient} from "../src/Client";
 import path from "path";
 import fs from "fs";
-import { IClientOptions } from "../dist/interfaces/common";
+import { IClientOptions } from "../src/interfaces/common";
+import {TConstructor} from "../src/types";
 
-export function connect(config: IClientOptions) {
-    const client = new Client(config);
+export function connect<T extends IClient>(client: T): T {
     const file = path.resolve(__dirname, './token.json');
 
-    if (!config.auth.code) {
+    if (!client.environment.get('auth.code', false)) {
         const json = fs.readFileSync(file).toString();
         const data = JSON.parse(json);
         client.token.setValue(data);

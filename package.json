@@ -10,6 +10,7 @@
     "node": ">=16"
   },
   "scripts": {
+    "test:setup": "npx ts-node tests/setup.ts",
     "test": "jest --no-cache --verbose false --silent false",
     "build": "tsc",
     "docs": "typedoc --entryPointStrategy expand ./src",

@@ -54,11 +54,6 @@ export interface ICollectionResponse<T> {
     };
 }
 
-export interface IResourcePagination<T> {
-    fetch(): void;
-    getData(): T[];
-}
-
 export interface IPaginationLinks {
     current?: string;
     next?: string;

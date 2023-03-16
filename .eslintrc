@@ -9,7 +9,7 @@
     "@typescript-eslint"
   ],
   "parserOptions": {
-    "ecmaVersion": 8,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "env": {

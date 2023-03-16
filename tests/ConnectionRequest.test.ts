@@ -1,4 +1,4 @@
-import Client from "../dist/Client";
+import { Client } from "../dist/Client";
 import config, { CODE } from "./config";
 import * as fs from "fs";
 import * as path from "path";

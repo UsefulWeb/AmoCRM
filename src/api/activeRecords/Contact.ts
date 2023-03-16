@@ -31,6 +31,14 @@ export interface ContactAttributes extends IEntityAttributes {
     _embedded?: JSONObject;
 }
 
+export interface IEmbeddedContact {
+    id: number;
+    is_main: boolean;
+}
+
+export interface IHasEmbeddedContacts {
+    contacts?: IEmbeddedContact[];
+}
 export interface IContact extends IResourceEntity<IContactFactory>, ContactAttributes {
     /**
      * Добавляет сущность на портал AmoCRM
