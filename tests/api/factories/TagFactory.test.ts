@@ -62,6 +62,8 @@ describe('TagsFactory', () => {
             name: 'test',
         });
 
+        lead.embeddedTags.add([tag]);
+
         await lead.save();
 
         // lead.tagsList.set()

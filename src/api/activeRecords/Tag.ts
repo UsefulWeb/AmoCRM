@@ -24,6 +24,7 @@ export interface IEmbeddedTag {
 export interface IHasEmbeddedTags {
     tags?: IEmbeddedTag[];
 }
+
 export interface ITag extends IResourceEntity<ITagFactory>, TagAttributes {
     /**
      * Добавляет сущность на портал AmoCRM

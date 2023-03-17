@@ -1,18 +1,17 @@
 import { IEntityAttributes, IResourceEntity, IResourceFactory } from "../interfaces/api";
 import { EventEmitter } from "../common/EventEmitter";
+import {JSONObject} from "../types";
 
 /**
  * Основной класс сущностей
  * */
-export default abstract class ResourceEntity
-    <T extends IResourceFactory<IResourceEntity<T>>>
-    extends
+export default abstract class ResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends
         EventEmitter
     implements
-        IResourceEntity<T>
-{
+        IResourceEntity<T> {
     public id?: number;
     public updated_at?: number;
+    public _embedded?: object;
     protected readonly factory: T;
     public required: string[] = [];
 
@@ -32,6 +31,18 @@ export default abstract class ResourceEntity
         return this.id !== undefined;
     }
 
+    getEmbedded() {
+        return this._embedded || {};
+    }
+
+    setEmbedded(patch: object) {
+        const embedded = this.getEmbedded();
+
+        this._embedded = {
+            ...embedded,
+            patch
+        };
+    }
     /**
      * Возвращает все атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */

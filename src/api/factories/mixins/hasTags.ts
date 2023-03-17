@@ -21,7 +21,7 @@ export interface IFactoryTagList {
 export interface IHasTagsFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
     get tagList(): IFactoryTagList;
     getTags(criteria?: IGetTagsCriteria, options?: IRequestOptions): Promise<IResourcePagination<ITag>>;
-    createTags(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions): Promise<ITag[]>;
+    addTags(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions): Promise<ITag[]>;
 }
 
 export function hasTags<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
@@ -35,7 +35,7 @@ export function hasTags<T extends IResourceEntity<IResourceFactory<T>>>(Base: TF
             }
             this._tags = {
                 get: this.getTags.bind(this),
-                add: this.createTags.bind(this),
+                add: this.addTags.bind(this),
             };
             return this._tags;
         }
@@ -57,7 +57,7 @@ export function hasTags<T extends IResourceEntity<IResourceFactory<T>>>(Base: TF
             return factory.get(criteria, options);
         }
 
-        createTags(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions) {
+        addTags(criteria: (TagCreateCriteria | ITag)[], options?: IRequestOptions) {
             const factory = this.getTagsFactory();
             return factory.create(criteria, options);
         }

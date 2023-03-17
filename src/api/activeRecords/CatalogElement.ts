@@ -2,7 +2,7 @@ import {JSONObject} from "../../types";
 
 export interface IEmbeddedCatalogElement {
     id: number;
-    metadata: JSONObject;
+    metadata: object;
     quantity: number;
     catalog_id: number;
     price_id: number;

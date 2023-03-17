@@ -22,6 +22,7 @@ export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>
     getEmbedded<A extends IEntityAttributes>(data: ICollectionResponse<A>): A[];
     getUrl(path?: string): string;
     getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
+    getEntityCriteria<R>(criteriaData: (object)[]): R[];
 }
 
 export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
@@ -33,8 +34,10 @@ export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>>
     setAttributes(attributes?: IEntityAttributes): void;
 }
 
-export interface IResourceEntityConstructor<T> {
-    from(request: IClientRequest, attributes?: JSONObject): T;
+export interface IEmbeddedResourceEntity<T> {
+    _embedded?: T;
+    getEmbedded(): T;
+    setEmbedded(patch: object): void;
 }
 
 export interface ISelfResponse {

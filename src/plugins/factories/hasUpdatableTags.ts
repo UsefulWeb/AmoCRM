@@ -4,8 +4,6 @@ import { IHasTagsFactory, IFactoryTagList } from "../../api/factories/mixins/has
 import { IHasUpdateFactory } from "../../api/factories/mixins/hasUpdate";
 import { IRequestOptions } from "../../interfaces/common";
 import { ITag, TagAttributes } from "../../api/activeRecords/Tag";
-import { hasUpdatableTags as entityHasUpdatableTags } from '../entities/hasUpdatableTags';
-import { applyMixins } from "../../util";
 
 export type THasUpdateAndTagsFactory<T extends IResourceEntity<IHasTagsFactory<T>>> = IHasTagsFactory<T> & IHasUpdateFactory<T>;
 
@@ -30,18 +28,11 @@ export interface IHasUpdatableTagsEntity<T extends IResourceFactory<IResourceEnt
 export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(Base: TConstructor<THasUpdateAndTagsFactory<T>>) {
 
     return class HasUpdatableTags extends Base {
-        _updatableTags?: IFactoryHasUpdatableTagList<T>;
-
-        getEntityClass() {
-            return applyMixins(
-                super.getEntityClass(),
-                [entityHasUpdatableTags]
-            );
-        }
+        _updatableTagList?: IFactoryHasUpdatableTagList<T>;
 
         get tagList() {
-            if (this._updatableTags) {
-                return this._updatableTags;
+            if (this._updatableTagList) {
+                return this._updatableTagList;
             }
             const tagList = {
                 ...super.tagList,
@@ -49,7 +40,7 @@ export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(
                 clearFor: this.clearTagsFor.bind(this),
                 set: this.setTags.bind(this)
             };
-            this._updatableTags = tagList;
+            this._updatableTagList = tagList;
             return tagList;
         }
 

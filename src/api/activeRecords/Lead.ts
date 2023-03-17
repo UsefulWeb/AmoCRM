@@ -10,10 +10,17 @@ import { hasSave, IHasSaveEntity} from "./mixins/hasSave";
 import { hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
 import { hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
 import { hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
-import { IEmbeddedTag, IHasEmbeddedTags } from "./Tag";
-import { IEmbeddedContact, IHasEmbeddedContacts} from "./Contact";
-import { IEmbeddedCompany, IHasEmbeddedCompanies} from "./Company";
-import { IEmbeddedCatalogElement, IHasEmbeddedCatalogElements} from "./CatalogElement";
+import { IHasEmbeddedTags } from "./Tag";
+import { IHasEmbeddedContacts} from "./Contact";
+import { IHasEmbeddedCompanies} from "./Company";
+import { IHasEmbeddedCatalogElements} from "./CatalogElement";
+import {hasEmbeddedTags, IHasEmbeddedTagsEntity} from "./mixins/embedded/hasEmbeddedTags";
+import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
+import {hasEmbeddedCompanies, IHasEmbeddedCompaniesEntity} from "./mixins/embedded/hasEmbeddedCompanies";
+import {
+    hasEmbeddedCatalogElements,
+    IHasEmbeddedCatalogElementsEntity
+} from "./mixins/embedded/hasEmbeddedCatalogElements";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -39,12 +46,18 @@ export interface LeadAttributes extends IEntityAttributes {
     _embedded?: ILeadEmbedded;
 }
 
+export type ILeadHasEmbedded = IHasEmbeddedTagsEntity<ILeadFactory> &
+    IHasEmbeddedContactsEntity<ILeadFactory> &
+    IHasEmbeddedCompaniesEntity<ILeadFactory> &
+    IHasEmbeddedCatalogElementsEntity<ILeadFactory>;
+
 export type ILead = IResourceEntity<ILeadFactory> &
     LeadAttributes &
     IHasCreateEntity<ILeadFactory> &
     IHasUpdateEntity<ILeadFactory> &
     IHasSaveEntity<ILeadFactory> &
-    IHasFetchEntity<ILeadFactory>;
+    IHasFetchEntity<ILeadFactory> &
+    ILeadHasEmbedded;
 
 export type ILeadEmbedded = IHasEmbeddedTags &
     IHasEmbeddedContacts &
@@ -119,9 +132,18 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
     }
 }
 
+export const embeddedLeadMixins = [
+    hasEmbeddedTags,
+    hasEmbeddedContacts,
+    hasEmbeddedCompanies,
+    hasEmbeddedCatalogElements
+];
+
 export const Lead: TConstructor<ILead> = applyMixins(BaseLead, [
     hasCreate,
     hasUpdate,
     hasSave,
-    hasFetch
+    hasFetch,
+
+    ...embeddedLeadMixins
 ]);
