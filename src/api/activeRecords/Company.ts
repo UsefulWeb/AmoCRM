@@ -53,7 +53,7 @@ export type ICompanyHasEmbedded = IHasEmbeddedTagsEntity<ICompanyFactory> &
     IHasEmbeddedCatalogElementsEntity<ICompanyFactory>;
 
 export type ICompany = IResourceEntity<ICompanyFactory> &
-    ContactAttributes &
+    CompanyAttributes &
     IHasCreateEntity<ICompanyFactory> &
     IHasUpdateEntity<ICompanyFactory> &
     IHasSaveEntity<ICompanyFactory> &
