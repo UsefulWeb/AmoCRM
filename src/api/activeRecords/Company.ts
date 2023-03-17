@@ -7,11 +7,21 @@ import { IRequestOptions } from "../../interfaces/common";
 import { ICompanyFactory } from "../factories/CompanyFactory";
 import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
 import { applyMixins } from "../../util";
-import { hasSave } from "./mixins/hasSave";
-import { hasFetch } from "./mixins/hasFetch";
-import { hasCreate } from "./mixins/hasCreate";
-import { hasUpdate } from "./mixins/hasUpdate";
+import {hasSave, IHasSaveEntity} from "./mixins/hasSave";
+import {hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
+import {hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
+import {hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
 import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
+import {hasEmbeddedTags, IHasEmbeddedTagsEntity} from "./mixins/embedded/hasEmbeddedTags";
+import {hasEmbeddedCustomers, IHasEmbeddedCustomersEntity} from "./mixins/embedded/hasEmbeddedCustomers";
+import {hasEmbeddedCompanies} from "./mixins/embedded/hasEmbeddedCompanies";
+import {
+    hasEmbeddedCatalogElements,
+    IHasEmbeddedCatalogElementsEntity
+} from "./mixins/embedded/hasEmbeddedCatalogElements";
+import {IContactFactory} from "../factories/ContactFactory";
+import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
+import {ContactAttributes} from "./Contact";
 
 export interface CompanyAttributes extends IEntityAttributes {
     id?: number;
@@ -36,54 +46,19 @@ export interface IEmbeddedCompany {
 export interface IHasEmbeddedCompanies {
     companies?: IEmbeddedCompany[];
 }
-export interface ICompany extends IResourceEntity<ICompanyFactory>, CompanyAttributes {
-    /**
-     * Добавляет сущность на портал AmoCRM
-     * @example
-     * ```ts
-     * const company = new client.Company({
-     *     name: "Walter White"
-     * });
-     * await company.create();
-     * ```
-     * @example
-     * ```ts
-     * const company = new client.Company;
-     * company.name = "Walter White";
-     * await company.create();
-     * ```
-     * @returns ссылка на созданную сущность
-     * */
-    create(options?: IRequestOptions): Promise<ICompany>;
-    /**
-     * Обновляет сущность на портале AmoCRM.
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const company = await client.companies.getById(123);
-     * company.name = "Walter White";
-     * await company.update();
-     * ```
-     * @returns ссылка на обновлённую сущность
-     * */
-    update(options?: IRequestOptions): Promise<ICompany>;
-    /**
-     * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
-     * @param options настройки запроса и обработки результата
-     * */
-    save(options?: IRequestOptions): Promise<ICompany>;
-    /**
-     * Получает содержимое сущности на портале
-     * @param criteria фильтр для уточнения результатов запроса
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const company = new client.Company({ id: 123 });
-     * await company.fetch();
-     * ```
-     * */
-    fetch(criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<ICompany>;
-}
+
+export type ICompanyHasEmbedded = IHasEmbeddedTagsEntity<ICompanyFactory> &
+    IHasEmbeddedContactsEntity<ICompanyFactory> &
+    IHasEmbeddedCustomersEntity<ICompanyFactory> &
+    IHasEmbeddedCatalogElementsEntity<ICompanyFactory>;
+
+export type ICompany = IResourceEntity<ICompanyFactory> &
+    ContactAttributes &
+    IHasCreateEntity<ICompanyFactory> &
+    IHasUpdateEntity<ICompanyFactory> &
+    IHasSaveEntity<ICompanyFactory> &
+    IHasFetchEntity<ICompanyFactory> &
+    ICompanyHasEmbedded;
 
 /**
  * Сделка
@@ -140,9 +115,21 @@ export class BaseCompany extends ResourceEntity<ICompanyFactory> {
     }
 }
 
-export const Company: TConstructor<ICompany> = applyMixins(BaseCompany, [
+export const mixins = [
     hasCreate,
     hasUpdate,
     hasSave,
-    hasFetch
+    hasFetch,
+];
+
+export const embeddedMixins = [
+    hasEmbeddedTags,
+    hasEmbeddedCustomers,
+    hasEmbeddedContacts,
+    hasEmbeddedCatalogElements
+];
+
+export const Company: TConstructor<ICompany> = applyMixins(BaseCompany, [
+    ...mixins,
+    ...embeddedMixins
 ]);

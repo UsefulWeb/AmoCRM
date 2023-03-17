@@ -60,7 +60,7 @@ export interface IHasEmbeddedContacts {
 }
 
 export type IContactHasEmbedded = IHasEmbeddedTagsEntity<IContactFactory> &
-    IHasEmbeddedContactsEntity<IContactFactory> &
+    IHasEmbeddedCompaniesEntity<IContactFactory> &
     IHasEmbeddedCustomersEntity<IContactFactory> &
     IHasEmbeddedCatalogElementsEntity<IContactFactory>;
 
