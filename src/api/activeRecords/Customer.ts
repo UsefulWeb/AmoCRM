@@ -24,6 +24,14 @@ export interface CustomerAttributes extends IEntityAttributes {
     _embedded?: JSONObject;
 }
 
+export interface IEmbeddedCustomer {
+    id: number;
+}
+
+export interface IHasEmbeddedCustomers {
+    customers?: IEmbeddedCustomer[];
+}
+
 export interface ICustomer extends IResourceEntity<ICustomerFactory>, CustomerAttributes {
     create(options?: IRequestOptions): Promise<ICustomer>;
     update(options?: IRequestOptions): Promise<ICustomer>;

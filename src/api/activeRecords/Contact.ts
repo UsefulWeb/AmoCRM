@@ -6,12 +6,26 @@ import { IContactFactory } from "../factories/ContactFactory";
 import { JSONObject, TConstructor } from "../../types";
 import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
 import { applyMixins } from "../../util";
-import { hasCreate } from "./mixins/hasCreate";
-import { hasUpdate } from "./mixins/hasUpdate";
-import { hasSave } from "./mixins/hasSave";
-import { hasFetch } from "./mixins/hasFetch";
+import {hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
+import {hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
+import {hasSave, IHasSaveEntity} from "./mixins/hasSave";
+import {hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
 import { IRequestOptions } from "../../interfaces/common";
 import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
+import {IHasEmbeddedTags} from "./Tag";
+import {IHasEmbeddedCompanies} from "./Company";
+import {IHasEmbeddedCatalogElements} from "./CatalogElement";
+import {IHasEmbeddedCustomers} from "./Customer";
+import {ILeadFactory} from "../factories/LeadFactory";
+import {ILeadHasEmbedded, LeadAttributes} from "./Lead";
+import {hasEmbeddedTags, IHasEmbeddedTagsEntity} from "./mixins/embedded/hasEmbeddedTags";
+import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
+import {hasEmbeddedCompanies, IHasEmbeddedCompaniesEntity} from "./mixins/embedded/hasEmbeddedCompanies";
+import {
+    hasEmbeddedCatalogElements,
+    IHasEmbeddedCatalogElementsEntity
+} from "./mixins/embedded/hasEmbeddedCatalogElements";
+import {hasEmbeddedCustomers, IHasEmbeddedCustomersEntity} from "./mixins/embedded/hasEmbeddedCustomers";
 
 export interface ContactAttributes extends IEntityAttributes {
     id?: number;
@@ -28,7 +42,7 @@ export interface ContactAttributes extends IEntityAttributes {
     closed_task_at?: number;
     custom_fields_values?: JSONObject[] | null;
     account_id?: number;
-    _embedded?: JSONObject;
+    _embedded?: IContactEmbedded;
 }
 
 export interface IEmbeddedContact {
@@ -36,57 +50,27 @@ export interface IEmbeddedContact {
     is_main: boolean;
 }
 
+export type IContactEmbedded = IHasEmbeddedTags &
+    IHasEmbeddedCompanies &
+    IHasEmbeddedCustomers &
+    IHasEmbeddedCatalogElements;
+
 export interface IHasEmbeddedContacts {
     contacts?: IEmbeddedContact[];
 }
-export interface IContact extends IResourceEntity<IContactFactory>, ContactAttributes {
-    /**
-     * Добавляет сущность на портал AmoCRM
-     * @example
-     * ```ts
-     * const contact = new client.Contact({
-     *     name: "Walter White"
-     * });
-     * await contact.create();
-     * ```
-     * @example
-     * ```ts
-     * const contact = new client.Contact;
-     * contact.name = "Walter White";
-     * await contact.create();
-     * ```
-     * @returns ссылка на созданную сущность
-     * */
-    create(options?: IRequestOptions): Promise<IContact>;
-    /**
-     * Обновляет сущность на портале AmoCRM.
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const contact = await client.contacts.getById(123);
-     * contact.name = "Walter White";
-     * await contact.update();
-     * ```
-     * @returns ссылка на обновлённую сущность
-     * */
-    update(options?: IRequestOptions): Promise<IContact>;
-    /**
-     * Создаёт или сохраняет сущность, в зависимости от результата {@link isNew()}
-     * @param options настройки запроса и обработки результата
-     * */
-    save(options?: IRequestOptions): Promise<IContact>;
-    /**
-     * Получает содержимое сущности на портале
-     * @param criteria фильтр для уточнения результатов запроса
-     * @param options настройки запроса и обработки результата
-     * @example
-     * ```ts
-     * const contact = new client.Contact({ id: 123 });
-     * await contact.fetch();
-     * ```
-     * */
-    fetch(criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<IContact>;
-}
+
+export type IContactHasEmbedded = IHasEmbeddedTagsEntity<IContactFactory> &
+    IHasEmbeddedContactsEntity<IContactFactory> &
+    IHasEmbeddedCustomersEntity<IContactFactory> &
+    IHasEmbeddedCatalogElementsEntity<IContactFactory>;
+
+export type IContact = IResourceEntity<IContactFactory> &
+    ContactAttributes &
+    IHasCreateEntity<IContactFactory> &
+    IHasUpdateEntity<IContactFactory> &
+    IHasSaveEntity<IContactFactory> &
+    IHasFetchEntity<IContactFactory> &
+    IContactHasEmbedded;
 
 export class BaseContact extends ResourceEntity<IContactFactory> {
     name?: string;
@@ -102,7 +86,7 @@ export class BaseContact extends ResourceEntity<IContactFactory> {
     closed_task_at?: number;
     custom_fields_values?: JSONObject[] | null;
     account_id?: number;
-    _embedded?: JSONObject;
+    _embedded?: IContactEmbedded;
 
     getAttributes(): ContactAttributes {
         return {
@@ -139,9 +123,21 @@ export class BaseContact extends ResourceEntity<IContactFactory> {
     }
 }
 
-export const Contact: TConstructor<IContact> = applyMixins(BaseContact, [
+export const mixins = [
     hasCreate,
     hasUpdate,
     hasSave,
-    hasFetch
+    hasFetch,
+];
+
+export const embeddedMixins = [
+    hasEmbeddedTags,
+    hasEmbeddedCustomers,
+    hasEmbeddedCompanies,
+    hasEmbeddedCatalogElements
+];
+
+export const Contact: TConstructor<IContact> = applyMixins(BaseContact, [
+    ...mixins,
+    ...embeddedMixins
 ]);

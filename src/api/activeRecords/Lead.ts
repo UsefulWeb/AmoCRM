@@ -63,6 +63,7 @@ export type ILeadEmbedded = IHasEmbeddedTags &
     IHasEmbeddedContacts &
     IHasEmbeddedCompanies &
     IHasEmbeddedCatalogElements;
+
 /**
  * Сделка
  */
@@ -132,7 +133,14 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
     }
 }
 
-export const embeddedLeadMixins = [
+export const mixins = [
+    hasCreate,
+    hasUpdate,
+    hasSave,
+    hasFetch,
+];
+
+export const embeddedMixins = [
     hasEmbeddedTags,
     hasEmbeddedContacts,
     hasEmbeddedCompanies,
@@ -140,10 +148,6 @@ export const embeddedLeadMixins = [
 ];
 
 export const Lead: TConstructor<ILead> = applyMixins(BaseLead, [
-    hasCreate,
-    hasUpdate,
-    hasSave,
-    hasFetch,
-
-    ...embeddedLeadMixins
+    ...mixins,
+    ...embeddedMixins
 ]);

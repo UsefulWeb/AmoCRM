@@ -4,6 +4,9 @@ import { IHasTagsFactory, IFactoryTagList } from "../../api/factories/mixins/has
 import { IHasUpdateFactory } from "../../api/factories/mixins/hasUpdate";
 import { IRequestOptions } from "../../interfaces/common";
 import { ITag, TagAttributes } from "../../api/activeRecords/Tag";
+import {hasUpdatableTags as entityHasUpdatableTags, IEntityHasUpdatableTags} from "../entities/hasUpdatableTags";
+import {applyMixins} from "../../util";
+
 
 export type THasUpdateAndTagsFactory<T extends IResourceEntity<IHasTagsFactory<T>>> = IHasTagsFactory<T> & IHasUpdateFactory<T>;
 
@@ -14,7 +17,8 @@ export interface IFactoryHasUpdatableTagList<T extends IResourceEntity<IHasTagsF
 }
 
 export interface IHasUpdatableTagsFactory<T extends IResourceEntity<IHasTagsFactory<T>>> extends IHasTagsFactory<T> {
-    get tagList(): IFactoryHasUpdatableTagList<T>;
+    // getEntityClass(): IEntityHasUpdatableTags<T>;
+    tagList: IFactoryHasUpdatableTagList<T>;
     setTags(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
     setTagsFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]>
     clearTagsFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]>
@@ -29,6 +33,13 @@ export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(
 
     return class HasUpdatableTags extends Base {
         _updatableTagList?: IFactoryHasUpdatableTagList<T>;
+
+        getEntityClass() {
+            return applyMixins(
+                super.getEntityClass(),
+                [entityHasUpdatableTags]
+            );
+        }
 
         get tagList() {
             if (this._updatableTagList) {
