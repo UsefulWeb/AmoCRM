@@ -1,11 +1,11 @@
 import { IClientRequest } from "../common/ClientRequest";
-import { JSONObject, TConstructor } from "../types";
+import { TConstructor } from "../types";
 import { IRequestOptions } from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
-import { EventEmitter } from "events";
 import { IClient } from "../Client";
 import { IEntityConstructors } from "../api/activeRecords";
 import { IFactoryConstructors } from "../api/factories";
+import {ICriteriaBuilder} from "../api/activeRecords/common/CriteriaBuilder";
 
 export interface IClientConstructors {
     entities: IEntityConstructors;
@@ -28,15 +28,16 @@ export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>
 export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
     id?: number;
     updated_at?: number;
+    criteriaBuilder: ICriteriaBuilder;
     isNew(): boolean;
     getFactory(): T;
     getAttributes(): IEntityAttributes;
     setAttributes(attributes?: IEntityAttributes): void;
 }
 
-export interface IEmbeddedResourceEntity<T> {
-    _embedded?: T;
-    getEmbedded(): T;
+export interface IResourceEntityWithEmbedded
+<T extends IResourceFactory<IResourceEntity<T>>, E extends IEmbeddedEntity> extends IResourceEntity<T> {
+    getEmbedded(): IEmbedded<E>;
     setEmbedded(patch: object): void;
 }
 
@@ -91,4 +92,13 @@ export interface IPaginatedResponse {
 
 export interface IEntityAttributes {
     id?: number;
+    _embedded?: object;
+}
+
+export interface IEmbeddedEntity {
+    id?: number;
+}
+
+export interface IEmbedded<T extends IEmbeddedEntity> {
+    [index: string]: T[];
 }

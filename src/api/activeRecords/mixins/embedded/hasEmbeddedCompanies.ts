@@ -1,70 +1,41 @@
 import {
-    IResourceEntity,
+    IResourceEntity, IResourceEntityWithEmbedded,
     IResourceFactory
 } from "../../../../interfaces/api";
-import { TConstructor, TEntityConstructor } from "../../../../types";
-import {IEmbeddedCompany, IHasEmbeddedCompanies} from "../../Company";
-
-export type ICompanyCriteria = (IEmbeddedCompany)[];
+import { TConstructor } from "../../../../types";
+import {IEmbeddedCompany } from "../../Company";
+import {IHasSaveEntity} from "../hasSave";
+import {EmbeddedEntityList, IEmbeddedEntityList, IQueryAttributes} from "../../common/EmbeddedEntityList";
 
 export interface IHasEmbeddedCompaniesEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
-    getEmbeddedCompanies(): IEmbeddedCompany[];
-    addEmbeddedCompanies(criteria: ICompanyCriteria): void;
-    removeEmbeddedCompanies(criteria: ICompanyCriteria): void;
-    embeddedCompanies: IEntityCompanyList<T>;
+    embeddedCompanies: IEmbeddedEntityList<IEmbeddedCompany>;
 }
 
-export interface IEntityCompanyList<T extends IResourceFactory<IResourceEntity<T>>> {
-    get(): IEmbeddedCompany[];
-    add(criteria: ICompanyCriteria): void;
-    remove(criteria: ICompanyCriteria): void;
+export interface IHasEmbeddedTagsCompaniesOptions {
+    attributes?: IQueryAttributes<IEmbeddedCompany>;
 }
 
-export function hasEmbeddedCompanies<T extends IResourceFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TConstructor<IResourceEntity<T>> {
-    return class HasEmbeddedCompanies extends Base {
-        _embedded?: IHasEmbeddedCompanies;
-        _embeddedCompanies?: IEntityCompanyList<T>;
+export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
+    IHasSaveEntity<T> &
+    IResourceEntityWithEmbedded<T, IEmbeddedCompany>;
 
-        get embeddedCompanies() {
-            if (this._embeddedCompanies) {
-                return this._embeddedCompanies;
+
+export function hasEmbeddedCompanies(options: IHasEmbeddedTagsCompaniesOptions) {
+    return function hasEmbeddedCompaniesConstructor<T extends IResourceFactory<IRequiredEntity<T>>>
+    (Base: TConstructor<IRequiredEntity<T>>): TConstructor<IResourceEntity<T>> {
+        return class HasEmbeddedCompanies extends Base {
+            readonly embeddedCompanies: IEmbeddedEntityList<IEmbeddedCompany>;
+
+            constructor(factory: T) {
+                super(factory);
+                this.embeddedCompanies = new EmbeddedEntityList({
+                    ...options,
+                    entity: this,
+                    embeddedType: 'companies'
+                });
+
+                this.criteriaBuilder.add(this.embeddedCompanies);
             }
-
-            this._embeddedCompanies = {
-                get: this.getEmbeddedContacts.bind(this),
-                add: this.addEmbeddedCompanies.bind(this),
-                remove: this.removeEmbeddedCompanies.bind(this)
-            };
-
-            return this._embeddedCompanies;
-        }
-        getEmbeddedContacts() {
-            return this._embedded?.companies || [];
-        }
-        addEmbeddedCompanies(criteria: ICompanyCriteria) {
-            const embedded = this._embedded || {};
-            const { companies = []} = embedded;
-
-            const factory = this.getFactory();
-            const entityCriteria = factory.getEntityCriteria<IEmbeddedCompany>(criteria);
-            companies.push(...entityCriteria);
-
-            this._embedded = {
-                ...embedded,
-                companies
-            };
-        }
-
-        removeEmbeddedCompanies(criteria: ICompanyCriteria) {
-            const embedded = this._embedded || {};
-            const embeddedCompanies = embedded.companies || [];
-            const ids = criteria.map(({ id }) => id);
-            const companies = embeddedCompanies.filter(({ id }) => !id || !ids.includes(id));
-
-            this._embedded = {
-                ...embedded,
-                companies
-            };
-        }
+        };
     };
 }

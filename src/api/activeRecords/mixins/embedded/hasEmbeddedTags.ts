@@ -1,74 +1,41 @@
 import {
-    IEmbeddedResourceEntity,
-    IEntityAttributes,
-    IResourceEntity,
+    IResourceEntity, IResourceEntityWithEmbedded,
     IResourceFactory
 } from "../../../../interfaces/api";
-import {TConstructor, TEntityConstructor} from "../../../../types";
-import {IEmbeddedTag, IHasEmbeddedTags} from "../../Tag";
-
-export type ITagCriteria = IEmbeddedTag[];
+import {TConstructor} from "../../../../types";
+import {IEmbeddedTag} from "../../Tag";
+import {IHasSaveEntity} from "../hasSave";
+import {EmbeddedEntityList, IEmbeddedEntityList, IQueryAttributes} from "../../common/EmbeddedEntityList";
 
 export interface IHasEmbeddedTagsEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
-    getEmbeddedTags(): IEmbeddedTag[];
-    addEmbeddedTags(criteria: ITagCriteria): void;
-    removeEmbeddedTags(criteria: ITagCriteria): void;
-    embeddedTags: IEntityTagList<T>;
+    embeddedTags: IEmbeddedEntityList<IEmbeddedTag>;
 }
 
-export interface IEntityTagList<T extends IResourceFactory<IResourceEntity<T>>> {
-    get(): IEmbeddedTag[];
-    add(criteria: ITagCriteria): void;
-    remove(criteria: ITagCriteria): void;
+export interface IHasEmbeddedTagsOptions {
+    attributes?: IQueryAttributes<IEmbeddedTag>;
 }
 
-export function hasEmbeddedTags<T extends IResourceFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TConstructor<IResourceEntity<T>> {
-    return class HasEmbeddedTags extends Base {
-        _embedded?: IHasEmbeddedTags;
-        _embeddedTags?: IEntityTagList<T>;
+export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
+    IHasSaveEntity<T> &
+    IResourceEntityWithEmbedded<T, IEmbeddedTag>;
 
-        get embeddedTags() {
-            if (this._embeddedTags) {
-                return this._embeddedTags;
+export function hasEmbeddedTags(options: IHasEmbeddedTagsOptions = {}) {
+    return function hasEmbeddedTagsConstructor
+        <T extends IResourceFactory<IRequiredEntity<T>>>
+    (Base: TConstructor<IRequiredEntity<T>>): TConstructor<IResourceEntity<T>> {
+        return class HasEmbeddedTags extends Base {
+            readonly embeddedTags: IEmbeddedEntityList<IEmbeddedTag>;
+
+            constructor(factory: T) {
+                super(factory);
+                this.embeddedTags = new EmbeddedEntityList({
+                    ...options,
+                    entity: this,
+                    embeddedType: 'tags',
+                });
+
+                this.criteriaBuilder.add(this.embeddedTags);
             }
-
-            this._embeddedTags = {
-                get: this.getEmbeddedTags.bind(this),
-                add: this.addEmbeddedTags.bind(this),
-                remove: this.removeEmbeddedTags.bind(this)
-            };
-
-            return this._embeddedTags;
-        }
-
-        getEmbeddedTags() {
-            return this._embedded?.tags || [];
-        }
-
-        addEmbeddedTags(criteria: ITagCriteria) {
-            const embedded = this._embedded || {};
-            const { tags = []} = embedded;
-
-            const factory = this.getFactory();
-            const entityCriteria = factory.getEntityCriteria(criteria);
-            tags.push(...entityCriteria);
-
-            this._embedded = {
-                ...embedded,
-                tags
-            };
-        }
-
-        removeEmbeddedTags(criteria: ITagCriteria) {
-            const embedded = this._embedded || {};
-            const ids = criteria.map(({ id }) => id);
-            const tags = this.getEmbeddedTags()
-                .filter(({ id }) => !id || !ids.includes(id));
-
-            this._embedded = {
-                ...embedded,
-                tags
-            };
-        }
+        };
     };
 }

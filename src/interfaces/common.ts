@@ -71,3 +71,5 @@ export interface IAPIResponseErrorValue {
 export interface IResponseParser<T> {
     parse<R>(result: IAPIResponse<T>): IAPIResponse<R>;
 }
+
+export type ObjectKey<T> = keyof T;

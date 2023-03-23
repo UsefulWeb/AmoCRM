@@ -5,7 +5,7 @@ import ResourceEntity from "../ResourceEntity";
 import { JSONObject, TConstructor } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
 import { ICompanyFactory } from "../factories/CompanyFactory";
-import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
+import {IEmbedded, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { applyMixins } from "../../util";
 import {hasSave, IHasSaveEntity} from "./mixins/hasSave";
 import {hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
@@ -36,7 +36,7 @@ export interface CompanyAttributes extends IEntityAttributes {
     closed_task_at?: number;
     custom_fields_values?: JSONObject[] | null;
     account_id?: number;
-    _embedded?: JSONObject;
+    _embedded?: ICompanyHasEmbedded;
 }
 
 export interface IEmbeddedCompany {
@@ -82,7 +82,7 @@ export class BaseCompany extends ResourceEntity<ICompanyFactory> {
     score?: number | null;
     account_id?: number;
     is_price_modified_by_robot?: boolean;
-    _embedded?: JSONObject;
+    _embedded?: ICompanyHasEmbedded;
 
     getAttributes(): CompanyAttributes {
         return {

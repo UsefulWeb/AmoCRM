@@ -4,13 +4,13 @@
 import ResourceEntity from "../ResourceEntity";
 import { JSONObject, TConstructor } from "../../types";
 import { ILeadFactory } from "../factories/LeadFactory";
-import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
+import {IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { applyMixins } from "../../util";
 import { hasSave, IHasSaveEntity} from "./mixins/hasSave";
 import { hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
-import { hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
-import { hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
-import { IHasEmbeddedTags } from "./Tag";
+import { hasCreate } from "./mixins/hasCreate";
+import { hasUpdate} from "./mixins/hasUpdate";
+import {IHasEmbeddedTags} from "./Tag";
 import { IHasEmbeddedContacts} from "./Contact";
 import { IHasEmbeddedCompanies} from "./Company";
 import { IHasEmbeddedCatalogElements} from "./CatalogElement";
@@ -53,13 +53,12 @@ export type ILeadHasEmbedded = IHasEmbeddedTagsEntity<ILeadFactory> &
 
 export type ILead = IResourceEntity<ILeadFactory> &
     LeadAttributes &
-    IHasCreateEntity<ILeadFactory> &
-    IHasUpdateEntity<ILeadFactory> &
     IHasSaveEntity<ILeadFactory> &
     IHasFetchEntity<ILeadFactory> &
     ILeadHasEmbedded;
 
-export type ILeadEmbedded = IHasEmbeddedTags &
+export type ILeadEmbedded =
+    IHasEmbeddedTags &
     IHasEmbeddedContacts &
     IHasEmbeddedCompanies &
     IHasEmbeddedCatalogElements;
@@ -141,10 +140,22 @@ export const mixins = [
 ];
 
 export const embeddedMixins = [
-    hasEmbeddedTags,
-    hasEmbeddedContacts,
-    hasEmbeddedCompanies,
-    hasEmbeddedCatalogElements
+    hasEmbeddedTags({
+        attributes: {
+            save: ['id', 'name']
+        }
+    }),
+    hasEmbeddedContacts({
+        attributes: {
+            save: ['id', "is_main"]
+        }
+    }),
+    hasEmbeddedCompanies({
+        attributes: {
+            save: ['id']
+        }
+    }),
+    hasEmbeddedCatalogElements()
 ];
 
 export const Lead: TConstructor<ILead> = applyMixins(BaseLead, [

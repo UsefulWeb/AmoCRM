@@ -1,4 +1,4 @@
-import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
+import {IEmbedded, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { ICustomerFactory } from "../factories/CustomerFactory";
 import { JSONObject, TConstructor } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
@@ -9,6 +9,7 @@ import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
 import { hasSave } from "./mixins/hasSave";
 import { hasFetch } from "./mixins/hasFetch";
+import {IHasEmbeddedTags} from "./Tag";
 
 export interface CustomerAttributes extends IEntityAttributes {
     name?: string;
@@ -21,8 +22,10 @@ export interface CustomerAttributes extends IEntityAttributes {
     created_at?: number;
     updated_at?: number;
     custom_fields_values?: JSONObject[] | null;
-    _embedded?: JSONObject;
+    _embedded?: ICustomerEmbedded;
 }
+
+export type ICustomerEmbedded = IHasEmbeddedTags;
 
 export interface IEmbeddedCustomer {
     id: number;
@@ -50,7 +53,7 @@ export class BaseCustomer extends ResourceEntity<ICustomerFactory> {
     created_at?: number;
     updated_at?: number;
     custom_fields_values?: JSONObject[] | null;
-    _embedded?: JSONObject;
+    _embedded?: ICustomerEmbedded;
 
     getAttributes(): CustomerAttributes {
         return {

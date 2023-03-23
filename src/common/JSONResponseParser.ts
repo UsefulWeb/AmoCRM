@@ -39,8 +39,11 @@ export default class JSONResponseParser extends EventEmitter implements IRespons
             throw new Error('INVALID_JSON_RESPONSE');
         }
         if ('status' in data) {
-            console.error(data);
-            throw new APIResponseError<T>('API_RESPONSE_ERROR', data, apiResponse);
+            this.handleError(data, apiResponse);
         }
+    }
+    handleError<T>(data: T, apiResponse: IAPIResponse<string>) {
+        console.error(JSON.stringify(data, null, 2));
+        throw new APIResponseError<T>('API_RESPONSE_ERROR', data, apiResponse);
     }
 }

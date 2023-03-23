@@ -1,5 +1,3 @@
-import {JSONObject} from "../../types";
-
 export interface IEmbeddedCatalogElement {
     id: number;
     metadata: object;

@@ -1,71 +1,40 @@
 import {
-    IResourceEntity,
+    IResourceEntity, IResourceEntityWithEmbedded,
     IResourceFactory
 } from "../../../../interfaces/api";
-import { TConstructor, TEntityConstructor } from "../../../../types";
-import { IEmbeddedContact, IHasEmbeddedContacts} from "../../Contact";
-
-export type IContactCriteria = (IEmbeddedContact)[];
+import { TConstructor } from "../../../../types";
+import { IEmbeddedContact} from "../../Contact";
+import {IHasSaveEntity} from "../hasSave";
+import {EmbeddedEntityList, IEmbeddedEntityList, IQueryAttributes} from "../../common/EmbeddedEntityList";
 
 export interface IHasEmbeddedContactsEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
-    getContacts(): IEmbeddedContact[];
-    addContacts(criteria: IContactCriteria): void;
-    removeContacts(criteria: IContactCriteria): void;
-    contactList: IEntityContactList<T>;
+    embeddedContacts: IEmbeddedEntityList<IEmbeddedContact>;
 }
 
-export interface IEntityContactList<T extends IResourceFactory<IResourceEntity<T>>> {
-    get(): IEmbeddedContact[];
-    add(criteria: IContactCriteria): void;
-    remove(criteria: IContactCriteria): void;
+export interface IHasEmbeddedContactsOptions {
+    attributes?: IQueryAttributes<IEmbeddedContact>;
 }
 
-export function hasEmbeddedContacts<T extends IResourceFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TConstructor<IResourceEntity<T>> {
-    return class HasEmbeddedContacts extends Base {
-        _embedded?: IHasEmbeddedContacts;
-        _embeddedContacts?: IEntityContactList<T>;
+export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
+    IHasSaveEntity<T> &
+    IResourceEntityWithEmbedded<T, IEmbeddedContact>;
 
-        get embeddedContacts() {
-            if (this._embeddedContacts) {
-                return this._embeddedContacts;
+export function hasEmbeddedContacts(options: IHasEmbeddedContactsOptions = {}) {
+    return function hasEmbeddedContactsConstructor
+        <T extends IResourceFactory<IRequiredEntity<T>>>
+    (Base: TConstructor<IRequiredEntity<T>>): TConstructor<IResourceEntity<T>> {
+        return class HasEmbeddedContacts extends Base {
+            readonly embeddedContacts: IEmbeddedEntityList<IEmbeddedContact>;
+            constructor(factory: T) {
+                super(factory);
+                this.embeddedContacts = new EmbeddedEntityList({
+                    ...options,
+                    entity: this,
+                    embeddedType: 'contacts',
+                });
+
+                this.criteriaBuilder.add(this.embeddedContacts);
             }
-
-            this._embeddedContacts = {
-                get: this.getEmbeddedContacts.bind(this),
-                add: this.addEmbeddedContacts.bind(this),
-                remove: this.removeEmbeddedContacts.bind(this)
-            };
-
-            return this._embeddedContacts;
-        }
-
-        getEmbeddedContacts() {
-            return this._embedded?.contacts || [];
-        }
-        addEmbeddedContacts(criteria: IContactCriteria) {
-            const embedded = this._embedded || {};
-            const { contacts = []} = embedded;
-
-            const factory = this.getFactory();
-            const entityCriteria = factory.getEntityCriteria<IEmbeddedContact>(criteria);
-            contacts.push(...entityCriteria);
-
-            this._embedded = {
-                ...embedded,
-                contacts
-            };
-        }
-
-        removeEmbeddedContacts(criteria: IContactCriteria) {
-            const embedded = this._embedded || {};
-            const embeddedContacts = embedded.contacts || [];
-            const ids = criteria.map(({ id }) => id);
-            const contacts = embeddedContacts.filter(({ id }) => !id || !ids.includes(id));
-
-            this._embedded = {
-                ...embedded,
-                contacts
-            };
-        }
+        };
     };
 }

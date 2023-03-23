@@ -1,71 +1,41 @@
 import {
-    IResourceEntity,
+    IResourceEntity, IResourceEntityWithEmbedded,
     IResourceFactory
 } from "../../../../interfaces/api";
-import { TConstructor, TEntityConstructor } from "../../../../types";
-import { IEmbeddedCustomer, IHasEmbeddedCustomers} from "../../Customer";
-
-export type ICustomerCriteria = (IEmbeddedCustomer)[];
+import { TConstructor } from "../../../../types";
+import { IEmbeddedCustomer} from "../../Customer";
+import {IHasSaveEntity} from "../hasSave";
+import {EmbeddedEntityList, IEmbeddedEntityList, IQueryAttributes} from "../../common/EmbeddedEntityList";
 
 export interface IHasEmbeddedCustomersEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
-    getCustomers(): IEmbeddedCustomer[];
-    addCustomers(criteria: ICustomerCriteria): void;
-    removeCustomers(criteria: ICustomerCriteria): void;
-    customerList: IEntityCustomerList<T>;
+    customerList: IEmbeddedEntityList<IEmbeddedCustomer>;
 }
 
-export interface IEntityCustomerList<T extends IResourceFactory<IResourceEntity<T>>> {
-    get(): IEmbeddedCustomer[];
-    add(criteria: ICustomerCriteria): void;
-    remove(criteria: ICustomerCriteria): void;
+export interface IHasEmbeddedCustomersOptions {
+    attributes?: IQueryAttributes<IEmbeddedCustomer>;
 }
 
-export function hasEmbeddedCustomers<T extends IResourceFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TConstructor<IResourceEntity<T>> {
-    return class HasEmbeddedCustomers extends Base {
-        _embedded?: IHasEmbeddedCustomers;
-        _embeddedCustomers?: IEntityCustomerList<T>;
+export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
+    IHasSaveEntity<T> &
+    IResourceEntityWithEmbedded<T, IEmbeddedCustomer>;
 
-        get embeddedCustomers() {
-            if (this._embeddedCustomers) {
-                return this._embeddedCustomers;
+
+export function hasEmbeddedCustomers(options: IHasEmbeddedCustomersOptions) {
+    return function hasEmbeddedCustomersConstructor<T extends IResourceFactory<IRequiredEntity<T>>>
+    (Base: TConstructor<IRequiredEntity<T>>): TConstructor<IResourceEntity<T>> {
+        return class HasEmbeddedCustomers extends Base {
+            readonly embeddedCustomers: IEmbeddedEntityList<IEmbeddedCustomer>;
+
+            constructor(factory: T) {
+                super(factory);
+                this.embeddedCustomers = new EmbeddedEntityList({
+                    ...options,
+                    entity: this,
+                    embeddedType: 'customers',
+                });
+
+                this.criteriaBuilder.add(this.embeddedCustomers);
             }
-
-            this._embeddedCustomers = {
-                get: this.getEmbeddedCustomers.bind(this),
-                add: this.addEmbeddedCustomers.bind(this),
-                remove: this.removeEmbeddedCustomers.bind(this)
-            };
-
-            return this._embeddedCustomers;
-        }
-
-        getEmbeddedCustomers() {
-            return this._embedded?.customers || [];
-        }
-        addEmbeddedCustomers(criteria: ICustomerCriteria) {
-            const embedded = this._embedded || {};
-            const { customers = []} = embedded;
-
-            const factory = this.getFactory();
-            const entityCriteria = factory.getEntityCriteria<IEmbeddedCustomer>(criteria);
-            customers.push(...entityCriteria);
-
-            this._embedded = {
-                ...embedded,
-                customers
-            };
-        }
-
-        removeEmbeddedCustomers(criteria: ICustomerCriteria) {
-            const embedded = this._embedded || {};
-            const embeddedCustomers = embedded.customers || [];
-            const ids = criteria.map(({ id }) => id);
-            const customers = embeddedCustomers.filter(({ id }) => !id || !ids.includes(id));
-
-            this._embedded = {
-                ...embedded,
-                customers
-            };
-        }
+        };
     };
 }

@@ -46,7 +46,7 @@ describe('TagsFactory', () => {
         expect(tag.name).toEqual(attributes.name);
     });
 
-    test.only('removes tag for leads', async () => {
+    test('adds embedded tag for lead', async () => {
         const client: ITaggedClient = connect(new TaggedClient(config));
 
         const attributes = {
@@ -62,16 +62,40 @@ describe('TagsFactory', () => {
             name: 'test',
         });
 
+        expect(lead.embeddedTags.get().length).toEqual(0);
+
         lead.embeddedTags.add([tag]);
 
-        await lead.save();
+        expect(lead.embeddedTags.get().length).toEqual(1);
 
-        // lead.tagsList.set()
-        // await client.leads.tagList.clearFor();
+        const { id = -1} = await lead.save();
 
-        // const pagination = await client.leads.tagList.get();
-        // const { length } = pagination.getData();
+        const existingLead = await client.leads.getById(id);
 
-        // expect(length).toEqual(0);
+        expect(existingLead).not.toBeNull();
+
+        const length = existingLead && existingLead.embeddedTags.get().length;
+
+        expect(length).toEqual(1);
+    });
+
+    test.only('remove some tags for lead', async () => {
+        const attributes = [
+            {
+                name: 'Tag 1',
+                color: 'DDEBB5'
+            },
+            {
+                name: 'Tag 2',
+                color: 'DDEBB5'
+            },
+            {
+                name: 'Tag 3',
+                color: 'DDEBB5'
+            },
+        ];
+
+        const tags = await client.leads.tagList.add(attributes);
+
     });
 });

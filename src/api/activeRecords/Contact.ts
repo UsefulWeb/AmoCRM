@@ -4,7 +4,7 @@
 import ResourceEntity from "../ResourceEntity";
 import { IContactFactory } from "../factories/ContactFactory";
 import { JSONObject, TConstructor } from "../../types";
-import { IEntityAttributes, IResourceEntity } from "../../interfaces/api";
+import {IEmbedded, IEmbeddedEntity, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { applyMixins } from "../../util";
 import {hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
@@ -45,12 +45,13 @@ export interface ContactAttributes extends IEntityAttributes {
     _embedded?: IContactEmbedded;
 }
 
-export interface IEmbeddedContact {
+export interface IEmbeddedContact extends IEmbeddedEntity {
     id: number;
     is_main: boolean;
 }
 
-export type IContactEmbedded = IHasEmbeddedTags &
+export type IContactEmbedded =
+    IHasEmbeddedTags &
     IHasEmbeddedCompanies &
     IHasEmbeddedCustomers &
     IHasEmbeddedCatalogElements;
@@ -66,8 +67,6 @@ export type IContactHasEmbedded = IHasEmbeddedTagsEntity<IContactFactory> &
 
 export type IContact = IResourceEntity<IContactFactory> &
     ContactAttributes &
-    IHasCreateEntity<IContactFactory> &
-    IHasUpdateEntity<IContactFactory> &
     IHasSaveEntity<IContactFactory> &
     IHasFetchEntity<IContactFactory> &
     IContactHasEmbedded;
