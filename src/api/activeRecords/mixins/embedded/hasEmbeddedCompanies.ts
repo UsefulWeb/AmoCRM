@@ -20,7 +20,7 @@ export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
     IResourceEntityWithEmbedded<T, IEmbeddedCompany>;
 
 
-export function hasEmbeddedCompanies(options: IHasEmbeddedTagsCompaniesOptions) {
+export function hasEmbeddedCompanies(options: IHasEmbeddedTagsCompaniesOptions = {}) {
     return function hasEmbeddedCompaniesConstructor<T extends IResourceFactory<IRequiredEntity<T>>>
     (Base: TConstructor<IRequiredEntity<T>>): TConstructor<IResourceEntity<T>> {
         return class HasEmbeddedCompanies extends Base {

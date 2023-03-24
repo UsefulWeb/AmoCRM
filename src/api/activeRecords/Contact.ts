@@ -4,22 +4,17 @@
 import ResourceEntity from "../ResourceEntity";
 import { IContactFactory } from "../factories/ContactFactory";
 import { JSONObject, TConstructor } from "../../types";
-import {IEmbedded, IEmbeddedEntity, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
+import {IEmbeddedEntity, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { applyMixins } from "../../util";
 import {hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
 import {hasSave, IHasSaveEntity} from "./mixins/hasSave";
 import {hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
-import { IRequestOptions } from "../../interfaces/common";
-import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
 import {IHasEmbeddedTags} from "./Tag";
 import {IHasEmbeddedCompanies} from "./Company";
 import {IHasEmbeddedCatalogElements} from "./CatalogElement";
 import {IHasEmbeddedCustomers} from "./Customer";
-import {ILeadFactory} from "../factories/LeadFactory";
-import {ILeadHasEmbedded, LeadAttributes} from "./Lead";
 import {hasEmbeddedTags, IHasEmbeddedTagsEntity} from "./mixins/embedded/hasEmbeddedTags";
-import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
 import {hasEmbeddedCompanies, IHasEmbeddedCompaniesEntity} from "./mixins/embedded/hasEmbeddedCompanies";
 import {
     hasEmbeddedCatalogElements,
@@ -130,10 +125,14 @@ export const mixins = [
 ];
 
 export const embeddedMixins = [
-    hasEmbeddedTags,
-    hasEmbeddedCustomers,
-    hasEmbeddedCompanies,
-    hasEmbeddedCatalogElements
+    hasEmbeddedTags({
+        attributes: {
+            save: ['id', 'name']
+        }
+    }),
+    hasEmbeddedCustomers(),
+    hasEmbeddedCompanies(),
+    hasEmbeddedCatalogElements()
 ];
 
 export const Contact: TConstructor<IContact> = applyMixins(BaseContact, [

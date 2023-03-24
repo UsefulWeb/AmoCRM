@@ -21,6 +21,9 @@ import {
     hasEmbeddedCatalogElements,
     IHasEmbeddedCatalogElementsEntity
 } from "./mixins/embedded/hasEmbeddedCatalogElements";
+import {IHasEmbeddedLossReasons} from "./LossReason";
+import {IHasEmbeddedSource} from "./Source";
+import {hasEmbeddedSource} from "./mixins/embedded/hasEmbeddedSource";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -61,7 +64,9 @@ export type ILeadEmbedded =
     IHasEmbeddedTags &
     IHasEmbeddedContacts &
     IHasEmbeddedCompanies &
-    IHasEmbeddedCatalogElements;
+    IHasEmbeddedCatalogElements &
+    IHasEmbeddedLossReasons &
+    IHasEmbeddedSource;
 
 /**
  * Сделка
@@ -142,7 +147,7 @@ export const mixins = [
 export const embeddedMixins = [
     hasEmbeddedTags({
         attributes: {
-            save: ['id', 'name']
+            save: ['id', 'name', 'color']
         }
     }),
     hasEmbeddedContacts({
@@ -155,7 +160,8 @@ export const embeddedMixins = [
             save: ['id']
         }
     }),
-    hasEmbeddedCatalogElements()
+    hasEmbeddedCatalogElements(),
+    hasEmbeddedSource
 ];
 
 export const Lead: TConstructor<ILead> = applyMixins(BaseLead, [

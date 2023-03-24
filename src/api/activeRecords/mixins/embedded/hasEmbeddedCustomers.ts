@@ -20,7 +20,7 @@ export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
     IResourceEntityWithEmbedded<T, IEmbeddedCustomer>;
 
 
-export function hasEmbeddedCustomers(options: IHasEmbeddedCustomersOptions) {
+export function hasEmbeddedCustomers(options: IHasEmbeddedCustomersOptions = {}) {
     return function hasEmbeddedCustomersConstructor<T extends IResourceFactory<IRequiredEntity<T>>>
     (Base: TConstructor<IRequiredEntity<T>>): TConstructor<IResourceEntity<T>> {
         return class HasEmbeddedCustomers extends Base {

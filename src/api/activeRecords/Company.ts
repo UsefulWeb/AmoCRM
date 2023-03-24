@@ -11,17 +11,13 @@ import {hasSave, IHasSaveEntity} from "./mixins/hasSave";
 import {hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
 import {hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
-import { IHasGetByIdCriteria } from "../factories/mixins/hasGetById";
 import {hasEmbeddedTags, IHasEmbeddedTagsEntity} from "./mixins/embedded/hasEmbeddedTags";
 import {hasEmbeddedCustomers, IHasEmbeddedCustomersEntity} from "./mixins/embedded/hasEmbeddedCustomers";
-import {hasEmbeddedCompanies} from "./mixins/embedded/hasEmbeddedCompanies";
 import {
     hasEmbeddedCatalogElements,
     IHasEmbeddedCatalogElementsEntity
 } from "./mixins/embedded/hasEmbeddedCatalogElements";
-import {IContactFactory} from "../factories/ContactFactory";
 import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
-import {ContactAttributes} from "./Contact";
 
 export interface CompanyAttributes extends IEntityAttributes {
     id?: number;
@@ -123,10 +119,14 @@ export const mixins = [
 ];
 
 export const embeddedMixins = [
-    hasEmbeddedTags,
-    hasEmbeddedCustomers,
-    hasEmbeddedContacts,
-    hasEmbeddedCatalogElements
+    hasEmbeddedTags({
+        attributes: {
+            save: ['id', 'name']
+        }
+    }),
+    hasEmbeddedCustomers(),
+    hasEmbeddedContacts(),
+    hasEmbeddedCatalogElements()
 ];
 
 export const Company: TConstructor<ICompany> = applyMixins(BaseCompany, [
