@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import {
     IEmbedded,
     IEmbeddedEntity,
@@ -81,7 +82,7 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
         }
 
         const value = this.get()
-            .map(item => this.getItemSaveCriteria(item, attributes));
+            .map(item => pick(item, attributes));
 
         return {
             _embedded: {
@@ -99,13 +100,5 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
     getUpdateCriteria() {
         const attributes = this.attributes?.update || this.attributes?.save;
         return this.getEmbeddedSaveCriteria(attributes);
-    }
-
-    protected getItemSaveCriteria(item: E, attributes: ObjectKey<E>[]) {
-        const criteria: E = <never>{};
-        return attributes.reduce((target, attribute) => {
-            target[attribute] = item[attribute];
-            return target;
-        }, criteria);
     }
 }

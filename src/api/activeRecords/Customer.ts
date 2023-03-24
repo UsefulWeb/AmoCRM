@@ -1,4 +1,4 @@
-import {IEmbedded, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
+import {IEmbedded, IEmbeddedEntity, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { ICustomerFactory } from "../factories/CustomerFactory";
 import { JSONObject, TConstructor } from "../../types";
 import { IRequestOptions } from "../../interfaces/common";
@@ -27,8 +27,8 @@ export interface CustomerAttributes extends IEntityAttributes {
 
 export type ICustomerEmbedded = IHasEmbeddedTags;
 
-export interface IEmbeddedCustomer {
-    id: number;
+export interface IEmbeddedCustomer extends IEmbeddedEntity {
+    id?: number;
 }
 
 export interface IHasEmbeddedCustomers {

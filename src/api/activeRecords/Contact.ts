@@ -130,10 +130,14 @@ export const mixins = [
 ];
 
 export const embeddedMixins = [
-    hasEmbeddedTags,
-    hasEmbeddedCustomers,
-    hasEmbeddedCompanies,
-    hasEmbeddedCatalogElements
+    hasEmbeddedTags({
+        attributes: {
+            save: ['id', 'name']
+        }
+    }),
+    hasEmbeddedCustomers(),
+    hasEmbeddedCompanies(),
+    hasEmbeddedCatalogElements()
 ];
 
 export const Contact: TConstructor<IContact> = applyMixins(BaseContact, [

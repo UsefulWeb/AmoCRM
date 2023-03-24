@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import {IClientOptions} from "./interfaces/common";
 import {EventEmitter} from "./common/EventEmitter";
 import {Connection, IConnection} from './common/Connection';

@@ -11,11 +11,10 @@ export interface ICriteriaItem {
     getUpdateCriteria(): object;
 }
 
-
 export class CriteriaBuilder<T extends IResourceFactory<IResourceEntity<T>>>
     implements ICriteriaBuilder, ICriteriaItem {
-    protected entity: IResourceEntity<T>;
     protected items: ICriteriaItem[];
+    protected entity: IResourceEntity<T>;
     constructor(entity: IResourceEntity<T>) {
         this.entity = entity;
         this.items = [];
