@@ -11,7 +11,7 @@ import {ICriteriaItem} from "./CriteriaBuilder";
 
 export interface IEmbeddedEntityList<E extends IEmbeddedEntity> extends ICriteriaItem {
     length: number;
-    add(criteria: object[]): void;
+    add(criteria: E[]): void;
     set(value: E[]|null): void;
     get(): E[];
     remove(value?: E[]): void;
@@ -83,6 +83,11 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
     }
 
     getEmbeddedSaveCriteria(attributes?: ObjectKey<E>[]) {
+        const readonly = attributes === undefined;
+        if (readonly) {
+            return {};
+        }
+
         const value = this.get().map(
             item => attributes ? pick(item, attributes) : item
         );

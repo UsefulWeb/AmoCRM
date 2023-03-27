@@ -41,8 +41,8 @@ export interface ContactAttributes extends IEntityAttributes {
 }
 
 export interface IEmbeddedContact extends IEmbeddedEntity {
-    id: number;
-    is_main: boolean;
+    id?: number;
+    is_main?: boolean;
 }
 
 export type IContactEmbedded =

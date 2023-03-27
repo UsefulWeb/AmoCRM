@@ -4,6 +4,7 @@ import * as path from "path";
 import { Client } from "../../../src/Client";
 import config, { CODE } from "../../config";
 import { connect } from "../../util";
+import {ILead} from "../../../src/api/activeRecords/Lead";
 jest.setTimeout(60 * 1000);
 
 let client: Client;
@@ -28,6 +29,7 @@ describe('LeadFactory', () => {
         const found = await client.leads.getById(id);
         expect(lead.id).toEqual(found?.id);
     });
+
     test('findById', async () => {
         const leads = await client.leads.get({
             limit: 1

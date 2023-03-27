@@ -9,6 +9,7 @@ import {
     ITaggedClientConstructors
 } from "../../../src/plugins/hasUpdatableTags";
 import {ILead} from "../../../src/api/activeRecords/Lead";
+import {IEmbeddedTag} from "../../../src/api/activeRecords/Tag";
 jest.setTimeout(60 * 1000);
 
 let client: IClient;
@@ -48,8 +49,6 @@ describe('TagsFactory', () => {
     });
 
     test('adds embedded tag for lead', async () => {
-        const client: ITaggedClient = connect(new TaggedClient(config));
-
         const attributes = {
             name: 'Тег',
             color: 'DDEBB5'
@@ -80,8 +79,8 @@ describe('TagsFactory', () => {
         expect(length).toEqual(1);
     });
 
-    test.only('remove all tags for lead', async () => {
-        const tags = [
+    test('remove all tags for lead', async () => {
+        const tags: IEmbeddedTag[] = [
             {
                 name: 'Tag 1',
                 color: 'DDEBB5'
@@ -105,7 +104,6 @@ describe('TagsFactory', () => {
         await lead.save();
 
         let existingLead: ILead = <never>await lead.fetch();
-        console.log('id', lead.id);
         expect(existingLead.embeddedTags.length).toEqual(tags.length);
 
         existingLead.embeddedTags.remove();

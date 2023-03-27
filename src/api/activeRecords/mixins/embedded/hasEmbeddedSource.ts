@@ -5,9 +5,7 @@ import {
 import {TConstructor} from "../../../../types";
 import {IEmbeddedTag} from "../../Tag";
 import {IHasSaveEntity} from "../hasSave";
-import {IQueryAttributes} from "../../common/EmbeddedEntityList";
 import {ICriteriaItem} from "../../common/CriteriaBuilder";
-import {omit} from "lodash";
 
 
 export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
@@ -37,9 +35,10 @@ export class EmbeddedSourceCriteriaItem<T extends IResourceFactory<IRequiredEnti
     }
 
     getUpdateCriteria(): object {
-        const embedded = this.entity.getEmbedded()
         return {
-            _embedded: omit(embedded, ['source'])
+            _embedded: {
+                source: undefined
+            }
         };
     }
 
