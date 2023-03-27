@@ -11,10 +11,11 @@ export function hasUpdate<T extends IHasUpdateFactory<IResourceEntity<T>>>(Base:
     return class HasUpdate extends Base {
         async update(options?: IRequestOptions) {
             const criteria = this.criteriaBuilder.getUpdateCriteria();
-            const [lead] = await this.getFactory().update([criteria], options);
+            const [first] = await this.getFactory().update([criteria], options);
+            this.updated_at = first.updated_at;
 
             this.emit('update');
-            return lead;
+            return first;
         }
     };
 }

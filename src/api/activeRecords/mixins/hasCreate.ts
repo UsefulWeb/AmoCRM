@@ -14,6 +14,8 @@ export function hasCreate<T extends IHasCreateFactory<IResourceEntity<T>>>(Base:
             const factory = this.getFactory();
             const [first] = await factory.create([criteria], options);
 
+            this.id = first.id;
+
             this.emit('create');
             return first;
         }

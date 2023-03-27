@@ -10,10 +10,11 @@ import {ObjectKey} from "../../../interfaces/common";
 import {ICriteriaItem} from "./CriteriaBuilder";
 
 export interface IEmbeddedEntityList<E extends IEmbeddedEntity> extends ICriteriaItem {
+    length: number;
     add(criteria: object[]): void;
-    set(value: E[]): void;
+    set(value: E[]|null): void;
     get(): E[];
-    remove(value: E[]): void;
+    remove(value?: E[]): void;
 }
 
 export interface IQueryAttributes<E extends IEmbeddedEntity> {
@@ -45,12 +46,16 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
         this.set(entityCriteria);
     }
 
-    set(value: IEmbeddedEntity[]) {
+    set(value: IEmbeddedEntity[]|null) {
         const embedded = this.entity.getEmbedded();
         this.entity.setEmbedded({
             ...embedded,
             [this.embeddedType]: value
         });
+    }
+
+    get length() {
+        return this.get().length;
     }
 
     get(): E[] {
@@ -59,7 +64,10 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
         return value || [];
     }
 
-    remove(value: IEmbeddedEntity[]) {
+    remove(value?: IEmbeddedEntity[]) {
+        if (!value) {
+            return this.set(null);
+        }
         const ids = value
             .map(({ id }) => id);
 
@@ -75,18 +83,12 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
     }
 
     getEmbeddedSaveCriteria(attributes?: ObjectKey<E>[]) {
-        const embedded = this.entity.getEmbedded();
-
-        if (!attributes) {
-            return embedded;
-        }
-
-        const value = this.get()
-            .map(item => pick(item, attributes));
+        const value = this.get().map(
+            item => attributes ? pick(item, attributes) : item
+        );
 
         return {
             _embedded: {
-                ...embedded,
                 [this.embeddedType]: value
             }
         };

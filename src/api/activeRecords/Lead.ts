@@ -147,7 +147,7 @@ export const mixins = [
 export const embeddedMixins = [
     hasEmbeddedTags({
         attributes: {
-            save: ['id', 'name', 'color']
+            save: ['id', 'name']
         }
     }),
     hasEmbeddedContacts({

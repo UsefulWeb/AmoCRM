@@ -5,11 +5,11 @@ import ResourceFactory from "../ResourceFactory";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
 import { IRequestOptions } from "../../interfaces/common";
-import { IResourceFactory } from "../../interfaces/api";
+import {ICollectionResponse, IResourceFactory} from "../../interfaces/api";
 
 import { hasGetByCriteria, IGetCriteria } from "./mixins/hasGetByCriteria";
 import { hasGetById, IHasGetByIdCriteria } from "./mixins/hasGetById";
-import { hasCreate } from "./mixins/hasCreate";
+import {hasCreate, ICreateResult} from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 import { IClientRequest } from "../../common/ClientRequest";

@@ -29,17 +29,8 @@ export function hasUpdate<T extends IResourceEntity<IResourceFactory<T>>>(Base: 
             const { data } = await request.patch<ICollectionResponse<IUpdateResult>>(url, requestCriteria, options);
             const response = this.getEmbedded(data);
 
-            const result = response.map((attributes, index: number) => {
-                const entityCriteria = criteria[index];
-                const instance = entityCriteria instanceof this.getEntityClass() ?
-                    entityCriteria :
-                    this.from(entityCriteria);
-                instance.id = attributes.id;
-                instance.updated_at = attributes.updated_at;
-                return instance;
-            });
             this.emit('update');
-            return result;
+            return response.map(attributes => this.from(attributes));;
         }
     };
 }

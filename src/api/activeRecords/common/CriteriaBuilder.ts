@@ -1,4 +1,4 @@
-import {IResourceEntity, IResourceFactory} from "../../../interfaces/api";
+import {IEntityAttributes, IResourceEntity, IResourceFactory} from "../../../interfaces/api";
 
 export interface ICriteriaBuilder {
     add(item: ICriteriaItem): void;
@@ -26,20 +26,26 @@ export class CriteriaBuilder<T extends IResourceFactory<IResourceEntity<T>>>
     getCreateCriteria() {
         const attributes = this.entity.getAttributes();
         return this.items.reduce((attributes,item) => {
-            return {
-                ...attributes,
-                ...item.getCreateCriteria()
-            };
+            return this.merge(attributes, item.getCreateCriteria());
         }, attributes);
     }
 
     getUpdateCriteria() {
         const attributes = this.entity.getAttributes();
         return this.items.reduce((attributes,item) => {
-            return {
-                ...attributes,
-                ...item.getUpdateCriteria()
-            };
+            return this.merge(attributes, item.getUpdateCriteria());
         }, attributes);
+    }
+
+    protected merge(source: IEntityAttributes, criteria: IEntityAttributes) {
+        const { _embedded } = criteria;
+        return {
+            ...source,
+            ...criteria,
+            _embedded: {
+                ...source._embedded,
+                ..._embedded
+            }
+        };
     }
 }
