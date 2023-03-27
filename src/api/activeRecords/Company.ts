@@ -36,7 +36,7 @@ export interface CompanyAttributes extends IEntityAttributes {
 }
 
 export interface IEmbeddedCompany {
-    id: number;
+    id?: number;
 }
 
 export interface IHasEmbeddedCompanies {

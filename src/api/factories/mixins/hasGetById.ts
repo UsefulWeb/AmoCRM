@@ -2,6 +2,13 @@ import { TFactoryConstructor } from "../../../types";
 import { IEntityAttributes, IResourceEntity, IResourceFactory } from "../../../interfaces/api";
 import { IRequestOptions } from "../../../interfaces/common";
 
+export enum GetWith {
+    CONTACTS = 'contacts',
+    COMPANIES = 'companies',
+    CATALOG_ELEMENTS = 'catalog_elements',
+    LOSS_REASON = 'loss_reason'
+}
+
 export interface IHasGetByIdCriteria {
     with?: string[];
 }
