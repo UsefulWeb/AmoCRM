@@ -1,5 +1,5 @@
 // экземпляр Client
-const { client } = require('amocrm-js');
+const { client } = require('../client');
 
 const run = async () => {
     // постраничная навигация сделок

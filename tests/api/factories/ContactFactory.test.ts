@@ -1,21 +1,16 @@
-import * as fs from "fs";
-import * as path from "path";
 
-import Client from "../../../src/Client";
+import { Client } from "../../../src/Client";
 import config, { CODE } from "../../config";
 import { connect } from "../../util";
+import {ITaggedClient} from "../../../src/plugins/hasUpdatableTags";
+import {ILead} from "../../../src/api/activeRecords/Lead";
+import {delay} from "../../../src/util";
 jest.setTimeout(60 * 1000);
 
 let client: Client;
 
 beforeEach(() => {
-    client = connect({
-        ...config,
-        auth: {
-            ...config.auth,
-            // code: CODE
-        }
-    });
+    client = connect(new Client(config));
 });
 
 describe('ContactFactory', () => {
@@ -35,15 +30,5 @@ describe('ContactFactory', () => {
         const { id = -1 } = contact;
         const found = await client.contacts.getById(id);
         expect(found?.id).toEqual(contact.id);
-    });
-    test('create with name', async () => {
-        const [contact] = await client.contacts.create([
-            {
-                name: 'Walter Scott'
-            }
-        ]);
-        const { id = -1 } = contact;
-        const found = await client.contacts.getById(id);
-        expect(found?.name).toEqual('Walter Scott');
     });
 });

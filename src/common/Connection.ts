@@ -1,4 +1,4 @@
-import { EventEmitter } from "./EventEmitter";
+import {EventEmitter, IEventEmitter} from "./EventEmitter";
 import { IAPIResponse, IAuthOptions, IAuthServerOptions, IRequestOptions } from "../interfaces/common";
 import { IToken } from "./Token";
 import { IEnvironment } from "./Environment";
@@ -6,7 +6,7 @@ import DomainRequest from "./DomainRequest";
 import { AuthServer, IAuthServer } from "./AuthServer";
 import { IAuth } from "./Auth";
 
-export interface IConnection {
+export interface IConnection extends IEventEmitter {
     update(): Promise<boolean>;
     isTokenExpired(): boolean;
     connect(): Promise<boolean>;

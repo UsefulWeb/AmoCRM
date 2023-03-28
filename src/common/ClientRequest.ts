@@ -7,6 +7,7 @@ export interface IClientRequest {
     get<T>(url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
     post<T>(url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
     patch<T>(url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
+    delete<T>(url: string, data?: object, options?: IRequestOptions): Promise<IAPIResponse<T>>;
 }
 
 /**
@@ -30,5 +31,8 @@ export class ClientRequest extends EventEmitter implements IClientRequest {
     }
     patch<T>(url: string, data?: object, options?: IRequestOptions) {
         return this.connection.makeRequest<T>('PATCH', url, data, options);
+    }
+    delete<T>(url: string, data?: object, options?: IRequestOptions) {
+        return this.connection.makeRequest<T>('DELETE', url, data, options);
     }
 }

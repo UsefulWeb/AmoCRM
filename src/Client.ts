@@ -1,26 +1,52 @@
-import "reflect-metadata";
-import { IClientOptions } from "./interfaces/common";
-import { EventEmitter } from "./common/EventEmitter";
-import { Connection, IConnection } from './common/Connection';
-import { Environment, IEnvironment } from "./common/Environment";
-import { ClientRequest, IClientRequest } from "./common/ClientRequest";
-import { Auth, IAuth } from "./common/Auth";
-import { Token, IToken } from "./common/Token";
-import { LeadFactory, ILeadFactory } from "./api/factories/LeadFactory";
-import { ILead } from "./api/activeRecords/Lead";
-import { JSONObject } from "./types";
-import { IResourceEntity, IResourceFactory } from "./interfaces/api";
-import { IContact } from "./api/activeRecords/Contact";
-import { ContactFactory, IContactFactory } from "./api/factories/ContactFactory";
-import CompanyFactory, { ICompanyFactory } from "./api/factories/CompanyFactory";
-import { ICompany } from "./api/activeRecords/Company";
+import {IClientOptions} from "./interfaces/common";
+import {EventEmitter} from "./common/EventEmitter";
+import {Connection, IConnection} from './common/Connection';
+import {Environment, IEnvironment} from "./common/Environment";
+import {ClientRequest, IClientRequest} from "./common/ClientRequest";
+import {Auth, IAuth} from "./common/Auth";
+import {IToken, Token} from "./common/Token";
+import {ILeadFactory} from "./api/factories/LeadFactory";
+import {ILead} from "./api/activeRecords/Lead";
+import {JSONObject} from "./types";
+import {IClientConstructors, IEntityAttributes, IResourceEntity, IResourceFactory} from "./interfaces/api";
+import {IContact} from "./api/activeRecords/Contact";
+import {IContactFactory} from "./api/factories/ContactFactory";
+import {ICompanyFactory} from "./api/factories/CompanyFactory";
+import {ICompany} from "./api/activeRecords/Company";
+import {IFactoryConstructors} from "./api/factories";
+import defaultConstructors from "./common/constructors";
+import {IEntityConstructors} from "./api/activeRecords";
 
-export type IClientEntity<T> = (attributes?: JSONObject) => T;
+export type IClientEntity<T> = {
+    new (attributes?: JSONObject): T;
+};
 
+export interface IClient {
+    constructors: IClientConstructors;
+    getRequest(): IClientRequest;
+    getFactoryConstructors(): IFactoryConstructors;
+    getEntityConstructors(): IEntityConstructors;
+
+    assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IClientEntity<T>;
+
+    readonly token: IToken;
+    readonly environment: IEnvironment;
+    readonly request: IClientRequest;
+    readonly connection: IConnection;
+    readonly auth: IAuth;
+
+    Lead: IClientEntity<ILead>;
+    Contact: IClientEntity<IContact>;
+    Company: IClientEntity<ICompany>;
+
+    leads: ILeadFactory;
+    contacts: IContactFactory;
+    companies: ICompanyFactory;
+}
 /**
  * Основной класс библиотеки
  * */
-export class Client extends EventEmitter {
+export class Client extends EventEmitter implements IClient {
     public readonly token: IToken;
     public readonly environment: IEnvironment;
     public readonly request: IClientRequest;
@@ -49,15 +75,29 @@ export class Client extends EventEmitter {
             this.auth
         );
         this.request = new ClientRequest(this.connection);
+        const { factories } = this.constructors;
+        this.leads = new factories.leads(this);
+        this.contacts = new factories.contacts(this);
+        this.companies = new factories.companies(this);
 
-        this.leads = new LeadFactory(this.request);
         this.Lead = this.assignEntity(this.leads);
-
-        this.contacts = new ContactFactory(this.request);
         this.Contact = this.assignEntity(this.contacts);
-
-        this.companies = new CompanyFactory(this.request);
         this.Company = this.assignEntity(this.companies);
+    }
+    get constructors() {
+        return defaultConstructors;
+    }
+
+    getRequest() {
+        return this.request;
+    }
+
+    getFactoryConstructors() {
+        return this.constructors.factories;
+    }
+
+    getEntityConstructors() {
+        return this.constructors.entities;
     }
 
     /**
@@ -65,9 +105,9 @@ export class Client extends EventEmitter {
      * @param factory - фабрика сущностей
      * @returns функция конструктор для вызова new client[Entity]
      * */
-    protected assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IClientEntity<T> {
-        return function (attributes?:JSONObject) {
+     assignEntity<T extends IResourceEntity<IResourceFactory<T>>>(factory: IResourceFactory<T>): IClientEntity<T> {
+        return function (attributes?: IEntityAttributes): T {
             return factory.from(attributes);
-        };
+        } as never as IClientEntity<T>;
     }
 }

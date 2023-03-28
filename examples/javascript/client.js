@@ -1,4 +1,4 @@
-const { Client } = require('amocrm-js');
+const { client } = require('../client');
 const token = require('./token.js');
 
 const client = new Client({

@@ -11,7 +11,7 @@ export type IHasCreateAndUpdateFactory<T extends IResourceEntity<IResourceFactor
 export type IHasCreateAndUpdateEntity<T extends IResourceFactory<IResourceEntity<T>>> = IHasCreateEntity<T> & IHasUpdateEntity<T>;
 
 export interface IHasSaveEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T>, IHasCreateAndUpdateEntity<T> {
-    save(options?: IRequestOptions): Promise<T|false>;
+    save(options?: IRequestOptions): Promise<IHasSaveEntity<T>>;
 }
 
 export function hasSave<T extends IHasCreateAndUpdateFactory<IHasCreateAndUpdateEntity<T>>>

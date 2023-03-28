@@ -1,5 +1,5 @@
 import * as http from 'http';
-import { TStringValueObject } from "../types";
+import { TClientPlugin, TStringValueObject } from "../types";
 
 export interface ITokenOptions {
     client_id: string;
@@ -16,9 +16,9 @@ export interface IAuthOptions extends ITokenOptions {
 }
 
 export interface IClientOptions {
-    [index: string]: string | object;
     domain: string;
     auth: IAuthOptions;
+    plugins?: TClientPlugin[];
 }
 
 export interface ITokenData {
@@ -71,3 +71,5 @@ export interface IAPIResponseErrorValue {
 export interface IResponseParser<T> {
     parse<R>(result: IAPIResponse<T>): IAPIResponse<R>;
 }
+
+export type ObjectKey<T> = keyof T;

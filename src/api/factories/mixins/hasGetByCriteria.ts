@@ -1,6 +1,6 @@
 import { IRequestOptions } from "../../../interfaces/common";
-import { IResourceEntity, IResourceFactory, IResourcePagination } from "../../../interfaces/api";
-import ResourcePagination from "../../ResourcePagination";
+import { IResourceEntity, IResourceFactory } from "../../../interfaces/api";
+import ResourcePagination, {IResourcePagination} from "../../ResourcePagination";
 import { TFactoryConstructor } from "../../../types";
 
 export interface IGetCriteria {
@@ -8,16 +8,15 @@ export interface IGetCriteria {
     page?: number;
     limit?: number;
     query?: string | number;
-    filter?: string;
     order?: string;
 }
 
-export interface IHasGetWithCriteria<T> {
+export interface IHasGetFactory<T> {
     get(criteria?: IGetCriteria, options?: IRequestOptions): Promise<IResourcePagination<T>>;
 }
 
 export function hasGetByCriteria<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
-    return class HasGetWithCriteria extends Base implements IHasGetWithCriteria<T>, IResourceFactory<T> {
+    return class HasGetWithCriteria extends Base implements IHasGetFactory<T>, IResourceFactory<T> {
         async get(criteria?: IGetCriteria, options?: IRequestOptions) {
             const url = this.getUrl();
 
