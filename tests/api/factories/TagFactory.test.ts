@@ -26,7 +26,7 @@ describe('TagsFactory', () => {
             color: 'DDEBB5'
         };
 
-        const [tag] = await client.leads.tagList.add([
+        const [tag] = await client.leads.tagList.create([
             attributes
         ]);
 
@@ -39,7 +39,7 @@ describe('TagsFactory', () => {
             color: 'DDEBB5'
         };
 
-        await client.leads.tagList.add([
+        await client.leads.tagList.create([
             attributes
         ]);
 

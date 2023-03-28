@@ -10,6 +10,9 @@ export interface IResourcePagination<T> {
     fetch(): void;
     getData(): T[];
     getPage(): number;
+    hasPrev(): boolean;
+    hasNext(): boolean;
+    hasFirst(): boolean;
     next(): Promise<boolean|T[]>;
     prev(): Promise<boolean|T[]>;
     [Symbol.iterator](): Iterator<T>;

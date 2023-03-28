@@ -1,5 +1,5 @@
 // экземпляр Client
-const { client } = require('amocrm-js');
+const { client } = require('../client');
 const run = async () => {
     /*
       базовые методы работы с объектом Company описаны в интерфейсе ICompany
