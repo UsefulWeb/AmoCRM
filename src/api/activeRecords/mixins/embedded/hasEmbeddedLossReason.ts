@@ -1,11 +1,13 @@
 import {
-    IResourceEntity, IResourceEntityWithEmbedded,
+    IEmbedded,
+    IResourceEntity,
     IResourceFactory
 } from "../../../../interfaces/api";
 import {TConstructor} from "../../../../types";
-import {IHasSaveEntity} from "../hasSave";
+import {IHasCreateAndUpdateEntity, IHasSave, IHasSaveEntity} from "../hasSave";
 import {EmbeddedEntityList, IEmbeddedEntityList, IQueryAttributes} from "../../common/EmbeddedEntityList";
 import {IEmbeddedLossReason} from "../../LossReason";
+import {IHasEmbedded} from "../hasEmbedded";
 
 export interface IHasEmbeddedLossReasonsEntity
 <T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
@@ -16,9 +18,10 @@ export interface IHasEmbeddedLossReasonsOptions {
     attributes?: IQueryAttributes<IEmbeddedLossReason>;
 }
 
-export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
-    IHasSaveEntity<T> &
-    IResourceEntityWithEmbedded<T, IEmbeddedLossReason>;
+export type IRequiredEntity<T extends IResourceFactory<IHasCreateAndUpdateEntity<T>>> =
+    IResourceEntity<T> &
+    IHasSave<T> &
+    IHasEmbedded<IEmbedded<IEmbeddedLossReason>>;
 
 export function hasEmbeddedLossReasons(options: IHasEmbeddedLossReasonsOptions = {}) {
     return function hasEmbeddedLossReasonsConstructor

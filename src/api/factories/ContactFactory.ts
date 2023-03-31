@@ -13,7 +13,7 @@ import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import {IHasTagsFactory} from "./mixins/hasTags";
 
 export interface ContactsGetCriteria extends IGetCriteria {
-    filter?: string;
+    filter?: object;
 }
 
 export interface ContactsCreateCriteria {

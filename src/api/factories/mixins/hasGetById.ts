@@ -13,9 +13,11 @@ export interface IHasGetByIdCriteria {
     with?: string[];
 }
 
-export interface IHasGetByIdFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
+export interface IHasGetById<T extends IResourceEntity<IResourceFactory<T>>> {
     getById(identity: number, criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<T|null>;
 }
+
+export type IHasGetByIdFactory<T extends IResourceEntity<IResourceFactory<T>>> = IResourceFactory<T> & IHasGetById<T>;
 
 export const getRequestCriteria = (criteria?: IHasGetByIdCriteria) => {
     if (!criteria) {

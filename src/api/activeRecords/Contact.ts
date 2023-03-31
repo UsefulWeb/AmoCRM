@@ -6,10 +6,10 @@ import { IContactFactory } from "../factories/ContactFactory";
 import { JSONObject, TConstructor } from "../../types";
 import {IEmbeddedEntity, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { applyMixins } from "../../util";
-import {hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
-import {hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
-import {hasSave, IHasSaveEntity} from "./mixins/hasSave";
-import {hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
+import {hasCreate} from "./mixins/hasCreate";
+import {hasUpdate} from "./mixins/hasUpdate";
+import {hasSave, IHasSave, IHasSaveEntity} from "./mixins/hasSave";
+import {hasFetch, IHasFetch} from "./mixins/hasFetch";
 import {IHasEmbeddedTags} from "./Tag";
 import {IHasEmbeddedCompanies} from "./Company";
 import {IHasEmbeddedCatalogElements} from "./CatalogElement";
@@ -21,6 +21,7 @@ import {
     IHasEmbeddedCatalogElementsEntity
 } from "./mixins/embedded/hasEmbeddedCatalogElements";
 import {hasEmbeddedCustomers, IHasEmbeddedCustomersEntity} from "./mixins/embedded/hasEmbeddedCustomers";
+import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
 
 export interface ContactAttributes extends IEntityAttributes {
     id?: number;
@@ -62,8 +63,9 @@ export type IContactHasEmbedded = IHasEmbeddedTagsEntity<IContactFactory> &
 
 export type IContact = IResourceEntity<IContactFactory> &
     ContactAttributes &
-    IHasSaveEntity<IContactFactory> &
-    IHasFetchEntity<IContactFactory> &
+    IHasEmbedded<IContactEmbedded> &
+    IHasSave<IContactFactory> &
+    IHasFetch<IContactFactory> &
     IContactHasEmbedded;
 
 export class BaseContact extends ResourceEntity<IContactFactory> {
@@ -122,6 +124,7 @@ export const mixins = [
     hasUpdate,
     hasSave,
     hasFetch,
+    hasEmbedded,
 ];
 
 export const embeddedMixins = [

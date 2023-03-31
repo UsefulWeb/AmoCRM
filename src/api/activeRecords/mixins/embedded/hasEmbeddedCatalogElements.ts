@@ -1,11 +1,13 @@
 import {
-    IResourceEntity, IResourceEntityWithEmbedded,
+    IEmbedded,
+    IResourceEntity,
     IResourceFactory
 } from "../../../../interfaces/api";
 import { TConstructor } from "../../../../types";
 import { IEmbeddedCatalogElement, IHasEmbeddedCatalogElements } from "../../CatalogElement";
-import {IHasSaveEntity} from "../hasSave";
+import {IHasCreateAndUpdateEntity, IHasSave, IHasSaveEntity} from "../hasSave";
 import {EmbeddedEntityList, IEmbeddedEntityList, IQueryAttributes} from "../../common/EmbeddedEntityList";
+import {IHasEmbedded} from "../hasEmbedded";
 
 export interface IHasEmbeddedCatalogElementsEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
     embeddedCatalogElements: IEmbeddedEntityList<IEmbeddedCatalogElement>;
@@ -15,16 +17,16 @@ export interface IHasEmbeddedCatalogElementsOptions {
     attributes?: IQueryAttributes<IEmbeddedCatalogElement>;
 }
 
-export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
-    IHasSaveEntity<T> &
-    IResourceEntityWithEmbedded<T, IEmbeddedCatalogElement>;
+export type IRequiredEntity<T extends IResourceFactory<IHasCreateAndUpdateEntity<T>>> =
+    IResourceEntity<T> &
+    IHasSave<T> &
+    IHasEmbedded<IEmbedded<IEmbeddedCatalogElement>>;
 
 export function hasEmbeddedCatalogElements(options: IHasEmbeddedCatalogElementsOptions = {}) {
     return function hasEmbeddedCatalogElementsConstructor
         <T extends IResourceFactory<IRequiredEntity<T>>>
     (Base: TConstructor<IRequiredEntity<T>>): TConstructor<IResourceEntity<T>> {
         return class HasEmbeddedElements extends Base {
-            _embedded?: IHasEmbeddedCatalogElements;
             embeddedCatalogElements: IEmbeddedEntityList<IEmbeddedCatalogElement>;
 
             constructor(factory: T) {

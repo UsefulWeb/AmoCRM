@@ -17,7 +17,7 @@ import { applyMixins } from "../../util";
 import {hasTags, IHasTagsFactory} from "./mixins/hasTags";
 
 export interface LeadsGetCriteria extends IGetCriteria {
-    filter?: string;
+    filter?: object;
 }
 
 export interface LeadsCreateCriteria {
@@ -42,11 +42,11 @@ export interface LeadsUpdateCriteria extends LeadsCreateCriteria {
 }
 
 export type ILeadFactory =
+    IResourceFactory<ILead> &
     IHasGetFactory<ILead> &
     IHasGetByIdFactory<ILead> &
     IHasCreateFactory<ILead> &
     IHasUpdateFactory<ILead> &
-    IResourceFactory<ILead> &
     IHasTagsFactory<ILead>;
 
 /**
@@ -74,10 +74,12 @@ export class BaseLeadFactory extends ResourceFactory<ILead> {
     }
 }
 
-export const LeadFactory = applyMixins(BaseLeadFactory, [
+export const mixins = [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
     hasUpdate,
     hasTags
-]);
+];
+
+export const LeadFactory = applyMixins(BaseLeadFactory, mixins);

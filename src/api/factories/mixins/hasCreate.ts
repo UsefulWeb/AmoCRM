@@ -11,12 +11,15 @@ export interface ICreateResult {
     request_id: string;
 }
 
-export interface IHasCreateFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IResourceFactory<T> {
+export interface IHasCreate<T extends IResourceEntity<IResourceFactory<T>>> {
     create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions): Promise<T[]>;
 }
 
+export type IHasCreateFactory<T extends IResourceEntity<IResourceFactory<T>>> = IResourceFactory<T> & IHasCreate<T>;
+
+
 export function hasCreate<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
-    return class CanCreate extends Base {
+    return class CanCreate extends Base implements IHasCreateFactory<T> {
         async create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions) {
             const url = this.getUrl();
             const requestCriteria = this.getEntityCriteria(criteria);

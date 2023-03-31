@@ -511,6 +511,7 @@ await client.connection.connect();
 - Сделки [[примеры работы]](./examples/javascript/01-leads)
 - Контакты [[примеры работы]](./examples/javascript/02-contacts)
 - Компании [[примеры работы]](./examples/javascript/03-companies)
+- Теги [[примеры работы]](./examples/javascript/04-tags)
 
 ## Доска почёта
 

@@ -1,6 +1,6 @@
 {
   "name": "amocrm-js",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "JS Library for AmoCRM",
   "main": "./dist/Client.js",
   "directories": {
@@ -58,7 +58,6 @@
     "typedoc-plugin-rename-defaults": "^0.5.1"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "qs": "^6.10.3",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4"

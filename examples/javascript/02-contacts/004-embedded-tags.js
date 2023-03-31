@@ -6,7 +6,7 @@ const run = async () => {
         После добавления, теги возможно выбирать
         при создании/редактировании контактов
     */
-    const [tag] = await client.contacts.tagList.create([
+    const [tag] = await client.contacts.tags.create([
         {
             name: 'Singer',
             color: 'DDEBB5'
@@ -18,7 +18,7 @@ const run = async () => {
     ]);
 
     // Теги можно найти с помощью метода get
-    const [tag2] = await client.contacts.tagList.get({
+    const [tag2] = await client.contacts.tags.get({
         // ищем ранее созданный тег
         query: 'Musician',
         limit: 1

@@ -7,8 +7,8 @@ import { IRequestOptions } from "../../interfaces/common";
 import { ICompanyFactory } from "../factories/CompanyFactory";
 import {IEmbedded, IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { applyMixins } from "../../util";
-import {hasSave, IHasSaveEntity} from "./mixins/hasSave";
-import {hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
+import {hasSave, IHasSave, IHasSaveEntity} from "./mixins/hasSave";
+import {hasFetch, IHasFetch} from "./mixins/hasFetch";
 import {hasCreate, IHasCreateEntity} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateEntity} from "./mixins/hasUpdate";
 import {hasEmbeddedTags, IHasEmbeddedTagsEntity} from "./mixins/embedded/hasEmbeddedTags";
@@ -18,6 +18,7 @@ import {
     IHasEmbeddedCatalogElementsEntity
 } from "./mixins/embedded/hasEmbeddedCatalogElements";
 import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
+import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
 
 export interface CompanyAttributes extends IEntityAttributes {
     id?: number;
@@ -32,7 +33,7 @@ export interface CompanyAttributes extends IEntityAttributes {
     closed_task_at?: number;
     custom_fields_values?: JSONObject[] | null;
     account_id?: number;
-    _embedded?: ICompanyHasEmbedded;
+    _embedded?: ICompanyEmbedded;
 }
 
 export interface IEmbeddedCompany {
@@ -43,18 +44,17 @@ export interface IHasEmbeddedCompanies {
     companies?: IEmbeddedCompany[];
 }
 
-export type ICompanyHasEmbedded = IHasEmbeddedTagsEntity<ICompanyFactory> &
+export type ICompanyEmbedded = IHasEmbeddedTagsEntity<ICompanyFactory> &
     IHasEmbeddedContactsEntity<ICompanyFactory> &
     IHasEmbeddedCustomersEntity<ICompanyFactory> &
     IHasEmbeddedCatalogElementsEntity<ICompanyFactory>;
 
 export type ICompany = IResourceEntity<ICompanyFactory> &
     CompanyAttributes &
-    IHasCreateEntity<ICompanyFactory> &
-    IHasUpdateEntity<ICompanyFactory> &
-    IHasSaveEntity<ICompanyFactory> &
-    IHasFetchEntity<ICompanyFactory> &
-    ICompanyHasEmbedded;
+    IHasEmbedded<ICompanyEmbedded> &
+    IHasSave<ICompanyFactory> &
+    IHasFetch<ICompanyFactory> &
+    ICompanyEmbedded;
 
 /**
  * Сделка
@@ -78,7 +78,7 @@ export class BaseCompany extends ResourceEntity<ICompanyFactory> {
     score?: number | null;
     account_id?: number;
     is_price_modified_by_robot?: boolean;
-    _embedded?: ICompanyHasEmbedded;
+    _embedded?: ICompanyEmbedded;
 
     getAttributes(): CompanyAttributes {
         return {
@@ -116,6 +116,7 @@ export const mixins = [
     hasUpdate,
     hasSave,
     hasFetch,
+    hasEmbedded
 ];
 
 export const embeddedMixins = [

@@ -73,3 +73,5 @@ export interface IResponseParser<T> {
 }
 
 export type ObjectKey<T> = keyof T;
+
+export type ObjectValues<T> = T[keyof T];

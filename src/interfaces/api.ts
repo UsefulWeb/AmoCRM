@@ -35,12 +35,6 @@ export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>>
     setAttributes(attributes?: IEntityAttributes): void;
 }
 
-export interface IResourceEntityWithEmbedded
-<T extends IResourceFactory<IResourceEntity<T>>, E extends IEmbeddedEntity> extends IResourceEntity<T> {
-    getEmbedded(): IEmbedded<E>;
-    setEmbedded(patch: object): void;
-}
-
 export interface ISelfResponse {
     id: number;
     updated_at: number;
@@ -71,6 +65,11 @@ export interface IResourcePaginationParams<T extends IResourceEntity<IResourceFa
     factory: IResourceFactory<T>;
     embedded: string;
     options?: IRequestOptions;
+}
+
+export interface ITimestampRangeCriteria {
+    from?: number;
+    to?: number;
 }
 
 export interface ILinkResponse {

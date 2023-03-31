@@ -5,3 +5,8 @@
 3. [Методы работы с отдельной контактов](./003-contact-entity.js)
 4. [Прикреплённые теги](./004-embedded-tags.js)
 5. [Прикреплённые компании](./005-embedded-companies.js)
+
+## Прикреплённые контакты
+
+1. [Сделки](../01-leads/005-embedded-contacts.js)
+2. [Компании](../03-companies/005-embedded-contacts.js)

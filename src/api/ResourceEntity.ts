@@ -35,18 +35,6 @@ export default abstract class ResourceEntity
         return this.id === undefined;
     }
 
-    getEmbedded() {
-        return this._embedded || {};
-    }
-
-    setEmbedded(patch: object) {
-        const embedded = this.getEmbedded();
-
-        this._embedded = {
-            ...embedded,
-            ...patch
-        };
-    }
     /**
      * Возвращает все атрибуты сущности, которые должны синхронизироваться с порталом AmoCRM
      * */
