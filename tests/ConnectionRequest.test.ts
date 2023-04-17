@@ -19,7 +19,7 @@ describe('ConnectionRequest', () => {
         expect(account.data).toBeDefined();
     });
 
-    test.only('get account info with query string with token',async () => {
+    test('get account info with query string with token',async () => {
         const client = new Client({
             ...config,
             auth: {

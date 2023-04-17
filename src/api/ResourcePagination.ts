@@ -138,7 +138,14 @@ export default class ResourcePagination<T extends IResourceEntity<IResourceFacto
      * */
     protected parseData(response?: IPaginatedResponse) {
         const { embedded, factory } = this.params;
-        const data: IEntityAttributes[] | undefined = <IEntityAttributes[] | undefined>response?._embedded[embedded] || [];
+        if (!response) {
+            return [];
+        }
+        const { _embedded } = response;
+        if (!_embedded) {
+            return [];
+        }
+        const data: IEntityAttributes[] | undefined = <IEntityAttributes[] | undefined>_embedded[embedded] || [];
         if (!Array.isArray(data)) {
             return;
         }

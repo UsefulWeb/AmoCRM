@@ -39,4 +39,14 @@ describe('LeadFactory', () => {
         const found = await client.leads.getById(id);
         expect(found?.id).toEqual(lead.id);
     });
+
+    test.only('find non existing lead', async () => {
+        const [lead] = await client.leads.create([
+            {}
+        ]);
+        const [found] = await client.leads.get({
+            query: Math.random().toString(36).slice(2)
+        });
+        expect(found).not.toBeDefined();
+    });
 });

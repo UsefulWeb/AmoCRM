@@ -102,7 +102,7 @@ describe('Token', () => {
         expect(currentToken?.access_token).toBe(token?.access_token);
     });
 
-    test.only('storing', async () => {
+    test('storing', async () => {
         const client = new Client({
             ...config,
             auth: {
