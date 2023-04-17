@@ -6,7 +6,7 @@ import {
 import {TConstructor} from "../../../../types";
 import {IEmbeddedTag} from "../../Tag";
 import {IHasCreateAndUpdateEntity, IHasSave, IHasSaveEntity} from "../hasSave";
-import {ICriteriaItem} from "../../common/CriteriaBuilder";
+import {IEntityCriteriaItem} from "../../common/EntityCriteriaBuilder";
 import {IHasEmbedded} from "../hasEmbedded";
 
 
@@ -28,7 +28,7 @@ export function hasEmbeddedSource
 }
 
 export class EmbeddedSourceCriteriaItem<T extends IResourceFactory<IRequiredEntity<T>>>
-    implements ICriteriaItem {
+    implements IEntityCriteriaItem {
     protected entity: IRequiredEntity<T>;
     constructor(entity: IRequiredEntity<T>) {
         this.entity = entity;

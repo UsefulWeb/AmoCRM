@@ -5,7 +5,8 @@ import { IEventEmitter } from "../common/EventEmitter";
 import { IClient } from "../Client";
 import { IEntityConstructors } from "../api/activeRecords";
 import { IFactoryConstructors } from "../api/factories";
-import {ICriteriaBuilder} from "../api/activeRecords/common/CriteriaBuilder";
+import {IEntityCriteriaBuilder} from "../api/activeRecords/common/EntityCriteriaBuilder";
+import {IFactoryCriteriaBuilder} from "../api/factories/common/FactoryCriteriaBuilder";
 
 export interface IClientConstructors {
     entities: IEntityConstructors;
@@ -13,6 +14,7 @@ export interface IClientConstructors {
 }
 
 export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IEventEmitter {
+    criteriaBuilder: IFactoryCriteriaBuilder;
     getClient(): IClient;
     getEntityClass(): TConstructor<T>;
     createEntity(): T;
@@ -28,7 +30,7 @@ export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>
 export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
     id?: number;
     updated_at?: number;
-    criteriaBuilder: ICriteriaBuilder;
+    criteriaBuilder: IEntityCriteriaBuilder;
     isNew(): boolean;
     getFactory(): T;
     getAttributes(): IEntityAttributes;

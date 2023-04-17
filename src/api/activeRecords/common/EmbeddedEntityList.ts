@@ -5,10 +5,10 @@ import {
     IResourceFactory
 } from "../../../interfaces/api";
 import {ObjectKey} from "../../../interfaces/common";
-import {ICriteriaItem} from "./CriteriaBuilder";
+import {IEntityCriteriaItem} from "./EntityCriteriaBuilder";
 import {IHasEmbeddedEntity} from "../mixins/hasEmbedded";
 
-export interface IEmbeddedEntityList<E extends IEmbeddedEntity> extends ICriteriaItem {
+export interface IEmbeddedEntityList<E extends IEmbeddedEntity> extends IEntityCriteriaItem {
     length: number;
     add(criteria: E[]): void;
     set(value: E[]|null): void;
@@ -114,12 +114,12 @@ export class EmbeddedEntityList<T extends IResourceFactory<IHasTypedEmbeddedEnti
         }, target);
     }
 
-    getCreateCriteria() {
+    get createCriteria() {
         const attributes = this.attributes?.create || this.attributes?.save;
         return this.getEmbeddedSaveCriteria(attributes);
     }
 
-    getUpdateCriteria() {
+    get updateCriteria() {
         const attributes = this.attributes?.update || this.attributes?.save;
         return this.getEmbeddedSaveCriteria(attributes);
     }
