@@ -75,7 +75,7 @@ export class AuthServer extends EventEmitter {
             response.end('NO_URL');
             return;
         }
-        const urlParams = url.substring(2);
+        const urlParams = url.substring(url.indexOf("?"));
         const searchParams = new URLSearchParams(urlParams);
         const queryString: TStringValueObject = Object.fromEntries(searchParams);
         const currentState = this.options.state;
