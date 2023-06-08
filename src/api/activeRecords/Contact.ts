@@ -22,6 +22,7 @@ import {
 } from "./mixins/embedded/hasEmbeddedCatalogElements";
 import {hasEmbeddedCustomers, IHasEmbeddedCustomersEntity} from "./mixins/embedded/hasEmbeddedCustomers";
 import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
+import {hasTasks, IHasTasks} from "./mixins/hasTasks";
 
 export interface ContactAttributes extends IEntityAttributes {
     id?: number;
@@ -66,6 +67,7 @@ export type IContact = IResourceEntity<IContactFactory> &
     IHasEmbedded<IContactEmbedded> &
     IHasSave<IContactFactory> &
     IHasFetch<IContactFactory> &
+    IHasTasks<IContactFactory> &
     IContactHasEmbedded;
 
 export class BaseContact extends ResourceEntity<IContactFactory> {
@@ -125,6 +127,7 @@ export const mixins = [
     hasSave,
     hasFetch,
     hasEmbedded,
+    hasTasks,
 ];
 
 export const embeddedMixins = [

@@ -7,9 +7,13 @@ import ResourceEntity from "../ResourceEntity";
 import { applyMixins } from "../../util";
 import { hasCreate } from "./mixins/hasCreate";
 import { hasUpdate } from "./mixins/hasUpdate";
-import { hasSave } from "./mixins/hasSave";
-import { hasFetch } from "./mixins/hasFetch";
+import {hasSave, IHasSave} from "./mixins/hasSave";
+import {hasFetch, IHasFetch} from "./mixins/hasFetch";
 import {IHasEmbeddedTags} from "./Tag";
+import {hasTasks, IHasTasks} from "./mixins/hasTasks";
+import {IContactFactory} from "../factories/ContactFactory";
+import {IHasEmbedded} from "./mixins/hasEmbedded";
+import {ContactAttributes, IContactEmbedded, IContactHasEmbedded} from "./Contact";
 
 export interface CustomerAttributes extends IEntityAttributes {
     name?: string;
@@ -35,12 +39,12 @@ export interface IHasEmbeddedCustomers {
     customers?: IEmbeddedCustomer[];
 }
 
-export interface ICustomer extends IResourceEntity<ICustomerFactory>, CustomerAttributes {
-    create(options?: IRequestOptions): Promise<ICustomer>;
-    update(options?: IRequestOptions): Promise<ICustomer>;
-    save(options?: IRequestOptions): Promise<ICustomer>;
-    fetch(criteria?: IHasGetByIdCriteria, options?: IRequestOptions): Promise<ICustomer>;
-}
+export type ICustomer = IResourceEntity<ICustomerFactory> &
+    CustomerAttributes &
+    IHasEmbedded<ICustomerEmbedded> &
+    IHasSave<ICustomerFactory> &
+    IHasFetch<ICustomerFactory> &
+    IHasTasks<ICustomerFactory>;
 
 export class BaseCustomer extends ResourceEntity<ICustomerFactory> {
     name?: string;
@@ -89,5 +93,6 @@ export const Customer: TConstructor<ICustomer> = applyMixins(BaseCustomer, [
     hasCreate,
     hasUpdate,
     hasSave,
-    hasFetch
+    hasFetch,
+    hasTasks
 ]);

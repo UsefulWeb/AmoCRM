@@ -20,7 +20,7 @@ export type IHasGetFactory<T extends IResourceEntity<IResourceFactory<T>>> = IRe
 
 export function hasGetByCriteria<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
     return class HasGetWithCriteria extends Base implements IHasGetByCriteria<T>, IResourceFactory<T> {
-        async get(criteria?: IGetCriteria, options?: IRequestOptions) {
+        async get(criteria: IGetCriteria = {}, options?: IRequestOptions) {
             const url = this.getUrl();
             const requestCriteria = this.criteriaBuilder.getCriteria(CriteriaBuilderType.GET, criteria);
             const params = {

@@ -34,7 +34,7 @@ export const getRequestCriteria = (criteria?: IHasGetByIdCriteria) => {
 };
 
 export class GetByIdFactoryCriteriaItem implements IFactoryCriteriaItem {
-    fetchCriteria(criteria: IHasGetByIdCriteria) {
+    fetchCriteria(criteria: IHasGetByIdCriteria = {}) {
         if (!criteria.with) {
             return {};
         }

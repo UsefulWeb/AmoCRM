@@ -19,6 +19,7 @@ import {
 } from "./mixins/embedded/hasEmbeddedCatalogElements";
 import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
 import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
+import {hasTasks, IHasTasks} from "./mixins/hasTasks";
 
 export interface CompanyAttributes extends IEntityAttributes {
     id?: number;
@@ -54,7 +55,8 @@ export type ICompany = IResourceEntity<ICompanyFactory> &
     IHasEmbedded<ICompanyEmbedded> &
     IHasSave<ICompanyFactory> &
     IHasFetch<ICompanyFactory> &
-    ICompanyEmbedded;
+    ICompanyEmbedded &
+    IHasTasks<ICompanyFactory>;
 
 /**
  * Сделка
@@ -116,7 +118,8 @@ export const mixins = [
     hasUpdate,
     hasSave,
     hasFetch,
-    hasEmbedded
+    hasEmbedded,
+    hasTasks
 ];
 
 export const embeddedMixins = [

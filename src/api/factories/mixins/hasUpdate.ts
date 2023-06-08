@@ -5,6 +5,7 @@ import {
     IResourceFactory
 } from "../../../interfaces/api";
 import { IRequestOptions } from "../../../interfaces/common";
+import {CriteriaBuilderType} from "../common/FactoryCriteriaBuilder";
 
 export interface IUpdateResult {
     id: number;
@@ -26,7 +27,9 @@ export function hasUpdate<T extends IResourceEntity<IResourceFactory<T>>>(Base: 
     return class HasUpdate extends Base implements IResourceFactory<T>, IHasUpdate<T> {
         async update(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]> {
             const url = this.getUrl();
-            const requestCriteria = this.getEntityCriteria(criteria);
+            const entityCriteria = this.getEntityCriteria(criteria);
+            const requestCriteria = this.criteriaBuilder.getCriteria(CriteriaBuilderType.UPDATE, entityCriteria);
+
             const request = this.getRequest();
             const { data } = await request.patch<ICollectionResponse<IUpdateResult>>(url, requestCriteria, options);
             const response = this.getEmbedded(data);

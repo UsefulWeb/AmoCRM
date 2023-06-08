@@ -18,10 +18,10 @@ export function hasFetch<T extends IHasGetByIdFactory<IResourceEntity<T>>>(Base:
             }
             const id = <number>this.id;
             const factory = this.getFactory();
-            const lead = await factory.getById(id, criteria, options);
+            const instance = await factory.getById(id, criteria, options);
 
             this.emit('fetch');
-            return lead;
+            return instance;
         }
     };
 }

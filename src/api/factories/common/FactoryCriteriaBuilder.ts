@@ -6,6 +6,7 @@ export type IFactoryCriteria<A extends IEntityAttributes> = ((object | A)[]) | o
 
 export interface IFactoryCriteriaBuilder {
     add(item: IFactoryCriteriaItem): void;
+    remove(item: IFactoryCriteriaItem): void;
     getCriteria(type: CriteriaBuilderType, defaults?: object): object;
 }
 
@@ -36,11 +37,15 @@ export class FactoryCriteriaBuilder<T extends IResourceEntity<IResourceFactory<T
         this.items = [];
     }
 
-    add(item: IFactoryCriteriaItem) {
-        this.items.push(item);
+    add(criteriaItem: IFactoryCriteriaItem) {
+        this.items.push(criteriaItem);
     }
 
-    getCriteria<A extends IEntityAttributes>(type: CriteriaBuilderType, defaults: IFactoryCriteria<A> = []) {
+    remove(criteriaItem: IFactoryCriteriaItem) {
+        this.items = this.items.filter(item => criteriaItem !== item);
+    }
+
+    getCriteria<A extends IEntityAttributes>(type: CriteriaBuilderType, defaults: IFactoryCriteria<A>) {
         const method = <ObjectKey<IFactoryCriteriaItem>>(type + 'Criteria');
 
         return this.items.reduce((data,factoryCriteriaItem) => {

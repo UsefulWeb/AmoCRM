@@ -35,6 +35,12 @@ export class HasTasksFactoryCriteriaItem implements IFactoryCriteriaItem {
         this.entityType = entityType;
     }
 
+    fetchCriteria() {
+        return {
+            entity_type: this.entityType
+        };
+    }
+
     createCriteria() {
         return {
             entity_type: this.entityType

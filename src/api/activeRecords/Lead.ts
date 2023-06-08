@@ -25,6 +25,7 @@ import {IHasEmbeddedLossReasons} from "./LossReason";
 import {IHasEmbeddedSource} from "./Source";
 import {hasEmbeddedSource} from "./mixins/embedded/hasEmbeddedSource";
 import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
+import {hasTasks, IHasTasks} from "./mixins/hasTasks";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -60,7 +61,8 @@ export type ILead = IResourceEntity<ILeadFactory> &
     IHasEmbedded<ILeadEmbedded> &
     IHasSave<ILeadFactory> &
     IHasFetch<ILeadFactory> &
-    ILeadHasEmbedded;
+    ILeadHasEmbedded &
+    IHasTasks<ILeadFactory>;
 
 export type ILeadEmbedded =
     IHasEmbeddedTags &
@@ -145,6 +147,7 @@ export const mixins = [
     hasSave,
     hasFetch,
     hasEmbedded,
+    hasTasks,
 ];
 
 export const embeddedMixins = [
