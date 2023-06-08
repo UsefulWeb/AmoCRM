@@ -1,11 +1,7 @@
 import { IResourceEntity, IResourceFactory } from "../../../interfaces/api";
 import { TFactoryConstructor } from "../../../types";
-import { IRequestOptions } from "../../../interfaces/common";
-import { ITagFactory, TagCreateCriteria } from "../TagFactory";
+import { ITagFactory } from "../TagFactory";
 import { IGetCriteria } from "./hasGetByCriteria";
-import { ITag } from "../../activeRecords/Tag";
-import { IResourcePagination } from "../../ResourcePagination";
-import {FactoryTagList, IFactoryTagList} from "../entityLists/FactoryTagList";
 import {IClient} from "../../../Client";
 import {getEntityFactory} from "../common/getEntityFactory";
 

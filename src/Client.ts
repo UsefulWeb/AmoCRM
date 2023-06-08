@@ -16,6 +16,8 @@ import {ICompany} from "./api/activeRecords/Company";
 import {IFactoryConstructors} from "./api/factories";
 import defaultConstructors from "./common/constructors";
 import {IEntityConstructors} from "./api/activeRecords";
+import {ITask} from "./api/activeRecords/Task";
+import {ITaskFactory} from "./api/factories/TaskFactory";
 
 export type IClientEntity<T> = {
     new (attributes?: JSONObject): T;
@@ -38,10 +40,12 @@ export interface IClient {
     Lead: IClientEntity<ILead>;
     Contact: IClientEntity<IContact>;
     Company: IClientEntity<ICompany>;
+    Task: IClientEntity<ITask>;
 
     leads: ILeadFactory;
     contacts: IContactFactory;
     companies: ICompanyFactory;
+    tasks: ITaskFactory;
 }
 /**
  * Основной класс библиотеки
@@ -56,10 +60,12 @@ export class Client extends EventEmitter implements IClient {
     public readonly Lead: IClientEntity<ILead>;
     public readonly Contact: IClientEntity<IContact>;
     public readonly Company: IClientEntity<ICompany>;
+    public readonly Task: IClientEntity<ITask>;
 
     public readonly leads: ILeadFactory;
     public readonly contacts: IContactFactory;
     public readonly companies: ICompanyFactory;
+    public readonly tasks: ITaskFactory;
 
     constructor(options: IClientOptions) {
         super();
@@ -79,10 +85,12 @@ export class Client extends EventEmitter implements IClient {
         this.leads = new factories.leads(this);
         this.contacts = new factories.contacts(this);
         this.companies = new factories.companies(this);
+        this.tasks = new factories.tasks(this);
 
         this.Lead = this.assignEntity(this.leads);
         this.Contact = this.assignEntity(this.contacts);
         this.Company = this.assignEntity(this.companies);
+        this.Task = this.assignEntity(this.tasks);
     }
     get constructors() {
         return defaultConstructors;

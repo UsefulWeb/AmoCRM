@@ -15,6 +15,7 @@ import {hasCreate, IHasCreateFactory} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 import {hasTags, IHasTagsFactory} from "./mixins/hasTags";
+import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
 
 export interface LeadsGetCriteria extends IGetCriteria {
     filter?: object;
@@ -47,7 +48,8 @@ export type ILeadFactory =
     IHasGetByIdFactory<ILead> &
     IHasCreateFactory<ILead> &
     IHasUpdateFactory<ILead> &
-    IHasTagsFactory<ILead>;
+    IHasTagsFactory<ILead> &
+    IHasTasksFactory<ILead>;
 
 /**
  * Фабрика управления сделками
@@ -79,7 +81,8 @@ export const mixins = [
     hasGetById,
     hasCreate,
     hasUpdate,
-    hasTags
+    hasTags,
+    hasTasks
 ];
 
 export const LeadFactory = applyMixins(BaseLeadFactory, mixins);

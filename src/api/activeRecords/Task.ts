@@ -1,8 +1,13 @@
 import {IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import {ITaskFactory} from "../factories/TaskFactory";
 import ResourceEntity from "../ResourceEntity";
-import {IHasSave} from "./mixins/hasSave";
-import {IHasFetch} from "./mixins/hasFetch";
+import {hasSave, IHasSave} from "./mixins/hasSave";
+import {hasFetch, IHasFetch} from "./mixins/hasFetch";
+import {TConstructor} from "../../types";
+import {applyMixins} from "../../util";
+import {hasCreate} from "./mixins/hasCreate";
+import {hasUpdate} from "./mixins/hasUpdate";
+import {hasEmbedded} from "./mixins/hasEmbedded";
 
 export interface TaskAttributes extends IEntityAttributes {
     id?: number;
@@ -35,7 +40,7 @@ export type ITask = IResourceEntity<ITaskFactory> &
 /**
  * Сделка
  */
-export class BaseLead extends ResourceEntity<ITaskFactory> {
+export class BaseTask extends ResourceEntity<ITaskFactory> {
     id?: number;
     created_by?: number;
     updated_by?: number;
@@ -94,4 +99,13 @@ export class BaseLead extends ResourceEntity<ITaskFactory> {
     }
 }
 
-export const Task = null;
+export const mixins = [
+    hasCreate,
+    hasUpdate,
+    hasSave,
+    hasFetch,
+];
+
+export const Task: TConstructor<ITask> = applyMixins(BaseTask, [
+    ...mixins
+]);

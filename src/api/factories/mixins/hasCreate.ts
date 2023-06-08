@@ -24,6 +24,7 @@ export function hasCreate<T extends IResourceEntity<IResourceFactory<T>>>(Base: 
             const url = this.getUrl();
             const entityCriteria = this.getEntityCriteria(criteria);
             const requestCriteria = this.criteriaBuilder.getCriteria(CriteriaBuilderType.CREATE, entityCriteria);
+            console.log({ requestCriteria });
             const request = this.getRequest();
             const { data } = await request.post<ICollectionResponse<ICreateResult>>(url, requestCriteria, options);
             const response = this.getEmbedded(data);

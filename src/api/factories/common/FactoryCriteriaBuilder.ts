@@ -12,10 +12,11 @@ export interface IFactoryCriteriaBuilder {
 export type IFactoryCriteriaItemCriteria =
     (<A extends IEntityAttributes>(criteria: (object | A)[]) => (object | A)[]) |
     ((criteria: object) => object);
+
 export interface IFactoryCriteriaItem {
-    getFetchCriteria?: (criteria: object) => object;
-    getCreateCriteria?: (criteria: object) => object;
-    getUpdateCriteria?: (criteria: object) => object;
+    fetchCriteria?: (criteria: object) => object;
+    createCriteria?: (criteria: object) => object;
+    updateCriteria?: (criteria: object) => object;
     deleteCriteria?: (criteria: object) => object;
 }
 
@@ -39,13 +40,15 @@ export class FactoryCriteriaBuilder<T extends IResourceEntity<IResourceFactory<T
         this.items.push(item);
     }
 
-    protected getMethodFrom<A extends IEntityAttributes>(method: ObjectKey<IFactoryCriteriaItem>, defaults: IFactoryCriteria<A> = []) {
+    getCriteria<A extends IEntityAttributes>(type: CriteriaBuilderType, defaults: IFactoryCriteria<A> = []) {
+        const method = <ObjectKey<IFactoryCriteriaItem>>(type + 'Criteria');
+
         return this.items.reduce((data,factoryCriteriaItem) => {
             const patchHandler = factoryCriteriaItem[method];
             if (!patchHandler) {
                 return data;
             }
-            const patch = patchHandler(defaults);
+            const patch = patchHandler.call(factoryCriteriaItem, defaults);
             if (Array.isArray(data)) {
                 return data.map(
                     attributes => deepmerge(attributes, patch)
@@ -53,10 +56,5 @@ export class FactoryCriteriaBuilder<T extends IResourceEntity<IResourceFactory<T
             }
             return deepmerge(data, patch);
         }, defaults);
-    }
-
-    getCriteria<A extends IEntityAttributes>(type: CriteriaBuilderType, defaults: IFactoryCriteria<A> = []) {
-        const method = <ObjectKey<IFactoryCriteriaItem>>(type + 'Criteria');
-        return this.getMethodFrom(method, defaults);
     }
 }

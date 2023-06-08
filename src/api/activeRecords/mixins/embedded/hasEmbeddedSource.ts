@@ -33,11 +33,11 @@ export class EmbeddedSourceCriteriaItem<T extends IResourceFactory<IRequiredEnti
     constructor(entity: IRequiredEntity<T>) {
         this.entity = entity;
     }
-    getCreateCriteria(): object {
+    get createCriteria(): object {
         return {};
     }
 
-    getUpdateCriteria(): object {
+    get updateCriteria(): object {
         return {
             _embedded: {
                 source: undefined
