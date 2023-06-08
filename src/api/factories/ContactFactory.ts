@@ -11,6 +11,8 @@ import { applyMixins } from "../../util";
 import {hasCreate, IHasCreateFactory} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import {IHasTagsFactory} from "./mixins/hasTags";
+import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
+import {ILead} from "../activeRecords/Lead";
 
 export interface ContactsGetCriteria extends IGetCriteria {
     filter?: object;
@@ -50,7 +52,8 @@ export type IContactFactory = IHasGetFactory<IContact> &
     IHasCreateFactory<IContact> &
     IHasUpdateFactory<IContact> &
     IResourceFactory<IContact> &
-    IHasTagsFactory<IContact>;
+    IHasTagsFactory<IContact> &
+    IHasTasksFactory<IContact>;
 
 /**
  * Фабрика управления контактами
@@ -74,5 +77,6 @@ export const ContactFactory = applyMixins(BaseContactFactory, [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
-    hasUpdate
+    hasUpdate,
+    hasTasks
 ]);

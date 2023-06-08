@@ -1,13 +1,16 @@
 import { applyMixins } from "../../util";
-import { hasGetByCriteria, IGetCriteria } from "./mixins/hasGetByCriteria";
-import { hasGetById } from "./mixins/hasGetById";
-import { hasCreate } from "./mixins/hasCreate";
-import { hasUpdate } from "./mixins/hasUpdate";
+import {hasGetByCriteria, IGetCriteria, IHasGetFactory} from "./mixins/hasGetByCriteria";
+import {hasGetById, IHasGetByIdFactory} from "./mixins/hasGetById";
+import {hasCreate, IHasCreateFactory} from "./mixins/hasCreate";
+import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import { Customer, ICustomer } from "../activeRecords/Customer";
 import schema from "../../schema/v4";
 import ResourceFactory from "../ResourceFactory";
 import { IResourceFactory } from "../../interfaces/api";
 import { JSONObject } from "../../types";
+import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
+import {ICompany} from "../activeRecords/Company";
+import {IHasTagsFactory} from "./mixins/hasTags";
 
 export interface CustomersGetCriteria extends IGetCriteria {
     filter?: string;
@@ -43,7 +46,12 @@ export interface CustomerUpdateResult {
 }
 
 
-export type ICustomerFactory = IResourceFactory<ICustomer>
+export type ICustomerFactory = IHasGetFactory<ICustomer> &
+    IHasGetByIdFactory<ICustomer> &
+    IHasCreateFactory<ICustomer> &
+    IHasUpdateFactory<ICustomer> &
+    IResourceFactory<ICustomer> &
+    IHasTasksFactory<ICustomer>;
 
 export class BaseCustomerFactory extends ResourceFactory<ICustomer> {
     getEntityClass() {
@@ -67,5 +75,6 @@ export const CustomerFactory = applyMixins(BaseCustomerFactory, [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
-    hasUpdate
+    hasUpdate,
+    hasTasks
 ]);

@@ -55,7 +55,7 @@ export function hasTasks<T extends IResourceEntity<IResourceFactory<T>>>(Base: T
         constructor(client: IClient) {
             super(client);
 
-            this.tasks = <ITaskFactory>getEntityFactory({
+            const tasks = <ITaskFactory>getEntityFactory({
                 factory: this,
                 type: 'tasks'
             });
@@ -63,7 +63,8 @@ export function hasTasks<T extends IResourceEntity<IResourceFactory<T>>>(Base: T
             const entityType = this.getEmbeddedKey();
             const criteriaItem = new HasTasksFactoryCriteriaItem(entityType);
 
-            this.tasks.criteriaBuilder.add(criteriaItem);
+            tasks.criteriaBuilder.add(criteriaItem);
+            this.tasks = tasks;
         }
     };
 }

@@ -32,7 +32,7 @@ describe('TasksFactory', () => {
         expect(task?.text).toBe(attributes.text);
     });
 
-    test.only('create lead task', async () => {
+    test('create lead task', async () => {
         const leadAttributes: LeadAttributes = {
             name: 'Lead for Task'
         };
