@@ -8,6 +8,8 @@ import {hasGetByCriteria, IHasGetFactory} from "./mixins/hasGetByCriteria";
 import {hasGetById, IHasGetByIdFactory} from "./mixins/hasGetById";
 import {hasCreate, IHasCreateFactory} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
+import {ObjectKey} from "../../interfaces/common";
+import {IFactoryConstructors} from "./index";
 
 export type ITaskFactory = IResourceFactory<ITask> &
     IHasGetFactory<ITask> &
@@ -53,7 +55,7 @@ export class BaseTaskFactory extends ResourceFactory<ITask> {
         return schema.entities.tasks.path;
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'tasks';
     }
 }

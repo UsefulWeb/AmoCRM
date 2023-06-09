@@ -2,9 +2,11 @@ import { ICollectionResponse, IEntityAttributes, IResourceEntity, IResourceFacto
 import { IClientRequest } from "../common/ClientRequest";
 import ResourceEntity from "./ResourceEntity";
 import { EventEmitter } from "../common/EventEmitter";
-import { TConstructor } from "../types";
+import {TConstructor, TFactoryConstructor} from "../types";
 import { IClient } from "../Client";
 import {FactoryCriteriaBuilder, IFactoryCriteriaBuilder} from "./factories/common/FactoryCriteriaBuilder";
+import {ObjectKey} from "../interfaces/common";
+import {IFactoryConstructors} from "./factories";
 
 /**
  * Основной класс фабрики сущностей. Класс-фабрика служит для создания
@@ -26,7 +28,7 @@ export default abstract class ResourceFactory<T extends IResourceEntity<IResourc
     }
 
     abstract getBaseUrl(): string;
-    abstract getEmbeddedKey(): string;
+    abstract getEmbeddedKey(): ObjectKey<IFactoryConstructors>;
 
     getClient() {
         return this.client;

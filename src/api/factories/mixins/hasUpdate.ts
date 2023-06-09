@@ -29,7 +29,6 @@ export function hasUpdate<T extends IResourceEntity<IResourceFactory<T>>>(Base: 
             const url = this.getUrl();
             const entityCriteria = this.getEntityCriteria(criteria);
             const requestCriteria = this.criteriaBuilder.getCriteria(CriteriaBuilderType.UPDATE, entityCriteria);
-
             const request = this.getRequest();
             const { data } = await request.patch<ICollectionResponse<IUpdateResult>>(url, requestCriteria, options);
             const response = this.getEmbedded(data);

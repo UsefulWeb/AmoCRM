@@ -53,4 +53,35 @@ describe('TasksFactory', () => {
         expect(task).toBeDefined();
         expect(task.id).toBeDefined();
     });
+
+    test('avoid side effects', async () => {
+        const leadAttributes: LeadAttributes = {
+            name: 'Lead for Task'
+        };
+
+        const [lead] = await client.leads.create([
+            leadAttributes
+        ]);
+
+        const taskAttributes: TaskAttributes = {
+            text: 'Lead Task',
+            entity_id: lead.id,
+            complete_till: tomorrow()
+        }
+
+        const [task] = await client.leads.tasks.create([
+            taskAttributes
+        ]);
+
+        expect(task).toBeDefined();
+        expect(task.id).toBeDefined();
+
+        const [globalTask] = await client.tasks.create([{
+            text: 'Global Task',
+            complete_till: tomorrow()
+        }]);
+
+        expect(globalTask.entity_id).toBeUndefined();
+        expect(globalTask.entity_type).toBeUndefined();
+    })
 });

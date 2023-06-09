@@ -10,10 +10,6 @@ export interface IFactoryCriteriaBuilder {
     getCriteria(type: CriteriaBuilderType, defaults?: object): object;
 }
 
-export type IFactoryCriteriaItemCriteria =
-    (<A extends IEntityAttributes>(criteria: (object | A)[]) => (object | A)[]) |
-    ((criteria: object) => object);
-
 export interface IFactoryCriteriaItem {
     fetchCriteria?: (criteria: object) => object;
     createCriteria?: (criteria: object) => object;

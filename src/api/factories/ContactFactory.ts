@@ -1,6 +1,6 @@
 import ResourceFactory from "../ResourceFactory";
 import { Contact, IContact } from "../activeRecords/Contact";
-import { IRequestOptions } from "../../interfaces/common";
+import {IRequestOptions, ObjectKey} from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
 import schema from "../../schema/v4";
 import { IResourceFactory } from "../../interfaces/api";
@@ -13,6 +13,7 @@ import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import {IHasTagsFactory} from "./mixins/hasTags";
 import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
 import {ILead} from "../activeRecords/Lead";
+import {IFactoryConstructors} from "./index";
 
 export interface ContactsGetCriteria extends IGetCriteria {
     filter?: object;
@@ -68,7 +69,7 @@ export class BaseContactFactory extends ResourceFactory<IContact> {
         return schema.entities.contacts.path;
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'contacts';
     }
 }

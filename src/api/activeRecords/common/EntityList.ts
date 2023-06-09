@@ -22,9 +22,8 @@ export class EntityList<T extends IResourceEntity<IResourceFactory<T>>> implemen
     public readonly create: IHasCreateFactory<T>['create'];
 
     constructor(options: IEntityListOptions<T>) {
-
-        const factory: IEntityListRequiredFactory<T> = Object.create(options.factory);
-        factory.criteriaBuilder.add(options.criteriaItem);
+        const { criteriaItem, factory } = options;
+        factory.criteriaBuilder.add(criteriaItem);
 
         this.get = factory.get.bind(factory);
         this.create = factory.create.bind(factory);

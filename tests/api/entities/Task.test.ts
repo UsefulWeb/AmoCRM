@@ -32,7 +32,7 @@ describe('Task', () => {
         expect(task.id).toBeDefined();
     });
 
-    test.only('create lead task', async () => {
+    test('create lead task', async () => {
         const id = uniqId();
         const lead = new client.Lead({
             name: 'Test Lead ' + id
@@ -48,5 +48,26 @@ describe('Task', () => {
 
         const [task] = await lead.tasks.get();
         expect(createdTask.id).toBe(task.id);
+    });
+
+    test('check linked lead', async () => {
+        const id = uniqId();
+        const lead = new client.Lead({
+            name: 'Test Lead ' + id
+        });
+        await lead.save();
+
+        const [createdTask] = await lead.tasks.create([
+            {
+                text: 'Test instance task for Lead' + id,
+                complete_till: tomorrow()
+            }
+        ]);
+
+        const taskDetails = await createdTask.fetch() as ITask;
+
+        const linkedLead = await taskDetails.entity.get<ILead>();
+
+        expect(linkedLead?.id).toBe(lead?.id);
     });
 });

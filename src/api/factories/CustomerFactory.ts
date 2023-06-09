@@ -11,6 +11,8 @@ import { JSONObject } from "../../types";
 import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
 import {ICompany} from "../activeRecords/Company";
 import {IHasTagsFactory} from "./mixins/hasTags";
+import {ObjectKey} from "../../interfaces/common";
+import {IFactoryConstructors} from "./index";
 
 export interface CustomersGetCriteria extends IGetCriteria {
     filter?: string;
@@ -62,7 +64,7 @@ export class BaseCustomerFactory extends ResourceFactory<ICustomer> {
         return schema.entities.customers.path;
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'customers';
     }
 

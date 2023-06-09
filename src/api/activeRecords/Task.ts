@@ -8,6 +8,13 @@ import {applyMixins} from "../../util";
 import {hasCreate} from "./mixins/hasCreate";
 import {hasUpdate} from "./mixins/hasUpdate";
 import {hasEmbedded} from "./mixins/hasEmbedded";
+import {ObjectKey} from "../../interfaces/common";
+import {IFactoryConstructors} from "../factories";
+import {hasLinkedEntity, IHasLinked, IHasLinkedEntity} from "./mixins/hasLinkedEntity";
+import {ILeadFactory} from "../factories/LeadFactory";
+import {IContactFactory} from "../factories/ContactFactory";
+import {ICompanyFactory} from "../factories/CompanyFactory";
+import {ICustomerFactory} from "../factories/CustomerFactory";
 
 export interface TaskAttributes extends IEntityAttributes {
     id?: number;
@@ -18,7 +25,7 @@ export interface TaskAttributes extends IEntityAttributes {
     responsible_user_id?: number;
     group_id?: number;
     entity_id?: number;
-    entity_type?: string;
+    entity_type?: ObjectKey<IFactoryConstructors>;
     is_completed?: boolean;
     task_type_id?: number;
     text?: string;
@@ -35,7 +42,8 @@ export interface ITaskResult {
 export type ITask = IResourceEntity<ITaskFactory> &
     TaskAttributes &
     IHasSave<ITaskFactory> &
-    IHasFetch<ITaskFactory>;
+    IHasFetch<ITaskFactory> &
+    IHasLinked<ITaskFactory, ILeadFactory | IContactFactory | ICompanyFactory | ICustomerFactory>;
 
 /**
  * Сделка
@@ -49,7 +57,7 @@ export class BaseTask extends ResourceEntity<ITaskFactory> {
     responsible_user_id?: number;
     group_id?: number;
     entity_id?: number;
-    entity_type?: string;
+    entity_type?: ObjectKey<IFactoryConstructors>;
     is_completed?: boolean;
     task_type_id?: number;
     text?: string;
@@ -104,6 +112,7 @@ export const mixins = [
     hasUpdate,
     hasSave,
     hasFetch,
+    hasLinkedEntity
 ];
 
 export const Task: TConstructor<ITask> = applyMixins(BaseTask, [

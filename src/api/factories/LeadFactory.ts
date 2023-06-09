@@ -5,7 +5,7 @@ import ResourceFactory from "../ResourceFactory";
 import { Lead, ILead } from "../activeRecords/Lead";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
-import { IRequestOptions } from "../../interfaces/common";
+import {IRequestOptions, ObjectKey} from "../../interfaces/common";
 import { JSONObject } from "../../types";
 import { IResourceFactory } from "../../interfaces/api";
 
@@ -16,6 +16,7 @@ import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 import {hasTags, IHasTagsFactory} from "./mixins/hasTags";
 import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
+import {IFactoryConstructors} from "./index";
 
 export interface LeadsGetCriteria extends IGetCriteria {
     filter?: object;
@@ -64,7 +65,7 @@ export class BaseLeadFactory extends ResourceFactory<ILead> {
         return schema.entities.leads.path;
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'leads';
     }
 

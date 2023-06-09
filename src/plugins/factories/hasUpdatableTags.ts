@@ -1,16 +1,16 @@
 import { IEntityAttributes, IResourceEntity, IResourceFactory, ISelfResponse } from "../../interfaces/api";
 import { TConstructor } from "../../types";
-import { IHasTagsFactory, IFactoryTagList } from "../../api/factories/mixins/hasTags";
+import { IHasTagsFactory } from "../../api/factories/mixins/hasTags";
 import { IHasUpdateFactory } from "../../api/factories/mixins/hasUpdate";
 import { IRequestOptions } from "../../interfaces/common";
 import { ITag, TagAttributes } from "../../api/activeRecords/Tag";
-import {hasUpdatableTags as entityHasUpdatableTags, IEntityHasUpdatableTags} from "../entities/hasUpdatableTags";
+import {hasUpdatableTags as entityHasUpdatableTags } from "../entities/hasUpdatableTags";
 import {applyMixins} from "../../util";
 
 
 export type THasUpdateAndTagsFactory<T extends IResourceEntity<IHasTagsFactory<T>>> = IHasTagsFactory<T> & IHasUpdateFactory<T>;
 
-export interface IFactoryHasUpdatableTagList<T extends IResourceEntity<IHasTagsFactory<T>>> extends IFactoryTagList {
+export interface IFactoryHasUpdatableTagList<T extends IResourceEntity<IHasTagsFactory<T>>> {
     setFor(criteria: (object | T)[], tagsCriteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<T[]> ;
     clearFor(criteria: (object | T)[], options?: IRequestOptions): Promise<T[]> ;
     set(criteria: (TagAttributes | ITag)[] | null, options?: IRequestOptions): Promise<ISelfResponse>;
@@ -46,7 +46,7 @@ export function hasUpdatableTags<T extends IResourceEntity<IHasTagsFactory<T>>>(
                 return this._updatableTagList;
             }
             const tagList = {
-                ...super.tagList,
+                ...super.tags,
                 setFor: this.setTagsFor.bind(this),
                 clearFor: this.clearTagsFor.bind(this),
                 set: this.setTags.bind(this)

@@ -1,6 +1,6 @@
 import { IClientRequest } from "../common/ClientRequest";
 import { TConstructor } from "../types";
-import { IRequestOptions } from "./common";
+import {IRequestOptions, ObjectKey} from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
 import { IClient } from "../Client";
 import { IEntityConstructors } from "../api/activeRecords";
@@ -20,13 +20,14 @@ export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>
     createEntity(): T;
     from(attributes?: IEntityAttributes): T;
     getRequest(): IClientRequest;
-    getEmbeddedKey(): string;
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors>;
     getEmbedded<A extends IEntityAttributes>(data: ICollectionResponse<A>): A[];
     getUrl(path?: string): string;
     getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
     getEntityCriteria<R>(criteriaData: (object)[]): R[];
 }
 
+export type EntityAttributes<T extends IResourceEntity<IResourceFactory<T>>> = ReturnType<T['getAttributes']>;
 export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
     id?: number;
     updated_at?: number;

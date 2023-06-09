@@ -19,7 +19,7 @@ export function hasEmbedded<T extends IHasCreateFactory<IResourceEntity<T>>, E>(
             if (this._embedded) {
                 return this._embedded;
             }
-            return <E>{};
+            return {} as E;
         }
 
         setEmbedded(patch: E): void {

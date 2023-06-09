@@ -1,6 +1,6 @@
 import {IResourceEntity, IResourceFactory, ITimestampRangeCriteria} from "../../../interfaces/api";
 import { TFactoryConstructor } from "../../../types";
-import { IRequestOptions } from "../../../interfaces/common";
+import {IRequestOptions, ObjectKey} from "../../../interfaces/common";
 import {ITaskFactory, TaskCreateCriteria, TaskUpdateCriteria} from "../TaskFactory";
 import { IGetCriteria } from "./hasGetByCriteria";
 import { ITask } from "../../activeRecords/Task";
@@ -8,6 +8,7 @@ import { IResourcePagination } from "../../ResourcePagination";
 import {IClient} from "../../../Client";
 import {getEntityFactory} from "../common/getEntityFactory";
 import {IFactoryCriteriaItem} from "../common/FactoryCriteriaBuilder";
+import {IFactoryConstructors} from "../index";
 
 export interface IGetTasksCriteria extends IGetCriteria {
     filter?: {
@@ -29,9 +30,9 @@ export type IHasTasksFactory<T extends IResourceEntity<IResourceFactory<T>>> = I
 
 export class HasTasksFactoryCriteriaItem implements IFactoryCriteriaItem {
 
-    protected entityType: string;
+    protected entityType: ObjectKey<IFactoryConstructors>;
 
-    constructor(entityType: string) {
+    constructor(entityType: ObjectKey<IFactoryConstructors>) {
         this.entityType = entityType;
     }
 
