@@ -229,6 +229,7 @@ await pagination.next();
 - Контакты [[примеры работы]](./examples/javascript/02-contacts)
 - Компании [[примеры работы]](./examples/javascript/03-companies)
 - Теги [[примеры работы]](./examples/javascript/04-tags)
+- Задачи [[примеры работы]](./examples/javascript/05-tasks)
 
 <a id="requests"></a>
 ## Запросы к порталу
