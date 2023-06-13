@@ -3,6 +3,14 @@ import path from "path";
 import fs from "fs";
 import { IClientOptions } from "../src/interfaces/common";
 import {TConstructor} from "../src/types";
+import moment from "moment";
+
+export const uniqId = () => Math.random().toString(36).slice(2);
+
+export const tomorrow = () => +moment()
+    .add(1,'days')
+    .endOf('day')
+    .format('X')
 
 export function connect<T extends IClient>(client: T): T {
     const file = path.resolve(__dirname, './token.json');

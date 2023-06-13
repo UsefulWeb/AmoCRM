@@ -1,16 +1,19 @@
 import {
-    IResourceEntity, IResourceEntityWithEmbedded,
+    IEmbedded,
+    IResourceEntity,
     IResourceFactory
 } from "../../../../interfaces/api";
 import {TConstructor} from "../../../../types";
 import {IEmbeddedTag} from "../../Tag";
-import {IHasSaveEntity} from "../hasSave";
-import {ICriteriaItem} from "../../common/CriteriaBuilder";
+import {IHasCreateAndUpdateEntity, IHasSave, IHasSaveEntity} from "../hasSave";
+import {IEntityCriteriaItem} from "../../common/EntityCriteriaBuilder";
+import {IHasEmbedded} from "../hasEmbedded";
 
 
-export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
-    IHasSaveEntity<T> &
-    IResourceEntityWithEmbedded<T, IEmbeddedTag>;
+export type IRequiredEntity<T extends IResourceFactory<IHasCreateAndUpdateEntity<T>>> =
+    IResourceEntity<T> &
+    IHasSave<T> &
+    IHasEmbedded<IEmbedded<IEmbeddedTag>>;
 
 export function hasEmbeddedSource
     <T extends IResourceFactory<IRequiredEntity<T>>>
@@ -25,16 +28,16 @@ export function hasEmbeddedSource
 }
 
 export class EmbeddedSourceCriteriaItem<T extends IResourceFactory<IRequiredEntity<T>>>
-    implements ICriteriaItem {
+    implements IEntityCriteriaItem {
     protected entity: IRequiredEntity<T>;
     constructor(entity: IRequiredEntity<T>) {
         this.entity = entity;
     }
-    getCreateCriteria(): object {
+    get createCriteria(): object {
         return {};
     }
 
-    getUpdateCriteria(): object {
+    get updateCriteria(): object {
         return {
             _embedded: {
                 source: undefined

@@ -1,11 +1,13 @@
 import {
-    IResourceEntity, IResourceEntityWithEmbedded,
+    IEmbedded,
+    IResourceEntity,
     IResourceFactory
 } from "../../../../interfaces/api";
 import { TConstructor } from "../../../../types";
 import {IEmbeddedCompany } from "../../Company";
-import {IHasSaveEntity} from "../hasSave";
+import {IHasCreateAndUpdateEntity, IHasSave, IHasSaveEntity} from "../hasSave";
 import {EmbeddedEntityList, IEmbeddedEntityList, IQueryAttributes} from "../../common/EmbeddedEntityList";
+import {IHasEmbedded} from "../hasEmbedded";
 
 export interface IHasEmbeddedCompaniesEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IResourceEntity<T> {
     embeddedCompanies: IEmbeddedEntityList<IEmbeddedCompany>;
@@ -15,9 +17,10 @@ export interface IHasEmbeddedTagsCompaniesOptions {
     attributes?: IQueryAttributes<IEmbeddedCompany>;
 }
 
-export type IRequiredEntity<T extends IResourceFactory<IResourceEntity<T>>> =
-    IHasSaveEntity<T> &
-    IResourceEntityWithEmbedded<T, IEmbeddedCompany>;
+export type IRequiredEntity<T extends IResourceFactory<IHasCreateAndUpdateEntity<T>>> =
+    IResourceEntity<T> &
+    IHasSave<T> &
+    IHasEmbedded<IEmbedded<IEmbeddedCompany>>;
 
 
 export function hasEmbeddedCompanies(options: IHasEmbeddedTagsCompaniesOptions = {}) {

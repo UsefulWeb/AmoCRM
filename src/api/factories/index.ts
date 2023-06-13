@@ -4,6 +4,7 @@ import { CompanyFactory, ICompanyFactory } from "./CompanyFactory";
 import { TagFactory, ITagFactory } from "./TagFactory";
 import { CustomerFactory, ICustomerFactory } from "./CustomerFactory";
 import { TConstructor } from "../../types";
+import {ITaskFactory, TaskFactory} from "./TaskFactory";
 
 export interface IFactoryConstructors {
     leads: TConstructor<ILeadFactory>,
@@ -11,6 +12,7 @@ export interface IFactoryConstructors {
     companies: TConstructor<ICompanyFactory>,
     tags: TConstructor<ITagFactory>,
     customers: TConstructor<ICustomerFactory>,
+    tasks: TConstructor<ITaskFactory>
 }
 
 const factories: IFactoryConstructors = {
@@ -19,6 +21,7 @@ const factories: IFactoryConstructors = {
     companies: CompanyFactory,
     tags: TagFactory,
     customers: CustomerFactory,
+    tasks: TaskFactory
 };
 
 export default factories;

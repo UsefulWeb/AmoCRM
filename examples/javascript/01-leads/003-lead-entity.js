@@ -34,7 +34,7 @@ const run = async () => {
 
     // ... спустя какое-то время сделка может обновиться на сервере
     // fetch обновит параметры текущей сделки
-    await newLead2.fetch();
+    const fetchedLead = await newLead2.fetch();
 };
 
 run();

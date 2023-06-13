@@ -6,7 +6,7 @@ const run = async () => {
         После добавления, теги возможно выбирать
         при создании/редактировании сделок
     */
-    const [tag] = await client.leads.tagList.create([
+    const [tag] = await client.leads.tags.create([
         {
             name: 'Building',
             color: 'DDEBB5'
@@ -18,7 +18,7 @@ const run = async () => {
     ]);
 
     // Теги можно найти с помощью метода get
-    const [tag2] = await client.leads.tagList.get({
+    const [tag2] = await client.leads.tags.get({
         // ищем ранее созданный тег
         query: 'VIP',
         limit: 1

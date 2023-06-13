@@ -1,11 +1,12 @@
 import { IClientRequest } from "../common/ClientRequest";
 import { TConstructor } from "../types";
-import { IRequestOptions } from "./common";
+import {IRequestOptions, ObjectKey} from "./common";
 import { IEventEmitter } from "../common/EventEmitter";
 import { IClient } from "../Client";
 import { IEntityConstructors } from "../api/activeRecords";
 import { IFactoryConstructors } from "../api/factories";
-import {ICriteriaBuilder} from "../api/activeRecords/common/CriteriaBuilder";
+import {IEntityCriteriaBuilder} from "../api/activeRecords/common/EntityCriteriaBuilder";
+import {IFactoryCriteriaBuilder} from "../api/factories/common/FactoryCriteriaBuilder";
 
 export interface IClientConstructors {
     entities: IEntityConstructors;
@@ -13,32 +14,28 @@ export interface IClientConstructors {
 }
 
 export interface IResourceFactory<T extends IResourceEntity<IResourceFactory<T>>> extends IEventEmitter {
+    criteriaBuilder: IFactoryCriteriaBuilder;
     getClient(): IClient;
     getEntityClass(): TConstructor<T>;
     createEntity(): T;
     from(attributes?: IEntityAttributes): T;
     getRequest(): IClientRequest;
-    getEmbeddedKey(): string;
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors>;
     getEmbedded<A extends IEntityAttributes>(data: ICollectionResponse<A>): A[];
     getUrl(path?: string): string;
     getEntityCriteria(criteriaData: (object)[]): IEntityAttributes[];
     getEntityCriteria<R>(criteriaData: (object)[]): R[];
 }
 
+export type EntityAttributes<T extends IResourceEntity<IResourceFactory<T>>> = ReturnType<T['getAttributes']>;
 export interface IResourceEntity<T extends IResourceFactory<IResourceEntity<T>>> extends IEventEmitter {
     id?: number;
     updated_at?: number;
-    criteriaBuilder: ICriteriaBuilder;
+    criteriaBuilder: IEntityCriteriaBuilder;
     isNew(): boolean;
     getFactory(): T;
     getAttributes(): IEntityAttributes;
     setAttributes(attributes?: IEntityAttributes): void;
-}
-
-export interface IResourceEntityWithEmbedded
-<T extends IResourceFactory<IResourceEntity<T>>, E extends IEmbeddedEntity> extends IResourceEntity<T> {
-    getEmbedded(): IEmbedded<E>;
-    setEmbedded(patch: object): void;
 }
 
 export interface ISelfResponse {
@@ -71,6 +68,11 @@ export interface IResourcePaginationParams<T extends IResourceEntity<IResourceFa
     factory: IResourceFactory<T>;
     embedded: string;
     options?: IRequestOptions;
+}
+
+export interface ITimestampRangeCriteria {
+    from?: number;
+    to?: number;
 }
 
 export interface ILinkResponse {

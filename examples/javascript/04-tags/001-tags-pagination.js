@@ -7,7 +7,7 @@ const run = async () => {
         Поэтому необходимо вызывать метод get в привязке к какой-то сущности:
         client.contacts, client.leads, client.companies и т.д.
     */
-    const pagination = await client.leads.tagList.get();
+    const pagination = await client.leads.tags.get();
 
     // загрузить данные следующей страницы. Возвращает false, если данных нет
     await pagination.next();

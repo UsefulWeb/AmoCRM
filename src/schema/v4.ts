@@ -15,6 +15,9 @@ export default {
         },
         customers: {
             path: '/api/v4/customers'
+        },
+        tasks: {
+            path: '/api/v4/tasks'
         }
     }
 };

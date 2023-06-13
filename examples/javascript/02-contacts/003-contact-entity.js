@@ -34,7 +34,7 @@ const run = async () => {
 
     // ... спустя какое-то время контакт может обновиться на сервере
     // fetch обновит параметры текущей контакт
-    await newContact2.fetch();
+    const fetchedContact = await newContact2.fetch();
 };
 
 run();

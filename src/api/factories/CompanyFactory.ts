@@ -5,7 +5,7 @@ import ResourceFactory from "../ResourceFactory";
 import { Company, ICompany } from "../activeRecords/Company";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
-import { IRequestOptions } from "../../interfaces/common";
+import {IRequestOptions, ObjectKey} from "../../interfaces/common";
 import { JSONObject } from "../../types";
 import { IResourceFactory } from "../../interfaces/api";
 
@@ -15,6 +15,9 @@ import {hasCreate, IHasCreateFactory} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 import {hasTags, IHasTagsFactory} from "./mixins/hasTags";
+import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
+import {IContact} from "../activeRecords/Contact";
+import {IFactoryConstructors} from "./index";
 
 export interface CompaniesGetCriteria extends IGetCriteria {
     filter?: string;
@@ -47,7 +50,8 @@ export type ICompanyFactory =
     IHasCreateFactory<ICompany> &
     IHasUpdateFactory<ICompany> &
     IResourceFactory<ICompany> &
-    IHasTagsFactory<ICompany>;
+    IHasTagsFactory<ICompany> &
+    IHasTasksFactory<ICompany>;
 
 /**
  * Фабрика управления компаниями
@@ -62,7 +66,7 @@ export class BaseCompanyFactory extends ResourceFactory<ICompany> {
         return schema.entities.companies.path;
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'companies';
     }
 }
@@ -72,5 +76,6 @@ export const CompanyFactory = applyMixins(BaseCompanyFactory, [
     hasGetById,
     hasCreate,
     hasUpdate,
-    hasTags
+    hasTags,
+    hasTasks
 ]);

@@ -6,7 +6,7 @@ const run = async () => {
         После добавления, теги возможно выбирать
         при создании/редактировании компаний
     */
-    const [tag] = await client.companies.tagList.create([
+    const [tag] = await client.companies.tags.create([
         {
             name: 'Music shop',
             color: 'DDEBB5'
@@ -18,7 +18,7 @@ const run = async () => {
     ]);
 
     // Теги можно найти с помощью метода get
-    const [tag2] = await client.companies.tagList.get({
+    const [tag2] = await client.companies.tags.get({
         // ищем ранее созданный тег
         query: 'Guitar Shop',
         limit: 1

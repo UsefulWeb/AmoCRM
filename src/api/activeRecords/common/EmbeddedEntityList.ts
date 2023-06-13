@@ -1,21 +1,23 @@
-import { pick } from 'lodash';
 import {
     IEmbedded,
     IEmbeddedEntity,
     IResourceEntity,
-    IResourceEntityWithEmbedded,
     IResourceFactory
 } from "../../../interfaces/api";
 import {ObjectKey} from "../../../interfaces/common";
-import {ICriteriaItem} from "./CriteriaBuilder";
+import {IEntityCriteriaItem} from "./EntityCriteriaBuilder";
+import {IHasEmbeddedEntity} from "../mixins/hasEmbedded";
 
-export interface IEmbeddedEntityList<E extends IEmbeddedEntity> extends ICriteriaItem {
+export interface IEmbeddedEntityList<E extends IEmbeddedEntity> extends IEntityCriteriaItem {
     length: number;
     add(criteria: E[]): void;
     set(value: E[]|null): void;
     get(): E[];
     remove(value?: E[]): void;
 }
+
+export type IHasTypedEmbeddedEntity<T extends IResourceFactory<IResourceEntity<T>>, E> =
+    IHasEmbeddedEntity<T, IEmbedded<E>>;
 
 export interface IQueryAttributes<E extends IEmbeddedEntity> {
     save?: ObjectKey<E>[];
@@ -24,13 +26,13 @@ export interface IQueryAttributes<E extends IEmbeddedEntity> {
 }
 
 export interface IEmbeddedEntityListOptions<T extends IResourceFactory<IResourceEntity<T>>, E extends IEmbeddedEntity> {
-    entity: IResourceEntityWithEmbedded<T, E>;
+    entity: IHasTypedEmbeddedEntity<T, E>;
     embeddedType: ObjectKey<IEmbedded<E>>;
     attributes?: IQueryAttributes<E>;
 }
 
-export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEmbedded<T, E>>, E extends IEmbeddedEntity> implements IEmbeddedEntityList<E> {
-    protected entity: IResourceEntityWithEmbedded<T, E>;
+export class EmbeddedEntityList<T extends IResourceFactory<IHasTypedEmbeddedEntity<T, E>>, E extends IEmbeddedEntity> implements IEmbeddedEntityList<E> {
+    protected entity: IHasTypedEmbeddedEntity<T, E>;
     protected embeddedType: ObjectKey<IEmbedded<E>>;
     protected attributes?: IQueryAttributes<E>;
     constructor(options: IEmbeddedEntityListOptions<T, E>) {
@@ -47,11 +49,10 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
     }
 
     set(value: IEmbeddedEntity[]|null) {
-        const embedded = this.entity.getEmbedded();
-        this.entity.setEmbedded({
-            ...embedded,
+        const patch = <IEmbedded<E>>{
             [this.embeddedType]: value
-        });
+        };
+        this.entity.setEmbedded(patch);
     }
 
     get length() {
@@ -89,7 +90,7 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
         }
 
         const value = this.get().map(
-            item => attributes ? pick(item, attributes) : item
+            item => this.pickItemAttributes(item, attributes)
         );
 
         return {
@@ -99,12 +100,26 @@ export class EmbeddedEntityList<T extends IResourceFactory<IResourceEntityWithEm
         };
     }
 
-    getCreateCriteria() {
+    protected pickItemAttributes(item: E, attributes?: ObjectKey<E>[]) {
+        if (!attributes) {
+            return item;
+        }
+        type Target = {
+            [P in ObjectKey<E>]?: E[P];
+        };
+        const target: Target = {};
+        return attributes.reduce((target: Target, key) => {
+            target[key] = item[key];
+            return target;
+        }, target);
+    }
+
+    get createCriteria() {
         const attributes = this.attributes?.create || this.attributes?.save;
         return this.getEmbeddedSaveCriteria(attributes);
     }
 
-    getUpdateCriteria() {
+    get updateCriteria() {
         const attributes = this.attributes?.update || this.attributes?.save;
         return this.getEmbeddedSaveCriteria(attributes);
     }

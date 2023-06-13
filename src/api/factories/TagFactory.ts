@@ -4,7 +4,7 @@
 import ResourceFactory from "../ResourceFactory";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
-import { IRequestOptions } from "../../interfaces/common";
+import {IRequestOptions, ObjectKey} from "../../interfaces/common";
 import {ICollectionResponse, IResourceFactory} from "../../interfaces/api";
 
 import { hasGetByCriteria, IGetCriteria } from "./mixins/hasGetByCriteria";
@@ -16,6 +16,7 @@ import { IClientRequest } from "../../common/ClientRequest";
 import { ITag, Tag } from "../activeRecords/Tag";
 import { IGetTagsCriteria} from "./mixins/hasTags";
 import { IClient } from "../../Client";
+import {IFactoryConstructors} from "./index";
 
 export interface TagCreateCriteria {
     name: string;
@@ -74,7 +75,7 @@ export class BaseTagFactory extends ResourceFactory<ITag> {
         return schema.apiUrl + '/' + this.entityType + '/tags';
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'tags';
     }
 }

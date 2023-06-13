@@ -6,10 +6,10 @@ import { JSONObject, TConstructor } from "../../types";
 import { ILeadFactory } from "../factories/LeadFactory";
 import {IEntityAttributes, IResourceEntity} from "../../interfaces/api";
 import { applyMixins } from "../../util";
-import { hasSave, IHasSaveEntity} from "./mixins/hasSave";
-import { hasFetch, IHasFetchEntity} from "./mixins/hasFetch";
-import { hasCreate } from "./mixins/hasCreate";
-import { hasUpdate} from "./mixins/hasUpdate";
+import {hasSave, IHasSave} from "./mixins/hasSave";
+import {hasFetch, IHasFetch} from "./mixins/hasFetch";
+import {hasCreate} from "./mixins/hasCreate";
+import {hasUpdate} from "./mixins/hasUpdate";
 import {IHasEmbeddedTags} from "./Tag";
 import { IHasEmbeddedContacts} from "./Contact";
 import { IHasEmbeddedCompanies} from "./Company";
@@ -24,6 +24,8 @@ import {
 import {IHasEmbeddedLossReasons} from "./LossReason";
 import {IHasEmbeddedSource} from "./Source";
 import {hasEmbeddedSource} from "./mixins/embedded/hasEmbeddedSource";
+import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
+import {hasTasks, IHasTasks} from "./mixins/hasTasks";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -56,9 +58,11 @@ export type ILeadHasEmbedded = IHasEmbeddedTagsEntity<ILeadFactory> &
 
 export type ILead = IResourceEntity<ILeadFactory> &
     LeadAttributes &
-    IHasSaveEntity<ILeadFactory> &
-    IHasFetchEntity<ILeadFactory> &
-    ILeadHasEmbedded;
+    IHasEmbedded<ILeadEmbedded> &
+    IHasSave<ILeadFactory> &
+    IHasFetch<ILeadFactory> &
+    ILeadHasEmbedded &
+    IHasTasks<ILeadFactory>;
 
 export type ILeadEmbedded =
     IHasEmbeddedTags &
@@ -142,6 +146,8 @@ export const mixins = [
     hasUpdate,
     hasSave,
     hasFetch,
+    hasEmbedded,
+    hasTasks,
 ];
 
 export const embeddedMixins = [

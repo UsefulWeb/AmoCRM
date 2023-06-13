@@ -5,7 +5,7 @@ import ResourceFactory from "../ResourceFactory";
 import { Lead, ILead } from "../activeRecords/Lead";
 import schema from '../../schema/v4';
 import ResourcePagination from "../ResourcePagination";
-import { IRequestOptions } from "../../interfaces/common";
+import {IRequestOptions, ObjectKey} from "../../interfaces/common";
 import { JSONObject } from "../../types";
 import { IResourceFactory } from "../../interfaces/api";
 
@@ -15,9 +15,11 @@ import {hasCreate, IHasCreateFactory} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import { applyMixins } from "../../util";
 import {hasTags, IHasTagsFactory} from "./mixins/hasTags";
+import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
+import {IFactoryConstructors} from "./index";
 
 export interface LeadsGetCriteria extends IGetCriteria {
-    filter?: string;
+    filter?: object;
 }
 
 export interface LeadsCreateCriteria {
@@ -42,12 +44,13 @@ export interface LeadsUpdateCriteria extends LeadsCreateCriteria {
 }
 
 export type ILeadFactory =
+    IResourceFactory<ILead> &
     IHasGetFactory<ILead> &
     IHasGetByIdFactory<ILead> &
     IHasCreateFactory<ILead> &
     IHasUpdateFactory<ILead> &
-    IResourceFactory<ILead> &
-    IHasTagsFactory<ILead>;
+    IHasTagsFactory<ILead> &
+    IHasTasksFactory<ILead>;
 
 /**
  * Фабрика управления сделками
@@ -62,7 +65,7 @@ export class BaseLeadFactory extends ResourceFactory<ILead> {
         return schema.entities.leads.path;
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'leads';
     }
 
@@ -74,10 +77,13 @@ export class BaseLeadFactory extends ResourceFactory<ILead> {
     }
 }
 
-export const LeadFactory = applyMixins(BaseLeadFactory, [
+export const mixins = [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
     hasUpdate,
-    hasTags
-]);
+    hasTags,
+    hasTasks
+];
+
+export const LeadFactory = applyMixins(BaseLeadFactory, mixins);

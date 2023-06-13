@@ -26,7 +26,7 @@ describe('Tag', () => {
             color: 'DDEBB5'
         };
 
-        const [tag] = await client.leads.tagList.create([
+        const [tag] = await client.leads.tags.create([
             attributes
         ]);
 

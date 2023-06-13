@@ -1,6 +1,6 @@
 import ResourceFactory from "../ResourceFactory";
 import { Contact, IContact } from "../activeRecords/Contact";
-import { IRequestOptions } from "../../interfaces/common";
+import {IRequestOptions, ObjectKey} from "../../interfaces/common";
 import ResourcePagination from "../ResourcePagination";
 import schema from "../../schema/v4";
 import { IResourceFactory } from "../../interfaces/api";
@@ -11,9 +11,12 @@ import { applyMixins } from "../../util";
 import {hasCreate, IHasCreateFactory} from "./mixins/hasCreate";
 import {hasUpdate, IHasUpdateFactory} from "./mixins/hasUpdate";
 import {IHasTagsFactory} from "./mixins/hasTags";
+import {hasTasks, IHasTasksFactory} from "./mixins/hasTasks";
+import {ILead} from "../activeRecords/Lead";
+import {IFactoryConstructors} from "./index";
 
 export interface ContactsGetCriteria extends IGetCriteria {
-    filter?: string;
+    filter?: object;
 }
 
 export interface ContactsCreateCriteria {
@@ -50,7 +53,8 @@ export type IContactFactory = IHasGetFactory<IContact> &
     IHasCreateFactory<IContact> &
     IHasUpdateFactory<IContact> &
     IResourceFactory<IContact> &
-    IHasTagsFactory<IContact>;
+    IHasTagsFactory<IContact> &
+    IHasTasksFactory<IContact>;
 
 /**
  * Фабрика управления контактами
@@ -65,7 +69,7 @@ export class BaseContactFactory extends ResourceFactory<IContact> {
         return schema.entities.contacts.path;
     }
 
-    getEmbeddedKey(): string {
+    getEmbeddedKey(): ObjectKey<IFactoryConstructors> {
         return 'contacts';
     }
 }
@@ -74,5 +78,6 @@ export const ContactFactory = applyMixins(BaseContactFactory, [
     hasGetByCriteria,
     hasGetById,
     hasCreate,
-    hasUpdate
+    hasUpdate,
+    hasTasks
 ]);
