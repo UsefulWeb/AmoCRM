@@ -1,5 +1,5 @@
-import {IResourceEntity, IResourceFactory} from "../../../interfaces/api";
-import { TConstructor, TEntityConstructor } from "../../../types";
+import {IEntityAttributes, IResourceEntity, IResourceFactory} from "../../../interfaces/api";
+import {TConstructor, TEntityConstructor} from "../../../types";
 import {IHasTasksFactory} from "../../factories/mixins/hasTasks";
 import {EntityList, IEntityList} from "../common/EntityList";
 import {ITask} from "../Task";
@@ -8,6 +8,7 @@ import {ITaskFactory} from "../../factories/TaskFactory";
 
 export interface IHasTasks<T extends IHasTasksFactory<IResourceEntity<T>>> {
     tasks: IEntityList<ITask>;
+    Task: TConstructor<ITask>;
 }
 
 export class TaskEntityCriteriaItem<T extends IResourceFactory<IResourceEntity<T>>> implements IFactoryCriteriaItem {
@@ -35,6 +36,7 @@ export class TaskEntityCriteriaItem<T extends IResourceFactory<IResourceEntity<T
 export function hasTasks<T extends IHasTasksFactory<IResourceEntity<T>>>(Base: TEntityConstructor<T>): TConstructor<IResourceEntity<T>> {
     return class HasTasks extends Base implements IHasTasks<T> {
         readonly tasks: IEntityList<ITask>;
+        readonly Task: TConstructor<ITask>;
 
         constructor(entityFactory: T) {
             super(entityFactory);
@@ -42,10 +44,15 @@ export function hasTasks<T extends IHasTasksFactory<IResourceEntity<T>>>(Base: T
             const factory: ITaskFactory = Object.create(this.getFactory().tasks);
             const criteriaItem = new TaskEntityCriteriaItem(this);
 
+            factory.criteriaBuilder.add(criteriaItem);
+
             this.tasks = new EntityList<ITask>({
                 factory,
-                criteriaItem
             });
+
+            this.Task = function (attributes?: IEntityAttributes): ITask {
+                return factory.from(attributes);
+            } as never as TConstructor<ITask>;
         }
     };
 }

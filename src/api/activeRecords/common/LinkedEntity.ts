@@ -40,6 +40,9 @@ export class LinkedEntity<
         const client = entityFactory.getClient();
         const factoryConstructors = client.getFactoryConstructors();
         const Constructor = factoryConstructors[entity_type];
+        if (!Constructor) {
+            return Promise.resolve(null);
+        }
         const factory = new Constructor(client) as never as IHasGetByIdFactory<TL>;
 
         return factory.getById(entity_id, criteria, options);

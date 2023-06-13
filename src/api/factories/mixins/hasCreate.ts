@@ -20,7 +20,7 @@ export type IHasCreateFactory<T extends IResourceEntity<IResourceFactory<T>>> = 
 
 export function hasCreate<T extends IResourceEntity<IResourceFactory<T>>>(Base: TFactoryConstructor<T>): TFactoryConstructor<T> {
     return class CanCreate extends Base implements IHasCreateFactory<T> {
-        async create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions) {
+        async create<A extends IEntityAttributes>(criteria: (object | A)[], options?: IRequestOptions): Promise<T[]> {
             const url = this.getUrl();
             const entityCriteria = this.getEntityCriteria(criteria);
             const requestCriteria = this.criteriaBuilder.getCriteria(CriteriaBuilderType.CREATE, entityCriteria);

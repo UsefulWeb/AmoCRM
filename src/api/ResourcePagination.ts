@@ -104,6 +104,9 @@ export default class ResourcePagination<T extends IResourceEntity<IResourceFacto
      * Загружает данные первой страницы, если это возможно
      * */
     async first() {
+        if (this.page === 1) {
+            return this.data;
+        }
         if (!this.hasFirst()) {
             return false;
         }

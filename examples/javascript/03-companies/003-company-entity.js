@@ -32,7 +32,7 @@ const run = async () => {
 
     // ... спустя какое-то время компания может обновиться на сервере
     // fetch обновит параметры текущей компании
-    await newCompany2.fetch();
+    const fetchedCompany = await newCompany2.fetch();
 };
 
 run();

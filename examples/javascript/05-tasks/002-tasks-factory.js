@@ -2,72 +2,70 @@
 const { client } = require('../client');
 
 const run = async () => {
-    /*
-        Подробное описание методов и их аргументов описано в
-        https://usefulweb.github.io/AmoCRM/classes/api_factories_LeadFactory.LeadFactory.html
-    */
-    // постраничная навигация сделок. Подробный пример рассмотрен в ./001-tasks-pagination.js
-    const pagination = await client.leads.get();
+    // постраничная навигация задач. Подробный пример рассмотрен в ./001-tasks-pagination.js
+    const pagination = await client.tasks.get();
 
-    /* Поиск сделок по id */
-    // получить объект lead по id
-    const lead = await client.leads.getById(123);
-    lead.name = 'Walter Scott';
-    await lead.save();
+    /* Поиск задач по id */
+    // получить объект Task по id
+    const task = await client.tasks.getById(123);
+    task.text = 'Updated Task Text';
+    task.complete_till = 2280001362;
+
+    await task.save();
     /*
-        базовые методы работы с объектом Lead описаны
+        базовые методы работы с объектом Task описаны
         - в README
         - в примере 003-tasks-entity.js
-        - в интерфейсе ILead на сайте библиотеки https://usefulweb.github.io/AmoCRM/interfaces/api_activeRecords_Lead.ILead.html
      */
 
-    /* Создание сделок */
+    /* Создание задач */
     /*
-        Создаёт две сделки, возвращает массив Lead с добавленными сделками.
-        Параметры совпадают с https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-add
+        Создаёт две задачи, возвращает массив Task с добавленными задачами.
     */
-    const leads = await client.leads.create([
+    const tasks = await client.tasks.create([
         {
-            name: "Lead 1"
+            text: 'Global task 1',
+            complete_till: 2280001362,
         },
         {
-            name: "Lead 2"
+            text: 'Global task 2',
+            complete_till: 2280001362
         }
     ]);
 
-    const lead1 = leads[0];
-    lead1.price = 350;
-    await lead1.save();
+    const task1 = tasks[0];
+    task1.complete_till = 2280001571;
+    await task1.save();
 
-    const newLead = new client.Lead;
+    const newTask = new client.Task;
 
-    // в конструктор можно передавать объекты Lead
-    const anotherLeads = await client.leads.create([
+    // в конструктор можно передавать объекты Task
+    const anotherTasks = await client.tasks.create([
         {
-            name: "Lead 1"
+            text: 'Global task',
+            complete_till: 2280001362
         },
-        newLead
+        newTask
     ]);
 
-    /* Обновление сделок */
-
+    /* Обновление задач */
     /*
-        Как и в create, туда можно передавать объекты Lead существующих в AmoCRM сделок.
-        Параметры совпадают с https://www.amocrm.ru/developers/content/crm_platform/leads-api#leads-edit
+        Как и в create, туда можно передавать объекты Task существующих в AmoCRM задач.
     */
-    const existingLead = await client.leads.getById(123);
+    const existingTask = await client.tasks.getById(123);
 
-    const updatedLeads = await client.leads.update([
+    const updatedTasks = await client.tasks.update([
         {
-            id: 122,
-            name: 'Walter Scott'
+            id: 123,
+            text: 'Global task 2',
+            complete_till: 2280001362
         },
-        existingLead
+        existingTask
     ]);
 
-    const updatedLead2 = updatedLeads[1];
-    updatedLead2.name = 'Updated Name';
-    updatedLead2.price = 100;
-    await updatedLead2.save();
+    const updatedTask2 = updatedTasks[1];
+    updatedTask2.text = 'Updated Task Text';
+    updatedTask2.com = 2280001362;
+    await updatedTask2.save();
 }
 run();

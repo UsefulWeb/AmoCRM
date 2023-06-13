@@ -14,7 +14,6 @@ export type IEntityListRequiredFactory<T extends IResourceEntity<IResourceFactor
 
 export interface IEntityListOptions<T extends IResourceEntity<IResourceFactory<T>>> {
     factory: IEntityListRequiredFactory<T>;
-    criteriaItem: IFactoryCriteriaItem;
 }
 
 export class EntityList<T extends IResourceEntity<IResourceFactory<T>>> implements IEntityList<T> {
@@ -22,8 +21,7 @@ export class EntityList<T extends IResourceEntity<IResourceFactory<T>>> implemen
     public readonly create: IHasCreateFactory<T>['create'];
 
     constructor(options: IEntityListOptions<T>) {
-        const { criteriaItem, factory } = options;
-        factory.criteriaBuilder.add(criteriaItem);
+        const { factory } = options;
 
         this.get = factory.get.bind(factory);
         this.create = factory.create.bind(factory);
