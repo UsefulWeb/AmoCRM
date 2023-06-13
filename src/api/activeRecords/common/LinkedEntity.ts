@@ -29,22 +29,22 @@ export class LinkedEntity<
         this.entity = entity;
     }
 
-    get<TL extends IResourceEntity<IResourceFactory<TL>> = IResourceEntity<L>>
+    async get<TL extends IResourceEntity<IResourceFactory<TL>> = IResourceEntity<L>>
     (criteria?: IHasGetByIdCriteria, options?: IRequestOptions){
         const { entity } = this;
         const { entity_type, entity_id } = entity;
         if (!entity_type || !entity_id) {
-            return Promise.resolve(null);
+            return null
         }
         const entityFactory = entity.getFactory(); // tasks
         const client = entityFactory.getClient();
         const factoryConstructors = client.getFactoryConstructors();
         const Constructor = factoryConstructors[entity_type];
         if (!Constructor) {
-            return Promise.resolve(null);
+            return null
         }
         const factory = new Constructor(client) as never as IHasGetByIdFactory<TL>;
 
-        return factory.getById(entity_id, criteria, options);
+        return await factory.getById(entity_id, criteria, options);
     }
 }
