@@ -80,9 +80,6 @@ export class Environment implements IEnvironment {
     }
 
     set(path: string, value: JSONValue) {
-        if (!this.options) {
-            throw new Error('NO_ENVIRONMENT_OPTIONS');
-        }
         let handler: any = this.options;
         const parts = path.split('.');
         if (parts.length === 0) {
