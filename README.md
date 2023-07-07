@@ -446,7 +446,6 @@ client.token.on('change', () => {
 - INVALID_JSON_RESPONSE. Некорректный JSON ответ
 - API_RESPONSE_ERROR. Ошибка в ответе по API
 - NO_TOKEN_AND_CODE. В настройках отсуствует код и не установлен токен
-- NO_CODE. В настройках отсуствует код авторизации
 - CONNECTION_ERROR. Неудачное соединение
 - NO_ENVIRONMENT_OPTIONS. Отсутствуют настройки
 - PATH_IS_EMPTY. Попытка установить client.environment.set без переданного первого пути
