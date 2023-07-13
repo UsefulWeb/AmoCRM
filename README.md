@@ -446,8 +446,8 @@ client.token.on('change', () => {
 - INVALID_JSON_RESPONSE. Некорректный JSON ответ
 - API_RESPONSE_ERROR. Ошибка в ответе по API
 - NO_TOKEN_AND_CODE. В настройках отсуствует код и не установлен токен
-- PATH_IS_EMPTY. Попытка установить client.environment.set без переданного первого пути
-- INVALID_PATH. Неверный
+- PATH_IS_EMPTY. Попытка вызвать client.environment.set без переданного пути
+- INVALID_PATH. Неверный путь при вызове client.environment.set
 - NO_AUTH_OPTIONS. Отсутствуют настройки config.auth
 - JSON_PARSE_ERROR. Ответ AmoCRM сформирован в неверном JSON формате
 
