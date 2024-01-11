@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 describe('Contact', () => {
-    test('adds embedded contact for lead', async () => {
+    test('adds embedded contact for contact', async () => {
         const [contact] = await client.contacts.create([
             {
                 name: 'Contact ' + (new Date).toJSON()
@@ -39,5 +39,26 @@ describe('Contact', () => {
             with: [GetWith.CONTACTS]
         });
         expect(savedLead.embeddedContacts.length).toEqual(1);
+    });
+
+    test('adds task to contact', async () => {
+        const [contact] = await client.contacts.create([
+            {
+                name: 'Walter Scott',
+            },
+        ]);
+
+        // создаём задачу для этого контакта
+        const [createdTask] = await contact.tasks.create([
+            {
+                text: 'contact task',
+                complete_till: 2280001362
+            }
+        ]);
+
+        // получаем список задач, связанных с этим контактом
+        const [contactTask] = await contact.tasks.get();
+
+        expect(contactTask.id).toEqual(createdTask.id);
     });
 });
