@@ -14,6 +14,7 @@ import {hasTasks, IHasTasks} from "./mixins/hasTasks";
 import {IContactFactory} from "../factories/ContactFactory";
 import {IHasEmbedded} from "./mixins/hasEmbedded";
 import {ContactAttributes, IContactEmbedded, IContactHasEmbedded} from "./Contact";
+import {IHasCustomFields} from "./mixins/hasCustomFields";
 
 export interface CustomerAttributes extends IEntityAttributes {
     name?: string;
@@ -41,6 +42,7 @@ export interface IHasEmbeddedCustomers {
 
 export type ICustomer = IResourceEntity<ICustomerFactory> &
     CustomerAttributes &
+    IHasCustomFields &
     IHasEmbedded<ICustomerEmbedded> &
     IHasSave<ICustomerFactory> &
     IHasFetch<ICustomerFactory> &

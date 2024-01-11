@@ -26,6 +26,7 @@ import {IHasEmbeddedSource} from "./Source";
 import {hasEmbeddedSource} from "./mixins/embedded/hasEmbeddedSource";
 import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
 import {hasTasks, IHasTasks} from "./mixins/hasTasks";
+import {IHasCustomFields} from "./mixins/hasCustomFields";
 
 export interface LeadAttributes extends IEntityAttributes {
     id?: number;
@@ -58,6 +59,7 @@ export type ILeadHasEmbedded = IHasEmbeddedTagsEntity<ILeadFactory> &
 
 export type ILead = IResourceEntity<ILeadFactory> &
     LeadAttributes &
+    IHasCustomFields &
     IHasEmbedded<ILeadEmbedded> &
     IHasSave<ILeadFactory> &
     IHasFetch<ILeadFactory> &

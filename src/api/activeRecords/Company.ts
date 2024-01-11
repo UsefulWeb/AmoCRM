@@ -20,6 +20,7 @@ import {
 import {hasEmbeddedContacts, IHasEmbeddedContactsEntity} from "./mixins/embedded/hasEmbeddedContacts";
 import {hasEmbedded, IHasEmbedded} from "./mixins/hasEmbedded";
 import {hasTasks, IHasTasks} from "./mixins/hasTasks";
+import {IHasCustomFields} from "./mixins/hasCustomFields";
 
 export interface CompanyAttributes extends IEntityAttributes {
     id?: number;
@@ -52,6 +53,7 @@ export type ICompanyEmbedded = IHasEmbeddedTagsEntity<ICompanyFactory> &
 
 export type ICompany = IResourceEntity<ICompanyFactory> &
     CompanyAttributes &
+    IHasCustomFields &
     IHasEmbedded<ICompanyEmbedded> &
     IHasSave<ICompanyFactory> &
     IHasFetch<ICompanyFactory> &
