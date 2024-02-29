@@ -22,7 +22,7 @@ __Не предназначена для Frontend приложений__
 [YouTube-плейлист по AmoCRM и библиотеке](https://www.youtube.com/playlist?list=PLcMMJHB8iEYmoNo5PnSjv8286zzMw4bdq)
 
 По всем вопросам работы библиотеки заходите в [чат проекта в Telegram](https://t.me/+QKoG6INanhIyYTAy).
-Сделаем вместе пространство уютным :)
+Сделаем вместе пространство уютным :) <3
 
 ## Изменения в 3.x.x по сравнению с 2.x.x
 
