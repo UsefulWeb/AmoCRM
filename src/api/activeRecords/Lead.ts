@@ -129,6 +129,9 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
         this.pipeline_id = attributes.pipeline_id;
         this.loss_reason_id = attributes.loss_reason_id;
         this.source_id = attributes.source_id;
+        this.created_at = attributes.created_at;
+        this.closed_at = attributes.closed_at;
+        this.updated_at = attributes.updated_at;
         this.created_by = attributes.created_by;
         this.updated_by = attributes.updated_by;
         this.closed_task_at = attributes.closed_task_at;
