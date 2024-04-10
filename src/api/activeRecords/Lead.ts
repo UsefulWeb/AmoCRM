@@ -47,6 +47,7 @@ export interface LeadAttributes extends IEntityAttributes {
     custom_fields_values?: JSONObject[] | null;
     score?: number | null;
     account_id?: number;
+    labor_cost?: number;
     is_price_modified_by_robot?: boolean;
     _embedded?: ILeadEmbedded;
 }
@@ -93,6 +94,7 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
     custom_fields_values?: JSONObject[] | null;
     score?: number | null;
     account_id?: number;
+    labor_cost?: number;
     is_price_modified_by_robot?: boolean;
     _embedded?: ILeadEmbedded;
 
@@ -114,6 +116,7 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
             custom_fields_values: this.custom_fields_values,
             score: this.score,
             account_id: this.account_id,
+            labor_cost: this.labor_cost,
             is_price_modified_by_robot: this.is_price_modified_by_robot,
             _embedded: this._embedded
         };
@@ -131,11 +134,15 @@ export class BaseLead extends ResourceEntity<ILeadFactory> {
         this.source_id = attributes.source_id;
         this.created_by = attributes.created_by;
         this.updated_by = attributes.updated_by;
+        this.closed_at = attributes.closed_at;
+        this.created_at = attributes.created_at;
+        this.updated_at = attributes.updated_at;
         this.closed_task_at = attributes.closed_task_at;
         this.is_deleted = attributes.is_deleted;
         this.custom_fields_values = attributes.custom_fields_values;
         this.score = attributes.score;
         this.account_id = attributes.account_id;
+        this.labor_cost = attributes.labor_cost;
         this.is_price_modified_by_robot = attributes.is_price_modified_by_robot;
         this._embedded = attributes._embedded;
     }
