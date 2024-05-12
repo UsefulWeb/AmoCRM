@@ -5,6 +5,7 @@ export interface ITokenOptions {
     client_id: string;
     client_secret: string;
     redirect_uri: string;
+    bearer?: string;
     code?: string;
 }
 
@@ -41,7 +42,7 @@ export interface IDomainRequestOptions {
     url: string;
     data?: object;
     options?: IRequestOptions;
-    token?: ITokenData;
+    token?: string;
 }
 
 export interface IAPIResponse<T> {

@@ -1,6 +1,7 @@
 export const CODE = '';
+export const LTS_TOKEN = '';
 
-export default {
+const config = {
     domain: 'test',
     auth: {
         client_id: 'clientId',
@@ -8,3 +9,12 @@ export default {
         redirect_uri: 'redirectUri'
     },
 }
+
+export const ltsConfig = {
+    ...config,
+    auth: {
+        ...config.auth,
+        bearer: LTS_TOKEN
+    }
+}
+export default config;

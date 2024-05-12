@@ -1,5 +1,5 @@
 import { Client } from "../../../src/Client";
-import config, { CODE } from "../../config";
+import { ltsConfig } from "../../config";
 import { connect } from "../../util";
 import {ILead} from "../../../src/api/activeRecords/Lead";
 import {GetWith} from "../../../src/api/factories/mixins/hasGetById";
@@ -8,7 +8,7 @@ jest.setTimeout(60 * 1000);
 let client: Client;
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = new Client(ltsConfig);
 });
 
 describe('Company', () => {

@@ -9,6 +9,7 @@ import {IEntityCriteriaItem} from "./EntityCriteriaBuilder";
 import {IHasEmbeddedEntity} from "../mixins/hasEmbedded";
 
 export interface IEmbeddedEntityList<E extends IEmbeddedEntity> extends IEntityCriteriaItem {
+    readonly embeddedType: ObjectKey<IEmbedded<E>>;
     length: number;
     add(criteria: E[]): void;
     set(value: E[]|null): void;
@@ -32,9 +33,10 @@ export interface IEmbeddedEntityListOptions<T extends IResourceFactory<IResource
 }
 
 export class EmbeddedEntityList<T extends IResourceFactory<IHasTypedEmbeddedEntity<T, E>>, E extends IEmbeddedEntity> implements IEmbeddedEntityList<E> {
+    public readonly embeddedType: ObjectKey<IEmbedded<E>>;
     protected entity: IHasTypedEmbeddedEntity<T, E>;
-    protected embeddedType: ObjectKey<IEmbedded<E>>;
     protected attributes?: IQueryAttributes<E>;
+
     constructor(options: IEmbeddedEntityListOptions<T, E>) {
         this.entity = options.entity;
         this.embeddedType = options.embeddedType;
@@ -83,6 +85,7 @@ export class EmbeddedEntityList<T extends IResourceFactory<IHasTypedEmbeddedEnti
         this.set(rest);
     }
 
+
     getEmbeddedSaveCriteria(attributes?: ObjectKey<E>[]) {
         const readonly = attributes === undefined;
         if (readonly) {
@@ -109,7 +112,9 @@ export class EmbeddedEntityList<T extends IResourceFactory<IHasTypedEmbeddedEnti
         };
         const target: Target = {};
         return attributes.reduce((target: Target, key) => {
-            target[key] = item[key];
+            if (key in item) {
+                target[key] = item[key];
+            }
             return target;
         }, target);
     }

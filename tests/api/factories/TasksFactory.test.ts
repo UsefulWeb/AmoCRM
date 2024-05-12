@@ -1,6 +1,6 @@
 import {Client, IClient} from "../../../src/Client";
-import config, { CODE } from "../../config";
-import {connect, tomorrow} from "../../util";
+import { ltsConfig } from "../../config";
+import {tomorrow} from "../../util";
 import {LeadAttributes} from "../../../src/api/activeRecords/Lead";
 import {TaskAttributes} from "../../../src/api/activeRecords/Task";
 jest.setTimeout(60 * 1000);
@@ -8,7 +8,7 @@ jest.setTimeout(60 * 1000);
 let client: IClient;
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = new Client(ltsConfig);
 });
 
 describe('TasksFactory', () => {

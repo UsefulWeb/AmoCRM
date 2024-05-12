@@ -2,23 +2,13 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { Client } from "../../../src/Client";
-import config, { CODE } from "../../config";
-import { connect } from "../../util";
-import {ILead} from "../../../src/api/activeRecords/Lead";
+import { ltsConfig } from "../../config";
 jest.setTimeout(60 * 1000);
 
 let client: Client;
 
 beforeEach(() => {
-    client = connect(
-        new Client({
-            ...config,
-            auth: {
-                ...config.auth,
-                // code: CODE
-            }
-        })
-    );
+    client = new Client(ltsConfig);
 });
 describe('LeadFactory', () => {
     test('create with no params', async () => {

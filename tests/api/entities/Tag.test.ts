@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {Client, IClient} from "../../../src/Client";
-import config, { CODE } from "../../config";
+import {ltsConfig} from "../../config";
 import { connect } from "../../util";
 import {
     hasUpdatableTags, ITaggedClient,
@@ -16,18 +16,16 @@ let client: IClient;
 const TaggedClient = hasUpdatableTags(Client);
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = new Client(ltsConfig);
 });
 
 describe('Tag', () => {
     test('adds embedded tag for lead', async () => {
-        const attributes = {
-            name: 'Тег',
-            color: 'DDEBB5'
-        };
-
         const [tag] = await client.leads.tags.create([
-            attributes
+            {
+                name: 'Тег',
+                color: 'EBEBEB'
+            }
         ]);
 
         const lead = new client.Lead({
@@ -36,7 +34,9 @@ describe('Tag', () => {
 
         expect(lead.embeddedTags.get().length).toEqual(0);
 
-        lead.embeddedTags.add([tag]);
+        lead.embeddedTags.add([{
+            id: tag.id
+        }]);
 
         expect(lead.embeddedTags.get().length).toEqual(1);
 

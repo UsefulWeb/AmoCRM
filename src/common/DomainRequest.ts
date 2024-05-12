@@ -31,7 +31,7 @@ export default class DomainRequest<T> extends EventEmitter {
         const { token, method } = this.config;
         const clientHeaders: TStringValueObject = {};
         if (token) {
-            clientHeaders['Authorization'] = 'Bearer ' + token.access_token;
+            clientHeaders['Authorization'] = 'Bearer ' + token;
         }
         if (this.isFormData()) {
             clientHeaders['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';

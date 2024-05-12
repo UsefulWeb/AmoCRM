@@ -1,6 +1,6 @@
 {
   "name": "amocrm-js",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "JS Library for AmoCRM",
   "main": "./dist/Client.js",
   "directories": {
@@ -10,8 +10,9 @@
     "node": ">=16"
   },
   "scripts": {
-    "test:setup": "npx ts-node tests/setup.ts",
+    "test:get-token": "npx ts-node tests/getToken.ts",
     "test": "jest --no-cache --verbose false --silent false",
+    "test:api": "npm test ./tests/api",
     "build": "tsc",
     "docs": "typedoc --entryPointStrategy expand ./src",
     "lint": "eslint ./src"

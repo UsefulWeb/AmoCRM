@@ -1,6 +1,6 @@
 import ngrok from "ngrok";
 import { connect } from "./util";
-import config, {CODE} from "./config";
+import config, {LTS_TOKEN} from "./config";
 import {Client} from "../src/Client";
 
 (async () => {
@@ -8,7 +8,7 @@ import {Client} from "../src/Client";
         ...config,
         auth: {
             ...config.auth,
-            code: CODE
+            bearer: LTS_TOKEN
         }
     };
     const client = connect(new Client(clientConfig));

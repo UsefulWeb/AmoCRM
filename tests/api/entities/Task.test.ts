@@ -1,15 +1,10 @@
-import * as fs from "fs";
-import * as path from "path";
-
 import {Client, IClient} from "../../../src/Client";
-import config, { CODE } from "../../config";
-import {connect, tomorrow, uniqId} from "../../util";
+import { ltsConfig } from "../../config";
+import {tomorrow, uniqId} from "../../util";
 import {
-    hasUpdatableTags, ITaggedClient,
-    ITaggedClientConstructors
+    hasUpdatableTags,
 } from "../../../src/plugins/hasUpdatableTags";
 import {ILead} from "../../../src/api/activeRecords/Lead";
-import {IEmbeddedTag} from "../../../src/api/activeRecords/Tag";
 import {ITask} from "../../../src/api/activeRecords/Task";
 jest.setTimeout(60 * 1000);
 
@@ -17,7 +12,7 @@ let client: IClient;
 const TaggedClient = hasUpdatableTags(Client);
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = new Client(ltsConfig);
 });
 
 describe('Task', () => {

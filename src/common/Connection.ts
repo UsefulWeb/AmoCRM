@@ -71,9 +71,15 @@ export class Connection extends EventEmitter implements IConnection {
         this.emit('beforeConnect');
 
         const code = this.environment.get<string>('auth.code');
+        const bearer = this.environment.get<string>('auth.bearer');
         const hasCode = Boolean(code);
+        const hasBearer = Boolean(bearer);
         const hasAuthServer = this.environment.exists('auth.server');
         const tokenExists = this.token.exists();
+
+        if (hasBearer) {
+            return true;
+        }
         if (!hasCode && hasAuthServer) {
             await this.waitForUserAction();
             return true;
@@ -94,11 +100,10 @@ export class Connection extends EventEmitter implements IConnection {
         try {
             await this.token.fetch();
             this.emit('connected');
-            this.connected = true;
             return true;
         }
         catch (e) {
-            this.emit('connectionError', e);
+            this.emit('error', e);
             throw e;
         }
     }
@@ -137,13 +142,23 @@ export class Connection extends EventEmitter implements IConnection {
         return this.connect();
     }
 
+    protected getToken() {
+        const bearer = this.environment.get<string>('auth.bearer');
+        if (bearer) {
+            return bearer;
+        }
+        const token = this.token.getValue();
+        return token?.access_token;
+    }
+
     /**
      * Формирует запрос к порталу. Предварительно проверяет наличие соединения
      * При его отсутствии пытается его установить
      * */
     async makeRequest<T>(method: string, url: string, data?: object, options?: IRequestOptions) {
         await this.update();
-        const token = this.token.getValue();
+
+        const token = this.getToken();
         const domain = <string>this.environment.get<string>('domain');
         const config = {
             domain,

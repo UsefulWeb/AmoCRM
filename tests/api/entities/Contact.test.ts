@@ -1,17 +1,14 @@
 
 import { Client } from "../../../src/Client";
-import config, { CODE } from "../../config";
-import { connect } from "../../util";
-import {ITaggedClient} from "../../../src/plugins/hasUpdatableTags";
+import {ltsConfig} from "../../config";
 import {ILead} from "../../../src/api/activeRecords/Lead";
-import {delay} from "../../../src/util";
 import {GetWith} from "../../../src/api/factories/mixins/hasGetById";
 jest.setTimeout(60 * 1000);
 
 let client: Client;
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = new Client(ltsConfig);
 });
 
 describe('Contact', () => {
