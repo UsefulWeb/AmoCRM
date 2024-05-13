@@ -10,14 +10,13 @@
 <p><strong>Не предназначена для Frontend приложений</strong></p>
 <p>Поддерживает OAuth авторизацию и использует адреса AmoCRM API v4.</p>
 <p>Сделайте библиотеку самой популярной в Галактике - поставьте Star ★!</p>
-<p>По вопросам сотрудничества <a href="https://t.me/neizerth">пишите мне в Telegram</a>.</p>
+<p>По вопросам, в том числе сотрудничества  <a href="https://t.me/neizerth">пишите мне в Telegram</a>.</p>
 
 <a href="#сообщество-и-вопросы" id="сообщество-и-вопросы" style="color: inherit; text-decoration: none;">
   <h2>Сообщество и вопросы</h2>
 </a>
 <p><a href="https://www.youtube.com/playlist?list=PLcMMJHB8iEYmoNo5PnSjv8286zzMw4bdq">YouTube-плейлист по AmoCRM и библиотеке</a></p>
-<p>По всем вопросам работы библиотеки заходите в <a href="https://t.me/+QKoG6INanhIyYTAy">чат проекта в Telegram</a>.
-Сделаем вместе пространство уютным :)</p>
+<p>Сделаем вместе пространство уютным :) &lt;3</p>
 
 <a href="#изменения-в-3xx-по-сравнению-с-2xx" id="изменения-в-3xx-по-сравнению-с-2xx" style="color: inherit; text-decoration: none;">
   <h2>Изменения в 3.x.x по сравнению с 2.x.x</h2>
@@ -72,12 +71,22 @@
 </a>
 <p>Подключение возможно:</p>
 <ol>
+<li>Через <a href="https://www.amocrm.ru/developers/content/oauth/step-by-step#%D0%94%D0%BE%D0%BB%D0%B3%D0%BE%D1%81%D1%80%D0%BE%D1%87%D0%BD%D1%8B%D0%B5-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D1%8B">долгосрочный токен</a></li>
 <li>По заранее известному коду авторизации
 (например, с помощью <a href="https://www.amocrm.ru/developers/content/oauth/easy-auth">упрощённой авторизации</a>)</li>
 <li>С помощью встроенного OAuth-сервера (см. пример ниже)</li>
 </ol>
 <p>После успешного подключения клиент автоматически получает новый токен
 по истечению старого перед формированием запроса</p>
+
+<a href="#получение-кода-авторизацию" id="получение-кода-авторизацию" style="color: inherit; text-decoration: none;">
+  <h3>Получение кода авторизацию</h3>
+</a>
+<ol>
+<li>С помощью <a href="https://www.amocrm.ru/developers/content/oauth/easy-auth">упрощённой авторизации</a></li>
+<li>С помощью встроенного сервера авторизации данной библиотеки</li>
+<li>Вручную</li>
+</ol>
 
 <a href="#процесс-oauth-авторизации" id="процесс-oauth-авторизации" style="color: inherit; text-decoration: none;">
   <h3>Процесс OAuth авторизации</h3>
@@ -88,14 +97,11 @@
 <li>Получить OAuth-токен по коду авторизации</li>
 </ol>
 
-<a href="#получение-кода-авторизацию" id="получение-кода-авторизацию" style="color: inherit; text-decoration: none;">
-  <h3>Получение кода авторизацию</h3>
+<a href="#подключение-по-долгосрочному-токену" id="подключение-по-долгосрочному-токену" style="color: inherit; text-decoration: none;">
+  <h3>Подключение по долгосрочному токену</h3>
 </a>
-<ol>
-<li>С помощью <a href="https://www.amocrm.ru/developers/content/oauth/easy-auth">упрощённой авторизации</a></li>
-<li>С помощью встроенного сервера авторизации данной библиотеки</li>
-<li>Вручную</li>
-</ol>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">client</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Client</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-7">// логин пользователя в портале, где адрес портала domain.amocrm.ru</span><br/><span class="hl-1">    </span><span class="hl-0">domain:</span><span class="hl-1"> </span><span class="hl-5">&#39;domain&#39;</span><span class="hl-1">, </span><span class="hl-7">// может быть указан полный домен вида domain.amocrm.ru, domain.amocrm.com</span><br/><span class="hl-1">    </span><span class="hl-7">/* </span><br/><span class="hl-7">      Информация об интеграции (подробности подключения </span><br/><span class="hl-7">      описаны на https://www.amocrm.ru/developers/content/oauth/step-by-step)</span><br/><span class="hl-7">    */</span><br/><span class="hl-1">    </span><span class="hl-0">auth:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">client_id:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientId&#39;</span><span class="hl-1">, </span><span class="hl-7">// ID интеграции</span><br/><span class="hl-1">      </span><span class="hl-0">client_secret:</span><span class="hl-1"> </span><span class="hl-5">&#39;clientSecret&#39;</span><span class="hl-1">, </span><span class="hl-7">// Секретный ключ</span><br/><span class="hl-1">      </span><span class="hl-0">redirect_uri:</span><span class="hl-1"> </span><span class="hl-5">&#39;redirectUri&#39;</span><span class="hl-1">, </span><span class="hl-7">// Ссылка для перенаправления</span><br/><span class="hl-1">      </span><span class="hl-0">bearer:</span><span class="hl-1"> </span><span class="hl-5">&#39;ltsToken&#39;</span><span class="hl-1">, </span><span class="hl-7">// долгосрочный токен</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">});</span>
+</code></pre>
 
 <a href="#подключение-по-коду-авторизации-упрощенная-авторизация" id="подключение-по-коду-авторизации-упрощенная-авторизация" style="color: inherit; text-decoration: none;">
   <h3>Подключение по коду авторизации (упрощенная авторизация)</h3>
@@ -171,6 +177,7 @@
 <li>Контакты <a href="./examples/javascript/02-contacts">[примеры работы]</a></li>
 <li>Компании <a href="./examples/javascript/03-companies">[примеры работы]</a></li>
 <li>Теги <a href="./examples/javascript/04-tags">[примеры работы]</a></li>
+<li>Задачи <a href="./examples/javascript/05-tasks">[примеры работы]</a></li>
 </ul>
 <p><a id="requests"></a></p>
 
@@ -349,13 +356,11 @@
 </a>
 <ul>
 <li>NO_JSON_RESPONSE. Пустой ответ</li>
-<li>INVALID_JSON_RESPONSE. Некорректный JSON вет</li>
+<li>INVALID_JSON_RESPONSE. Некорректный JSON ответ</li>
 <li>API_RESPONSE_ERROR. Ошибка в ответе по API</li>
 <li>NO_TOKEN_AND_CODE. В настройках отсуствует код и не установлен токен</li>
-<li>CONNECTION_ERROR. Неудачное соединение</li>
-<li>NO_ENVIRONMENT_OPTIONS. Отсутствуют настройки</li>
-<li>PATH_IS_EMPTY. Попытка установить client.environment.set без переданного первого пути</li>
-<li>INVALID_PATH. Неверный</li>
+<li>PATH_IS_EMPTY. Попытка вызвать client.environment.set без переданного пути</li>
+<li>INVALID_PATH. Неверный путь при вызове client.environment.set</li>
 <li>NO_AUTH_OPTIONS. Отсутствуют настройки config.auth</li>
 <li>JSON_PARSE_ERROR. Ответ AmoCRM сформирован в неверном JSON формате</li>
 </ul>

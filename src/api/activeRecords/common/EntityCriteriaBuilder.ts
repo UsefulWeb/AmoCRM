@@ -1,5 +1,10 @@
 import {IEntityAttributes, IResourceEntity, IResourceFactory} from "../../../interfaces/api";
 import deepmerge from 'deepmerge';
+import {overwriteMerge} from "../../../util";
+
+const mergeOptions = {
+    arrayMerge: overwriteMerge
+}
 
 export interface IEntityCriteriaBuilder extends IEntityCriteriaItem {
     add(item: IEntityCriteriaItem): void;
@@ -22,17 +27,22 @@ export class EntityCriteriaBuilder<T extends IResourceFactory<IResourceEntity<T>
         this.items.push(item);
     }
 
+    get attributes(): IEntityAttributes {
+        return {
+            ...this.entity.getAttributes(),
+            _embedded: {}
+        };
+    }
+
     get createCriteria() {
-        const attributes = this.entity.getAttributes();
-        return this.items.reduce((attributes,item) => {
-            return deepmerge(attributes, item.createCriteria);
-        }, attributes);
+        return this.items.reduce((attributes, item) => {
+            return deepmerge(attributes, item.createCriteria, mergeOptions);
+        }, this.attributes);
     }
 
     get updateCriteria() {
-        const attributes = this.entity.getAttributes();
         return this.items.reduce((attributes,item) => {
-            return deepmerge(attributes, item.updateCriteria);
-        }, attributes);
+            return deepmerge(attributes, item.updateCriteria, mergeOptions);
+        }, this.attributes);
     }
 }

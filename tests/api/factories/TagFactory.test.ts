@@ -1,12 +1,12 @@
 import {Client, IClient} from "../../../src/Client";
-import config, { CODE } from "../../config";
+import { ltsConfig } from "../../config";
 import { connect } from "../../util";
 jest.setTimeout(60 * 1000);
 
 let client: IClient;
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = connect(new Client(ltsConfig));
 });
 
 describe('TagsFactory', () => {

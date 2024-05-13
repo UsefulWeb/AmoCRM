@@ -15,7 +15,7 @@ export const tomorrow = () => +moment()
 export function connect<T extends IClient>(client: T): T {
     const file = path.resolve(__dirname, './token.json');
 
-    if (!client.environment.get('auth.code', false)) {
+    if (!client.environment.get('auth.code', false) && fs.existsSync(file)) {
         const json = fs.readFileSync(file).toString();
         const data = JSON.parse(json);
         client.token.setValue(data);

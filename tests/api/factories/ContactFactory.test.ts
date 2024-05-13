@@ -1,16 +1,12 @@
 
 import { Client } from "../../../src/Client";
-import config, { CODE } from "../../config";
-import { connect } from "../../util";
-import {ITaggedClient} from "../../../src/plugins/hasUpdatableTags";
-import {ILead} from "../../../src/api/activeRecords/Lead";
-import {delay} from "../../../src/util";
+import { ltsConfig } from "../../config";
 jest.setTimeout(60 * 1000);
 
 let client: Client;
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = new Client(ltsConfig);
 });
 
 describe('ContactFactory', () => {

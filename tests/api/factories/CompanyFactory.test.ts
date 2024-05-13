@@ -1,15 +1,11 @@
-import * as fs from "fs";
-import * as path from "path";
-
 import { Client } from "../../../src/Client";
-import config, { CODE } from "../../config";
-import { connect } from "../../util";
+import { ltsConfig } from "../../config";
 jest.setTimeout(60 * 1000);
 
 let client: Client;
 
 beforeEach(() => {
-    client = connect(new Client(config));
+    client = new Client(ltsConfig);
 });
 
 describe('CompanyFactory', () => {

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { Client } from "../../src/Client";
-import config from "../config";
+import {ltsConfig} from "../config";
 import ResourcePagination from "../../src/api/ResourcePagination";
 
 jest.setTimeout(60 * 1000);
@@ -10,10 +10,7 @@ jest.setTimeout(60 * 1000);
 let client: Client;
 
 beforeEach(() => {
-    const file = path.resolve(__dirname, '../token.json');
-    const json = fs.readFileSync(file).toString();
-    const data = JSON.parse(json);
-    client = new Client(config);
+    client = new Client(ltsConfig);
 });
 
 describe('ResourcePagination',() => {
